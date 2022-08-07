@@ -12,7 +12,7 @@
 	Test test = new Test();
 	test.TestMethod();
 	
-	out.println("DDDD");
+	out.println("ABCD");
 %>
 </body>
 </html>
