@@ -12,7 +12,7 @@
 	Test test = new Test();
 	test.TestMethod();
 	
-	out.println("ABCD");
+	out.println("QWER");
 %>
 </body>
 </html>
