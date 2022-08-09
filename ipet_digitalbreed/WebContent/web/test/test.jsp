@@ -12,7 +12,7 @@
 	Test test = new Test();
 	test.TestMethod();
 	
-	out.println("1111");
+	out.println("5555");
 %>
 </body>
 </html>
