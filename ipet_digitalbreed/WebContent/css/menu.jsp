@@ -1,54 +1,78 @@
-<div class="main-menu-content">
-            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="layout"></i><span class="menu-title text-truncate" data-i18n="Page Layouts"><b>Database</b></span></a>
-                    <ul class="menu-content">
-                        <li><a class="d-flex align-items-center" href="layout-collapsed-menu.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Collapsed Menu">Phenotype</span></a>
-                        </li>
-                        <li><a class="d-flex align-items-center" href="layout-full.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Layout Full">Genotype</span></a>
-                        </li>
-                    </ul>
-                </li>
-				<li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="briefcase"></i><span class="menu-title text-truncate" data-i18n="Components"><b>GWAS/GS</b></span></a>
-                    <ul class="menu-content">
-                        <li><a class="d-flex align-items-center" href="component-accordion.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Accordion">GWAS</span></a>
-                        </li>
-                        <li><a class="d-flex align-items-center" href="component-alerts.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Alerts">Genomic Selection</span></a>
-                        </li>       
-                    </ul>
-                </li>
-                <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="command"></i><span class="menu-title text-truncate" data-i18n="Components"><b>Variants browser</b></span></a>
-                <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="at-sign"></i><span class="menu-title text-truncate" data-i18n="Components"><b>Primer design</b></span></a>
-                
-                <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="box"></i><span class="menu-title text-truncate" data-i18n="Extensions"><b>Breeder's Toolbox</b></span></a>
-                <ul class="menu-content">
-                        <li><a class="d-flex align-items-center" href="#"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Second Level"><b>Genotype data processing</b></span></a>
-                            <ul class="menu-content">
-                                <li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">Quality filter</span></a>
-                                </li>
-                                <li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">Subset filter</span></a>
-                                </li>
-								<li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">Vcf file merge</span></a>
-                                </li>
-								<li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">Vcf file transformation</span></a>
-                                </li>
-								<li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">Annotation</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a class="d-flex align-items-center" href="#"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Second Level"><b>Genotype data analyses</b></span></a>
-                            <ul class="menu-content">
-                                <li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">PCA</span></a>
-                                </li>
-                                <li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">UPGMA clustering</span></a>
-                                </li>
-								<li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">Genocore</span></a>
-                                </li>
-								<li><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" data-i18n="Third Level">Minimal marker</span></a>
-                                </li>								
-                            </ul>
-                        </li>
-                    </ul>
-				<li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file"></i><span class="menu-title text-truncate" data-i18n="Components"><b>About</b></span></a>                    
-                </li>
-            </ul>
+    <%
+    	String menu_active = request.getParameter("menu_active");
+   		System.out.println(menu_active);
+    %>
+    
+    <!-- BEGIN: Main Menu-->
+    <div class="horizontal-menu-wrapper">
+        <div class="header-navbar navbar-expand-sm navbar navbar-horizontal floating-nav navbar-light navbar-without-dd-arrow navbar-shadow menu-border" role="navigation" data-menu="menu-wrapper">
+            <div class="navbar-header">
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item mr-auto"><a class="navbar-brand" href="../../../html/ltr/horizontal-menu-template/index.html">
+									<img src="/ipet_digitalbreed/images/logo.png"><font size="4px"  color="#4c8aa9"><b>&nbsp;Digital Breeding</b></font>           
+
+                        </a></li>
+                    <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
+                </ul>
+            </div>
+            <!-- Horizontal menu content-->
+            <div class="navbar-container main-menu-content" data-menu="menu-container">
+                <!-- include ../../../includes/mixins-->
+                <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+                    <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="index.html" data-toggle="dropdown"><i class="feather icon-cpu"></i><span data-i18n="Dashboard ">Database</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="<%if(menu_active.equals("genotype")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./database/genotype.jsp" data-toggle="dropdown" data-i18n="Analytics"><i class="feather icon-crop"></i>Genotype</a>
+                            </li>
+                            <li class="<%if(menu_active.equals("phenotype")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./database/phenotype.jsp" data-toggle="dropdown" data-i18n="eCommerce"><i class="feather icon-wind"></i>Phenotype</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-package"></i><span data-i18n="Apps">GWAS/GS</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="<%if(menu_active.equals("gwas")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./gwas_gs/gwas.jsp" data-toggle="dropdown" data-i18n="Email"><i class="feather icon-bar-chart-2"></i>GWAS</a>
+                            </li>
+                            <li class="<%if(menu_active.equals("gs")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./gwas_gs/gs.jsp" data-toggle="dropdown" data-i18n="Chat"><i class="feather icon-share-2"></i>Genome Selection</a>
+                            </li>
+                        </ul>
+                    </li>
+                      <li class="<%if(menu_active.equals("vb")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./vb/vb.jsp" data-i18n="Chat"><i class="feather icon-sliders"></i>Variants browser</a></li>
+                      <li class="<%if(menu_active.equals("pd")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./pd/pd.jsp" data-i18n="Chat"><i class="feather icon-link"></i>Primer design</a></li>
+                      
+                    <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-settings"></i><span data-i18n="Forms &amp; Tables">Breeder's toolbox</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Form Elements"><i class="feather icon-activity"></i>Genotype Process</a>
+                                <ul class="dropdown-menu">
+                                    <li class="<%if(menu_active.equals("qf")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/qf/qf.jsp" data-toggle="dropdown" data-i18n="Select"><i class="feather icon-circle"></i>Quality filter</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("sf")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/sf/sf.jsp" data-toggle="dropdown" data-i18n="Switch"><i class="feather icon-circle"></i>Subset filter</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("vfm")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/vfm/vfm.jsp" data-toggle="dropdown" data-i18n="Checkbox"><i class="feather icon-circle"></i>Vcf file merge</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("vft")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/vft/vft.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Vcf file transformation</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("anno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Annotation</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Form Elements"><i class="feather icon-monitor"></i>Genotype Analyses</a>
+                                <ul class="dropdown-menu">
+                                    <li class="<%if(menu_active.equals("pca")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/pca/pca.jsp" data-toggle="dropdown" data-i18n="Select"><i class="feather icon-circle"></i>PCA</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("upgma")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/upgma/upgma.jsp" data-toggle="dropdown" data-i18n="Switch"><i class="feather icon-circle"></i>UPGMA clustering</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("genocore")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/genocore/genocore.jsp" data-toggle="dropdown" data-i18n="Checkbox"><i class="feather icon-circle"></i>Genocore</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("mini")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/mini/mini.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Minimal marker</a>
+                                    </li>
+                                </ul>
+                            </li>
+							<li class="<%if(menu_active.equals("pheno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./b_toolbox/pheno/pheno.jsp" data-i18n="Chat"><i class="feather icon-sliders"></i>Phenotype Analyses</a></li>
+                            
+                        </ul>
+                    </li>
+					<li class="<%if(menu_active.equals("about")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="./about/about.jsp" data-i18n="Chat"><i class="feather icon-heart"></i>About</a></li>
+                </ul>
+            </div>
         </div>
+    </div>
+    <!-- END: Main Menu-->
