@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
@@ -41,6 +42,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/aggrid.css">
     
+    
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -64,7 +66,7 @@
                             <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
                         </ul>
 			            <ul class="nav navbar-nav flex-row">
-			                <li class="nav-item"><a class="navbar-brand" href="./mainboard.jsp">
+			                <li class="nav-item"><a class="navbar-brand" href="../mainboard.jsp">
 									<img src="../../images/logo.png"><font size="4px"  color="#4c8aa9"><b>&nbsp;Digital Breeding</b></font>           
 			                    </a></li>
 			            </ul>
@@ -117,15 +119,7 @@
                                     <div class="col-12">
                                         <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
                                             <div class="dropdown sort-dropdown mb-1 mb-sm-0">
-                                                <button class="btn btn-white filter-btn dropdown-toggle border text-dark" type="button" id="dropdownMenuButton6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    1 - 20 of 500
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton6">
-                                                    <a class="dropdown-item" href="#">20</a>
-                                                    <a class="dropdown-item" href="#">50</a>
-                                                    <a class="dropdown-item" href="#">100</a>
-                                                    <a class="dropdown-item" href="#">150</a>
-                                                </div>
+                                               <button class="btn btn-warning mr-1 mb-1" onclick="addRow()">VCF Tool Box</button>
                                             </div>
                                             <div class="ag-btns d-flex flex-wrap">
                                                 <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
@@ -138,49 +132,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="myGrid" class="aggrid ag-theme-material" style="height:300px;"></div>                   
-                            </div>
-                        </div>
-                    </div>
-                    
-
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <ul class="nav nav-pills nav-active-bordered-pill">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="base-pill31" data-toggle="pill" href="#pill1" aria-expanded="true">VCF Info</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="base-pill32" data-toggle="pill" href="#pill2" aria-expanded="false">VCF viewer</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="base-pill33" data-toggle="pill" href="#pill3" aria-expanded="false">Pill 3</a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <div role="tabpanel" class="tab-pane active" id="pill1" aria-expanded="true" aria-labelledby="base-pill1">
-                                                <p>Oat cake marzipan cake lollipop caramels wafer pie jelly beans. Icing halvah chocolate cake carrot
-                                                    cake. Jelly beans carrot cake marshmallow gingerbread chocolate cake. Gummies cupcake croissant.</p>
-                                            </div>
-                                            <div class="tab-pane" id="pill2" aria-labelledby="base-pill2">
-                                                <p>Sugar plum tootsie roll biscuit caramels. Liquorice brownie pastry cotton candy oat cake fruitcake
-                                                    jelly chupa chups. Pudding caramels pastry powder cake soufflé wafer caramels. Jelly-o pie cupcake.
-                                                </p>
-                                            </div>
-                                            <div class="tab-pane" id="pill3" aria-labelledby="base-pill3">
-                                                <p>Biscuit ice cream halvah candy canes bear claw ice cream cake chocolate bar donut. Toffee cotton
-                                                    candy liquorice. Oat cake lemon drops gingerbread dessert caramels. Sweet dessert jujubes powder sweet
-                                                    sesame snaps.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
+                                <div id="myGrid" class="aggrid ag-theme-material" style="width: 100%;height:230px;"></div><br>
+                                <button class="btn btn-danger mr-1 mb-1" onclick="addRow()">Delete selected</button>
+								<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="removeRow()">VCF file Upload</button>            
+                                      
                             </div>
                         </div>
                     </div>                    
+                    <div id="vcf_status" class="card"></div>
                 </section>
                 <!-- // Basic example section end -->
 
@@ -217,6 +177,7 @@
 
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_genotype.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <!-- END: Page JS-->
 
 </body>
