@@ -11,20 +11,20 @@ $(document).ready(function() {
   /*** COLUMN DEFINE ***/
   var columnDefs = [
     {
-      headerName: "선택",
-      field: "firstname",
+      headerName: "순번",
+      field: "selectfiles",
       editable: true,
       sortable: true,
-      width: 175,
+      width: 120,
       filter: 'agMultiColumnFilter',
-      cellClass: "ag-header-cell-label",
+      cellClass: "grid-cell-centered",      
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
       headerCheckboxSelection: true
     },
     {
       headerName: "VCF 파일 다운로드",
-      field: "lastname",
+      field: "fileid",
       editable: true,
       sortable: true,
       filter: 'agMultiColumnFilter',
@@ -33,7 +33,7 @@ $(document).ready(function() {
     },
     {
       headerName: "VCF 파일명",
-      field: "company",
+      field: "filename",
       editable: true,
       sortable: true,
       filter: true,
@@ -42,16 +42,16 @@ $(document).ready(function() {
     },
     {
       headerName: "상세내용",
-      field: "city",
+      field: "comment",
       editable: true,
       sortable: true,
       filter: true,
       cellClass: "ag-header-cell-label",
-      width: 125
+      width: 500
     },
     {
       headerName: "작물",
-      field: "country",
+      field: "cropid",
       editable: true,
       sortable: true,
       filter: true,
@@ -60,40 +60,55 @@ $(document).ready(function() {
     },
     {
       headerName: "등록일자",
-      field: "state",
+      field: "cre_dt",
       editable: true,
       sortable: true,
       filter: 'agDateColumnFilter',
       cellClass: "grid-cell-centered",      
-      width: 125
+      width: 180
     },
     {
       headerName: "참조유전체",
-      field: "zip",
+      field: "refgenome",
       editable: true,
       sortable: true,
       filter: true,
       cellClass: "grid-cell-centered",      
-      width: 125
+      width: 190
     },
     {
       headerName: "샘플수",
-      field: "email",
+      field: "samplecnt",
       editable: true,
       sortable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
-      width: 260
+      width: 120
     },
     {
       headerName: "변이수",
-      field: "followers",
+      field: "variablecnt",
       editable: true,
       sortable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
-      width: 250
-    }
+      width: 120
+    },
+	{
+      headerName: "jobid",
+      field: "jobid",
+      hide: true
+    },  
+	{
+      headerName: "uploadpath",
+      field: "uploadpath",
+      hide: true
+    },  
+	{
+      headerName: "resultpath",
+      field: "resultpath",
+      hide: true
+    }        
   ];
 
   /*** GRID OPTIONS ***/
@@ -136,15 +151,13 @@ $(document).ready(function() {
 	    elem.addClass(newClass);
 	}
  
-
-
   /*** DEFINED TABLE VARIABLE ***/
   var gridTable = document.getElementById("myGrid");
 
   /*** GET TABLE DATA FROM URL ***/
 
   agGrid
-    .simpleHttpRequest({ url: "../../web/database/genotype_grid.json"})
+    .simpleHttpRequest({ url: "http://localhost:8080/ipet_digitalbreed/web/database/genotype_json.jsp"})
     .then(function(data) {
       gridOptions.api.setRowData(data);
     });
