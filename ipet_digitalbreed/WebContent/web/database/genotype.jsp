@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/shepherd-theme-default.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
-    <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-material.css">    
+    <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css">    
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -133,7 +133,7 @@
                                     </div>
                                 </div>
                                 
-                                <div id="myGrid" class="aggrid ag-theme-material" style="width: 100%;height:230px;"></div><br>
+                                <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:220px;"></div><br>
                                 <button class="btn btn-danger mr-1 mb-1" onclick="addRow()">Delete selected</button>
 								<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="removeRow()">VCF file Upload</button>            
                                       
@@ -177,7 +177,7 @@
 
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_genotype.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
     <!-- END: Page JS-->
 
 </body>

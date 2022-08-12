@@ -15,9 +15,9 @@ $(document).ready(function() {
       field: "firstname",
       editable: true,
       sortable: true,
-      filter: true,
       width: 175,
-      filter: true,
+      filter: 'agMultiColumnFilter',
+      cellClass: "ag-header-cell-label",
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
       headerCheckboxSelection: true
@@ -27,7 +27,8 @@ $(document).ready(function() {
       field: "lastname",
       editable: true,
       sortable: true,
-      filter: true,
+      filter: 'agMultiColumnFilter',
+      cellClass: "grid-cell-centered",      
       width: 175
     },
     {
@@ -36,6 +37,7 @@ $(document).ready(function() {
       editable: true,
       sortable: true,
       filter: true,
+      cellClass: "ag-header-cell-label",
       width: 250
     },
     {
@@ -44,6 +46,7 @@ $(document).ready(function() {
       editable: true,
       sortable: true,
       filter: true,
+      cellClass: "ag-header-cell-label",
       width: 125
     },
     {
@@ -52,6 +55,7 @@ $(document).ready(function() {
       editable: true,
       sortable: true,
       filter: true,
+      cellClass: "grid-cell-centered",      
       width: 150
     },
     {
@@ -59,7 +63,8 @@ $(document).ready(function() {
       field: "state",
       editable: true,
       sortable: true,
-      filter: true,
+      filter: 'agDateColumnFilter',
+      cellClass: "grid-cell-centered",      
       width: 125
     },
     {
@@ -68,22 +73,25 @@ $(document).ready(function() {
       editable: true,
       sortable: true,
       filter: true,
+      cellClass: "grid-cell-centered",      
       width: 125
     },
     {
-      headerName: "샘플 수",
+      headerName: "샘플수",
       field: "email",
       editable: true,
       sortable: true,
-      filter: true,
+      filter: 'agNumberColumnFilter',
+      cellClass: "grid-cell-centered",      
       width: 260
     },
     {
-      headerName: "변이 수",
+      headerName: "변이수",
       field: "followers",
       editable: true,
       sortable: true,
-      filter: true,
+      filter: 'agNumberColumnFilter',
+      cellClass: "grid-cell-centered",      
       width: 250
     }
   ];
@@ -92,9 +100,9 @@ $(document).ready(function() {
   var gridOptions = {
     columnDefs: columnDefs,
     rowHeight: 35,
-    rowSelection: "multiple",
-    floatingFilter: false,
-    filter: true,
+    //rowSelection: "multiple",
+    floatingFilter: true,
+    filter: 'agMultiColumnFilter',
     pagination: true,
     paginationPageSize: 20,
     pivotPanelShow: "always",
