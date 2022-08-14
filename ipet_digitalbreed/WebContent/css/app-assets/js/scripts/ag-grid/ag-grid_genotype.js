@@ -7,13 +7,16 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-$(document).ready(function() {
+	function refresh() {
+		gridOptions.api.refreshCells(); 
+	}
+
   /*** COLUMN DEFINE ***/
   var columnDefs = [
     {
       headerName: "순번",
       field: "selectfiles",
-      editable: true,
+      editable: false,
       sortable: true,
       width: 120,
       filter: 'agMultiColumnFilter',
@@ -22,64 +25,74 @@ $(document).ready(function() {
       headerCheckboxSelectionFilteredOnly: true,
       headerCheckboxSelection: true
     },
-    {
+    /**{
       headerName: "VCF 파일 다운로드",
       field: "fileid",
-      editable: true,
+      editable: false,
       sortable: true,
       filter: 'agMultiColumnFilter',
       cellClass: "grid-cell-centered",      
-      width: 175
-    },
+      width: 175,
+      cellRenderer: function(params){
+      return "<a href='http://example.com/edit/" 
+        + params.value 
+        + "'>link "+params.value+"</a>";
+    }
+    },**/
     {
       headerName: "VCF 파일명",
       field: "filename",
-      editable: true,
+      editable: false,
       sortable: true,
       filter: true,
-      cellClass: "ag-header-cell-label",
-      width: 250
+      cellClass: "grid-cell-centered",      
+      width: 230,
+	  cellRenderer: function(params){
+      return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+"/"+params.data.jobid+"/&filename="
+        + params.value 
+        + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
+    }
     },
     {
       headerName: "상세내용",
       field: "comment",
-      editable: true,
+      editable: false,
       sortable: true,
       filter: true,
       cellClass: "ag-header-cell-label",
-      width: 500
+      width: 690
     },
     {
       headerName: "작물",
       field: "cropid",
-      editable: true,
+      editable: false,
       sortable: true,
       filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 150
-    },
-    {
-      headerName: "등록일자",
-      field: "cre_dt",
-      editable: true,
-      sortable: true,
-      filter: 'agDateColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 180
     },
     {
+      headerName: "등록일자",
+      field: "cre_dt",
+      editable: false,
+      sortable: true,
+      filter: 'agDateColumnFilter',
+      cellClass: "grid-cell-centered",      
+      width: 120
+    },
+    {
       headerName: "참조유전체",
       field: "refgenome",
-      editable: true,
+      editable: false,
       sortable: true,
       filter: true,
       cellClass: "grid-cell-centered",      
-      width: 190
+      width: 230,
     },
     {
       headerName: "샘플수",
       field: "samplecnt",
-      editable: true,
+      editable: false,
       sortable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
@@ -88,7 +101,7 @@ $(document).ready(function() {
     {
       headerName: "변이수",
       field: "variablecnt",
-      editable: true,
+      editable: false,
       sortable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
@@ -124,10 +137,16 @@ $(document).ready(function() {
     colResizeDefault: "shift",
     animateRows: true,
     resizable: true,
+    serverSideInfiniteScroll: true,
 	onCellClicked: params => {
-		console.log('cell was clicked', params.data.company);
-		const element = document.getElementById('vcf_status');
-	    element.innerHTML  = "<div class='card-content'><div class='card-body'><div class='row'><div class='col-12'><ul class='nav nav-pills nav-active-bordered-pill'><li class='nav-item'><a class='nav-link' id='base-pill31' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info</a></li><li class='nav-item'><a class='nav-link' id='base-pill32' data-toggle='pill' href='#pill2' aria-expanded='false'>VCF viewer</a></li><li class='nav-item'><a class='nav-link' id='base-pill33' data-toggle='pill' href='#pill3' aria-expanded='false'>Variant</a></li><li class='nav-item'><a class='nav-link' id='base-pill34' data-toggle='pill' href='#pill4' aria-expanded='false'>DP</a></li><li class='nav-item'><a class='nav-link' id='base-pill35' data-toggle='pill' href='#pill5' aria-expanded='false'>Missing</a></li></ul><div class='tab-content'><div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe></div><div class='tab-pane' id='pill2' aria-labelledby='base-pill2'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe></div><div class='tab-pane' id='pill3' aria-labelledby='base-pill3'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame'></iframe></div><div class='tab-pane' id='pill4' aria-labelledby='base-pill4'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill4_frame' id='pill4_frame'></iframe></div><div class='tab-pane' id='pill5' aria-labelledby='base-pill5'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill5_frame' id='pill5_frame'></iframe></div></div></div></div></div></div>";
+	
+	console.log("cell clicked : " + params.column.getId());
+	
+	if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
+			console.log('cell was clicked', params.data.jobid);
+			console.log('cell was clicked', params.data.resultpath);
+			const element = document.getElementById('vcf_status');
+	   		element.innerHTML  = "<div class='card-content'><div class='card-body'><div class='row'><div class='col-12'><ul class='nav nav-pills nav-active-bordered-pill'><li class='nav-item'><a class='nav-link' id='base-pill31' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info</a></li><li class='nav-item'><a class='nav-link' id='base-pill32' data-toggle='pill' href='#pill2' aria-expanded='false'>VCF viewer</a></li><li class='nav-item'><a class='nav-link' id='base-pill33' data-toggle='pill' href='#pill3' aria-expanded='false'>Variant</a></li><li class='nav-item'><a class='nav-link' id='base-pill34' data-toggle='pill' href='#pill4' aria-expanded='false'>DP</a></li><li class='nav-item'><a class='nav-link' id='base-pill35' data-toggle='pill' href='#pill5' aria-expanded='false'>Missing</a></li></ul><div class='tab-content'><div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe></div><div class='tab-pane' id='pill2' aria-labelledby='base-pill2'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe></div><div class='tab-pane' id='pill3' aria-labelledby='base-pill3'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame'></iframe></div><div class='tab-pane' id='pill4' aria-labelledby='base-pill4'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill4_frame' id='pill4_frame'></iframe></div><div class='tab-pane' id='pill5' aria-labelledby='base-pill5'><iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill5_frame' id='pill5_frame'></iframe></div></div></div></div></div></div>";
 	       replaceClass("base-pill31", "nav-link", "nav-link active");
 	       replaceClass("base-pill32", "nav-link", "nav-link");
 	       replaceClass("base-pill33", "nav-link", "nav-link");
@@ -136,9 +155,11 @@ $(document).ready(function() {
 		   
 		   $('#pill1_frame').attr('src', "");
 		   $('#pill2_frame').attr('src', "");
-		   $('#pill3_frame').attr('src', "../../result/database/genotype_statistics/1111/1111_variant.html");
-		   $('#pill4_frame').attr('src', "../../result/database/genotype_statistics/1111/1111_depth.html");
-		   $('#pill5_frame').attr('src', "../../result/database/genotype_statistics/1111/1111_miss.html");
+		   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
+		   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
+		   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
+	}
+
 	}    
   };
 
@@ -157,7 +178,7 @@ $(document).ready(function() {
   /*** GET TABLE DATA FROM URL ***/
 
   agGrid
-    .simpleHttpRequest({ url: "http://localhost:8080/ipet_digitalbreed/web/database/genotype_json.jsp"})
+    .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp"})
     .then(function(data) {
       gridOptions.api.setRowData(data);
     });
@@ -204,4 +225,3 @@ $(document).ready(function() {
      // gridOptions.columnApi.setColumnPinned("email", "left");
     }
   });
-});

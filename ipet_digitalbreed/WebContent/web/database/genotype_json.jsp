@@ -6,7 +6,9 @@
 
 	GenotypeListJson genotypelistjson = new GenotypeListJson();
 
-	JSONArray GenotypeListJsonValues = genotypelistjson.getGenotypeListJson();
+	String permissionUid = session.getAttribute("permissionUid")+"";
+
+	JSONArray GenotypeListJsonValues = genotypelistjson.getGenotypeListJson(permissionUid);
 
 	response.setHeader("Access-Control-Allow-Origin", "*");
 	response.setHeader("Access-Control-Allow-Credentials", "true");

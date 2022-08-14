@@ -17,13 +17,15 @@
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
+ 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/innorix/innorix.css">    
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/shepherd-theme-default.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
-    <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css">    
+    <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
+	<link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/forms/validation/form-validation.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -41,13 +43,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/aggrid.css">
-    
-    
     <!-- END: Page CSS-->
-
-    <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
-    <!-- END: Custom CSS-->
 
 </head>
 <!-- END: Head-->
@@ -135,7 +131,8 @@
                                 
                                 <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:220px;"></div><br>
                                 <button class="btn btn-danger mr-1 mb-1" onclick="addRow()">Delete selected</button>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="removeRow()">VCF file Upload</button>            
+								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop">VCF file Upload</button>    
+						        
                                       
                             </div>
                         </div>
@@ -147,13 +144,81 @@
             </div>
         </div>
     </div>
+    
+	<!-- Modal start-->
+
+	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+	            <div class="modal-content">
+	                <div class="modal-header bg-warning white">
+	                    <h4 class="modal-title" id="myModalLabel4">VCF File Upload</h4>
+	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">&times;</span>
+	                    </button>
+	                </div>
+	                <div class="modal-body">
+						<form class="form">
+						     <div class="form-body">
+						         <div class="row">
+						             <br><div class="col-md-12 col-12">
+						                 <br><div class="form-label-group">
+						                     <input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
+						                     <label for="first-name-column">Comment</label>
+						                 </div>
+						             </div>
+						             <div class="col-md-6 col-12">
+						                 <div class="form-label-group">
+						                     <input type="text" id="maf" class="form-control" placeholder="Maf" name="maf">
+						                     <label for="city-column">Maf</label>
+						                 </div>
+						             </div>
+						             <div class="col-md-6 col-12">
+						                 <div class="form-label-group">
+						                     <input type="text" id="mindp" class="form-control" name="mindp" placeholder="minDP">
+						                     <label for="country-floating">minDP</label>
+						                 </div>
+						             </div>
+						             <div class="col-md-6 col-12">
+						                 <div class="form-label-group">
+						                     <input type="text" id="mingq" class="form-control" name="mingq" placeholder=minGQ>
+						                     <label for="company-column">minGQ</label>
+						                 </div>
+						             </div>
+						             <div class="col-md-6 col-12">
+						                 <div class="form-label-group">
+						                     <input type="email" id="missing" class="form-control" name="missing" placeholder="Missing">
+						                     <label for="email-id-column">Missing</label>
+						                 </div>
+						             </div>						             
+						             <div class="col-md-12 col-12">
+										<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div><br>
+						             </div>	
+						             <div class="col-12">
+						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
+						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+						             </div>
+						             
+						         </div>
+						     </div>
+						</form>
+	                </div>
+	                <!-- 
+		                <div class="modal-footer">
+		                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+		                </div>
+	                 -->
+	            </div>
+	        </div>
+                          
+	<!-- Modal end-->
+                        
     <!-- END: Content-->
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
     <!-- BEGIN: Footer-->
     <footer class="footer footer-static footer-light navbar-shadow">
-        <p class="clearfix blue-grey lighten-2 mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2022<a class="text-bold-800 grey darken-2" href="http://www.dnacare.co.kr" target="_blank">DNACARE Co., LTD</a>All rights Reserved</span><span class="float-md-right d-none d-md-block">Hand-crafted & Made with<i class="feather icon-heart pink"></i></span>
+        <p class="clearfix blue-grey lighten-2 mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2022<a class="text-bold-800 grey darken-2" href="http://www.dnacare.co.kr" target="_blank">DNACARE Co., LTD</a>All rights Reserved</span>
             <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="feather icon-arrow-up"></i></button>
         </p>
     </footer>
@@ -162,6 +227,7 @@
 
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
+    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
@@ -178,8 +244,51 @@
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_genotype.js"></script>
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
+	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
+    <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
+
+        <script>   
+            var box = new Object();
+            window.onload = function() {
+                // 파일전송 컨트롤 생성
+                box = innorix.create({
+                    el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
+                    height          : 130,
+                    maxFileCount   : 1,  
+                    allowType : ["vcf"],
+                    agent: false, // true = Agent 설치, false = html5 모드 사용                    
+                    uploadUrl: './fileuploader.jsp' // 업로드 URL
+                });
+
+                // 업로드 완료 이벤트
+                box.on('uploadComplete', function (p) {
+             	    
+                    /*var f = p.files;
+                    var r = "Upload complete\n\n";
+                    for (var i = 0; i < f.length; i++ ) {
+                        r += f[i].clientFileName + " " + f[i].fileSize + "\n";
+                    }
+                    alert(r);*/
+					//window.close();
+					//self.opener.location.reload(); 
+					backdrop.style.display = "none";
+					refresh();
+                });
+            };
+            function FileUpload() {
+	            var postObj = new Object();
+	            postObj.comment = document.getElementById("comment").value;;
+	            postObj.maf = document.getElementById('maf').value;
+	            postObj.mindp = document.getElementById('mindp').value;
+	            postObj.mingq = document.getElementById('mingq').value;
+	            postObj.missing = document.getElementById('missing').value;
+	            box.setPostData(postObj);
+	            box.upload();
+            }            
+            
+        </script>
 </body>
 <!-- END: Body-->
 

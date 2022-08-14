@@ -7,7 +7,7 @@ public class GenotypeListJson {
 
 	static IPETDigitalConnDB ipetdigitalconndb = null;
 
-	public JSONArray getGenotypeListJson() throws Exception
+	public JSONArray getGenotypeListJson(String permissionUid) throws Exception
 	{
 		 ipetdigitalconndb = new IPETDigitalConnDB();	
 		 JSONArray jsonArray = new JSONArray();
@@ -15,9 +15,7 @@ public class GenotypeListJson {
 			try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-				String sql="select no, fileid, uploadpath, filename,resultpath, comment, refgenome, cropid, samplecnt, variablecnt, cre_dt  from vcfdata_info_t order by cre_dt desc;";
-
-				System.out.println(sql);
+				String sql="select no, fileid, uploadpath, filename,resultpath, comment, refgenome, cropid, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from vcfdata_info_t where creuser='"+permissionUid+"' order by no desc;";
 
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 
@@ -32,6 +30,7 @@ public class GenotypeListJson {
 					jsonObject.put("cropid",ipetdigitalconndb.rs.getString("cropid"));
 					jsonObject.put("samplecnt",ipetdigitalconndb.rs.getString("samplecnt"));
 					jsonObject.put("variablecnt",ipetdigitalconndb.rs.getString("variablecnt"));
+					jsonObject.put("jobid",ipetdigitalconndb.rs.getString("jobid"));
 					jsonObject.put("cre_dt",ipetdigitalconndb.rs.getString("cre_dt"));
 					jsonArray.add(jsonObject);
 				}
