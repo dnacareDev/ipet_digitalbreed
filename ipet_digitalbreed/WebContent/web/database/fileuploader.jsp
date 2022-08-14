@@ -64,7 +64,9 @@
 		
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
-		String insertVcfinfo_sql="";
+		//insert into vcfdata_info_t values('2','f-00002','c-00002','v-00002','IRGSPv1.0.fasta','/uploads/database/db_input/','test.vcf','/result/database/genotype_statistics/','고추(내수용) SNP 분석 raw data 업로드 파일(vcf)','35','562313','1','2','3','4','20220813142535','master',now());
+
+		String insertVcfinfo_sql="insert into vcfdata_info_t values ";
 		
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
