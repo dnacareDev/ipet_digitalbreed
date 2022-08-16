@@ -10,10 +10,8 @@
 <%
 	request.setCharacterEncoding("UTF-8"); 
 
-
 	String resultpath = request.getParameter("resultpath");
  	String filename = request.getParameter("filename");
-
 
     // 파일 업로드된 경로
     String root = request.getSession().getServletContext().getRealPath("/");
@@ -24,16 +22,12 @@
  	System.out.println("root : " + root);
  	System.out.println("savepath : " + savepath);
 
-
-	// 실제 내보낼 파일명
-    String orgfilename = filename;
        
     InputStream in = null;
     OutputStream os = null;
     File file = null;
     boolean skip = false;
-    String client = "";
- 
+    String client = ""; 
  
     try{
  

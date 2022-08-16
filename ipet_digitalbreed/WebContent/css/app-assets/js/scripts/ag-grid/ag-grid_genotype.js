@@ -9,9 +9,15 @@
 
 	function refresh() {
 		gridOptions.api.refreshCells(); 
+		  agGrid
+    .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+    .then(function(data) {
+      gridOptions.api.setRowData(data);
+    });
 	}
 
   /*** COLUMN DEFINE ***/
+  
   var columnDefs = [
     {
       headerName: "순번",
@@ -48,7 +54,7 @@
       cellClass: "grid-cell-centered",      
       width: 230,
 	  cellRenderer: function(params){
-      return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+"/"+params.data.jobid+"/&filename="
+      return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
         + params.value 
         + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
     }
@@ -159,7 +165,6 @@
 		   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
 		   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
 	}
-
 	}    
   };
 
@@ -178,7 +183,7 @@
   /*** GET TABLE DATA FROM URL ***/
 
   agGrid
-    .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp"})
+    .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
       gridOptions.api.setRowData(data);
     });

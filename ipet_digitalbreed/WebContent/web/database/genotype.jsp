@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
+<%@ page import="ipet_digitalbreed.*"%>    
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -26,6 +27,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/forms/validation/form-validation.css">
+	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/forms/select/select2.min.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -49,7 +51,17 @@
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
-
+<style>
+body {
+	font-family: 'SDSamliphopangche_Outline';
+}
+</style>
+<%
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	String permissionUid = session.getAttribute("permissionUid")+"";
+	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
+	System.out.println(cropvari_sql);
+%>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
     <!-- BEGIN: Header-->
@@ -114,10 +126,33 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
-                                            <div class="dropdown sort-dropdown mb-1 mb-sm-0">
-                                               <button class="btn btn-warning mr-1 mb-1" onclick="addRow()">VCF Tool Box</button>
-                                            </div>
-                                            <div class="ag-btns d-flex flex-wrap">
+                                            <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
+                                                <select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
+                                                    <%
+	                                                	try{
+	                                                		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	                                                		int selected_cnt=0;
+	                                                		String selected_flag=null;
+	
+	                                                		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
+	                                                		while (ipetdigitalconndb.rs.next()) { 	
+	                                                			if(selected_cnt==0) {selected_flag = "selected";};   
+	                                                			out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
+	                                                			System.out.println("selected_cnt : " + selected_cnt);
+	                                                			selected_cnt++;
+	                                                			selected_flag="";
+	                                                		}
+	                                                	}catch(Exception e){
+	                                                		System.out.println(e);
+	                                                	}finally { 
+	                                                		ipetdigitalconndb.stmt.close();
+	                                                		ipetdigitalconndb.rs.close();
+	                                                		ipetdigitalconndb.conn.close();
+	                                                	}
+                                                    %>       
+                                                     </select>                                          
+                                            </div>           
+                                            <div class="ag-btns d-flex flex-wrap">                                            
                                                 <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
                                                 <div class="btn-export">
                                                     <button class="btn btn-primary ag-grid-export-btn">
@@ -130,7 +165,7 @@
                                 </div>
                                 
                                 <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:220px;"></div><br>
-                                <button class="btn btn-danger mr-1 mb-1" onclick="addRow()">Delete selected</button>
+                                <button class="btn btn-warning mr-1 mb-1" onclick="addRow()">VCF Tool Box</button><button class="btn btn-danger mr-1 mb-1" onclick="addRow()">Delete selected</button>
 								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop">VCF file Upload</button>    
 						        
                                       
@@ -228,6 +263,8 @@
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
+    <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->

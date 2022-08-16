@@ -10,6 +10,7 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
+	
 	String jobid = runanalysistools.getCurrentDateTime();		
 	String permissionUid = session.getAttribute("permissionUid")+"";	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
