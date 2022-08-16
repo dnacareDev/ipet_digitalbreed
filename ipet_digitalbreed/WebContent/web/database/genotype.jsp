@@ -153,10 +153,10 @@ body {
                                             </div>           
                                             <div class="ag-btns d-flex flex-wrap">                                            
                                                 <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
-                                                <div class="btn-export">
-                                                    <button class="btn btn-primary ag-grid-export-btn">
+                                               <!-- <div class="btn-export">
+                                                    <button class="btn btn-primary mr-1 mb-1">
                                                         Export as CSV
-                                                    </button>
+                                                    </button>-->
                                                 </div>
                                             </div>
                                         </div>
