@@ -52,7 +52,7 @@
       sortable: true,
       filter: true,
       cellClass: "grid-cell-centered",      
-      width: 230,
+      width: 275,
 	  cellRenderer: function(params){
       return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
         + params.value 
@@ -66,7 +66,7 @@
       sortable: true,
       filter: true,
       cellClass: "ag-header-cell-label",
-      width: 690
+      width: 750
     },
     {
       headerName: "작물",
@@ -75,7 +75,8 @@
       sortable: true,
       filter: true,
       cellClass: "grid-cell-centered",      
-      width: 180
+      width: 180,
+      hide: true
     },
     {
       headerName: "등록일자",
@@ -93,7 +94,7 @@
       sortable: true,
       filter: true,
       cellClass: "grid-cell-centered",      
-      width: 230,
+      width: 275,
     },
     {
       headerName: "샘플수",
@@ -159,7 +160,7 @@
 	       replaceClass("base-pill34", "nav-link", "nav-link");
 	       replaceClass("base-pill35", "nav-link", "nav-link");	  
 		   
-		   $('#pill1_frame').attr('src', "");
+		   $('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
 		   $('#pill2_frame').attr('src', "");
 		   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
 		   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");

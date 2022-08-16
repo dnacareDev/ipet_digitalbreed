@@ -138,7 +138,6 @@ body {
 	                                                		while (ipetdigitalconndb.rs.next()) { 	
 	                                                			if(selected_cnt==0) {selected_flag = "selected";};   
 	                                                			out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
-	                                                			System.out.println("selected_cnt : " + selected_cnt);
 	                                                			selected_cnt++;
 	                                                			selected_flag="";
 	                                                		}
@@ -180,6 +179,7 @@ body {
         </div>
     </div>
     
+    
 	<!-- Modal start-->
 
 	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
@@ -192,7 +192,7 @@ body {
 	                    </button>
 	                </div>
 	                <div class="modal-body">
-						<form class="form">
+						<form class="form" id="uploadvcfform">
 						     <div class="form-body">
 						         <div class="row">
 						             <br><div class="col-md-12 col-12">
@@ -201,6 +201,7 @@ body {
 						                     <label for="first-name-column">Comment</label>
 						                 </div>
 						             </div>
+						             <!-- 
 						             <div class="col-md-6 col-12">
 						                 <div class="form-label-group">
 						                     <input type="text" id="maf" class="form-control" placeholder="Maf" name="maf">
@@ -224,7 +225,8 @@ body {
 						                     <input type="email" id="missing" class="form-control" name="missing" placeholder="Missing">
 						                     <label for="email-id-column">Missing</label>
 						                 </div>
-						             </div>						             
+						             </div>		
+						             -->				             
 						             <div class="col-md-12 col-12">
 										<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div><br>
 						             </div>	
@@ -285,8 +287,8 @@ body {
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-
-        <script>   
+        <script>                  
+        	
             var box = new Object();
             window.onload = function() {
                 // 파일전송 컨트롤 생성
@@ -295,6 +297,7 @@ body {
                     height          : 130,
                     maxFileCount   : 1,  
                     allowType : ["vcf"],
+					addDuplicateFile : false,
                     agent: false, // true = Agent 설치, false = html5 모드 사용                    
                     uploadUrl: './fileuploader.jsp' // 업로드 URL
                 });
@@ -310,21 +313,26 @@ body {
                     alert(r);*/
 					//window.close();
 					//self.opener.location.reload(); 
-					backdrop.style.display = "none";
+					document.getElementById('uploadvcfform').reset();
+	        		box.removeAllFiles();
+					backdrop.style.display = "none";					
 					refresh();
                 });
             };
             function FileUpload() {
 	            var postObj = new Object();
-	            postObj.comment = document.getElementById("comment").value;;
-	            postObj.maf = document.getElementById('maf').value;
-	            postObj.mindp = document.getElementById('mindp').value;
-	            postObj.mingq = document.getElementById('mingq').value;
-	            postObj.missing = document.getElementById('missing').value;
+	            postObj.comment = document.getElementById("comment").value;;	       
+	            postObj.varietyid = $( "#variety-select option:selected" ).val();
 	            box.setPostData(postObj);
 	            box.upload();
             }            
             
+            $('#backdrop').on('hidden.bs.modal', function (e) {
+	        	//$(this).find('form')[0].reset();
+	        	//alert("AAAAAAAAAAAAAAA");
+	        	document.getElementById('uploadvcfform').reset();
+	        	box.removeAllFiles();
+	        });            
         </script>
 </body>
 <!-- END: Body-->

@@ -17,6 +17,10 @@
 	
 	String savePath = rootFolder+"uploads/database/db_input/";
 	String outputPath = rootFolder+"result/database/genotype_statistics/";	
+	
+	String db_savePath = "uploads/database/db_input/";
+	String db_outputPath = "/ipet_digitalbreed/result/database/genotype_statistics/";	
+
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	File folder_savePath = new File(savePath+jobid);
@@ -54,31 +58,48 @@
 	String _type            = uploader.getParameter("type");            // 커스텀 정의 POST Param 1
 	String _part            = uploader.getParameter("part");            // 커스텀 정의 POST Param 2
 	String comment = uploader.getParameter("comment");
-	String maf = uploader.getParameter("maf");
+	/*String maf = uploader.getParameter("maf");
 	String mindp = uploader.getParameter("mindp");
 	String mingq = uploader.getParameter("mingq");	
-	String missing = uploader.getParameter("missing");	
+	String missing = uploader.getParameter("missing");	*/
+	String varietyid = uploader.getParameter("varietyid");
 	
 	String _run_retval = uploader.run();
 	
 	if (uploader.isUploadDone()) {	
+		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
+		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
+		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		
+		runanalysistools.execute(genotype_sequence);
+		runanalysistools.execute(genotype_statistics);
+		runanalysistools.execute(vcf_statistcs);
+
+		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		
+		String vcf_statistcs_data = bufferedReader.readLine();
+	    String[] vcf_statistcs_data_strArr = vcf_statistcs_data.split(",");
+
+		String refseq = vcf_statistcs_data_strArr[0];
+		String samplecnt = vcf_statistcs_data_strArr[1];
+		String variablecnt = vcf_statistcs_data_strArr[2];
+
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
-		//insert into vcfdata_info_t values('2','f-00002','c-00002','v-00002','IRGSPv1.0.fasta','/uploads/database/db_input/','test.vcf','/result/database/genotype_statistics/','고추(내수용) SNP 분석 raw data 업로드 파일(vcf)','35','562313','1','2','3','4','20220813142535','master',now());
+		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+refseq+"','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
 
-		String insertVcfinfo_sql="insert into vcfdata_info_t values ";
+		System.out.println("insertVcfinfo_sql : " + insertVcfinfo_sql);
 		
-		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
-		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
-
-		runanalysistools.execute(genotype_sequence);
-		runanalysistools.execute(genotype_statistics);		
+		try{
+				ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
+		}catch(Exception e){
+    		System.out.println(e);
+    	}finally { 
+			System.out.println("AAAAAAAAAAAAAAA");
+    		ipetdigitalconndb.stmt.close();
+    		ipetdigitalconndb.conn.close();
+    	}		
 	}
-
-	/*
-		./genotype_sequence_final.sh /data/apache-tomcat-9.0.64/webapps/ROOT/ipet_digitalbreed/uploads/database/db_input/ /data/apache-tomcat-9.0.64/webapps/ROOT/ipet_digitalbreed/result/database/genotype_statistics/ 20220813142535 test.vcf
-
-		./genotype_statistics_final.sh /data/apache-tomcat-9.0.64/webapps/ROOT/ipet_digitalbreed/uploads/database/db_input/ /data/apache-tomcat-9.0.64/webapps/ROOT/ipet_digitalbreed/result/database/genotype_statistics/ 20220813142535 test.vcf
-	*/
+	
 %>
