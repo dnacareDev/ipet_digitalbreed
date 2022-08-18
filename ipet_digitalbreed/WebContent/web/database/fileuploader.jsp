@@ -88,15 +88,13 @@
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
 		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+refseq+"','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
-
-		System.out.println("insertVcfinfo_sql : " + insertVcfinfo_sql);
 		
 		try{
 				ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
 		}catch(Exception e){
     		System.out.println(e);
     	}finally { 
-			System.out.println("AAAAAAAAAAAAAAA");
+			System.out.println("vcf file upload Success");
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}		

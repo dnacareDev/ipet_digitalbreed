@@ -161,13 +161,11 @@ body {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:220px;"></div><br>
-                                <button class="btn btn-warning mr-1 mb-1" onclick="addRow()">VCF Tool Box</button><button class="btn btn-danger mr-1 mb-1" onclick="addRow()">Delete selected</button>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop">VCF file Upload</button>    
-						        
-                                      
+                                </div>								                              
+                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:220px;" ></div><br>
+                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;" onclick="addRow()"><i class="feather icon-corner-up-left"></i> Tool Box</button>
+                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop"><i class="feather icon-upload"></i> Upload</button>
+								<button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  	
                             </div>
                         </div>
                     </div>                    
@@ -178,9 +176,46 @@ body {
             </div>
         </div>
     </div>
-    
-    
-	<!-- Modal start-->
+                            
+    <!-- END: Content-->
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    <!-- BEGIN: Footer-->
+    <footer class="footer footer-static footer-light navbar-shadow">
+        <p class="clearfix blue-grey lighten-2 mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2022<a class="text-bold-800 grey darken-2" href="http://www.dnacare.co.kr" target="_blank">DNACARE Co., LTD</a>All rights Reserved</span>
+            <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="feather icon-arrow-up"></i></button>
+        </p>
+    </footer>
+    <!-- END: Footer-->
+
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
+    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
+    <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
+	<script src="../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="../../css/app-assets/js/core/app-menu.js"></script>
+    <script src="../../css/app-assets/js/core/app.js"></script>
+    <script src="../../css/app-assets/js/scripts/components.js"></script>
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_genotype.js"></script>
+    <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
+	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
+    <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
+    <!-- END: Page JS-->
+
+<!-- Modal start-->
 
 	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
 	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -233,8 +268,7 @@ body {
 						             <div class="col-12">
 						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
 						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
-						             </div>
-						             
+						             </div>						             
 						         </div>
 						     </div>
 						</form>
@@ -248,47 +282,8 @@ body {
 	        </div>
                           
 	<!-- Modal end-->
-                        
-    <!-- END: Content-->
-    <div class="sidenav-overlay"></div>
-    <div class="drag-target"></div>
-
-    <!-- BEGIN: Footer-->
-    <footer class="footer footer-static footer-light navbar-shadow">
-        <p class="clearfix blue-grey lighten-2 mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2022<a class="text-bold-800 grey darken-2" href="http://www.dnacare.co.kr" target="_blank">DNACARE Co., LTD</a>All rights Reserved</span>
-            <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="feather icon-arrow-up"></i></button>
-        </p>
-    </footer>
-    <!-- END: Footer-->
-
-
-    <!-- BEGIN: Vendor JS-->
-    <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
-    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
-    <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
-    <!-- BEGIN Vendor JS-->
-
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
-	<script src="../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
-    <!-- END: Page Vendor JS-->
-
-    <!-- BEGIN: Theme JS-->
-    <script src="../../css/app-assets/js/core/app-menu.js"></script>
-    <script src="../../css/app-assets/js/core/app.js"></script>
-    <script src="../../css/app-assets/js/scripts/components.js"></script>
-    <!-- END: Theme JS-->
-
-    <!-- BEGIN: Page JS-->
-    <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_genotype.js"></script>
-    <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
-	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
-    <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
-    <!-- END: Page JS-->
-
-        <script>                  
-        	
+	
+        <script>    
             var box = new Object();
             window.onload = function() {
                 // 파일전송 컨트롤 생성

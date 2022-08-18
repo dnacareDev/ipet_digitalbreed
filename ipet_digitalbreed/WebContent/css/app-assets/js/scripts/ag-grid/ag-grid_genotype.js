@@ -16,6 +16,31 @@
     });
 	}
 
+	function getSelectedRowData() {
+	  let selectedData = gridOptions.api.getSelectedRows();
+	  var deleteitems = new Array();
+	  
+	  for (var i = 0; i < selectedData.length; i++) {
+		    deleteitems.push(selectedData[i].selectfiles);
+	  }    
+	  
+	  //location.href="../../web/database/genotype_delete.jsp?deleteitems="+deleteitems;
+	  
+	  $.ajax({
+		    url:"../../web/database/genotype_delete.jsp",
+		    type:"POST",
+		    data:{'params':deleteitems},
+		    success: function(result) {
+		        if (result) {
+					alert("정상적으로 삭제되었습니다.");
+					refresh();
+		        } else {
+		            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+		        }
+		    }
+		  });
+		}
+	
   /*** COLUMN DEFINE ***/
   
   var columnDefs = [
@@ -24,7 +49,7 @@
       field: "selectfiles",
       editable: false,
       sortable: true,
-      width: 120,
+      width: 120,	
       filter: 'agMultiColumnFilter',
       cellClass: "grid-cell-centered",      
       checkboxSelection: true,
@@ -135,7 +160,7 @@
   var gridOptions = {
     columnDefs: columnDefs,
     rowHeight: 35,
-    //rowSelection: "multiple",
+    rowSelection: "multiple",
     floatingFilter: true,
     filter: 'agMultiColumnFilter',
     pagination: true,
