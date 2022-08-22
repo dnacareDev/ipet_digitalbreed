@@ -23,7 +23,6 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/shepherd-theme-default.css">
-    <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/forms/validation/form-validation.css">
@@ -117,7 +116,7 @@ body {
                     </div>
                 </div>
             </div>
-            <div class="content-body">
+            	<div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
                     <div class="card">
@@ -266,7 +265,7 @@ body {
 										<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div><br>
 						             </div>	
 						             <div class="col-12">
-						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
+						                 <button type="button" class="btn btn-primary" style="float: right;" onclick="FileUpload();">Upload</button>
 						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
 						             </div>						             
 						         </div>
@@ -315,6 +314,11 @@ body {
                 });
             };
             function FileUpload() {
+            	if(document.getElementById("comment").value==''){
+            		alert("Comment must be entered.");   
+            		document.getElementById("comment").focus();
+            	  return false;  
+            	}
 	            var postObj = new Object();
 	            postObj.comment = document.getElementById("comment").value;;	       
 	            postObj.varietyid = $( "#variety-select option:selected" ).val();
