@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.innorix.transfer.InnorixUpload" %>
-<%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
+<%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*,java.nio.file.*"%>
 <%@ page import="ipet_digitalbreed.*"%>    
 
 <%
+
+if (request.getMethod().equals("POST"))
+{
 	int maxPostSize = 2147482624; // bytes
 	
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
-	String jobid = runanalysistools.getCurrentDateTime();		
+
 	String permissionUid = session.getAttribute("permissionUid")+"";	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	
@@ -23,29 +25,9 @@
 
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
-	File folder_savePath = new File(savePath+jobid);
 
-	if (!folder_savePath.exists()) {
-		try{
-			folder_savePath.mkdir(); 
-	        } 
-	        catch(Exception e){
-		    e.getStackTrace();
-		}        
-	}
-
-	File folder_outputPath = new File(outputPath+jobid);
 	
-	if (!folder_outputPath.exists()) {
-		try{
-			folder_outputPath.mkdir(); 
-	        } 
-	        catch(Exception e){
-		    e.getStackTrace();
-		}        
-	}
-	
-	InnorixUpload uploader = new InnorixUpload(request, response, maxPostSize, savePath+jobid);
+	InnorixUpload uploader = new InnorixUpload(request, response, maxPostSize, savePath);
 
 	String _action          = uploader.getParameter("_action");         // 동작 플래그
 	String _orig_filename   = uploader.getParameter("_orig_filename");  // 원본 파일명
@@ -66,13 +48,55 @@
 	
 	String _run_retval = uploader.run();
 	
+
 	if (uploader.isUploadDone()) {	
+		String jobid = runanalysistools.getCurrentDateTime();		
+
+		File folder_savePath = new File(savePath+jobid);
+
+		if (!folder_savePath.exists()) {
+		try{
+			folder_savePath.mkdir(); 
+	        } 
+	        catch(Exception e){
+		    e.getStackTrace();
+			}        
+		}
+
+		File folder_outputPath = new File(outputPath+jobid);
+		
+		if (!folder_outputPath.exists()) {
+			try{
+				folder_outputPath.mkdir(); 
+				} 
+				catch(Exception e){
+				e.getStackTrace();
+			}        
+		}
+
+	    File from = new File(savePath+_orig_filename);
+        File to = new File(savePath+jobid+"/"+_orig_filename);
+ 
+        try {
+            Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File moved successfully.");
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		
+		System.out.println("genotype_sequence : " + genotype_sequence);
 		runanalysistools.execute(genotype_sequence);
+
+		System.out.println("genotype_statistics : " + genotype_statistics);
 		runanalysistools.execute(genotype_statistics);
+
+		System.out.println("vcf_statistcs : " + vcf_statistcs);
 		runanalysistools.execute(vcf_statistcs);
 
 		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
@@ -85,6 +109,8 @@
 		String samplecnt = vcf_statistcs_data_strArr[1];
 		String variablecnt = vcf_statistcs_data_strArr[2];
 
+		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+		
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
 		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+refseq+"','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
@@ -93,11 +119,13 @@
 				ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
 		}catch(Exception e){
     		System.out.println(e);
+    		ipetdigitalconndb.stmt.close();
+    		ipetdigitalconndb.conn.close();
     	}finally { 
 			System.out.println("vcf file upload Success");
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}		
 	}
-	
+}
 %>
