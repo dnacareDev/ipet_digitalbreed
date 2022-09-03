@@ -182,7 +182,6 @@
   var gridTable = document.getElementById("myGrid");
 
   /*** GET TABLE DATA FROM URL ***/
-
   agGrid
     .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
