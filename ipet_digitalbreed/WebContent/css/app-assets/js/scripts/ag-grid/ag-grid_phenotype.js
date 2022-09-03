@@ -43,118 +43,7 @@
 	
   /*** COLUMN DEFINE ***/
   
-  var columnDefs = [
-    {
-      headerName: "순번",
-      field: "selectfiles",
-      editable: false,
-      sortable: true,
-      width: 120,	
-      filter: 'agMultiColumnFilter',
-      cellClass: "grid-cell-centered",      
-      checkboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      headerCheckboxSelection: true	
-    },
-    /**{
-      headerName: "VCF 파일 다운로드",
-      field: "fileid",
-      editable: false,
-      sortable: true,
-      filter: 'agMultiColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 175,
-      cellRenderer: function(params){
-      return "<a href='http://example.com/edit/" 
-        + params.value 
-        + "'>link "+params.value+"</a>";
-    }
-    },**/
-    {
-      headerName: "VCF 파일명",
-      field: "filename",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 275,
-	  cellRenderer: function(params){
-      return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
-        + params.value 
-        + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
-    }
-    },
-    {
-      headerName: "상세내용",
-      field: "comment",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "ag-header-cell-label",
-      width: 750
-    },
-    {
-      headerName: "작물",
-      field: "cropid",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 180,
-      hide: true
-    },
-    {
-      headerName: "등록일자",
-      field: "cre_dt",
-      editable: false,
-      sortable: true,
-      filter: 'agDateColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-    {
-      headerName: "참조유전체",
-      field: "refgenome",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 275,
-    },
-    {
-      headerName: "샘플수",
-      field: "samplecnt",
-      editable: false,
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-    {
-      headerName: "변이수",
-      field: "variablecnt",
-      editable: false,
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-	{
-      headerName: "jobid",
-      field: "jobid",
-      hide: true
-    },  
-	{
-      headerName: "uploadpath",
-      field: "uploadpath",
-      hide: true
-    },  
-	{
-      headerName: "resultpath",
-      field: "resultpath",
-      hide: true
-    }        
-  ];
+ 
 
   /*** GRID OPTIONS ***/
   var gridOptions = {
@@ -207,6 +96,7 @@
   var gridTable = document.getElementById("myGrid");
 
   /*** GET TABLE DATA FROM URL ***/
+
   agGrid
     .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {

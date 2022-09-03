@@ -19,9 +19,13 @@
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
 =======
 >>>>>>> 7d9906263f57df3e3db30a04bf46d6e287dfe92d
+=======
+	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
+>>>>>>> 9ce23bc (phenotype commit)
  	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/innorix/innorix.css">    
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
@@ -33,9 +37,13 @@
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/forms/validation/form-validation.css">
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/forms/select/select2.min.css">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/extensions/swiper.css">	
 =======
 >>>>>>> 7d9906263f57df3e3db30a04bf46d6e287dfe92d
+=======
+    <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/extensions/swiper.css">	
+>>>>>>> 9ce23bc (phenotype commit)
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -103,14 +111,19 @@ body {
 		<jsp:include page="../../css/menu.jsp?menu_active=phenotype" flush="true"/>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 7d9906263f57df3e3db30a04bf46d6e287dfe92d
+=======
+
+>>>>>>> 9ce23bc (phenotype commit)
     <!-- BEGIN: Content-->
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
+<<<<<<< HEAD
 <<<<<<< HEAD
 			<div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
@@ -119,6 +132,9 @@ body {
                             <h2 class="content-header-title float-left mb-0">&nbsp;Genotype Database</h2>
 =======
             <div class="content-header row">
+=======
+			<div class="content-header row">
+>>>>>>> 9ce23bc (phenotype commit)
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
@@ -137,11 +153,15 @@ body {
                 </div>
             </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9ce23bc (phenotype commit)
             <div class="content-body">
                 <div id="user-profile">
                     <section id="profile-info">
                         <div class="row">
                             <div class="col-lg-6 col-12">
+<<<<<<< HEAD
                                 <div class="card" style="height:700px;">
                                     <div class="card-body">   
 
@@ -368,12 +388,159 @@ body {
                     <div id="vcf_status" class="card"></div>
                 </section>
                 <!-- // Basic example section end -->
+=======
+                                <div class="card" style="height:670px;">
+                                    <div class="card-body">   
+>>>>>>> 9ce23bc (phenotype commit)
 
-            </div>
-        </div>
+									<div class="card-content">				
+			                            <div class="card-body">
+			                                <div class="row">
+			                                    <div class="col-12">
+			                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
+			                                            <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
+			                                                <select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
+			                                                    <%
+				                                                	try{
+				                                                		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+				                                                		int selected_cnt=0;
+				                                                		String selected_flag=null;
+				
+				                                                		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
+				                                                		while (ipetdigitalconndb.rs.next()) { 	
+				                                                			if(selected_cnt==0) {selected_flag = "selected";};   
+				                                                			out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
+				                                                			selected_cnt++;
+				                                                			selected_flag="";
+				                                                		}
+				                                                	}catch(Exception e){
+				                                                		System.out.println(e);
+				                                                	}finally { 
+				                                                		ipetdigitalconndb.stmt.close();
+				                                                		ipetdigitalconndb.rs.close();
+				                                                		ipetdigitalconndb.conn.close();
+				                                                	}
+			                                                    %>       
+		                                                    </select>                                          
+				                                        </div>           
+			                                            <div class="ag-btns d-flex flex-wrap">                                            
+			                                                <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
+			                                               <!-- <div class="btn-export">
+			                                                    <button class="btn btn-primary mr-1 mb-1">
+			                                                        Export as CSV
+			                                                    </button>-->
+		                                                </div>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                </div>	
+			                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:460px;" ></div><br>
+			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;" onclick="addRow()"><i class="feather icon-corner-up-left"></i> Tool Box</button>
+			                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop"><i class="feather icon-upload"></i> Upload</button>
+											<button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  	
+			                            </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+
+							<div class="col-lg-6 col-12">
+								<div class="row">
+									<div class="col-lg-6 col-12">                                    
+						                <!-- navigations swiper start -->
+						                <section id="component-swiper-navigations">
+						                    <div class="card ">
+						                        <div class="card-header">
+						                            <h4 class="card-title">Navigations</h4>
+						                        </div>
+						                        <div class="card-content">
+						                            <div class="card-body">
+						                                <div class="swiper-navigations swiper-container">
+						                                    <div style="height: 234px;" class="swiper-wrapper">
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
+						                                        </div>
+						                                    </div>
+						                                    <!-- Add Arrows -->
+						                                    <div class="swiper-button-next"></div>
+						                                    <div class="swiper-button-prev"></div>
+						                                </div>
+						                            </div>
+						                        </div>
+						                    </div>
+						                </section>
+						                <!-- navigations swiper ends -->						                
+								    </div>           
+									<div class="col-lg-6 col-12">                                    
+						                <!-- navigations swiper start -->
+						                <section id="component-swiper-navigations">
+						                    <div class="card ">
+						                        <div class="card-header">
+						                            <h4 class="card-title">Navigations</h4>
+						                        </div>
+						                        <div class="card-content">
+						                            <div class="card-body">
+						                                <div class="swiper-navigations swiper-container">
+						                                    <div style="height: 234px;" class="swiper-wrapper">
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
+						                                        </div>
+						                                        <div style="height: 234px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
+						                                        </div>
+						                                    </div>
+						                                    <!-- Add Arrows -->
+						                                    <div class="swiper-button-next"></div>
+						                                    <div class="swiper-button-prev"></div>
+						                                </div>
+						                            </div>
+						                        </div>
+						                    </div>
+						                </section>
+						                <!-- navigations swiper ends -->						                
+								    </div>	
+								</div>
+								<div class="row">
+									<div class="col-lg-12 col-12">                                    
+						                <!-- navigations swiper start -->
+						                <section id="component-swiper-navigations">
+						                    <div class="card ">
+						                        <div class="card-header">
+						                            <h4 class="card-title">Navigations</h4>
+						                        </div>
+						                        <div class="card-content">
+						                            <div id="phenograph" class="card-body">
+						                          		chart position
+						                            </div>
+						                        </div>
+						                    </div>
+						                </section>
+						                <!-- navigations swiper ends -->
+						                
+						                						                
+								    </div>	
+								</div>
+							</div>
+                        </div>   
+					</section> 
+                </div>                
+            </div>            
+        </div>        
     </div>
-                            
     <!-- END: Content-->
+
+
+
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
@@ -398,9 +565,13 @@ body {
     <script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
 	<script src="../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<script src="../../css/app-assets/vendors/js/extensions/swiper.min.js"></script>
 =======
 >>>>>>> 7d9906263f57df3e3db30a04bf46d6e287dfe92d
+=======
+	<script src="../../css/app-assets/vendors/js/extensions/swiper.min.js"></script>
+>>>>>>> 9ce23bc (phenotype commit)
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -409,6 +580,125 @@ body {
     <script src="../../css/app-assets/js/scripts/components.js"></script>
     <!-- END: Theme JS-->
 
+
+ 	<script>
+    
+    var columnDefs = [
+        {
+          headerName: "순번",
+          field: "selectfiles",
+          editable: false,
+          sortable: true,
+          width: 120,	
+          filter: 'agMultiColumnFilter',
+          cellClass: "grid-cell-centered",      
+          checkboxSelection: true,
+          headerCheckboxSelectionFilteredOnly: true,
+          headerCheckboxSelection: true
+        },
+        /**{
+          headerName: "VCF 파일 다운로드",
+          field: "fileid",
+          editable: false,
+          sortable: true,
+          filter: 'agMultiColumnFilter',
+          cellClass: "grid-cell-centered",      
+          width: 175,
+          cellRenderer: function(params){
+          return "<a href='http://example.com/edit/" 
+            + params.value 
+            + "'>link "+params.value+"</a>";
+        }
+        },**/
+        {
+          headerName: "VCF 파일명",
+          field: "filename",
+          editable: false,
+          sortable: true,
+          filter: true,
+          cellClass: "grid-cell-centered",      
+          width: 275,
+    	  cellRenderer: function(params){
+          return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
+            + params.value 
+            + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
+        }
+        },
+        {
+          headerName: "상세내용",
+          field: "comment",
+          editable: false,
+          sortable: true,
+          filter: true,
+          cellClass: "ag-header-cell-label",
+          width: 750
+        },
+        {
+          headerName: "작물",
+          field: "cropid",
+          editable: false,
+          sortable: true,
+          filter: true,
+          cellClass: "grid-cell-centered",      
+          width: 180,
+          hide: true
+        },
+        {
+          headerName: "등록일자",
+          field: "cre_dt",
+          editable: false,
+          sortable: true,
+          filter: 'agDateColumnFilter',
+          cellClass: "grid-cell-centered",      
+          width: 120
+        },
+        {
+          headerName: "참조유전체",
+          field: "refgenome",
+          editable: false,
+          sortable: true,
+          filter: true,
+          cellClass: "grid-cell-centered",      
+          width: 275,
+        },
+        {
+          headerName: "샘플수",
+          field: "samplecnt",
+          editable: false,
+          sortable: true,
+          filter: 'agNumberColumnFilter',
+          cellClass: "grid-cell-centered",      
+          width: 120
+        },
+        {
+          headerName: "변이수",
+          field: "variablecnt",
+          editable: false,
+          sortable: true,
+          filter: 'agNumberColumnFilter',
+          cellClass: "grid-cell-centered",      
+          width: 120
+        },
+    	{
+          headerName: "jobid",
+          field: "jobid",
+          hide: true
+        },  
+    	{
+          headerName: "uploadpath",
+          field: "uploadpath",
+          hide: true
+        },  
+    	{
+          headerName: "resultpath",
+          field: "resultpath",
+          hide: true
+        }        
+      ];
+    
+    </script>
+    
+    
     <!-- BEGIN: Page JS-->
 <<<<<<< HEAD
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_genotype.js"></script>
@@ -420,14 +710,21 @@ body {
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9ce23bc (phenotype commit)
     
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/extensions/swiper.js"></script>
     <!-- END: Page JS-->
     
+<<<<<<< HEAD
 =======
 
 >>>>>>> 7d9906263f57df3e3db30a04bf46d6e287dfe92d
+=======
+   
+>>>>>>> 9ce23bc (phenotype commit)
 <!-- Modal start-->
 
 	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
