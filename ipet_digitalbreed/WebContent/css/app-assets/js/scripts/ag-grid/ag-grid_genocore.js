@@ -124,7 +124,10 @@
 			   											</div>
 			   											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
 			   												<iframe src = '' width='50%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame' style='float:right;'></iframe>
+			   												<!--
 			   												<iframe src = '' width='50%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame' style='float:right;'></iframe>
+			   												-->
+			   												<div id='pill3_frame' style='width:50%; float:right;'></div>
 			   											</div>
 			   										</div>
 			   									</div>
@@ -159,10 +162,37 @@
 	        dataType: "text",
 	        success: function(data) {
 	        	//console.log("csv function data : ", data);
+	        	const row_data = data.split(/\r?\n|\r/);
+	        	//console.log(row_data);
+	        	
+	        	const head_data = row_data[0].split(",");
+
+	        	let excel_table = `<table>`;
+	        	
+	        	excel_table += `<thead><tr>`;
+	        	for(let i=0 ; i<head_data.length ; i++) {
+	        		excel_table += `<th>${head_data[i]}</th>`;
+	        	}
+	        	excel_table += `</tr></thead>`;
+	        	
+	        	excel_table += `<tbody>`;
+	        	for(let i=1 ; i<row_data.length ; i++) {
+	        		const cell_data = row_data[i].split(",");
+	        		
+	        		excel_table += `<tr>`;
+	        		for(let j=0 ; j<cell_data.length ; j++) {
+	        			excel_table += `<td>${cell_data[j]}</td>`;
+	        		}
+	        		excel_table += `</tr>`;
+	        	}
+	        	excel_table += `</tbody>`;
 	        	
 	        	
+	        	excel_table += `</table>`;
+	        	console.log(excel_table);
 	        	
-	        	let excel_table = `<table><thead><th>`;
+	        	$('#pill3_frame').html(excel_table);
+	        	
 	        }
 	    });
 	}
