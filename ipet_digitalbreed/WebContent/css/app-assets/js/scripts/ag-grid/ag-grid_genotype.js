@@ -49,7 +49,7 @@
       field: "selectfiles",
       editable: false,
       sortable: true,
-      width: 120,	
+      width: 140,	
       filter: 'agMultiColumnFilter',
       cellClass: "grid-cell-centered",      
       checkboxSelection: true,
@@ -77,7 +77,7 @@
       sortable: true,
       filter: true,
       cellClass: "grid-cell-centered",      
-      width: 275,
+      width: 300,
 	  cellRenderer: function(params){
       return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
         + params.value 
@@ -91,7 +91,7 @@
       sortable: true,
       filter: true,
       cellClass: "ag-header-cell-label",
-      width: 750
+      width: 710
     },
     {
       headerName: "작물",
@@ -110,7 +110,7 @@
       sortable: true,
       filter: 'agDateColumnFilter',
       cellClass: "grid-cell-centered",      
-      width: 120
+      width: 150
     },
     {
       headerName: "참조유전체",

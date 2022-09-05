@@ -170,9 +170,9 @@ body {
 		                                    </div>
 		                                </div>	
 			                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:450px;" ></div><br>
-			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;" onclick="addRow()"><i class="feather icon-corner-up-left"></i> Tool Box</button>
-			                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop"><i class="feather icon-upload"></i> Upload</button>
-											<button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  	
+			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
+											<button class="btn btn-danger mr-1 mb-1" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
+			                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop"><i class="feather icon-save"></i> Save</button>
 			                            </div>
                                     </div>                                    
                                 </div>
@@ -276,8 +276,7 @@ body {
 						                        </div>
 						                    </div>
 						                </section>
-						                <!-- navigations swiper ends -->
-						                
+						                <!-- navigations swiper ends -->						                
 						                						                
 								    </div>	
 								</div>
@@ -325,121 +324,79 @@ body {
     <script src="../../css/app-assets/js/scripts/components.js"></script>
     <!-- END: Theme JS-->
 
-
  	<script>
-    
+ 	
+ 	var variety_id = $( "#variety-select option:selected" ).val();
+ 	var grid_array;	
+	$.ajax({
+		url : "traitnamertn.jsp",
+		type : "post",
+		async: false,
+		data : {"varietyid" : variety_id},
+		dataType : "json",
+		success : function(result){
+			grid_array = result;
+			
+		}
+	});
+	
+
+	/*$.each(grid_array, function(key, value){
+	    console.log('key:' + key + ' / ' + 'value:' + value);
+	});*/
+		
+	
     var columnDefs = [
         {
-          headerName: "순번",
-          field: "selectfiles",
-          editable: false,
-          sortable: true,
-          width: 120,	
-          filter: 'agMultiColumnFilter',
-          cellClass: "grid-cell-centered",      
-          checkboxSelection: true,
-          headerCheckboxSelectionFilteredOnly: true,
-          headerCheckboxSelection: true
-        },
-        /**{
-          headerName: "VCF 파일 다운로드",
-          field: "fileid",
-          editable: false,
-          sortable: true,
-          filter: 'agMultiColumnFilter',
-          cellClass: "grid-cell-centered",      
-          width: 175,
-          cellRenderer: function(params){
-          return "<a href='http://example.com/edit/" 
-            + params.value 
-            + "'>link "+params.value+"</a>";
-        }
-        },**/
+            headerName: "순번",
+            field: "selectfiles",
+            editable: false,
+            sortable: true,
+            width: 140,	
+            filter: 'agMultiColumnFilter',
+            cellClass: "grid-cell-centered",      
+            checkboxSelection: true,
+            headerCheckboxSelectionFilteredOnly: true,
+            headerCheckboxSelection: true	
+		},
         {
-          headerName: "VCF 파일명",
-          field: "filename",
-          editable: false,
-          sortable: true,
-          filter: true,
-          cellClass: "grid-cell-centered",      
-          width: 275,
-    	  cellRenderer: function(params){
-          return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
-            + params.value 
-            + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
-        }
-        },
+            headerName: "사진",
+            field: "photo_status",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 120,	
+		},
         {
-          headerName: "상세내용",
-          field: "comment",
-          editable: false,
-          sortable: true,
-          filter: true,
-          cellClass: "ag-header-cell-label",
-          width: 750
-        },
+            headerName: "번호",
+            field: "selectfiles",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 120,	
+		},
         {
-          headerName: "작물",
-          field: "cropid",
-          editable: false,
-          sortable: true,
-          filter: true,
-          cellClass: "grid-cell-centered",      
-          width: 180,
-          hide: true
-        },
+            headerName: "등록일자",
+            field: "cre_dt",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 150
+		},
         {
-          headerName: "등록일자",
-          field: "cre_dt",
-          editable: false,
-          sortable: true,
-          filter: 'agDateColumnFilter',
-          cellClass: "grid-cell-centered",      
-          width: 120
-        },
-        {
-          headerName: "참조유전체",
-          field: "refgenome",
-          editable: false,
-          sortable: true,
-          filter: true,
-          cellClass: "grid-cell-centered",      
-          width: 275,
-        },
-        {
-          headerName: "샘플수",
-          field: "samplecnt",
-          editable: false,
-          sortable: true,
-          filter: 'agNumberColumnFilter',
-          cellClass: "grid-cell-centered",      
-          width: 120
-        },
-        {
-          headerName: "변이수",
-          field: "variablecnt",
-          editable: false,
-          sortable: true,
-          filter: 'agNumberColumnFilter',
-          cellClass: "grid-cell-centered",      
-          width: 120
-        },
-    	{
-          headerName: "jobid",
-          field: "jobid",
-          hide: true
-        },  
-    	{
-          headerName: "uploadpath",
-          field: "uploadpath",
-          hide: true
-        },  
-    	{
-          headerName: "resultpath",
-          field: "resultpath",
-          hide: true
-        }        
-      ];
+            headerName: "개체명",
+            field: "samplename",
+            editable: true,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 150
+		}
+	];
+    
     
     </script>
     
@@ -455,11 +412,22 @@ body {
     <script src="../../css/app-assets/js/scripts/extensions/swiper.js"></script>
     <!-- END: Page JS-->
     
+       
+    <script>   
+    
+	for (var i=0; i<grid_array.length; i++) {
+		for (key in grid_array[i]) {		
+			addCol(key, grid_array[i][key] );
+		}
+	}
+	
+	
+</script>
 <!-- Modal start-->
 
 	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
 	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-	            <div class="modal-content">
+	            <div class="modal-content">s
 	                <div class="modal-header bg-warning white">
 	                    <h4 class="modal-title" id="myModalLabel4">VCF File Upload</h4>
 	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">

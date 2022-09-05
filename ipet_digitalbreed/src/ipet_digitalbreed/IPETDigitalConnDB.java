@@ -12,6 +12,8 @@ public class IPETDigitalConnDB {
 		public Connection conn = null;
         public Statement stmt = null;
 		public ResultSet rs = null;
+		public Statement stmt1 = null;
+		public ResultSet rs1 = null;
 
 	public IPETDigitalConnDB(){
 		try {
