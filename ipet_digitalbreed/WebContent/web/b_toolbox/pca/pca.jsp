@@ -296,7 +296,27 @@ body {
 <script type="text/javascript">                  
    	$(document).ready(function(){
    		$("#fileControl").hide();
-   	})
+   		
+   		
+   		$.ajax(
+   			{
+   				//url: "./pca_non_population.jsp",
+   				url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
+   				method: 'POST',
+   				success: function(data) {
+	  				console.log("vcf file list : ", data);
+	  				
+	  				makeOptions(data);
+   				}
+  		});
+   	});
+   	
+    function makeOptions(data) {
+    	for(let i=0 ; i<data.length ; i++) {
+			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} </option>`);
+		}
+    }
    
    	$('input[type=radio][name=radio_population]').change(function() {
    		if (this.value == 'invalid') {
@@ -316,7 +336,8 @@ body {
    	
     var box = new Object();
     window.onload = function() {
-    // 파일전송 컨트롤 생성
+    	
+    	// 파일전송 컨트롤 생성
 	    box = innorix.create({
 	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
 	        height          : 130,
@@ -324,7 +345,7 @@ body {
 	        allowType : ["vcf"],
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: './pca_population.jsp?jobid='+ $('#VcfSelect').find(':selected').data('jobid') // 업로드 URL | jobid를 getParameter로 붙임
+	        uploadUrl: './pca_population.jsp'
 	    });
 
 	    // 업로드 완료 이벤트
@@ -345,7 +366,7 @@ body {
 	    	var postObj = new Object();
 	        postObj.comment = document.getElementById("comment").value;;	       
 	        postObj.varietyid = $( "#variety-select option:selected" ).val();
-	        //postObj.jobid = $('#VcfSelect').find(':selected').data('jobid');
+	        postObj.jobid = $('#VcfSelect').find(':selected').data('jobid');
 	        postObj.filename = $('#VcfSelect').find(':selected').data('filename');
 	        postObj.uploadpath = $('#VcfSelect').find(':selected').data('uploadpath');
 	        box.setPostData(postObj);

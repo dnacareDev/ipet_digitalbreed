@@ -279,7 +279,26 @@ body {
 <script type="text/javascript">                  
    	$(document).ready(function(){
    		$("#fileControl").hide();
-   	})
+   		
+   		$.ajax(
+   	   		{
+   	   			//url: "./pca_non_population.jsp",
+   	   			url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
+   	   			method: 'POST',
+   	   			success: function(data) {
+	   	  			console.log("vcf file list : ", data);
+	   	  			
+	   	  			makeOptions(data);
+   	   			}
+   	  	});
+   	});
+   	
+   	function makeOptions(data) {
+    	for(let i=0 ; i<data.length ; i++) {
+			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} </option>`);
+		}
+    }
    
    	$('input[type=radio][name=radio_population]').change(function() {
    		if (this.value == 'invalid') {
@@ -287,7 +306,7 @@ body {
    		} else {
    			$("#fileControl").show();
    		}
-   	})
+   	});
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
     	//$(this).find('form')[0].reset();
@@ -297,36 +316,19 @@ body {
     });    
    	
    	
-    var box = new Object();
-    window.onload = function() {
-    // 파일전송 컨트롤 생성
-	    box = innorix.create({
-	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-	        height          : 130,
-	        maxFileCount   : 1,  
-	        allowType : ["vcf"],
-			addDuplicateFile : false,
-	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: './genocore_analysis.jsp?jobid='+ $('#VcfSelect').find(':selected').data('jobid') // 업로드 URL | jobid를 getParameter로 붙임
-	    });
-
-	    // 업로드 완료 이벤트
-	    box.on('uploadComplete', function (p) {
-			document.getElementById('uploadvcfform').reset();
-	    	box.removeAllFiles();
-			backdrop.style.display = "none";					
-			refresh();
-        });
-    };
        
     function excute() {
        	
     	console.log("invalid");	  
-	   		
+	   	
+    	let comment = $('#comment').val();
+   		let varietyid = $( "#variety-select option:selected" ).val();
    		let jobid = $('#VcfSelect').find(':selected').data('jobid');
    		let filename = $('#VcfSelect').find(':selected').data('filename');
    		let uploadpath = $('#VcfSelect').find(':selected').data('uploadpath');
    		
+   		console.log("comment : ", comment);
+   		console.log("varietyid : ", varietyid);
    		console.log("jobid : ", jobid);
    		console.log("filename : ", filename);
    		console.log("uploadpath : ", uploadpath);
@@ -336,7 +338,12 @@ body {
    				{
    					url: "./genocore_analysis.jsp",
    					method: 'POST',
-   					data: {"jobid" : jobid, "filename" : filename, "uploadpath" : uploadpath},
+   					data: {
+   						"comment" : comment, 
+   						"varietyid" : varietyid, 
+   						"jobid" : jobid, 
+   						"filename" : filename
+   						},
    					success: function(result) {
   						console.log("genocore_analysis.jsp");
    					}

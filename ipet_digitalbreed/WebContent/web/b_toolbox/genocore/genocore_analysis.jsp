@@ -10,16 +10,21 @@
 	
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
+	String comment = request.getParameter("comment");
+	String varietyid = request.getParameter("varietyid");
 	String jobid = request.getParameter("jobid");		
 	String jobid2 = runanalysistools.getCurrentDateTime();									// parameter로 받은게 아닌, 새로 생성되는 jobid
 	String filename = request.getParameter("filename");
-	String uploadPath = request.getParameter("uploadpath");
+	//String uploadPath = request.getParameter("uploadpath");
+	String permissionUid = session.getAttribute("permissionUid")+"";
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 
 	System.out.println();
 	System.out.println("jobid : " + jobid);
 	System.out.println("jobid2 : " + jobid2);
 	System.out.println("filename : " + filename);
+	System.out.println("comment : " + comment);
+	System.out.println("varietyid : " + varietyid);
 	System.out.println("rootPath : " + rootFolder);
 	System.out.println();	
 	
@@ -28,6 +33,9 @@
 	String savePath = rootFolder + "uploads/database/db_input/" + jobid + "/";
 	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/genocore/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
+	
+	String db_savePath = "uploads/database/db_input/";
+	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/genocore/";
 	
 	File folder_savePath = new File(savePath);
 	
@@ -57,10 +65,27 @@
 	System.out.println("outputPath : " + outputPath);
 	System.out.println();
 	
-	String PCA = "Rscript " +script_path+ "breedertoolbox_genocore_final.R " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename+ " NA NA";
+	String Genocore = "Rscript " +script_path+ "breedertoolbox_genocore_final.R " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename;
 	
-	System.out.println("PCA parameter(without population) : " + PCA);
+	System.out.println("Genocore parameter : " + Genocore);
 			
-	runanalysistools.execute(PCA);
+	runanalysistools.execute(Genocore);
+	
+	
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	
+	String insertPcainfo_sql="insert into genocore_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";	
+
+	System.out.println("insert genocore_info_t sql : " + insertPcainfo_sql);
+	
+	try{
+			ipetdigitalconndb.stmt.executeUpdate(insertPcainfo_sql);
+	}catch(Exception e){
+		System.out.println(e);
+	}finally { 
+		System.out.println("AAAAAAAAAAAAAAA");
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
+	}	
 	
 %>

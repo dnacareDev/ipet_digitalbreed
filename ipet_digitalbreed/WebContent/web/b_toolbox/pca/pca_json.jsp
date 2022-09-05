@@ -4,12 +4,12 @@
 <%@page import="org.json.simple.JSONObject"%>
 <%
 
-	GenotypeListJson genotypelistjson = new GenotypeListJson();
+	PcaListJson pcaListJson = new PcaListJson();
 
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String varietyid = request.getParameter("varietyid");
 
-	JSONArray GenotypeListJsonValues = genotypelistjson.getGenotypeListJson(permissionUid, varietyid);
+	JSONArray pcaListJsonValues = pcaListJson.getPcaListJson(permissionUid, varietyid);
 	
 	//System.out.println(varietyid);
 	//System.out.println(GenotypeListJsonValues);
@@ -20,7 +20,7 @@
 	response.setHeader("Access-Control-Allow-Headers", "Authorization,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type");
 	response.setContentType("application/json");
 	
-	out.print(GenotypeListJsonValues.toJSONString());	
+	out.print(pcaListJsonValues.toJSONString());	
 %>
 
 

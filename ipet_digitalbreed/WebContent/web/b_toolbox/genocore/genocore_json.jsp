@@ -4,12 +4,12 @@
 <%@page import="org.json.simple.JSONObject"%>
 <%
 
-	GenotypeListJson genotypelistjson = new GenotypeListJson();
+	GenocoreListJson genocoreListJson = new GenocoreListJson();
 
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String varietyid = request.getParameter("varietyid");
 
-	JSONArray GenotypeListJsonValues = genotypelistjson.getGenotypeListJson(permissionUid, varietyid);
+	JSONArray GenotypeListJsonValues = genocoreListJson.getGenocoreListJson(permissionUid, varietyid);
 	
 	//System.out.println(varietyid);
 	//System.out.println(GenotypeListJsonValues);

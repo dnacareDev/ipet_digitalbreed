@@ -32,7 +32,8 @@
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	String db_savePath = "uploads/database/db_input/";
-	String db_outputPath = "result/Breeder_toolbox_analyses/pca/";
+	//String db_outputPath = "result/Breeder_toolbox_analyses/pca/";
+	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/pca/";
 	
 	File folder_savePath = new File(savePath);
 	
@@ -72,12 +73,12 @@
 	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	String insertVcfinfo_sql="insert into pca_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";	
+	String insertPcainfo_sql="insert into pca_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";	
 
-	System.out.println("insertVcfinfo_sql : " + insertVcfinfo_sql);
+	System.out.println("insertPcainfo_sql : " + insertPcainfo_sql);
 	
 	try{
-			ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
+			ipetdigitalconndb.stmt.executeUpdate(insertPcainfo_sql);
 	}catch(Exception e){
 		System.out.println(e);
 	}finally { 
