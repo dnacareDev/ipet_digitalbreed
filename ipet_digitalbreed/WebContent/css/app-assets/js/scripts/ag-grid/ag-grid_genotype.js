@@ -160,6 +160,8 @@
   var gridOptions = {
     columnDefs: columnDefs,
     rowHeight: 35,
+    enableRangeSelection: true,
+	suppressMultiRangeSelection: true,
     rowSelection: "multiple",
     floatingFilter: true,
     filter: 'agMultiColumnFilter',

@@ -324,83 +324,21 @@ body {
     <script src="../../css/app-assets/js/scripts/components.js"></script>
     <!-- END: Theme JS-->
 
- 	<script>
- 	
- 	var variety_id = $( "#variety-select option:selected" ).val();
- 	var grid_array;	
-	$.ajax({
-		url : "traitnamertn.jsp",
-		type : "post",
-		async: false,
-		data : {"varietyid" : variety_id},
-		dataType : "json",
-		success : function(result){
-			grid_array = result;
-			
-		}
-	});
-	
-
-	/*$.each(grid_array, function(key, value){
-	    console.log('key:' + key + ' / ' + 'value:' + value);
-	});*/
-		
-	
-    var columnDefs = [
-        {
-            headerName: "순번",
-            field: "selectfiles",
-            editable: false,
-            sortable: true,
-            width: 140,	
-            filter: 'agMultiColumnFilter',
-            cellClass: "grid-cell-centered",      
-            checkboxSelection: true,
-            headerCheckboxSelectionFilteredOnly: true,
-            headerCheckboxSelection: true	
-		},
-        {
-            headerName: "사진",
-            field: "photo_status",
-            editable: false,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 120,	
-		},
-        {
-            headerName: "번호",
-            field: "selectfiles",
-            editable: false,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 120,	
-		},
-        {
-            headerName: "등록일자",
-            field: "cre_dt",
-            editable: false,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 150
-		},
-        {
-            headerName: "개체명",
-            field: "samplename",
-            editable: true,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 150
-		}
-	];
-    
-    
+ 	<script> 	
+	 	var variety_id = $( "#variety-select option:selected" ).val();
+	 	var grid_array;	
+		$.ajax({
+			url : "traitnamertn.jsp",
+			type : "post",
+			async: false,
+			data : {"varietyid" : variety_id},
+			dataType : "json",
+			success : function(result){
+				grid_array = result;			
+			}
+		});    
     </script>
-    
-    
+        
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_phenotype.js"></script>
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
@@ -411,18 +349,15 @@ body {
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/extensions/swiper.js"></script>
     <!-- END: Page JS-->
-    
-       
-    <script>   
-    
-	for (var i=0; i<grid_array.length; i++) {
-		for (key in grid_array[i]) {		
-			addCol(key, grid_array[i][key] );
+           
+    <script>
+		for (var i=0; i<grid_array.length; i++) {
+			for (key in grid_array[i]) {		
+				addCol(key, grid_array[i][key] );
+			}
 		}
-	}
+	</script>
 	
-	
-</script>
 <!-- Modal start-->
 
 	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
@@ -490,58 +425,7 @@ body {
 	        </div>
                           
 	<!-- Modal end-->
-	
-        <script>    
-            var box = new Object();
-            window.onload = function() {
-                // 파일전송 컨트롤 생성
-                box = innorix.create({
-                    el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-                    height          : 130,
-                    maxFileCount   : 1,  
-                    allowType : ["vcf"],
-					addDuplicateFile : false,
-                    agent: false, // true = Agent 설치, false = html5 모드 사용                    
-                    uploadUrl: './fileuploader.jsp' // 업로드 URL
-                });
-
-                // 업로드 완료 이벤트
-                box.on('uploadComplete', function (p) {
-             	    
-                    /*var f = p.files;
-                    var r = "Upload complete\n\n";
-                    for (var i = 0; i < f.length; i++ ) {
-                        r += f[i].clientFileName + " " + f[i].fileSize + "\n";
-                    }
-                    alert(r);*/
-					//window.close();
-					//self.opener.location.reload(); 
-					document.getElementById('uploadvcfform').reset();
-	        		box.removeAllFiles();
-					backdrop.style.display = "none";					
-					refresh();
-                });
-            };
-            function FileUpload() {
-            	if(document.getElementById("comment").value==''){
-            		alert("Comment must be entered.");   
-            		document.getElementById("comment").focus();
-            	  return false;  
-            	}
-	            var postObj = new Object();
-	            postObj.comment = document.getElementById("comment").value;;	       
-	            postObj.varietyid = $( "#variety-select option:selected" ).val();
-	            box.setPostData(postObj);
-	            box.upload();
-            }            
-            
-            $('#backdrop').on('hidden.bs.modal', function (e) {
-	        	//$(this).find('form')[0].reset();
-	        	//alert("AAAAAAAAAAAAAAA");
-	        	document.getElementById('uploadvcfform').reset();
-	        	box.removeAllFiles();
-	        });            
-        </script>
+	       
 </body>
 <!-- END: Body-->
 

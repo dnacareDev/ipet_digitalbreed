@@ -43,11 +43,63 @@
 		*/
 	}
 	
+	var columnDefs = [
+        {
+            headerName: "순번",
+            field: "selectfiles",
+            editable: false,
+            sortable: true,
+            width: 140,	
+            filter: 'agMultiColumnFilter',
+            cellClass: "grid-cell-centered",      
+            checkboxSelection: true,
+            headerCheckboxSelectionFilteredOnly: true,
+            headerCheckboxSelection: true	
+		},
+        {
+            headerName: "사진",
+            field: "photo_status",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 120,	
+		},
+        {
+            headerName: "번호",
+            field: "selectfiles",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 120,	
+		},
+        {
+            headerName: "등록일자",
+            field: "cre_dt",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 150
+		},
+        {
+            headerName: "개체명",
+            field: "samplename",
+            editable: true,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 150
+		}
+	];
+    
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
 	    columnDefs: columnDefs,
 		enableRangeSelection: true,
-	    rowHeight: 35,
+		suppressMultiRangeSelection: true,
+  	    rowHeight: 35,
 	  	rowSelection: 'multiple',	  	
 	    floatingFilter: true,
 	    filter: 'agMultiColumnFilter',
@@ -60,7 +112,6 @@
 	    serverSideInfiniteScroll: true,
 	  };
 
-
 	function replaceClass(id, oldClass, newClass) {
 	    var elem = $(`#${id}`);
 	    if (elem.hasClass(oldClass)) {
@@ -71,7 +122,6 @@
  
   /*** DEFINED TABLE VARIABLE ***/
   var gridTable = document.getElementById("myGrid");
-
 
   /*** GET TABLE DATA FROM URL ***/
 
