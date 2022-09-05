@@ -8,7 +8,7 @@
 
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String varietyid = request.getParameter("varietyid");
-System.out.println("varietyid : " + varietyid);
+
 	JSONArray PhenotypeListJsonValues = phenotypelistjson.getGenotypeListJson(permissionUid, varietyid);
 
 	response.setHeader("Access-Control-Allow-Origin", "*");

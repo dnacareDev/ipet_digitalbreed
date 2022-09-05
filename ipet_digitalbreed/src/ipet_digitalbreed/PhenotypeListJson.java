@@ -56,8 +56,7 @@ public class PhenotypeListJson {
 					}finally { 
 						ipetdigitalconndb.stmt1.close();
 						ipetdigitalconndb.rs1.close();
-					}
-					
+					}					
 					
 					jsonArray.add(jsonObject);
 				}

@@ -89,6 +89,8 @@
     {
       headerName: "체크",
       field: "selectfiles",
+      enableRangeSelection: true,
+	  suppressMultiRangeSelection: true,
       editable: false,
       sortable: true,
       width: 120,

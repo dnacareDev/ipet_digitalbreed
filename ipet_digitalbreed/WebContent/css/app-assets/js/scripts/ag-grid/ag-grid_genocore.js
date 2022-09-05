@@ -90,6 +90,8 @@
 		// 주석처리한 옵션 전부 작동안함. 다른 이름으로 바꿔야한다.
 		columnDefs: columnDefs,
 		rowHeight: 35,
+    	enableRangeSelection: true,
+		suppressMultiRangeSelection: true,		
 		//rowSelection: "multiple",
 		//floatingFilter: true,
 		//filter: 'agMultiColumnFilter',

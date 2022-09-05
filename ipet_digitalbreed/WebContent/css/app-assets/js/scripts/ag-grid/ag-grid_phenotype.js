@@ -28,7 +28,7 @@
 	  
 		/*
 		  	$.ajax({
-			    url:"../../web/database/genotype_delete.jsp",
+			    url:"../../web/database/phenotype_delete.jsp",
 			    type:"POST",
 			    data:{'params':deleteitems},
 			    success: function(result) {
@@ -54,7 +54,7 @@
             cellClass: "grid-cell-centered",      
             checkboxSelection: true,
             headerCheckboxSelectionFilteredOnly: true,
-            headerCheckboxSelection: true	
+            headerCheckboxSelection: true,
 		},
         {
             headerName: "사진",
@@ -145,13 +145,28 @@
 
   function addnewrow() {
 		var newRows = [{                
-			name:'Insert row 3',                
-			sex:'Female',                
-			age: 44            
+      
 		}]; 		           
 		gridOptions.api.updateRowData({add: newRows, addIndex:0});
   }
    		 
+  function getAllData() {
+		/*let saveList = [];
+		 
+		gridOptions.api.forEachNode((obj,idx)=>{
+		            //console.log(obj);
+		            saveList.push( obj.data);
+		});
+
+		console.log(saveList);*/
+		
+		  let rowData = [];
+		  gridOptions.api.forEachNode(node => rowData.push(node.data));
+		  console.log(rowData);
+		  return rowData;
+		
+}
+
    		 
   $(".ag-grid-filter").on("keyup", function() {
     updateSearchQuery($(this).val());

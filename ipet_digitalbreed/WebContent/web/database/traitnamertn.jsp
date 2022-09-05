@@ -27,7 +27,6 @@
         		ipetdigitalconndb.rs.close();
         		ipetdigitalconndb.conn.close();
         	}
-		 System.out.println(jsonArray);
 		 out.println(jsonArray);
 %>
 
