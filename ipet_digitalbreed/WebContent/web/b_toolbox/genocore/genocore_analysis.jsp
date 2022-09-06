@@ -10,6 +10,8 @@
 	
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
+	String selectCount = request.getParameter("selectCount");
+	
 	String comment = request.getParameter("comment");
 	String varietyid = request.getParameter("varietyid");
 	String jobid = request.getParameter("jobid");		
@@ -79,10 +81,10 @@
 	System.out.println("insert genocore_info_t sql : " + insertPcainfo_sql);
 	
 	try{
-			ipetdigitalconndb.stmt.executeUpdate(insertPcainfo_sql);
-	}catch(Exception e){
+		ipetdigitalconndb.stmt.executeUpdate(insertPcainfo_sql);
+	} catch(Exception e) {
 		System.out.println(e);
-	}finally { 
+	} finally { 
 		System.out.println("AAAAAAAAAAAAAAA");
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();

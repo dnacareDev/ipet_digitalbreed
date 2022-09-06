@@ -169,12 +169,7 @@ body {
                                 </div>
                                 
                                 <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:320px;"></div><br>
-                                <!--  
-                                <button class="btn btn-warning ml-1 mb-1" onclick="addRow()">VCF Tool Box</button>
-                                <button class="btn btn-danger ml-1 mb-1" onclick="addRow()">Delete selected</button>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop">VCF file Upload</button>    
-						        -->
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#newRegistration">신규 분석</button>
+								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">신규 분석</button>
                                 <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> 삭제</button>  
                                       
                             </div>
@@ -189,7 +184,7 @@ body {
     
     
 	<!-- Modal start-->
-    <div class="modal fade text-left" id="newRegistration" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
@@ -199,23 +194,20 @@ body {
                     </button>
                 </div>
                 <div class="modal-body">
-					<form class="form" id="PcaNewAnalysis">
+					<form class="form" id="uploadPcaForm">
 					    <div class="form-body">
 					        <div class="row">
 					            <br>
 					            <div class="col-md-12 col-12">
 					                <br>
 					             	<div class="form-label-group">
-					                 	<h6>상세 내용</h6>
 					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
 					             		<label for="first-name-column">Comment</label>
 					                </div>
 					            </div>
 					            <div class="col-md-12 col-12">
 					            	<div class="form-label-group" >
-					                    <h6>VCF 파일 선택</h6>
 					                    <select class="select2 form-select" id="VcfSelect">
- 
 					                    	<!--  
 					                    	<option value="-1" selected disabled>목록 선택</option>
 					                    	<option value="1">Alaska</option>
@@ -228,14 +220,6 @@ body {
 					            <div class="col-md-12 col-12">
 									<div class="form-label-group">
 							            <h5>population</h5>
-							            <div>
-									    	<input type="radio" id="invalid" name="radio_population" value="without_population" checked>
-									    	<label for="invalid">사용 안함</label>
-									    </div>
-							            <div>
-									    	<input type="radio" id="valid" name="radio_population" value="with_population">
-									    	<label for="valid">신규 등록</label>
-									    </div>
 							            <div class="col-md-12 col-12">
 											<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
 											<br>
@@ -295,41 +279,39 @@ body {
 
 <script type="text/javascript">                  
    	$(document).ready(function(){
-   		$("#fileControl").hide();
-   		
+   		vcfFileList();
+   	});
+   	
+   	function vcfFileList() {
    		
    		$.ajax(
    			{
-   				//url: "./pca_non_population.jsp",
-   				url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
-   				method: 'POST',
-   				success: function(data) {
-	  				console.log("vcf file list : ", data);
-	  				
-	  				makeOptions(data);
-   				}
-  		});
-   	});
+ 	   			//url: "./pca_non_population.jsp",
+ 	   			url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
+ 	   			method: 'POST',
+ 	   			success: function(data) {
+ 		  			console.log("vcf file list : ", data);
+ 		  			
+ 		  			makeOptions(data);
+ 	   			}
+   	  	});
+   	}
    	
     function makeOptions(data) {
+    	$("#VcfSelect").empty();
+    	
+    	$("#VcfSelect").append(`<option disabled hidden selected>Select VCF File</option>`);
     	for(let i=0 ; i<data.length ; i++) {
 			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} </option>`);
+			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
 		}
     }
-   
-   	$('input[type=radio][name=radio_population]').change(function() {
-   		if (this.value == 'invalid') {
-   			$("#fileControl").hide();
-   		} else {
-   			$("#fileControl").show();
-   		}
-   	})
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-    	//$(this).find('form')[0].reset();
-    	//alert("AAAAAAAAAAAAAAA");
-    	document.getElementById('uploadvcfform').reset();
+
+   		// 모달창 닫으면 초기화
+    	document.getElementById('uploadPcaForm').reset();
+    	vcfFileList();
     	box.removeAllFiles();
     });    
    	
@@ -350,7 +332,7 @@ body {
 
 	    // 업로드 완료 이벤트
 	    box.on('uploadComplete', function (p) {
-			document.getElementById('uploadvcfform').reset();
+			document.getElementById('uploadPcaForm').reset();
 	    	box.removeAllFiles();
 			backdrop.style.display = "none";					
 			refresh();
@@ -358,22 +340,16 @@ body {
     };
        
     function FileUpload() {
-       	
-    //console.log($('input[type=radio][name=radio_population]:checked').val());
-       	
-	    if($('input[type=radio][name=radio_population]:checked').val() == 'with_population') {
-	   		console.log("with_population")
-	    	var postObj = new Object();
-	        postObj.comment = document.getElementById("comment").value;;	       
-	        postObj.varietyid = $( "#variety-select option:selected" ).val();
-	        postObj.jobid = $('#VcfSelect').find(':selected').data('jobid');
-	        postObj.filename = $('#VcfSelect').find(':selected').data('filename');
-	        postObj.uploadpath = $('#VcfSelect').find(':selected').data('uploadpath');
-	        box.setPostData(postObj);
-	        box.upload();
-	        
-	   	} else {
-	   		console.log("without_population");	  
+    	//console.log($('input[type=radio][name=radio_population]:checked').val());
+    	
+    	console.log("comment : ", $('#comment').val());
+    	console.log("varietyid : ", $( "#variety-select option:selected" ).val());
+    	console.log("jobid : ", $('#VcfSelect').find(':selected').data('jobid'));
+    	console.log("filename : ", $('#VcfSelect').find(':selected').data('filename'));
+    	
+    	
+    	if(!box.fileList.files.length) {
+    		console.log("file not exist -> without_population");
 	   		
 	   		let comment = $('#comment').val();
 	   		let varietyid = $( "#variety-select option:selected" ).val();
@@ -396,9 +372,20 @@ body {
 	  					console.log("pca_non_population.jsp");
 	   				}
 	  		});
-	   		// ajax가 아니라 Rscript를 돌릴 jsp파일에 jobid, filename을 parameter로 보내줘야 함
-			// 경로까지 필요하다면 data-jobid, data-filename, data-path 식으로 코드를 짠다.
-	    }
+    		
+    	} else {
+    		console.log("file exists -> with_population");
+    		
+	    	var postObj = new Object();
+	        postObj.comment = document.getElementById("comment").value;;	       
+	        postObj.varietyid = $( "#variety-select option:selected" ).val();
+	        postObj.jobid = $('#VcfSelect').find(':selected').data('jobid');
+	        postObj.filename = $('#VcfSelect').find(':selected').data('filename');
+	        postObj.uploadpath = $('#VcfSelect').find(':selected').data('uploadpath');
+	        box.setPostData(postObj);
+	        box.upload();
+    	}
+    	
     }
     
 

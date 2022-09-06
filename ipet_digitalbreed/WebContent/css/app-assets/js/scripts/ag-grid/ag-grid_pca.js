@@ -16,6 +16,7 @@
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
 		    });
+		vcfFileList();
 	}
 
 	/*** COLUMN DEFINE ***/
@@ -25,7 +26,7 @@
 	      field: "no",
 	      editable: false,
 	      sortable: true,
-	      width: 180,
+	      width: 150,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -39,7 +40,7 @@
 	      sortable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
-	      width: 280,
+	      width: 400,
 	    },
 	    {
 	      headerName: "분석상태",
@@ -57,7 +58,7 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered",      
-	      width: 600
+	      width: 750
 	    },
 	    {
 	      headerName: "분석일",
@@ -67,7 +68,7 @@
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
 	      cellStyle: {'background-color' : '#F0F0F0'},
-	      width: 300
+	      width: 314
 	    },
 		{
 	      headerName: "jobid",
@@ -88,9 +89,11 @@
 
 	/*** GRID OPTIONS ***/
 	var gridOptions = {
-		// 주석처리한 옵션 전부 작동안함. 다른 이름으로 바꿔야한다.
+		// 주석처리한 옵션 작동안함. 전부 다른 이름으로 바꿔야한다.
 		columnDefs: columnDefs,
 		rowHeight: 35,
+		enableRangeSelection: true,
+		suppressMultiRangeSelection: true,
 		//rowSelection: "multiple",
 		//floatingFilter: true,
 		//filter: 'agMultiColumnFilter',

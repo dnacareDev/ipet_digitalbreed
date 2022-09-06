@@ -10,10 +10,11 @@
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
-		    .simpleHttpRequest({ url: "../../../web/database/genocore_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+		    .simpleHttpRequest({ url: "../../../web/b_toolbox/genocore/genocore_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
 		    	gridOptions.api.setRowData(data);
 		    });
+		vcfFileList();
 	}
 
 	/*** COLUMN DEFINE ***/
@@ -23,7 +24,7 @@
 	      field: "no",
 	      editable: false,
 	      sortable: true,
-	      width: 180,
+	      width: 150,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -37,7 +38,7 @@
 	      sortable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
-	      width: 280,
+	      width: 400,
 	    },
 	    {
 	      headerName: "분석상태",
@@ -55,7 +56,7 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered",      
-	      width: 600
+	      width: 750
 	    },
 	    {
 	      headerName: "분석일",
@@ -65,7 +66,7 @@
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
 	      cellStyle: {'background-color' : '#F0F0F0'},
-	      width: 300
+	      width: 314
 	    },
 		{
 	      headerName: "jobid",
@@ -104,9 +105,10 @@
 		onCellClicked: params => {
 		
 			console.log("cell clicked : " + params.column.getId());
-			//console.log("params : ", params);
+			console.log("params : ", params);
 			
-			if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
+			//if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
+			if(params.column.getId() == "file_name"){
 				console.log('cell was clicked', params.data.jobid);
 				console.log('cell was clicked', params.data.resultpath);
 				const element = document.getElementById('vcf_status');
@@ -119,53 +121,66 @@
 						   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA2 (2D)</a></li>
 			   										</ul>
 			   										<div class='tab-content'>
-			   											<div class='col-12'>
-			   												<input type="button" class="btn btn-primary float-right" onclick="selectCount()" value="test">
-			   												<input type="number" class="float-right" id=select_count
-			   											</div>
 			   											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 			   												<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
 			   											</div>
 			   											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-			   												<div id='pill2_frame' style='width:50%; float:left;'></div>
-			   												<iframe src = '' width='50%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' ></iframe>
+			   												<div class="row">
+			   													<div class="col-12">
+			   														<input type="button" class="btn btn-primary float-right" onclick="executeSelectCount()" value="execute">
+			   														<input type="number" class="form-control w-25 float-right mr-2" id="select_count" placeholder="input count...">
+			   													</div>
+			   												</div>
+			   												<div class="row">
+			   													<div id='pill2_frame' style='width:50%; float:left;'></div>
+			   													<iframe src = '' width='50%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' ></iframe>
+			   												</div>
 			   											</div>
+			   										</div>
+			   										<div class="hidden-parameter">
+			   											<input type='text' id='jobid' style='display:none;'>
+			   											<input type='text' id='filename' style='display:none;'>
+			   											<input type='text' id='resultpath' style='display:none;'>
 			   										</div>
 			   									</div>
 			   								</div>
 			   							</div>
 			   						</div>`;
-			    /*   
-			   	replaceClass("base-pill31", "nav-link", "nav-link active");
-			    replaceClass("base-pill32", "nav-link", "nav-link");
-			    replaceClass("base-pill33", "nav-link", "nav-link");
-			    replaceClass("base-pill34", "nav-link", "nav-link");
-			    replaceClass("base-pill35", "nav-link", "nav-link");
-			    */	  
-			    $('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
+			   	
+			    $('#pill1_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
 			    
-			    //파일을 다운받아버림. 다운받지말고 화면에 출력되도록
-			    $('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore.html");
 			    
+			    // 단순 텍스트를 table화하고 sample값을 뽑아낸다. -> input count 제한값에 적용해야 함
+			    const text_url = params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt";
+			    console.log(text_url);
+			   	
+			   	
+			   	$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
+			    
+			    // #pill2_frame 
 			    const csv_url = params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore_table.csv";
-			    
 			    csvToTable(csv_url);
+			    
+			    $('#jobid').val(params.data.jobid);
+			    $('#filename').val(params.data.file_name);
+			    $('#resultpath').val(params.data.resultpath);
 			}
 		}
 	};
 	
 	function csvToTable(csv_url) {
 		
+		$('#pill2_frame').empty();
+		
 		$.ajax({
 	        type: "GET",
 	        url: csv_url,
 	        dataType: "text",
 	        success: function(data) {
-	        	//console.log("csv function data : ", data);
 	        	const row_data = data.split(/\r?\n|\r/);
-	        	//console.log(row_data);
-	        	
 	        	const head_data = row_data[0].split(",");
+	        	//console.log("csv data : ", data);
+	        	//console.log(row_data);
 
 	        	let excel_table = `<table>`;
 	        	
@@ -189,7 +204,7 @@
 	        	
 	        	
 	        	excel_table += `</table>`;
-	        	console.log(excel_table);
+	        	//console.log(excel_table);
 	        	
 	        	$('#pill2_frame').html(excel_table);
 	        	
@@ -197,6 +212,34 @@
 	    });
 	}
 
+	
+	function executeSelectCount() {
+		const count = $("#select_count").val();
+		const filename = $('#filename').val();
+		const jobid = $('#jobid').val();
+		const resultpath = $('#resultpath').val();
+		console.log(select_count);
+		
+   		$.ajax({
+   				url: "./genocore_select_count.jsp",
+   				method: 'POST',
+   				data: {
+   					"count" : count,
+   					"filename" : filename,
+   					"jobid" : jobid, 
+   					},
+   				success: function(result) {
+  					console.log("genocore_select_count.jsp success");
+  					
+  					//$('#pill3_frame').empty();
+  				    $('#pill3_frame').attr('src', resultpath + jobid+"/"+jobid+"_genocore_filtering.html");
+  				    
+  				    // #pill2_frame 
+  				    const csv_url = resultpath+"/"+jobid+"/"+jobid+"_genocore_table_filtering.csv";
+  				    csvToTable(csv_url);
+   				}
+  		});
+	}
 
 	function replaceClass(id, oldClass, newClass) {
 	    var elem = $(`#${id}`);
@@ -206,66 +249,60 @@
 	    elem.addClass(newClass);
 	}
  
-  /*** DEFINED TABLE VARIABLE ***/
-  var gridTable = document.getElementById("myGrid");
+	/*** DEFINED TABLE VARIABLE ***/
+	var gridTable = document.getElementById("myGrid");
 
-  /*** GET TABLE DATA FROM URL ***/
+	/*** GET TABLE DATA FROM URL ***/
   	agGrid
 		.simpleHttpRequest({ url: "../../../web/b_toolbox/genocore/genocore_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		.then(function(data) {
 		console.log("data : ", data);
 		  
-		
-		
-		//pca 테이블이 만들어질때까지는 하드코딩 데이터
 		gridOptions.api.setRowData(data);
-	  
 	});
   	
 
-  /*** FILTER TABLE ***/
-  function updateSearchQuery(val) {
-    gridOptions.api.setQuickFilter(val);
-  }
+  	/*** FILTER TABLE ***/
+  	function updateSearchQuery(val) {
+  		gridOptions.api.setQuickFilter(val);
+  	}
 
-  $(".ag-grid-filter").on("keyup", function() {
-    updateSearchQuery($(this).val());
-  });
+  	$(".ag-grid-filter").on("keyup", function() {
+  		updateSearchQuery($(this).val());
+  	});
 
-  /*** CHANGE DATA PER PAGE ***/
-  function changePageSize(value) {
-    gridOptions.api.paginationSetPageSize(Number(value));
-  }
+  	/*** CHANGE DATA PER PAGE ***/
+  	function changePageSize(value) {
+  		gridOptions.api.paginationSetPageSize(Number(value));
+  	}
 
-  $(".sort-dropdown .dropdown-item").on("click", function() {
-    var $this = $(this);
-    changePageSize($this.text());
-    $(".filter-btn").text("1 - " + $this.text() + " of 500");
-  });
+  	$(".sort-dropdown .dropdown-item").on("click", function() {
+  		var $this = $(this);
+  		changePageSize($this.text());
+  		$(".filter-btn").text("1 - " + $this.text() + " of 500");
+  	});
 
-  /*** EXPORT AS CSV BTN ***/
-  $(".ag-grid-export-btn").on("click", function(params) {
-    gridOptions.api.exportDataAsCsv();
-  });
+  	/*** EXPORT AS CSV BTN ***/
+  	$(".ag-grid-export-btn").on("click", function(params) {
+  		gridOptions.api.exportDataAsCsv();
+  	});
 
-  /*** INIT TABLE ***/
-  new agGrid.Grid(gridTable, gridOptions);
+  	/*** INIT TABLE ***/
+  	new agGrid.Grid(gridTable, gridOptions);
 
-  /*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
+  	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
 
-  if ($(window).width() < 768) {
-    //gridOptions.columnApi.setColumnPinned("email", null);
-  } else {
-   // gridOptions.columnApi.setColumnPinned("email", "left");
-  }
-  $(window).on("resize", function() {
-    if ($(window).width() < 768) {
-      //gridOptions.columnApi.setColumnPinned("email", null);
-    } else {
-     // gridOptions.columnApi.setColumnPinned("email", "left");
-    }
-  });
-  
-  
-  
+  	if ($(window).width() < 768) {
+  		//gridOptions.columnApi.setColumnPinned("email", null);
+  	} else {
+  		// gridOptions.columnApi.setColumnPinned("email", "left");
+  	}
+  	
+  	$(window).on("resize", function() {
+  		if ($(window).width() < 768) {
+  			//gridOptions.columnApi.setColumnPinned("email", null);
+  		} else {
+  			// gridOptions.columnApi.setColumnPinned("email", "left");
+  		}
+  	});
   
