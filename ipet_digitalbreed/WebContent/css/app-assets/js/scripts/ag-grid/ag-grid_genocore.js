@@ -119,15 +119,16 @@
 						   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA2 (2D)</a></li>
 			   										</ul>
 			   										<div class='tab-content'>
+			   											<div class='col-12'>
+			   												<input type="button" class="btn btn-primary float-right" onclick="selectCount()" value="test">
+			   												<input type="number" class="float-right" id=select_count
+			   											</div>
 			   											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 			   												<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
 			   											</div>
 			   											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-			   												<iframe src = '' width='50%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame' style='float:right;'></iframe>
-			   												<!--
-			   												<iframe src = '' width='50%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame' style='float:right;'></iframe>
-			   												-->
-			   												<div id='pill3_frame' style='width:50%; float:right;'></div>
+			   												<div id='pill2_frame' style='width:50%; float:left;'></div>
+			   												<iframe src = '' width='50%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' ></iframe>
 			   											</div>
 			   										</div>
 			   									</div>
@@ -144,8 +145,7 @@
 			    $('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
 			    
 			    //파일을 다운받아버림. 다운받지말고 화면에 출력되도록
-			    $('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore.html");
-			    //$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore_table.csv");
+			    $('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore.html");
 			    
 			    const csv_url = params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore_table.csv";
 			    
@@ -191,7 +191,7 @@
 	        	excel_table += `</table>`;
 	        	console.log(excel_table);
 	        	
-	        	$('#pill3_frame').html(excel_table);
+	        	$('#pill2_frame').html(excel_table);
 	        	
 	        }
 	    });

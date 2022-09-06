@@ -47,6 +47,17 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/aggrid.css">
     <!-- END: Page CSS-->
 
+
+	<style type="text/css">
+		table {
+			width : 80%;
+		}
+		
+		th, td {
+			border : 1px solid black;
+		}
+
+	</style>
 </head>
 <!-- END: Head-->
 
