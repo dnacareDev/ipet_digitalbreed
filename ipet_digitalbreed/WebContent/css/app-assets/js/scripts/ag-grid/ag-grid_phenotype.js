@@ -149,33 +149,27 @@
   }
    		 
   function getAllData() {
-		/*let saveList = [];
-		 
-		gridOptions.api.forEachNode((obj,idx)=>{
-		            //console.log(obj);
-		            saveList.push( obj.data);
-		});*/
+
 		let saveList = [];
-		
-		console.log(gridOptions.api.getDataAsCsv());		
 		
 		saveList.push(gridOptions.api.getDataAsCsv());
 		
-		console.log(saveList);	
+		console.log(saveList[0]);	
 		
-		  	$.ajax({
+		$.ajax({
 			    url:"../../web/database/phenotype_update.jsp",
 			    type:"POST",
-			    data:{'params':saveList},
+			    data:{'params':saveList, 'varietyid':$( "#variety-select option:selected" ).val()},
 			    success: function(result) {
-			        /*if (result) {
-						alert("정상적으로 삭제되었습니다.");
-						refresh();
-			        } else {
-			            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
-			        }*/
+			    
+			       if(result.trim()===""){
+			         refresh();
+			       }
+			       else{
+			      	 alert(result.trim());
+			       }
 			    }
-			  });			
+		});			
   }
 
    		 

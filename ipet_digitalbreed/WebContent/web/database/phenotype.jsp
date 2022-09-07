@@ -126,10 +126,12 @@ body {
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 <div class="card" style="height:675px;">
-                                    <div class="card-body">   
-
+									
+									
 									<div class="card-content">				
 			                            <div class="card-body">
+			                            
+			                            
 			                                <div class="row">
 			                                    <div class="col-12">
 			                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
@@ -174,7 +176,6 @@ body {
 											<button class="btn btn-danger mr-1 mb-1" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
 			                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
 			                            </div>
-                                    </div>                                    
                                 </div>
                             </div>
 
