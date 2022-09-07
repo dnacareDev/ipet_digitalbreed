@@ -295,15 +295,14 @@
    	
    	function vcfFileList() {
    		$.ajax(
-   	   		{
-   	   			//url: "./pca_non_population.jsp",
-   	   	   		url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
-   	   	   		method: 'POST',
-   	   	   		success: function(data) {
-   		   		console.log("vcf file list : ", data);
-   		   	 			
-   		   		makeOptions(data);
-   	   	   		}
+ 	   	{
+ 	   		url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
+ 	   		method: 'POST',
+ 	   		success: function(data) {
+	 			console.log("vcf file list : ", data);
+	 		   	 			
+	 			makeOptions(data);
+ 	   	   	}
    	   	});
    	}
    	

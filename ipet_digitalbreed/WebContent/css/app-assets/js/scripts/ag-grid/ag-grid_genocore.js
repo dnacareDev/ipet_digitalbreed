@@ -104,13 +104,13 @@
 	
 		onCellClicked: params => {
 		
-			console.log("cell clicked : " + params.column.getId());
+			//console.log("cell id : " + params.column.getId());
 			console.log("params : ", params);
 			
 			//if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
 			if(params.column.getId() == "file_name"){
-				console.log('cell was clicked', params.data.jobid);
-				console.log('cell was clicked', params.data.resultpath);
+				//console.log('cell jobid', params.data.jobid);
+				//console.log('cell resultpath', params.data.resultpath);
 				const element = document.getElementById('vcf_status');
 			   	element.innerHTML  = `<div class='card-content'>
 			   							<div class='card-body'>
@@ -122,7 +122,10 @@
 			   										</ul>
 			   										<div class='tab-content'>
 			   											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+			   												<!--
 			   												<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
+			   												-->
+			   												<div id='pill1_frame' style='width:50%; height:470px; float:left;'></div>
 			   											</div>
 			   											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
 			   												<div class="row">
@@ -132,7 +135,7 @@
 			   													</div>
 			   												</div>
 			   												<div class="row">
-			   													<div id='pill2_frame' style='width:50%; float:left;'></div>
+			   													<div id='pill2_frame' style='width:50%; height:470px; overflow-y:scroll; float:left;'></div>
 			   													<iframe src = '' width='50%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' ></iframe>
 			   												</div>
 			   											</div>
@@ -141,18 +144,20 @@
 			   											<input type='text' id='jobid' style='display:none;'>
 			   											<input type='text' id='filename' style='display:none;'>
 			   											<input type='text' id='resultpath' style='display:none;'>
+			   											<input type='text' id='coresamples' style='display:none;'>
 			   										</div>
 			   									</div>
 			   								</div>
 			   							</div>
 			   						</div>`;
 			   	
-			    $('#pill1_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
+			    //$('#pill1_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
 			    
 			    
 			    // 단순 텍스트를 table화하고 sample값을 뽑아낸다. -> input count 제한값에 적용해야 함
 			    const text_url = params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt";
 			    console.log(text_url);
+			    textToTable(text_url);
 			   	
 			   	
 			   	$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
@@ -167,6 +172,42 @@
 			}
 		}
 	};
+	
+	function textToTable(text_url) {
+		$('#pill1_frame').empty();
+		
+		$.ajax({
+	        type: "GET",
+	        url: text_url,
+	        dataType: "text",
+	        success: function(data) {
+	        	const row_data = data.replaceAll(" ", "").split(/\r?\n|\r/);
+	        	//console.log("text data : ", data);
+	        	//console.log(row_data);
+
+	        	let text_table = `<table>`;
+	        	for(let i=0 ; i<row_data.length ; i++) {
+	        		const cell_data = row_data[i].split(":");
+	        		
+	        		text_table += `<tr>`;
+	        		for(let j=0 ; j<cell_data.length ; j++) {
+	        			text_table += `<td>${cell_data[j]}</td>`;
+	        			
+	        			// coreSamples값을 input에 대입
+	        			if(i==1 && j==1) {
+	        				$('#coresamples').val(cell_data[j]);
+	        			}
+	        		}
+	        		text_table += `</tr>`;
+	        	}
+	        	text_table += `</table>`;
+	        	
+	        	//console.log(text_table);
+	        	
+	        	$('#pill1_frame').html(text_table);
+	        }
+	    });
+	}
 	
 	function csvToTable(csv_url) {
 		
@@ -211,14 +252,19 @@
 	        }
 	    });
 	}
-
 	
 	function executeSelectCount() {
 		const count = $("#select_count").val();
 		const filename = $('#filename').val();
 		const jobid = $('#jobid').val();
 		const resultpath = $('#resultpath').val();
+		const coresamples = $('#coresamples').val();
 		console.log(select_count);
+		
+		if(count > coresamples) {
+			alert("Core Samples 값 " + coresamples + "보다 높은 값은 입력할 수 없습니다.")
+			return;
+		}
 		
    		$.ajax({
    				url: "./genocore_select_count.jsp",
