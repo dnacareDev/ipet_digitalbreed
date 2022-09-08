@@ -126,12 +126,8 @@ body {
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 <div class="card" style="height:675px;">
-									
-									
 									<div class="card-content">				
-			                            <div class="card-body">
-			                            
-			                            
+			                            <div class="card-body">		
 			                                <div class="row">
 			                                    <div class="col-12">
 			                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">

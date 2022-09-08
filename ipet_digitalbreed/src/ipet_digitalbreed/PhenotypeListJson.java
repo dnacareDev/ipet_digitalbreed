@@ -22,6 +22,7 @@ public class PhenotypeListJson {
 				String sql_trait=null;
 				int trait_cnt=1;
 				
+								
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 
 					JSONObject jsonObject = new JSONObject();
@@ -38,14 +39,24 @@ public class PhenotypeListJson {
 						ipetdigitalconndb.stmt1 = ipetdigitalconndb.conn.createStatement();
 
 						sql_trait="SELECT group_concat( value SEPARATOR  ',' ) as val FROM sampledata_traitval_t where sampleid='"+ipetdigitalconndb.rs.getString("sampleid")+"' GROUP BY sampleid order by sampleid desc;";
-											
+						System.out.println("sql_trait : " + sql_trait);				
 						StringTokenizer stk=null;
 						ipetdigitalconndb.rs1=ipetdigitalconndb.stmt1.executeQuery(sql_trait);
-						while (ipetdigitalconndb.rs1.next()) { 						
-							stk=new StringTokenizer(ipetdigitalconndb.rs1.getString("val"),",");
+						while (ipetdigitalconndb.rs1.next()) { 	
 							
-							while(stk.hasMoreTokens()){
-								jsonObject.put(trait_cnt+"_"+ipetdigitalconndb.rs.getString("varietyid"),stk.nextToken());
+							String[] traitvalue = ipetdigitalconndb.rs1.getString("val").split(",");
+							
+							//stk=new StringTokenizer(ipetdigitalconndb.rs1.getString("val"),",");
+							
+							
+							
+							System.out.println("AAAAAAA : " + ipetdigitalconndb.rs1.getString("val"));
+							
+							System.out.println("AAA : " + traitvalue.length);
+							
+							for(int i=0;i<traitvalue.length;i++) {		
+								jsonObject.put(trait_cnt+"_"+ipetdigitalconndb.rs.getString("varietyid"),traitvalue[i]);
+								System.out.println(traitvalue[i]);
 								trait_cnt++;
 							}							
 						}
@@ -72,7 +83,7 @@ public class PhenotypeListJson {
 			
 
 
-				
+			System.out.println(jsonArray);
 			return jsonArray;
 	}
 
