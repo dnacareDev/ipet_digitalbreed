@@ -169,8 +169,8 @@ body {
                                 </div>
                                 
                                 <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:320px;"></div><br>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">신규 분석</button>
-                                <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> 삭제</button>  
+								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+                                <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
                                       
                             </div>
                         </div>
@@ -188,7 +188,7 @@ body {
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">PCA 신규 분석</h4>
+                    <h4 class="modal-title" id="myModalLabel5">PCA New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -198,14 +198,14 @@ body {
 					    <div class="form-body">
 					        <div class="row">
 					            <br>
-					            <div class="col-md-12 col-12">
+					            <div class="col-md-12 col-12 ml-1">
 					                <br>
 					             	<div class="form-label-group">
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" required data-validation-required-message="This name field is required">						                     
 					             		<label for="first-name-column">Comment</label>
 					                </div>
 					            </div>
-					            <div class="col-md-12 col-12">
+					            <div class="col-md-12 col-12 ml-1">
 					            	<div class="form-label-group" >
 					                    <select class="select2 form-select" id="VcfSelect">
 					                    	<!--  
@@ -219,7 +219,7 @@ body {
 					            </div>
 					            <div class="col-md-12 col-12">
 									<div class="form-label-group">
-							            <h5>population</h5>
+							            <h5>&nbsp;&nbsp;population</h5>
 							            <div class="col-md-12 col-12">
 											<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
 											<br>
@@ -280,6 +280,10 @@ body {
 <script type="text/javascript">                  
    	$(document).ready(function(){
    		vcfFileList();
+   		//console.log("select2");
+   		
+   		//setTimeout($(".select2.select2-container.select2-container--default").width("100px"), 2000 );
+   		$(".select2.select2-container.select2-container--default").width("444px");
    	});
    	
    	function vcfFileList() {
@@ -372,6 +376,9 @@ body {
 	  					console.log("pca_non_population.jsp");
 	   				}
 	  		});
+	   		
+	   		//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+	   		setTimeout( function () {location.reload()}, 500);
     		
     	} else {
     		console.log("file exists -> with_population");

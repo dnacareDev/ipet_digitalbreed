@@ -66,14 +66,20 @@
 	}
 
 	table {
-		width : 90%;
-		margin-top : 24px;
-		margin-left : 12px;
+		width: 95%;
+		margin-top: 24px;
+		margin-left: 12px;
 	}
 	
 	th, td {
-		border : 1px solid black;
-		text-align : center;
+		border: 1px solid #DDDDDD;
+		color: black;
+		text-align: center;
+	}
+	
+	th:hover, td:hover {
+	  background-color: #aad5f8;
+	  color: #000000;	  
 	}
 	
 
@@ -186,8 +192,8 @@
                                 </div>
                                 
                                 <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:320px;"></div><br>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">신규 분석</button>
-                                <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> 삭제</button>  
+								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+                                <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
                                       
                             </div>
                         </div>
@@ -205,7 +211,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">Genocore 신규 분석</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Genocore New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -218,14 +224,12 @@
 					            <div class="col-md-12 col-12">
 					                <br>
 					             	<div class="form-label-group">
-					                 	<h6>상세 내용</h6>
 					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
 					             		<label for="first-name-column">Comment</label>
 					                </div>
 					            </div>
 					            <div class="col-md-12 col-12">
 					            	<div class="form-label-group" >
-					                    <h6>VCF 파일 선택</h6>
 					                    <select class="select2 form-select" id="VcfSelect">
  
 					                    	<!--  

@@ -98,7 +98,7 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
-	      //cellStyle: {'background-color' : '#F0F0F0'},
+	      cellStyle: {'background-color' : '#F0F0F0'},
 	      width: 314
 	    },
 		{
@@ -123,7 +123,6 @@
 		// 주석처리한 옵션 작동안함. 전부 다른 이름으로 바꿔야한다.
 		columnDefs: columnDefs,
 		rowHeight: 35,
-		rowSelection: "multiple",
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
 		//rowSelection: "multiple",
@@ -151,9 +150,9 @@
 		   									<div class='row'>
 		   										<div class='col-12'>
 		   											<ul class='nav nav-pills nav-active-bordered-pill'>
-		   												<li class='nav-item'><a class='nav-link active' id='pca1_2d' data-toggle='pill' href='#pill1' aria-expanded='true'>PCA 1-2 </a></li>
-						   								<li class='nav-item'><a class='nav-link' id='pca2_2d' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA 2-3</a></li>
-						   								<li class='nav-item'><a class='nav-link' id='pca3_2d' data-toggle='pill' href='#pill3' aria-expanded='false'>PCA 1-3</a></li>
+		   												<li class='nav-item'><a class='nav-link' id='pca1_2d' data-toggle='pill' href='#pill1' aria-expanded='true'>PCA1 (2D)</a></li>
+						   								<li class='nav-item'><a class='nav-link' id='pca2_2d' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA2 (2D)</a></li>
+						   								<li class='nav-item'><a class='nav-link' id='pca3_2d' data-toggle='pill' href='#pill3' aria-expanded='false'>PCA3 (2D)</a></li>
 						   								<li class='nav-item'><a class='nav-link' id='pca_3d' data-toggle='pill' href='#pill4' aria-expanded='false'>PCA (3D)</a></li>
 		   											</ul>
 		   											<div class='tab-content'>
@@ -183,8 +182,8 @@
 				$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
 				$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
 				*/
-		   		$('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
-		   		$('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
+		   		$('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
+			    $('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
 				$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
 				$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca.html");
 			}
@@ -206,13 +205,12 @@
 	/*** GET TABLE DATA FROM URL ***/
 
   	agGrid
-		.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+		.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/mini_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		.then(function(data) {
 		console.log("data : ", data);
 		  
 		//pca 테이블이 만들어질때까지는 하드코딩 데이터
 		gridOptions.api.setRowData(data);
-		gridOptions.api.sizeColumnsToFit();
 		
 		// 모달창에 genotype vcf파일 리스트 option목록 생성
 		
@@ -257,8 +255,6 @@
 	}
 	
 	$(window).on("resize", function() {
-		gridOptions.api.sizeColumnsToFit();
-		
 	    if ($(window).width() < 768) {
 	      //gridOptions.columnApi.setColumnPinned("email", null);
 	    } else {

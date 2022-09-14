@@ -57,6 +57,23 @@
 		}        
 	}
 	
+	// insert 구문을 먼저(status=0)
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+
+	String insertPcainfo_sql="insert into pca_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";	
+	System.out.println("insertPcainfo_sql : " + insertPcainfo_sql);
+	
+	try{
+			ipetdigitalconndb.stmt.executeUpdate(insertPcainfo_sql);
+	}catch(Exception e){
+		System.out.println(e);
+	}finally { 
+		System.out.println("AAAAAAAAAAAAAAA");
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
+	}		
+	
+	
 	System.out.println();
 	System.out.println("script_path : " + script_path);
 	System.out.println("savePath : " + savePath);
@@ -71,21 +88,9 @@
 	
 	
 	
+	
+	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-	
-	String insertPcainfo_sql="insert into pca_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";	
-
-	System.out.println("insertPcainfo_sql : " + insertPcainfo_sql);
-	
-	try{
-			ipetdigitalconndb.stmt.executeUpdate(insertPcainfo_sql);
-	}catch(Exception e){
-		System.out.println(e);
-	}finally { 
-		System.out.println("AAAAAAAAAAAAAAA");
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.conn.close();
-	}		
 	
 	
 %>
