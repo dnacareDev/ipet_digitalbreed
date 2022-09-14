@@ -57,7 +57,7 @@
 	      field: "no",
 	      editable: false,
 	      sortable: true,
-	      width: 150,
+	      width: 250,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -71,7 +71,7 @@
 	      sortable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
-	      width: 400,
+	      width: 300,
 	    },
 	    {
 	      headerName: "분석상태",
@@ -89,7 +89,7 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered",      
-	      width: 750
+	      width: 600
 	    },
 	    {
 	      headerName: "분석일",

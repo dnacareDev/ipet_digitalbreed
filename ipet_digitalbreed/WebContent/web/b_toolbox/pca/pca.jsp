@@ -60,6 +60,12 @@ body {
     display: none;
 }
 
+/*
+.ag-header-cell-text {
+   margin-left: 10px;
+}
+*/
+
 </style>
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -184,7 +190,7 @@ body {
     
     
 	<!-- Modal start-->
-    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
@@ -207,7 +213,7 @@ body {
 					            </div>
 					            <div class="col-md-12 col-12 ml-1">
 					            	<div class="form-label-group" >
-					                    <select class="select2 form-select" id="VcfSelect">
+					                    <select class="select2 form-select" id="VcfSelect" style="width: 444px;">
 					                    	<!--  
 					                    	<option value="-1" selected disabled>목록 선택</option>
 					                    	<option value="1">Alaska</option>
@@ -282,9 +288,12 @@ body {
    		vcfFileList();
    		//console.log("select2");
    		
-   		//setTimeout($(".select2.select2-container.select2-container--default").width("100px"), 2000 );
-   		$(".select2.select2-container.select2-container--default").width("444px");
+   		$(".select2.select2-container.select2-container--default").eq(1).width("444px");
+   		
+   		//console.log($(".select2.select2-container.select2-container--default").eq(1));
+
    	});
+
    	
    	function vcfFileList() {
    		
