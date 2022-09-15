@@ -7,8 +7,73 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-	function refresh() {
-		gridOptions.api.refreshCells(); 
+	function refresh() {	
+	
+		var columnDefs = [
+        {
+            headerName: "순번",
+            field: "selectfiles",
+            editable: false,
+            sortable: true,
+            width: 140,	
+            filter: 'agMultiColumnFilter',
+            cellClass: "grid-cell-centered",      
+            checkboxSelection: true,
+            headerCheckboxSelectionFilteredOnly: true,
+            headerCheckboxSelection: true,
+		},
+        {
+            headerName: "사진",
+            field: "photo_status",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 120,	
+            cellRenderer: deltaIndicator,
+		},
+        {
+            headerName: "등록일자",
+            field: "cre_dt",
+            editable: false,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 150
+		},
+        {
+            headerName: "개체명",
+            field: "samplename",
+            editable: true,
+            sortable: true,
+            filter: true,
+            cellClass: "grid-cell-centered",      
+            width: 150
+		}
+	];
+		
+			var variety_id = $( "#variety-select option:selected" ).val();
+	 	var grid_array;	
+		$.ajax({
+			url : "../../web/database/traitnamertn.jsp",
+			type : "post",
+			async: false,
+			data : {"varietyid" : variety_id},
+			dataType : "json",
+			success : function(result){			
+				grid_array = result;	
+				for (var i=0; i<grid_array.length; i++) {
+					for (key in grid_array[i]) {		
+						//addCol(key, grid_array[i][key] );
+						//addCol(i+"", grid_array[i][key] );						
+						//var columnDefs = columnDefs;												
+						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], width: "210",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+						gridOptions.api.setColumnDefs(columnDefs);										
+					}
+				}		
+			}
+		});  
+		gridOptions.api.refreshCells(); 		
 		  agGrid
     .simpleHttpRequest({ url: "../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
@@ -39,7 +104,27 @@
 			    }
 			  });
 		
-	}
+	}	
+	    
+	const deltaIndicator = (params) => {
+	  const element = document.createElement('span');
+	  const imageElement = document.createElement('img');	
+	  
+	  if (params.value ==  1) {
+  		return '<span><i class="ficon feather icon-file-text"></i></span>';
+	  } 
+	  else if (params.value ==  0) {
+  		return '<span><i class="ficon feather icon-file"></i></span>';
+	  }
+	  else {
+  		return '<span></span>';
+	  }
+	 
+	  element.appendChild(imageElement);
+	  element.appendChild(document.createTextNode(params.value));
+	  return element;
+	};
+	
 	
 	var columnDefs = [
         {
@@ -62,15 +147,7 @@
             filter: true,
             cellClass: "grid-cell-centered",      
             width: 120,	
-		},
-        {
-            headerName: "번호",
-            field: "selectfiles",
-            editable: false,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 120,	
+            cellRenderer: deltaIndicator,
 		},
         {
             headerName: "등록일자",
@@ -92,6 +169,9 @@
 		}
 	];
     
+
+
+
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
 	    columnDefs: columnDefs,
@@ -107,7 +187,22 @@
 	    colResizeDefault: "shift",
 	    animateRows: true,
 	    resizable: true,
-	    serverSideInfiniteScroll: true,
+	    serverSideInfiniteScroll: true,	    
+
+		onCellClicked: params => {
+			if(params.column.getId() == "photo_status"){
+					$.ajax({
+						 url:"../../web/database/phenotype_photo_view.jsp",
+						 type:"POST",
+					     data:{'no':params.data.selectfiles},
+						 success: function(result) {						 	
+						 	$("#photo_list").html(result);												
+						 }
+					});						             	   	 	
+					$('#backdrop').modal({ show: true });				
+			}
+		}  	
+		    
 	  };
 
 	function replaceClass(id, oldClass, newClass) {
@@ -141,6 +236,7 @@
 	gridOptions.api.setColumnDefs(columnDefs);
   }
 
+  
   function addnewrow() {
 		var newRows = [{                
       
@@ -154,15 +250,14 @@
 		
 		saveList.push(gridOptions.api.getDataAsCsv());
 		
-		console.log(saveList[0]);	
-		
-		$.ajax({
+			$.ajax({
 			    url:"../../web/database/phenotype_update.jsp",
 			    type:"POST",
 			    data:{'params':saveList, 'varietyid':$( "#variety-select option:selected" ).val()},
 			    success: function(result) {
 			    
 			       if(result.trim()===""){
+			      	 alert("저장되었습니다.");
 			         refresh();
 			       }
 			       else{

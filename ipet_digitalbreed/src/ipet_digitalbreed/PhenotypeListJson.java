@@ -15,15 +15,14 @@ public class PhenotypeListJson {
 		 JSONArray jsonArray = new JSONArray();
 
 			try{
-				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-				ipetdigitalconndb.stmt1 = ipetdigitalconndb.conn.createStatement();
+				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();				
 
 				String sql="select no, cropid, varietyid, sampleid, samplename, photo_status, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from sampledata_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
 				String sql_trait=null;
-				int trait_cnt=1;
-				
+						
 								
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
+				
 				while (ipetdigitalconndb.rs.next()) { 
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("selectfiles",ipetdigitalconndb.rs.getString("no"));
@@ -37,26 +36,17 @@ public class PhenotypeListJson {
 
 					try{
 						ipetdigitalconndb.stmt1 = ipetdigitalconndb.conn.createStatement();
-
 						sql_trait="SELECT group_concat( value SEPARATOR  ',' ) as val FROM sampledata_traitval_t where sampleid='"+ipetdigitalconndb.rs.getString("sampleid")+"' GROUP BY sampleid order by sampleid desc;";
-						System.out.println("sql_trait : " + sql_trait);				
-						StringTokenizer stk=null;
+						
+						System.out.println("sql_trait : " + sql_trait);
 						ipetdigitalconndb.rs1=ipetdigitalconndb.stmt1.executeQuery(sql_trait);
 						while (ipetdigitalconndb.rs1.next()) { 	
-							
-							String[] traitvalue = ipetdigitalconndb.rs1.getString("val").split(",");
-							
-							//stk=new StringTokenizer(ipetdigitalconndb.rs1.getString("val"),",");
-							
-							
-							
-							System.out.println("AAAAAAA : " + ipetdigitalconndb.rs1.getString("val"));
-							
-							System.out.println("AAA : " + traitvalue.length);
-							
+							int trait_cnt=0;		
+							String[] traitvalue = ipetdigitalconndb.rs1.getString("val").split(",");							
+					
 							for(int i=0;i<traitvalue.length;i++) {		
-								jsonObject.put(trait_cnt+"_"+ipetdigitalconndb.rs.getString("varietyid"),traitvalue[i]);
-								System.out.println(traitvalue[i]);
+								//jsonObject.put(trait_cnt+"_"+ipetdigitalconndb.rs.getString("varietyid"),traitvalue[i].trim());
+								jsonObject.put(trait_cnt+"_key",traitvalue[i].trim());
 								trait_cnt++;
 							}							
 						}
@@ -72,17 +62,16 @@ public class PhenotypeListJson {
 					jsonArray.add(jsonObject);
 				}
 			}catch(Exception e){
+				ipetdigitalconndb.stmt.close();
+				ipetdigitalconndb.rs.close();
+				ipetdigitalconndb.conn.close();
 				System.out.println(e);
 			}finally { 
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.rs.close();
-				ipetdigitalconndb.stmt1.close();
-				ipetdigitalconndb.rs1.close();
 				ipetdigitalconndb.conn.close();
 			}
 			
-
-
 			System.out.println(jsonArray);
 			return jsonArray;
 	}

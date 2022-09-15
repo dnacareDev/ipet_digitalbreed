@@ -320,7 +320,7 @@ body {
             	  return false;  
             	}
 	            var postObj = new Object();
-	            postObj.comment = document.getElementById("comment").value;;	       
+	            postObj.comment = document.getElementById("comment").value;      
 	            postObj.varietyid = $( "#variety-select option:selected" ).val();
 	            box.setPostData(postObj);
 	            box.upload();

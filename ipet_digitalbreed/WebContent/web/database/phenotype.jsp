@@ -350,18 +350,19 @@ body {
     <script>
 		for (var i=0; i<grid_array.length; i++) {
 			for (key in grid_array[i]) {		
-				addCol(key, grid_array[i][key] );
+				//addCol(key, grid_array[i][key] );
+				addCol(i+"_key", grid_array[i][key] );				
 			}
 		}
 	</script>
 	
 <!-- Modal start-->
 
-	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
-	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-	            <div class="modal-content">s
+	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+	            <div class="modal-content">
 	                <div class="modal-header bg-warning white">
-	                    <h4 class="modal-title" id="myModalLabel4">VCF File Upload</h4>
+	                    <h4 class="modal-title" id="myModalLabel4">Photo Upload</h4>
 	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
@@ -370,54 +371,13 @@ body {
 						<form class="form" id="uploadvcfform">
 						     <div class="form-body">
 						         <div class="row">
-						             <br><div class="col-md-12 col-12">
-						                 <br><div class="form-label-group">
-						                     <input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
-						                     <label for="first-name-column">Comment</label>
-						                 </div>
-						             </div>
-						             <!-- 
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="maf" class="form-control" placeholder="Maf" name="maf">
-						                     <label for="city-column">Maf</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="mindp" class="form-control" name="mindp" placeholder="minDP">
-						                     <label for="country-floating">minDP</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="mingq" class="form-control" name="mingq" placeholder=minGQ>
-						                     <label for="company-column">minGQ</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="email" id="missing" class="form-control" name="missing" placeholder="Missing">
-						                     <label for="email-id-column">Missing</label>
-						                 </div>
-						             </div>		
-						             -->				             
 						             <div class="col-md-12 col-12">
-										<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div><br>
-						             </div>	
-						             <div class="col-12">
-						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
-						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
-						             </div>						             
+						                 <div style="height: 450px" class="form-label-group" id="photo_list"></div>
+						             </div>					             
 						         </div>
 						     </div>
 						</form>
 	                </div>
-	                <!-- 
-		                <div class="modal-footer">
-		                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
-		                </div>
-	                 -->
 	            </div>
 	        </div>
                           

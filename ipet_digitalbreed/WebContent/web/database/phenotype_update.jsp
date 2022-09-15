@@ -13,6 +13,7 @@
 	String deleteSql=null;
 	
 	String[] deleteitems = request.getParameterValues("params[]");
+	System.out.println("deleteitems : " + deleteitems[0]);
 	String varietyid = request.getParameter("varietyid");
 	String cropid = null;
 	String sampleid = null;
@@ -78,9 +79,8 @@
 		   
 		    
 		    for(int j=0; j<sampleinfo_array.length; j++) { 
-		    	System.out.println("splitData"+j+" : " + sampleinfo_array[j]); 
-		    	
-		    	if(j==4 && sampleinfo_array[j].equals("\"\"")){
+		    			    	
+		    	if(j==3 && sampleinfo_array[j].equals("\"\"")){
 		    		out.println("[필수입력] "+i+"번째 개체의 개체명을 입력해주세요.");	   
 		    		break Loop1; 
 		    	}   
@@ -91,36 +91,36 @@
 		    int traitno=1;
 		    
 			if(!sampleinfo_array[0].replaceAll("\"","").equals("")){
-				String updatesql="update sampledata_info_t set samplename='"+sampleinfo_array[4].replaceAll("\"","")+"' where no='"+sampleinfo_array[0].replaceAll("\"","")+"'";
-				System.out.println("updatesql : " + updatesql);			
+				String updatesql="update sampledata_info_t set samplename='"+sampleinfo_array[3].replaceAll("\"","")+"' where no='"+sampleinfo_array[0].replaceAll("\"","")+"'";
+				System.out.println("updatesql : " + updatesql);	
+
+							
 				ipetdigitalconndb.stmt.executeUpdate(updatesql);
 				
-				for(int j=5; j<sampleinfo_array.length; j++) { 
-					updatetraitsql="update sampledata_traitval_t set value='"+sampleinfo_array[j].replaceAll("\"","")+"' where sampleno='"+sampleinfo_array[0].replaceAll("\"","")+"' and seq='"+traitno+"'";
-					traitno++;
+				for(int j=4; j<sampleinfo_array.length; j++) { 
+					updatetraitsql="update sampledata_traitval_t set value='"+sampleinfo_array[j].replaceAll("\"","").trim()+"' where sampleno='"+sampleinfo_array[0].replaceAll("\"","")+"'and seq='"+traitno+"'";
 					System.out.println("updatetraitsql : " + updatetraitsql);	
+
+					traitno++;						
 					ipetdigitalconndb.stmt.executeUpdate(updatetraitsql);
 				}
 			}
 			else{
-				String insertsql="insert into sampledata_info_t(cropid, varietyid, sampleid, samplename, photo_status, creuser, cre_dt) values('"+cropid+"','"+varietyid+"','"+conv_newsampleid+"','"+sampleinfo_array[4].replaceAll("\"","")+"','0','"+permissionUid+"',now());";
-				System.out.println("insertsql : " + insertsql);		
+				String insertsql="insert into sampledata_info_t(cropid, varietyid, sampleid, samplename, photo_status, creuser, cre_dt) values('"+cropid+"','"+varietyid+"','"+conv_newsampleid+"','"+sampleinfo_array[3].replaceAll("\"","")+"','0','"+permissionUid+"',now());";						
 				ipetdigitalconndb.stmt.executeUpdate(insertsql);	
 		
 				String newsampleidsql="select no from sampledata_info_t where sampleid='"+conv_newsampleid+"';";
-								
+				System.out.println("newsampleidsql : " + inserttraitsql);	
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(newsampleidsql);
 					
 				while (ipetdigitalconndb.rs.next()) { 						
 					newsampleno = ipetdigitalconndb.rs.getString("no");
 				}
-					
-				System.out.println("sampleinfo_array.length : " + sampleinfo_array.length);
-				
-				for(int k=5; k<sampleinfo_array.length; k++) { 
-					inserttraitsql="insert into sampledata_traitval_t(cropid, varietyid, sampleid, sampleno, seq, value, creuser, cre_dt) values('"+cropid+"','"+varietyid+"','"+conv_newsampleid+"','"+newsampleno+"','"+traitno+"', '"+sampleinfo_array[k].replaceAll("\"","")+"','"+permissionUid+"',now());";
-					traitno++;
-					System.out.println("inserttraitsql : " + inserttraitsql);	
+											
+				for(int k=4; k<sampleinfo_array.length; k++) { 
+					inserttraitsql="insert into sampledata_traitval_t(cropid, varietyid, sampleid, sampleno, seq, value, creuser, cre_dt) values('"+cropid+"','"+varietyid+"','"+conv_newsampleid+"','"+newsampleno+"','"+traitno+"', '"+sampleinfo_array[k].replaceAll("\"","").trim()+"','"+permissionUid+"',now());";
+					System.out.println("inserttraitsql : " + inserttraitsql);
+					traitno++;						
 					ipetdigitalconndb.stmt.executeUpdate(inserttraitsql);
 				}			
 			}

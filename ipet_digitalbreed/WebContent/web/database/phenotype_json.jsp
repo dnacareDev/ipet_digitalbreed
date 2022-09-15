@@ -16,7 +16,7 @@
 	response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
 	response.setHeader("Access-Control-Allow-Headers", "Authorization,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type");
 	response.setContentType("application/json");
-	
+	System.out.print(PhenotypeListJsonValues.toJSONString());
 	out.print(PhenotypeListJsonValues.toJSONString());	
 %>
 
