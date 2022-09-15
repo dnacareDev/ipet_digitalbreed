@@ -15,7 +15,7 @@ public class MinimalMarkerListJson {
 			try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-				String sql="select no, uploadpath, filename, resultpath, comment, status, cropid, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from genocore_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
+				String sql="select no, uploadpath, filename, resultpath, comment, status, cropid, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from mini_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
 
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 
@@ -30,9 +30,6 @@ public class MinimalMarkerListJson {
 					jsonObject.put("jobid",ipetdigitalconndb.rs.getString("jobid"));
 					jsonObject.put("cre_dt",ipetdigitalconndb.rs.getString("cre_dt"));
 					jsonArray.add(jsonObject);
-					
-					
-					
 				}
 			}catch(Exception e){
 				System.out.println(e);

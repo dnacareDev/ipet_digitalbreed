@@ -142,7 +142,7 @@
 			console.log("cell clicked : " + params.column.getId());
 			//console.log("params : ", params);
 			
-			if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
+			if(params.column.getId() != "no"){
 				console.log('cell was clicked', params.data.jobid);
 				console.log('cell was clicked', params.data.resultpath);
 				const element = document.getElementById('vcf_status');

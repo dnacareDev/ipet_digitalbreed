@@ -140,7 +140,7 @@
 			//console.log("params : ", params);
 			
 			//if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
-			if(params.column.getId() == "file_name"){
+			if(params.column.getId() == "no"){
 				//console.log('cell jobid', params.data.jobid);
 				//console.log('cell resultpath', params.data.resultpath);
 				const element = document.getElementById('vcf_status');

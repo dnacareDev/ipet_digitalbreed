@@ -36,7 +36,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../web/b_toolbox/pca/pca_delete.jsp",
+		    url:"../../../web/b_toolbox/mini/mini_delete.jsp",
 		    type:"POST",
 		    data:{'params':deleteitems},
 		    success: function(result) {
@@ -141,7 +141,7 @@
 			console.log("cell clicked : " + params.column.getId());
 			//console.log("params : ", params);
 			
-			if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
+			if(params.column.getId() != "no"){
 				console.log('cell was clicked', params.data.jobid);
 				console.log('cell was clicked', params.data.resultpath);
 				const element = document.getElementById('vcf_status');
@@ -157,19 +157,20 @@
 		   											</ul>
 		   											<div class='tab-content'>
 		   												<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+		   													<div>jobid + "_iteration.xlsx"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
 		   												</div>
 		   												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
+		   													<div>jobid + "_length.len"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe>
 		   												</div>
 		   												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
+		   													<div>jobid + "_minimal_markers.csv"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame'></iframe>
 		   												</div>
 		   												<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
+		   													<div>jobid + "_minimal_markers.xlsx"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill4_frame' id='pill4_frame'></iframe>
-		   												</div>
-		   												<div class='tab-pane' id='pill5' aria-labelledby='base-pill5'>
-		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill5_frame' id='pill5_frame'></iframe>
 		   												</div>
 		   											</div>
 		   										</div>
@@ -205,7 +206,7 @@
 	/*** GET TABLE DATA FROM URL ***/
 
   	agGrid
-		.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/mini_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+		.simpleHttpRequest({ url: "../../../web/b_toolbox/mini/mini_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		.then(function(data) {
 		console.log("data : ", data);
 		  

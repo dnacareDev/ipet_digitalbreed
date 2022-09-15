@@ -137,7 +137,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">&nbsp;Genocore</h2>
+                            <h2 class="content-header-title float-left mb-0">&nbsp;Minimal Marker</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="../../mainboard.jsp">Home</a>
@@ -207,11 +207,11 @@
     
     
 	<!-- Modal start-->
-    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">Genocore 신규 분석</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Minimal Marker New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -288,7 +288,7 @@
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../../css/app-assets/js/scripts/ag-grid/ag-grid_genocore.js"></script>
+    <script src="../../../css/app-assets/js/scripts/ag-grid/ag-grid_mini.js"></script>
     <script src="../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
 	<script src="../../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
@@ -332,7 +332,7 @@
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
     	
-   		console.log("ba")
+   		//console.log("ba")
    		
    		document.getElementById('uploadGenocoreForm').reset();
     	vcfFileList();
@@ -356,7 +356,7 @@
    		console.log("uploadpath : ", uploadpath);
    		
    		$.ajax({
-   				url: "./genocore_analysis.jsp",
+   				url: "./mini_analysis.jsp",
    				method: 'POST',
    				data: {
    					"comment" : comment, 

@@ -83,107 +83,6 @@
 	      hide: true
 	    }        
 	];
-	
-  /*
-  var columnDefs = [
-    {
-      headerName: "체크",
-      field: "selectfiles",
-      editable: false,
-      sortable: true,
-      width: 120,
-      filter: 'agMultiColumnFilter',
-      cellClass: "grid-cell-centered",      
-      checkboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      headerCheckboxSelection: true
-    },
-    {
-      headerName: "번호",
-      field: "filename",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 275,
-	  cellRenderer: function(params){
-      return params.value+"<a href='../../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
-        + params.value 
-        + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
-    }
-    },
-    {
-      headerName: "결과보기",
-      field: "comment",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "ag-header-cell-label",
-      width: 750
-    },
-    {
-      headerName: "파일명",
-      field: "cropid",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 180,
-      hide: true
-    },
-    {
-      headerName: "분석일",
-      field: "cre_dt",
-      editable: false,
-      sortable: true,
-      filter: 'agDateColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-    {
-      headerName: "분석상태",
-      field: "refgenome",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 275,
-    },
-    {
-      headerName: "샘플수",
-      field: "samplecnt",
-      editable: false,
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-    {
-      headerName: "변이수",
-      field: "variablecnt",
-      editable: false,
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-	{
-      headerName: "jobid",
-      field: "jobid",
-      hide: true
-    },  
-	{
-      headerName: "uploadpath",
-      field: "uploadpath",
-      hide: true
-    },  
-	{
-      headerName: "resultpath",
-      field: "resultpath",
-      hide: true
-    }        
-  ];
-  */
 
   /*** GRID OPTIONS ***/
 var gridOptions = {
@@ -206,7 +105,7 @@ var gridOptions = {
 		console.log("cell clicked : " + params.column.getId());
 		//console.log("params : ", params);
 		
-		if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
+		if(params.column.getId() != "no"){
 				console.log('cell was clicked', params.data.jobid);
 				console.log('cell was clicked', params.data.resultpath);
 				const element = document.getElementById('vcf_status');

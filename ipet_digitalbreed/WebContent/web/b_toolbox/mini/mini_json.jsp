@@ -9,7 +9,7 @@
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String varietyid = request.getParameter("varietyid");
 
-	JSONArray GenotypeListJsonValues = minimalMarkerListJson.getGenocoreListJson(permissionUid, varietyid);
+	JSONArray GenotypeListJsonValues = minimalMarkerListJson.getMinimalMarkerListJson(permissionUid, varietyid);
 	
 	//System.out.println(varietyid);
 	//System.out.println(GenotypeListJsonValues);
