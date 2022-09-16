@@ -57,7 +57,7 @@
 	      field: "no",
 	      editable: false,
 	      sortable: true,
-	      width: 250,
+	      width: 150,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -71,7 +71,7 @@
 	      sortable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
-	      width: 300,
+	      width: 400,
 	    },
 	    {
 	      headerName: "분석상태",
@@ -89,7 +89,7 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered",      
-	      width: 600
+	      width: 750
 	    },
 	    {
 	      headerName: "분석일",
@@ -99,7 +99,7 @@
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
 	      //cellStyle: {'background-color' : '#F0F0F0'},
-	      width: 314
+	      width: 296
 	    },
 		{
 	      headerName: "jobid",

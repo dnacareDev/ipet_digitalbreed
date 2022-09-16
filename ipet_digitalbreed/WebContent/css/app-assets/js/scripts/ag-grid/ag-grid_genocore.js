@@ -140,7 +140,7 @@
 			//console.log("params : ", params);
 			
 			//if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
-			if(params.column.getId() == "no"){
+			if(params.column.getId() != "no"){
 				//console.log('cell jobid', params.data.jobid);
 				//console.log('cell resultpath', params.data.resultpath);
 				const element = document.getElementById('vcf_status');
@@ -150,19 +150,16 @@
 			   									<div class='col-12'>
 			   										<ul class='nav nav-pills nav-active-bordered-pill'>
 			   											<li class='nav-item'><a class='nav-link active' id='info' data-toggle='pill' href='#pill1' aria-expanded='true'>INFO</a></li>
-						   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA2 (2D)</a></li>
+						   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>GENOCORE</a></li>
 			   										</ul>
 			   										<div class='tab-content'>
 			   											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-			   												<!--
-			   												<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
-			   												-->
 			   												<div id='pill1_frame' style='width:75%; height:130px; float:left;'></div>
 			   											</div>
 			   											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
 			   												<div class="row">
 			   													<div class="col-12">
-			   														<input type="text" class="form-control w-25 float-left" id="select_count" placeholder="Search or Input count...">
+			   														<input type="text" class="form-control w-25 float-left" id="select_count" autocomplete="off">
 			   														<input type="button" class="btn btn-primary ml-1 float-left" onclick="executeSelectCount()" value="execute">
 			   													</div>
 			   												</div>
@@ -196,13 +193,10 @@
 			   	
 			    
 			   	
-			   	$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
-			    
-			    
+			   	//$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
 			    
 			    /** #pill2_frame | 두번째 ag-grid */
 			   	const csv_url = params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore_table.csv";
-			   	
 			   	csvToGrid(csv_url);
 			   	
 		  	  	// input에 parameter 주입
@@ -297,18 +291,10 @@
 		        	console.log(json_data);
 	  	  			
 	  	  			gridOptions2.api.setRowData(json_data);
+	  	  			gridOptions.api.sizeColumnsToFit();
+	  	  			//gridOptions2.api.sizeColumnsToFit();
 	  	  		});
 	  	  	});
-  	  	
-  	  	// 사이즈 
-  	  	window.onresize = function(event) {
-  	  		gridOptions2.api.sizeColumnsToFit();
-  	  	}
-  	  	
-  	  	// PCA2(2D) 클릭시 resize
-  	  	$(".nav-item").on("click", function() {
-  	  		gridOptions2.api.sizeColumnsToFit();
-  	  	});
 	}
 	
 	function executeSelectCount() {
@@ -348,6 +334,7 @@
   				    const csv_url = resultpath+"/"+jobid+"/"+jobid+"_genocore_table_filtering.csv";
   				    gridOptions2.api.destroy();
   				    csvToGrid(csv_url);
+  				    gridOptions2.api.sizeColumnsToFit();
    				}
   		});
 	}
@@ -359,7 +346,17 @@
 	    }
 	    elem.addClass(newClass);
 	}
- 
+	
+	document.addEventListener('click', function(event) {
+		if(event.target.id == "genocore" && !$("#pill3_frame").attr('src')) {
+			
+			const jobid = $('#jobid').val();
+			const resultpath = $('#resultpath').val();
+			
+			gridOptions2.api.sizeColumnsToFit();
+			$('#pill3_frame').attr('src', resultpath + jobid +"/"+ jobid+"_genocore.html");
+		}
+	})
 	
   	$(".sort-dropdown .dropdown-item").on("click", function() {
   		var $this = $(this);
@@ -428,6 +425,7 @@
   	
   	$(window).on("resize", function() {
   		gridOptions.api.sizeColumnsToFit();
+	  	gridOptions2.api.sizeColumnsToFit();
   		/*
   		if ($(window).width() < 768) {
   			//gridOptions.columnApi.setColumnPinned("email", null);

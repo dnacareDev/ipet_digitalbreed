@@ -99,7 +99,7 @@
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
 	      cellStyle: {'background-color' : '#F0F0F0'},
-	      width: 314
+	      width: 296
 	    },
 		{
 	      headerName: "jobid",
@@ -187,6 +187,9 @@
 			    $('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
 				$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
 				$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca.html");
+				
+				gridOptions.api.sizeColumnsToFit();
+				
 			}
 		}
 	};
@@ -212,6 +215,7 @@
 		  
 		//pca 테이블이 만들어질때까지는 하드코딩 데이터
 		gridOptions.api.setRowData(data);
+		gridOptions.api.sizeColumnsToFit();
 		
 		// 모달창에 genotype vcf파일 리스트 option목록 생성
 		
@@ -256,6 +260,8 @@
 	}
 	
 	$(window).on("resize", function() {
+		gridOptions.api.sizeColumnsToFit();
+		
 	    if ($(window).width() < 768) {
 	      //gridOptions.columnApi.setColumnPinned("email", null);
 	    } else {

@@ -73,6 +73,9 @@ body {
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
+	
+	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
+	String jobid_pca = runAnalysisTools.getCurrentDateTime();
 %>
 <%--
 	GenotypeListJson genotypeListJson = new GenotypeListJson();
@@ -188,7 +191,6 @@ body {
         </div>
     </div>
     
-    
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -207,7 +209,7 @@ body {
 					            <div class="col-md-12 col-12 ml-1">
 					                <br>
 					             	<div class="form-label-group">
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" required data-validation-required-message="This name field is required">						                     
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 					             		<label for="first-name-column">Comment</label>
 					                </div>
 					            </div>
@@ -286,12 +288,9 @@ body {
 <script type="text/javascript">                  
    	$(document).ready(function(){
    		vcfFileList();
-   		//console.log("select2");
    		
    		$(".select2.select2-container.select2-container--default").eq(1).width("444px");
    		
-   		//console.log($(".select2.select2-container.select2-container--default").eq(1));
-
    	});
 
    	
@@ -335,32 +334,109 @@ body {
     	// 파일전송 컨트롤 생성
 	    box = innorix.create({
 	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-	        height          : 130,
+	        width			: 445,
+	    	height          : 130,
 	        maxFileCount   : 1,  
-	        allowType : ["vcf"],
+	        //allowType : ["vcf"],
+	        allowType : ["xlsx"],
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: './pca_population.jsp'
+	        //uploadUrl: './pca_population.jsp'
+	        uploadUrl: './pca_fileuploader.jsp?jobid_pca=<%=jobid_pca%>'
 	    });
+    	
+    	
 
 	    // 업로드 완료 이벤트
 	    box.on('uploadComplete', function (p) {
 			document.getElementById('uploadPcaForm').reset();
 	    	box.removeAllFiles();
-			backdrop.style.display = "none";					
-			refresh();
+			//backdrop.style.display = "none";	
+			//refresh();
+			
+	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+	   		setTimeout( function () {
+	   			backdrop.style.display = "none"; 
+	   			refresh();
+	   			}
+	   		, 1000);
         });
     };
        
     function FileUpload() {
-    	//console.log($('input[type=radio][name=radio_population]:checked').val());
     	
-    	console.log("comment : ", $('#comment').val());
-    	console.log("varietyid : ", $( "#variety-select option:selected" ).val());
-    	console.log("jobid : ", $('#VcfSelect').find(':selected').data('jobid'));
-    	console.log("filename : ", $('#VcfSelect').find(':selected').data('filename'));
+    	const comment = $('#comment').val();
+    	const varietyid = $( "#variety-select option:selected" ).val();
+    	const jobid_vcf = $('#VcfSelect').find(':selected').data('jobid');
+    	const filename = $('#VcfSelect').find(':selected').data('filename');
+    	// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
+    	// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
     	
     	
+    	/*
+    	console.log("comment : ", comment);
+    	console.log("varietyid : ", varietyid);
+    	console.log("jobid : ", jobid);
+    	console.log("filename : ", filename);
+    	console.log("jobid2 : ", jobid2);
+    	*/
+    	
+    	if(box.fileList.files.length) {
+			console.log("file exists -> with_population");
+			console.log(box.fileList.files[0].file.name);
+			
+			const population_name = box.fileList.files[0].file.name;
+			
+			
+    		// 파일 업로드 영역
+	    	var postObj = new Object();
+	    	postObj.comment = comment;	       
+	        postObj.varietyid = varietyid;
+	        postObj.jobid_vcf = jobid_vcf;
+	        postObj.filename = filename;
+	        box.setPostData(postObj);
+	        box.upload();
+	        
+	        
+			// with_population 영역
+	    	fetch('./pca_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_pca=<%=jobid_pca%>' + '&population_name=' +population_name+ '&filename=' +filename) 
+	        .then(function(response) {
+	    		response.text()
+	    		.then(function(data) {
+	    			//data = data.replace(/\n\s*/g, "");
+	    			//console.log(data);
+	    			console.log("pca_population.jsp");
+	    		})
+	    	})
+	        
+    	} else {
+    		
+    		// without_population 영역
+    		$.ajax(
+	   				{
+	   					url: "./pca_non_population.jsp",
+	   					method: 'POST',
+	   					data: {
+	   						"comment" : comment, 
+	   						"varietyid" : varietyid, 
+	   						"jobid_vcf" : jobid_vcf, 
+	   						"jobid_pca" : "<%=jobid_pca%>",
+	   						"filename" : filename },
+	   					success: function(result) {
+	  					console.log("pca_non_population.jsp");
+	   				}
+	  		});
+    		
+    		//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+	   		setTimeout( function () {
+	   			backdrop.style.display = "none"; 
+	   			refresh();
+	   			}
+	   		, 1000);
+    	}
+    	
+    	
+    	/*
     	if(!box.fileList.files.length) {
     		console.log("file not exist -> without_population");
 	   		
@@ -387,7 +463,7 @@ body {
 	  		});
 	   		
 	   		//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {location.reload()}, 500);
+	   		setTimeout( function () {refresh()}, 500);
     		
     	} else {
     		console.log("file exists -> with_population");
@@ -401,10 +477,9 @@ body {
 	        box.setPostData(postObj);
 	        box.upload();
     	}
-    	
+    	*/
     }
     
-
        
 
        

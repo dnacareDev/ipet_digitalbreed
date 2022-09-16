@@ -225,7 +225,7 @@
 					                <br>
 					             	<div class="form-label-group">
 					                 	<h6>상세 내용</h6>
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment"  autocomplete="off" required data-validation-required-message="This name field is required">						                     
 					             		<label for="first-name-column">Comment</label>
 					                </div>
 					            </div>
