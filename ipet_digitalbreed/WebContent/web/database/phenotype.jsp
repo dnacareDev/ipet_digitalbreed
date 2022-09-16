@@ -20,7 +20,6 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
- 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/innorix/innorix.css">    
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether.min.css">
@@ -304,7 +303,6 @@ body {
 
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
-    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
     <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
     <!-- BEGIN Vendor JS-->
@@ -356,13 +354,13 @@ body {
 		}
 	</script>
 	
-<!-- Modal start-->
+		<!-- Modal start-->
 
 	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
 	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
 	            <div class="modal-content">
 	                <div class="modal-header bg-warning white">
-	                    <h4 class="modal-title" id="myModalLabel4">Photo Upload</h4>
+	                    <h4 class="modal-title" id="myModalLabel4">Photo gallery</h4>
 	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
@@ -379,9 +377,9 @@ body {
 						</form>
 	                </div>
 	            </div>
-	        </div>
+	    </div>
                           
-	<!-- Modal end-->
+			<!-- Modal end-->
 	       
 </body>
 <!-- END: Body-->

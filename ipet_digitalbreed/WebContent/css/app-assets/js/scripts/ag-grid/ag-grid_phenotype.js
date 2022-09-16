@@ -170,8 +170,6 @@
 	];
     
 
-
-
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
 	    columnDefs: columnDefs,
