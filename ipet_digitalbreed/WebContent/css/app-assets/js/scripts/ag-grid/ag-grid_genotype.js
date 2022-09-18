@@ -91,7 +91,7 @@
       sortable: true,
       filter: true,
       cellClass: "ag-header-cell-label",
-      width: 710
+      width: 670
     },
     {
       headerName: "작물",

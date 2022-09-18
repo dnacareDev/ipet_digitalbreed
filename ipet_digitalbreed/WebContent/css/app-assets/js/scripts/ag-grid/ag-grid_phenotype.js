@@ -9,7 +9,18 @@
 
 	function refresh() {	
 	
-		var columnDefs = [
+		var columnDefs = [	
+		  {
+		    rowDrag: true,
+		    maxWidth: 30,
+		    suppressMenu: true,
+		    rowDragText: (params, dragItemCount) => {
+		      if (dragItemCount > 1) {
+		        return dragItemCount + ' athletes';
+		      }
+		      return params.rowNode.data.athlete;
+		    },
+		  },		
         {
             headerName: "순번",
             field: "selectfiles",
@@ -124,9 +135,19 @@
 	  element.appendChild(document.createTextNode(params.value));
 	  return element;
 	};
-	
-	
+		
 	var columnDefs = [
+		  {
+		    rowDrag: true,
+		    maxWidth: 30,
+		    suppressMenu: true,
+		    rowDragText: (params, dragItemCount) => {
+		      if (dragItemCount > 1) {
+		        return dragItemCount + ' athletes';
+		      }
+		      return params.rowNode.data.athlete;
+		    },
+		  },	
         {
             headerName: "순번",
             field: "selectfiles",
@@ -138,6 +159,7 @@
             checkboxSelection: true,
             headerCheckboxSelectionFilteredOnly: true,
             headerCheckboxSelection: true,
+            
 		},
         {
             headerName: "사진",
@@ -169,9 +191,43 @@
 		}
 	];
     
+		function addDropZones(params) {
+		  var tileContainer = document.querySelector('.tile-container');
+		  var dropZone = {
+		    getContainer: () => {
+		      return tileContainer;
+		    },
+		    onDragStop: (params) => {
+		      var tile = createTile(params.node.data);
+		      tileContainer.appendChild(tile);
+		    },
+		  };
+		
+		  params.api.addRowDropZone(dropZone);
+		}
+
+	  function addCheckboxListener(params) {
+		  var checkbox = document.querySelector('input[type=checkbox]');
+		
+		  checkbox.addEventListener('change', function () {
+		    params.api.setSuppressMoveWhenRowDragging(checkbox.checked);
+		  });
+	  }
+
+
+	function createTile(data) {
+	  var el = document.createElement('div');
+	
+	  el.classList.add('tile');
+	  el.innerHTML = data.selectfiles;
+	
+	  return el;
+	}
 
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
+	    flex: 1,
+	    rowDragManaged: true,
 	    columnDefs: columnDefs,
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
@@ -179,14 +235,17 @@
 	  	rowSelection: 'multiple',	  	
 	    floatingFilter: true,
 	    filter: 'agMultiColumnFilter',
-	    pagination: true,
-	    paginationPageSize: 20,
+	    //pagination: true,
+	    //paginationPageSize: 20,
 	    pivotPanelShow: "always",
 	    colResizeDefault: "shift",
 	    animateRows: true,
 	    resizable: true,
 	    serverSideInfiniteScroll: true,	    
-
+	    onGridReady: (params) => {
+	      addDropZones(params);
+	      addCheckboxListener(params);
+	    },
 		onCellClicked: params => {
 			if(params.column.getId() == "photo_status"){
 					$.ajax({
@@ -234,7 +293,8 @@
 	gridOptions.api.setColumnDefs(columnDefs);
   }
 
-  
+
+
   function addnewrow() {
 		var newRows = [{                
       

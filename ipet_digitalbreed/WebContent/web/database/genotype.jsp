@@ -161,7 +161,7 @@ body {
                                         </div>
                                     </div>
                                 </div>								                              
-                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:230px;" ></div><br>
+                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:320px;" ></div><br>
                                 <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;" onclick="addRow()"><i class="feather icon-corner-up-left"></i> Tool Box</button>
                                 <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop"><i class="feather icon-upload"></i> Upload</button>
 								<button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  	

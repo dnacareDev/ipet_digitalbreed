@@ -12,7 +12,7 @@
 	String imggps = request.getParameter("imggps");		
 %>
 <body>
-<div id="map" style="width:580;height:292;"></div>
+<div id="map" style="width:680;height:392;"></div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=627045c47f219b7e9a2f56ca315a10db"></script>
 <script>

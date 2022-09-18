@@ -19,7 +19,6 @@
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
-	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether.min.css">
@@ -178,66 +177,71 @@ body {
 								<div class="row">
 									<div class="col-lg-6 col-12">                                    
 						                <!-- navigations swiper start -->
-						                <section id="component-swiper-navigations">
-						                    <div class="card ">
-						                        <div class="card-header">
-						                            <h4 class="card-title">Navigations</h4>
-						                        </div>
-						                        <div class="card-content">
-						                            <div class="card-body">
-						                                <div class="swiper-navigations swiper-container">
-						                                    <div style="height: 237px;" class="swiper-wrapper">
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
-						                                        </div>
-						                                    </div>
-						                                    <!-- Add Arrows -->
-						                                    <div class="swiper-button-next"></div>
-						                                    <div class="swiper-button-prev"></div>
-						                                </div>
-						                            </div>
-						                        </div>
-						                    </div>
-						                </section>
+						                             <!-- progress swiper start -->
+					                <section id="component-swiper-progress_one">
+					                    <div class="card ">
+					                        <div class="card-header">
+					                            <font size="3px">drag & drop sample here</font>
+					                        </div>
+					                        <div class="card-content">
+					                            <div class="card-body">
+					                                <div class="swiper-progress swiper-container">
+					                                    <div style="height: 237px;" class="swiper-wrapper">
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2326.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2437.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2449.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2458.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2473.JPG" alt="banner">
+					                                        </div>
+					                                    </div>
+					                                    <!-- Add Pagination -->
+					                                    <div class="swiper-pagination"></div>
+					                                    <!-- Add Arrows -->
+					                                    <div class="swiper-button-next"></div>
+					                                    <div class="swiper-button-prev"></div>
+					                                </div>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </section>
 						                <!-- navigations swiper ends -->						                
 								    </div>           
 									<div class="col-lg-6 col-12">                                    
 						                <!-- navigations swiper start -->
-						                <section id="component-swiper-navigations">
-						                    <div class="card ">
-						                        <div class="card-header">
-						                            <h4 class="card-title">Navigations</h4>
-						                        </div>
-						                        <div class="card-content">
-						                            <div class="card-body">
-						                                <div class="swiper-navigations swiper-container">
-						                                    <div style="height: 237px;" class="swiper-wrapper">
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
-						                                        </div>
-						                                    </div>
-						                                    <!-- Add Arrows -->
-						                                    <div class="swiper-button-next"></div>
-						                                    <div class="swiper-button-prev"></div>
-						                                </div>
-						                            </div>
-						                        </div>
-						                    </div>
-						                </section>
+					                <section id="component-swiper-progress_two">
+					                    <div class="card ">
+					                        <div class="card-header">
+					                            <font size="3px">drag & drop sample here</font>
+					                        </div>
+					                        <div class="card-content">
+					                            <div class="card-body">
+					                                <div class="swiper-progress swiper-container">
+					                                    <div style="height: 237px;" class="swiper-wrapper">
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2326.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2437.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2449.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2458.JPG" alt="banner">
+					                                        </div>
+					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2473.JPG" alt="banner">
+					                                        </div>
+					                                    </div>
+					                                    <!-- Add Pagination -->
+					                                    <div class="swiper-pagination"></div>
+					                                    <!-- Add Arrows -->
+					                                    <div class="swiper-button-next"></div>
+					                                    <div class="swiper-button-prev"></div>
+					                                </div>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </section>
 						                <!-- navigations swiper ends -->						                
 								    </div>	
 								</div>
@@ -247,26 +251,15 @@ body {
 						                <section id="component-swiper-navigations">
 						                    <div class="card ">
 						                        <div class="card-header">
-						                            <h4 class="card-title">Navigations</h4>
+						                            <h4 class="card-title">Spyder Plot</h4>
 						                        </div>
 						                        <div class="card-content">
 						                            <div class="card-body">
 						                                <div class="swiper-navigations swiper-container">
 						                                    <div style="height: 237px;" class="swiper-wrapper">
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
-						                                        </div>
+						                                       sdfsdf
 						                                    </div>
-						                                    <!-- Add Arrows -->
-						                                    <div class="swiper-button-next"></div>
-						                                    <div class="swiper-button-prev"></div>
+
 						                                </div>
 						                            </div>
 						                        </div>
@@ -370,7 +363,7 @@ body {
 						     <div class="form-body">
 						         <div class="row">
 						             <div class="col-md-12 col-12">
-						                 <div style="height: 450px" class="form-label-group" id="photo_list"></div>
+						                 <div style="height: 680px" class="form-label-group" id="photo_list"></div>
 						             </div>					             
 						         </div>
 						     </div>

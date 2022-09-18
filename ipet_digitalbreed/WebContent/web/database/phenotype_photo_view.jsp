@@ -47,10 +47,89 @@
 		
 	<script type="text/javascript">
 
+			function getSelectedRowData() {
+			    var chkArray = new Array();
+
+			    $("input[name='imgno[]']:checked").each(function() { 
+			      var tmpVal = $(this).val(); 
+			      chkArray.push(tmpVal);
+			    });
+
+			    if( chkArray.length < 1 ){
+			      alert("선택 된 사진이 없습니다. 사진을 선택해 주세요.");
+			      return;
+			    }
+			    
+			    else{			    	
+			  	  $.ajax({
+					    url:"./phenotype_photo_delete.jsp",
+					    type:"POST",
+					    data:{'params':chkArray},
+					    success: function(result) {
+					        if (result) {
+								alert("정상적으로 삭제되었습니다.");
+
+								$.ajax({
+									 url:"./phenotype_photo_view.jsp",
+									 type:"POST",
+								     data:{'no': <%=no%>},
+									 success: function(result) {	
+										 console.log(result);
+									 	$("#photo_list").html(result);		
+										$('#backdrop').modal({ show: true });	
+									 }
+								});									
+								
+					        } else {
+					            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+					        }
+					    }
+					  });
+					}				
+			    }
+	
+			
+			function updateComment(){
+				var imgnoArray = new Array();
+				var cmtArray = new Array();
+
+				$('textarea').each(function () {
+					imgnoArray.push(this.name);
+					cmtArray.push(this.value);					
+			    });
+				
+
+			  	  $.ajax({
+					    url:"./phenotype_photo_update.jsp",
+					    type:"POST",
+					    data:{'imgnoArray':imgnoArray, 'cmtArray':cmtArray},
+					    success: function(result) {
+					        if (result) {
+								alert("정상적으로 수정되었습니다.");
+
+								$.ajax({
+									 url:"./phenotype_photo_view.jsp",
+									 type:"POST",
+								     data:{'no': <%=no%>},
+									 success: function(result) {	
+										 console.log(result);
+									 	$("#photo_list").html(result);		
+										$('#backdrop').modal({ show: true });	
+									 }
+								});									
+								
+					        } else {
+					            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+					        }
+					    }
+					  });
+			  	  
+			  	  
+			}
+			
 			function view_photo(filename){
 				$("#photo_zone").attr("src", filename);			
-				$('#photo_zone').width('100%');       
-			    $('#photo_zone').height('100%');
+				$('#photo_zone').width('85%');       
 				$('#photo_ori_view').modal({ show: true });			
 			}
 			
@@ -60,8 +139,8 @@
 			}
 	
 			function mapOpen(photogps){
-				var popHeight = 310;                                      // 띄울 팝업창 높이   
-				var popWidth = 600;                                       // 띄울 팝업창 너비
+				var popHeight = 410;                                      // 띄울 팝업창 높이   
+				var popWidth = 700;                                       // 띄울 팝업창 너비
 				var winHeight = document.body.clientHeight;	  // 현재창의 높이
 				var winWidth = document.body.clientWidth;	  // 현재창의 너비
 				var winX = window.screenLeft;	                          // 현재창의 x좌표
@@ -85,6 +164,7 @@
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
 	                </div>
+	                <center>
 	                <div id="photo_div" class="modal-body">
 	                	<img id="photo_zone">
 	                </div>
@@ -137,11 +217,11 @@
 	<table border="0"  width="90%">	
 	<tr>
 		<td style="float:left;">		  
-			<input type="button" class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="javascript:view_uploader(<%=no%>);" value="Upload">
+			<input type="button" class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="javascript:view_uploader();" value="Upload">
 		</td>
-		<td style="float:right;">		  
-			<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
-			<button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
+		<td style="float:right;">	
+			<input type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="javascript:updateComment();" value=" Save ">	
+			<input type="button" class="btn btn-danger mr-1 mb-1" style="float: left;" onclick="javascript:getSelectedRowData();" value="  Del ">			
 		</td>
 	</tr>
 	</table>
@@ -172,7 +252,7 @@
 			<table border="1" width="100%" height="200" align="left" cellspacing=1 cellpadding=1 style='border-width:1; border-color:#DCDCDC;' >
 			<tr>
 			  <td align="center">
-			   <input type="checkbox" name="no" value="<%=imgno%>">
+			   <input type="checkbox" name="imgno[]" value="<%=imgno%>">
 			  </td>
 			</tr>
 			<tr>
@@ -198,7 +278,7 @@
 			
 			<tr>
 			  <td align="center">
-			   <textarea name="comment" rows="" cols="30" placeholder="Comment"><%=comment%></textarea>
+			   <textarea name="<%=imgno%>" rows="" cols="30" placeholder="Comment"><%=comment%></textarea>
 			  </td>
 			</tr>
 			
