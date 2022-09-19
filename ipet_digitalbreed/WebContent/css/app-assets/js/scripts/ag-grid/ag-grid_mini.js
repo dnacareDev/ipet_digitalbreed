@@ -11,7 +11,7 @@
 		gridOptions.api.refreshCells(); 
 		agGrid
 		    //.simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-			.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+			.simpleHttpRequest({ url: "../../../web/b_toolbox/mini/mini_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);

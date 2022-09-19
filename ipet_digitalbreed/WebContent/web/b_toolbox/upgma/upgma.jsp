@@ -60,13 +60,19 @@ body {
     display: none;
 }
 
+.irx-file-inner-wrapper {
+	height: 30px !important;
+}
+
 </style>
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	System.out.println(cropvari_sql);
-	//System.out.println("UID : " + permissionUid);
+	
+	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
+	String jobid_upgma = runAnalysisTools.getCurrentDateTime();
 %>
 <%--
 	GenotypeListJson genotypeListJson = new GenotypeListJson();
@@ -167,17 +173,10 @@ body {
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:320px;"></div><br>
-                                <!--  
-                                <button class="btn btn-warning ml-1 mb-1" onclick="addRow()">VCF Tool Box</button>
-                                <button class="btn btn-danger ml-1 mb-1" onclick="addRow()">Delete selected</button>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop">VCF file Upload</button>    
-						        -->
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#newRegistration">신규 분석</button>
-                                <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> 삭제</button>  
-                                      
                             </div>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+                            <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
                         </div>
                     <div id="vcf_status" class="card"></div>
                 </section>
@@ -188,36 +187,30 @@ body {
     
     
 	<!-- Modal start-->
-    <div class="modal fade text-left" id="newRegistration" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">UPGMA Clustering 신규 분석</h4>
+                    <h4 class="modal-title" id="myModalLabel5">UPGMA Clustering New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-					<form class="form" id="PcaNewAnalysis">
+					<form class="form" id="uploadUpgmaForm">
 					    <div class="form-body">
 					        <div class="row">
 					            <br>
-					            <div class="col-md-12 col-12">
+					            <div class="col-md-12 col-12 ml-1">
 					                <br>
 					             	<div class="form-label-group">
-					                 	<h6>상세내용</h6>
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 					             		<label for="first-name-column">Comment</label>
 					                </div>
 					            </div>
-					            <div class="col-md-12 col-12">
+					            <div class="col-md-12 col-12 ml-1">
 					            	<div class="form-label-group" >
-					                    <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="isValid" id="radio_my_data" value="myData" checked />
-                                            <label class="form-check-label" for="inlineRadio1">VCF 파일 선택</label>
-                                        </div>
-					                    <select class="select2 form-select" id="VcfSelect">
- 
+					                    <select class="select2 form-select" id="VcfSelect" style="width: 444px;">
 					                    	<!--  
 					                    	<option value="-1" selected disabled>목록 선택</option>
 					                    	<option value="1">Alaska</option>
@@ -229,15 +222,7 @@ body {
 					            </div>
 					            <div class="col-md-12 col-12">
 									<div class="form-label-group">
-							            <h5>population</h5>
-							            <div>
-									    	<input type="radio" id="invalid" name="radio_population" value="invalid" checked>
-									    	<label for="invalid">사용 안함</label>
-									    </div>
-							            <div>
-									    	<input type="radio" id="valid" name="radio_population" value="valid">
-									    	<label for="valid">신규 등록</label>
-									    </div>
+							            <h5>&nbsp;&nbsp;population</h5>
 							            <div class="col-md-12 col-12">
 											<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
 											<br>
@@ -295,73 +280,150 @@ body {
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-        <script>                  
-        	$(document).ready(function(){
-        		$("#fileControl").hide();
-        	})
-        
-        	$('input[type=radio][name=radio_population]').change(function() {
-        		if (this.value == 'invalid') {
-        			$("#fileControl").hide();
-        		} else {
-        			$("#fileControl").show();
-        		}
-        	})
-        	
-            var box = new Object();
-            window.onload = function() {
-                // 파일전송 컨트롤 생성
-                box = innorix.create({
-                    el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-                    height          : 130,
-                    maxFileCount   : 1,  
-                    allowType : ["vcf"],
-					addDuplicateFile : false,
-                    agent: false, // true = Agent 설치, false = html5 모드 사용                    
-                    uploadUrl: './fileuploader.jsp' // 업로드 URL
-                });
+    <script>                  
+    $(document).ready(function(){
+    	vcfFileList();
+    	$(".select2.select2-container.select2-container--default").eq(1).width("444px");
+    })
+       
+    function vcfFileList() {
+		$.ajax(
+		{
+			url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
+			method: 'POST',
+			success: function(data) {
+				console.log("vcf file list : ", data);
+			 		   	 			
+		 		makeOptions(data);
+		   	}
+	   	});
+	}
+    
+    function makeOptions(data) {
+   		$("#VcfSelect").empty();
+   		
+   		$("#VcfSelect").append(`<option disabled hidden selected>Select VCF File</option>`);
+    	for(let i=0 ; i<data.length ; i++) {
+			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
+		}
+    }
+    
+    var box = new Object();
+    window.onload = function() {
+    	
+    	// 파일전송 컨트롤 생성
+	    box = innorix.create({
+	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
+	        width			: 445,
+	    	height          : 130,
+	        maxFileCount   : 1,  
+	        //allowType : ["vcf"],
+	        allowType : ["xlsx"],
+			addDuplicateFile : false,
+	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
+	        //uploadUrl: './pca_population.jsp'
+	        uploadUrl: './upgma_fileuploader.jsp?jobid_upgma=<%=jobid_upgma%>',
+	    });
+    	
+    	
 
-                // 업로드 완료 이벤트
-                box.on('uploadComplete', function (p) {
-             	    
-                    /*var f = p.files;
-                    var r = "Upload complete\n\n";
-                    for (var i = 0; i < f.length; i++ ) {
-                        r += f[i].clientFileName + " " + f[i].fileSize + "\n";
-                    }
-                    alert(r);*/
-					//window.close();
-					//self.opener.location.reload(); 
-					document.getElementById('uploadvcfform').reset();
-	        		box.removeAllFiles();
-					backdrop.style.display = "none";					
-					refresh();
-                });
-            };
-            function FileUpload() {
-            	
-            	//console.log($('input[type=radio][name=radio_population]:checked').val());
-            	
-            	if($('input[type=radio][name=radio_population]:checked').val() == 'valid') {
-            		var postObj = new Object();
-    	            postObj.comment = document.getElementById("comment").value;;	       
-    	            postObj.varietyid = $( "#variety-select option:selected" ).val();
-    	            box.setPostData(postObj);
-    	            box.upload();	
-            	} else {
-            		console.log("invalid");
-            	}
-            	
-            	
+	    // 업로드 완료 이벤트
+	    box.on('uploadComplete', function (p) {
+			document.getElementById('uploadUpgmaForm').reset();
+	    	box.removeAllFiles();
+			//backdrop.style.display = "none";	
+			//refresh();
+			
+	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+	   		setTimeout( function () {
+	   			//backdrop.style.display = "none";
+	   			refresh();
+	   			$("#backdrop").modal("hide");
+	   		}, 1000);
+        });
+	    
+	    //console.log("box? : ", box);
+    };
+    
+	function FileUpload() {
+    	
+    	const comment = $('#comment').val();
+    	const varietyid = $( "#variety-select option:selected" ).val();
+    	const jobid_vcf = $('#VcfSelect').find(':selected').data('jobid');
+    	const jobid_upgma = "<%=jobid_upgma%>";
+    	const filename = $('#VcfSelect').find(':selected').data('filename');
+    	// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
+    	// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
+    	
+    	
+    	/*
+    	console.log("comment : ", comment);
+    	console.log("varietyid : ", varietyid);
+    	console.log("jobid_upgma : ", jobid_upgma);
+    	console.log("filename : ", filename);
+    	console.log("jobid_vcf : ", jobid_vcf);
+    	*/
+    	
+    	if(box.fileList.files.length) {
+			console.log("file exists -> with_population");
+			//console.log(box.fileList.files[0].file.name);
+			
+			const population_name = box.fileList.files[0].file.name;
+			
+			
+    		// 파일 업로드 영역
+	    	var postObj = new Object();
+	    	postObj.comment = comment;	       
+	        postObj.varietyid = varietyid;
+	        postObj.jobid_vcf = jobid_vcf;
+	        postObj.filename = filename;
+	        box.setPostData(postObj);
+	        box.upload();
+	        
+			// with_population 영역
+	    	fetch('./upgma_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_upgma=' +jobid_upgma+ '&population_name=' +population_name+ '&filename=' +filename) 
+	        .then(function(response) {
+	    		response.text()
+	    		.then(function(data) {
+	    			//data = data.replace(/\n\s*/g, "");
+	    			//console.log(data);
+	    			console.log("pca_population.jsp");
+	    		})
+	    	})
+	        
+    	} else {
+    		
+    		// without_population 영역
+    		$.ajax(
+				{
+					url: "./upgma_non_population.jsp",
+					method: 'POST',
+					data: {
+ 						"comment" : comment, 
+ 						"varietyid" : varietyid, 
+ 						"jobid_vcf" : jobid_vcf, 
+ 						"jobid_upgma" : "<%=jobid_upgma%>",
+ 						"filename" : filename },
+ 					success: function(result) {
+						console.log("pca_non_population.jsp");
+ 					}
+	  		});
+    		
+    		//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+	   		setTimeout( function () {
+	   			//backdrop.style.display = "none";
+	   			refresh();
+	   			$("#backdrop").modal("hide");
+	   			}
+	   		, 1000);
+    	}
+    }
 	            
-            }            
-            
-            $('#backdrop').on('hidden.bs.modal', function (e) {
-	        	//$(this).find('form')[0].reset();
-	        	//alert("AAAAAAAAAAAAAAA");
-	        	document.getElementById('uploadvcfform').reset();
-	        	box.removeAllFiles();
-	        });    
+    $('#backdrop').on('hidden.bs.modal', function (e) {
+    	document.getElementById('uploadUpgmaForm').reset();
+    	vcfFileList();
+    });    
             
             
             

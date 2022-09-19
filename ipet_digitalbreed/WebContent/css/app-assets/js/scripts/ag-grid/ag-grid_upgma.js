@@ -10,17 +10,48 @@
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
-		    .simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+		    .simpleHttpRequest({ url: "../../../web/b_toolbox/upgma/upgma_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
 		      gridOptions.api.setRowData(data);
 		    });
 	}
 
+	function getSelectedRowData() {
+		
+		if( !confirm("삭제하시겠습니까?") ) {
+			return;
+		}
+		
+		let selectedData = gridOptions.api.getSelectedRows();
+		var deleteitems = new Array();
+		  
+		for (var i = 0; i < selectedData.length; i++) {
+		    deleteitems.push(selectedData[i].no);
+		}
+		
+		console.log("delete row : ", deleteitems);
+		
+		$.ajax(
+		{
+		    url:"../../../web/b_toolbox/upgma/upgma_delete.jsp",
+		    type:"POST",
+		    data:{'params':deleteitems},
+		    success: function(result) {
+		        if (result) {
+					alert("정상적으로 삭제되었습니다.");
+					refresh();
+		        } else {
+		            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+		        }
+		    }
+		});
+	}
+	
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
 	      headerName: "번호",
-	      field: "check_number",
+	      field: "no",
 	      editable: false,
 	      sortable: true,
 	      width: 150,
@@ -41,7 +72,7 @@
 	    },
 	    {
 	      headerName: "분석상태",
-	      field: "analysis_status",
+	      field: "status",
 	      editable: false,
 	      sortable: true,
 	      filter: true,
@@ -50,7 +81,7 @@
 	    },
 	    {
 	      headerName: "상세내용",
-	      field: "note",
+	      field: "comment",
 	      editable: false,
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
@@ -59,7 +90,7 @@
 	    },
 	    {
 	      headerName: "분석일",
-	      field: "analysis_date",
+	      field: "cre_dt",
 	      editable: false,
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
@@ -132,12 +163,7 @@
 												</div>
 											</div>
 										</div>
-										`;
-			       replaceClass("base-pill31", "nav-link", "nav-link active");
-			       replaceClass("base-pill32", "nav-link", "nav-link");
-			       replaceClass("base-pill33", "nav-link", "nav-link");
-			       replaceClass("base-pill34", "nav-link", "nav-link");
-			       replaceClass("base-pill35", "nav-link", "nav-link");	  
+										`;	  
 				   
 			       /*
 				   $('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
@@ -148,19 +174,9 @@
 				   */
 			       
 			       gridOptions.api.sizeColumnsToFit();
-			       
-			       plotly_pill1();
 			}
 		}
 	};
-
-	function plotly_pill1() {
-		TESTER = document.getElementById('pill1');
-		Plotly.newPlot( TESTER, [{
-		x: [1, 2, 3, 4, 5],
-		y: [1, 2, 4, 8, 16] }], {
-		margin: { t: 0 } } );
-	}
 
 
 	function replaceClass(id, oldClass, newClass) {
@@ -175,53 +191,13 @@
   var gridTable = document.getElementById("myGrid");
 
   /*** GET TABLE DATA FROM URL ***/
-  /*
   agGrid
-    .simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-    .then(function(data) {
-    	console.log("data : ", data);
-    	gridOptions.api.setRowData(data);
-    });
-  */
-  agGrid
-	  .simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+	  .simpleHttpRequest({ url: "../../../web/b_toolbox/upgma/upgma_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 	  .then(function(data) {
 		  console.log("data : ", data);
 		  //console.log(agGrid.getColumns());
 		  
-		  const pseudo_data = [
-			  {
-				  check_number : '12',
-				  file_name : 'upgma_5789.vcf',
-				  analysis_status : 'progress',
-				  note : 'code',
-				  analysis_date : '2022-08-22',
-				  jobid : '20233331',
-				  uploadpath : '/digit/path/upload',
-				  resultpath : '/digit/path/upload'
-			  },
-			  {
-				  check_number : '12',
-				  file_name : 'upgma_34356.vcf',
-				  analysis_status : 'fail',
-				  note : 'code',
-				  analysis_date : '2022-08-22',
-				  jobid : '20233331',
-				  uploadpath : '/digit/path/upload',
-				  resultpath : '/digit/path/upload'
-			  },
-			  {
-				  check_number : '12',
-				  file_name : 'upgma_85659.vcf',
-				  analysis_status : 'success',
-				  note : 'code111',
-				  analysis_date : '2022-08-22',
-				  jobid : '20233331',
-				  uploadpath : '/digit/path/upload',
-				  resultpath : '/digit/path/upload'
-			  },
-		  ];
-		  gridOptions.api.setRowData(pseudo_data);
+		  gridOptions.api.setRowData(data);
 		  
 	  });
   

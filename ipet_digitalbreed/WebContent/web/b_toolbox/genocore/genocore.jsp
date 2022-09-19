@@ -190,12 +190,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:320px;"></div><br>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
-                                <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
-                                      
                             </div>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+                            <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
                         </div>
                     </div>
                     <div id="vcf_status" class="card"></div>
@@ -231,7 +229,6 @@
 					            <div class="col-md-12 col-12">
 					            	<div class="form-label-group" >
 					                    <select class="select2 form-select" id="VcfSelect">
- 
 					                    	<!--  
 					                    	<option value="-1" selected disabled>목록 선택</option>
 					                    	<option value="1">Alaska</option>
@@ -242,7 +239,7 @@
 					                </div>
 					            </div>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="excute();">실행</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">실행</button>
 					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">초기화</button>
 					            </div>
 					        </div>
@@ -319,26 +316,16 @@
 			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
 		}
     }
-   
-   	$('input[type=radio][name=radio_population]').change(function() {
-   		if (this.value == 'invalid') {
-   			$("#fileControl").hide();
-   		} else {
-   			$("#fileControl").show();
-   		}
-   	});
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
     	
-   		console.log("ba")
-   		
    		document.getElementById('uploadGenocoreForm').reset();
     	vcfFileList();
     	
     	//box.removeAllFiles();
     });    
    	
-    function excute() {
+    function execute() {
     	console.log("invalid");	  
 	   	
     	let comment = $('#comment').val();
@@ -364,6 +351,8 @@
    					},
    				success: function(result) {
   					console.log("genocore_analysis.jsp");
+  					refresh();
+  					$("#backdrop").modal("hide");
    				}
   		});
     }

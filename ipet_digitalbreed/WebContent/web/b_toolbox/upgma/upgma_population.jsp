@@ -9,7 +9,7 @@
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 
 	String jobid_vcf = request.getParameter("jobid_vcf");
-	String jobid_pca = request.getParameter("jobid_pca");
+	String jobid_upgma = request.getParameter("jobid_upgma");
 	String filename = request.getParameter("filename");
 	String population_name = request.getParameter("population_name");
 	
@@ -17,13 +17,13 @@
 	String permissionUid = session.getAttribute("permissionUid")+"";	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String inputPath = rootFolder + "uploads/database/db_input/" + jobid_vcf + "/";
-	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/pca/";
-	String populationPath = rootFolder + "uploads/Breeder_toolbox_analyses/pca/";
+	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/phylogenetic_tree/";
+	String populationPath = rootFolder + "uploads/Breeder_toolbox_analyses/upgma/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	System.out.println("=========================");
 	System.out.println("jobid_vcf : " + jobid_vcf);
-	System.out.println("jobid_pca : " + jobid_pca);
+	System.out.println("jobid_upgma : " + jobid_upgma);
 	System.out.println("filename : " + filename);
 	System.out.println("population_name : " + population_name);
 	System.out.println("=========================");
@@ -39,7 +39,7 @@
 
 	
 	
-	File folder_outputPath = new File(outputPath+jobid_pca);
+	File folder_outputPath = new File(outputPath+jobid_upgma);
 	
 	if (!folder_outputPath.exists()) {
 		try{
@@ -52,11 +52,10 @@
 	}
 	
 	
-	String PCA = "Rscript " +script_path+ "pca_plot.R " +inputPath+ " " +outputPath+ " " +jobid_pca+ " " +filename+ " " +populationPath+ " " +population_name;
+	String UPGMA = "Rscript " +script_path+ "phylogenetic_tree.R " +inputPath+ " " +outputPath+ " " +jobid_upgma+ " " +filename+ " " +populationPath+ " " +population_name;
 	
-	System.out.println("PCA parameter(with population) : " + PCA);
+	System.out.println("UPGMA parameter(with population) : " + UPGMA);
 	
-	runanalysistools.execute(PCA);
-	
+	runanalysistools.execute(UPGMA);
 	
 %>

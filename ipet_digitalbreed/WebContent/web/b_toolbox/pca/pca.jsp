@@ -60,11 +60,9 @@ body {
     display: none;
 }
 
-/*
-.ag-header-cell-text {
-   margin-left: 10px;
+.irx-file-inner-wrapper {
+	height: 30px !important;
 }
-*/
 
 </style>
 <%
@@ -176,12 +174,11 @@ body {
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div id="myGrid" class="ag-theme-alpine" style="width: 100%;height:320px;"></div><br>
-								<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
-                                <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
-                                      
+                                  
                             </div>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+                            <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
                     <div id="vcf_status" class="card"></div>
@@ -288,12 +285,9 @@ body {
 <script type="text/javascript">                  
    	$(document).ready(function(){
    		vcfFileList();
-   		
    		$(".select2.select2-container.select2-container--default").eq(1).width("444px");
-   		
    	});
 
-   	
    	function vcfFileList() {
    		
    		$.ajax(
@@ -342,7 +336,7 @@ body {
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
 	        //uploadUrl: './pca_population.jsp'
-	        uploadUrl: './pca_fileuploader.jsp?jobid_pca=<%=jobid_pca%>'
+	        uploadUrl: './pca_fileuploader.jsp?jobid_pca=<%=jobid_pca%>',
 	    });
     	
     	
@@ -356,11 +350,14 @@ body {
 			
 	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
 	   		setTimeout( function () {
-	   			backdrop.style.display = "none"; 
+	   			//backdrop.style.display = "none";
 	   			refresh();
+	   			$("#backdrop").modal("hide");
 	   			}
 	   		, 1000);
         });
+	    
+	    //console.log("box? : ", box);
     };
        
     function FileUpload() {
@@ -413,71 +410,28 @@ body {
     		
     		// without_population 영역
     		$.ajax(
-	   				{
-	   					url: "./pca_non_population.jsp",
-	   					method: 'POST',
-	   					data: {
-	   						"comment" : comment, 
-	   						"varietyid" : varietyid, 
-	   						"jobid_vcf" : jobid_vcf, 
-	   						"jobid_pca" : "<%=jobid_pca%>",
-	   						"filename" : filename },
-	   					success: function(result) {
-	  					console.log("pca_non_population.jsp");
-	   				}
+				{
+					url: "./pca_non_population.jsp",
+					method: 'POST',
+					data: {
+ 						"comment" : comment, 
+ 						"varietyid" : varietyid, 
+ 						"jobid_vcf" : jobid_vcf, 
+ 						"jobid_pca" : "<%=jobid_pca%>",
+ 						"filename" : filename },
+ 					success: function(result) {
+						console.log("pca_non_population.jsp");
+ 					}
 	  		});
     		
     		//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
 	   		setTimeout( function () {
-	   			backdrop.style.display = "none"; 
+	   			//backdrop.style.display = "none";
 	   			refresh();
+	   			$("#backdrop").modal("hide");
 	   			}
 	   		, 1000);
     	}
-    	
-    	
-    	/*
-    	if(!box.fileList.files.length) {
-    		console.log("file not exist -> without_population");
-	   		
-	   		let comment = $('#comment').val();
-	   		let varietyid = $( "#variety-select option:selected" ).val();
-	   		let jobid = $('#VcfSelect').find(':selected').data('jobid');
-	   		let filename = $('#VcfSelect').find(':selected').data('filename');
-	   		//let uploadpath = $('#VcfSelect').find(':selected').data('uploadpath');
-	   		
-	   		console.log("comment : ", comment);
-	   		console.log("varietyid : ", varietyid);
-	   		console.log("jobid : ", jobid);
-	   		console.log("filename : ", filename);
-	   		
-	   		
-	   		$.ajax(
-	   				{
-	   					url: "./pca_non_population.jsp",
-	   					method: 'POST',
-	   					data: {"comment" : comment, "varietyid" : varietyid, "jobid" : jobid, "filename" : filename },
-	   					success: function(result) {
-	  					console.log("pca_non_population.jsp");
-	   				}
-	  		});
-	   		
-	   		//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {refresh()}, 500);
-    		
-    	} else {
-    		console.log("file exists -> with_population");
-    		
-	    	var postObj = new Object();
-	        postObj.comment = document.getElementById("comment").value;;	       
-	        postObj.varietyid = $( "#variety-select option:selected" ).val();
-	        postObj.jobid = $('#VcfSelect').find(':selected').data('jobid');
-	        postObj.filename = $('#VcfSelect').find(':selected').data('filename');
-	        postObj.uploadpath = $('#VcfSelect').find(':selected').data('uploadpath');
-	        box.setPostData(postObj);
-	        box.upload();
-    	}
-    	*/
     }
     
        
