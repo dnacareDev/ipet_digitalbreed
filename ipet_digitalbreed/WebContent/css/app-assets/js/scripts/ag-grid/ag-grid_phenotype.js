@@ -8,11 +8,10 @@
 ==========================================================================================*/
 
 	function refresh() {	
-	
 		var columnDefs = [	
 		  {
 		    rowDrag: true,
-		    maxWidth: 30,
+		    maxWidth: 50,
 		    suppressMenu: true,
 		    rowDragText: (params, dragItemCount) => {
 		      if (dragItemCount > 1) {
@@ -75,10 +74,7 @@
 				grid_array = result;	
 				for (var i=0; i<grid_array.length; i++) {
 					for (key in grid_array[i]) {		
-						//addCol(key, grid_array[i][key] );
-						//addCol(i+"", grid_array[i][key] );						
-						//var columnDefs = columnDefs;												
-						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], width: "210",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], width: "120",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 						gridOptions.api.setColumnDefs(columnDefs);										
 					}
 				}		
@@ -99,7 +95,6 @@
 	  for (var i = 0; i < selectedData.length; i++) {
 		    deleteitems.push(selectedData[i].selectfiles);
 	  }    
-
 		
 		  	$.ajax({
 			    url:"../../web/database/phenotype_delete.jsp",
@@ -113,11 +108,13 @@
 			            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
 			        }
 			    }
-			  });
+		  	});
 		
+		$("#photo_one_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
+		$("#photo_two_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
 	}	
 	    
-	const deltaIndicator = (params) => {
+	  const deltaIndicator = (params) => {
 	  const element = document.createElement('span');
 	  const imageElement = document.createElement('img');	
 	  
@@ -139,7 +136,7 @@
 	var columnDefs = [
 		  {
 		    rowDrag: true,
-		    maxWidth: 30,
+		    maxWidth: 50,
 		    suppressMenu: true,
 		    rowDragText: (params, dragItemCount) => {
 		      if (dragItemCount > 1) {
@@ -191,21 +188,42 @@
 		}
 	];
     
-		function addDropZones(params) {
-		  var tileContainer = document.querySelector('.tile-container');
+		function addDropZonesone(params) {
+		
+		  var tileContainer = document.querySelector('#photo_one_desc');
+		  
 		  var dropZone = {
 		    getContainer: () => {
 		      return tileContainer;
 		    },
 		    onDragStop: (params) => {
-		      var tile = createTile(params.node.data);
-		      tileContainer.appendChild(tile);
+		      createTileone(params.node.data);
+		      //tileContainer.appendChild(tile);
 		    },
-		  };
-		
-		  params.api.addRowDropZone(dropZone);
-		}
+		  };	
 
+		  params.api.addRowDropZone(dropZone);	 
+		  
+		}
+    
+		function addDropZonestwo(params) {
+		
+		  var tileContainer = document.querySelector('#photo_two');
+		  
+		  var dropZone = {
+		    getContainer: () => {
+		      return tileContainer;
+		    },
+		    onDragStop: (params) => {
+		      createTiletwo(params.node.data);
+		    },
+		  };	
+
+		  params.api.addRowDropZone(dropZone);	 
+		  
+		}
+		
+		
 	  function addCheckboxListener(params) {
 		  var checkbox = document.querySelector('input[type=checkbox]');
 		
@@ -215,19 +233,32 @@
 	  }
 
 
-	function createTile(data) {
-	  var el = document.createElement('div');
-	
-	  el.classList.add('tile');
-	  el.innerHTML = data.selectfiles;
-	
-	  return el;
+	function createTileone(data_one) {
+		$.ajax({
+				url:"../../web/database/phenotype_swiper_one.jsp",
+				type:"POST",
+				data:{'sampleno': data_one.selectfiles},
+				success: function(result_one) {	
+					$("#photo_one_desc").html(result_one);												
+			}
+		});	
 	}
 
+	function createTiletwo(data_two) {
+		$.ajax({
+				url:"../../web/database/phenotype_swiper_two.jsp",
+				type:"POST",
+				data:{'sampleno': data_two.selectfiles},
+				success: function(result_two) {	
+					$("#photo_two_desc").html(result_two);												
+			}
+		});	
+	}
+	
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
 	    flex: 1,
-	    rowDragManaged: true,
+	    //rowDragManaged: true,
 	    columnDefs: columnDefs,
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
@@ -243,7 +274,8 @@
 	    resizable: true,
 	    serverSideInfiniteScroll: true,	    
 	    onGridReady: (params) => {
-	      addDropZones(params);
+	      addDropZonesone(params);
+	      addDropZonestwo(params);
 	      addCheckboxListener(params);
 	    },
 		onCellClicked: params => {

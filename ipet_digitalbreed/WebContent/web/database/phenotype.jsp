@@ -175,34 +175,20 @@ body {
 
 							<div class="col-lg-6 col-12">
 								<div class="row">
+									
 									<div class="col-lg-6 col-12">                                    
 						                <!-- navigations swiper start -->
-						                             <!-- progress swiper start -->
 					                <section id="component-swiper-progress_one">
 					                    <div class="card ">
-					                        <div class="card-header">
-					                            <font size="3px">drag & drop sample here</font>
+					                        <div id="card-header_one" class="card-header">
+					                            <font size="3px">Sample #1</font>
 					                        </div>
 					                        <div class="card-content">
 					                            <div class="card-body">
-					                                <div class="swiper-progress swiper-container">
-					                                    <div style="height: 237px;" class="swiper-wrapper">
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2326.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2437.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2449.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2458.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2473.JPG" alt="banner">
-					                                        </div>
-					                                    </div>
-					                                    <!-- Add Pagination -->
-					                                    <div class="swiper-pagination"></div>
-					                                    <!-- Add Arrows -->
-					                                    <div class="swiper-button-next"></div>
-					                                    <div class="swiper-button-prev"></div>
+					                                <div id="photo_one" style="border:2px dashed; padding:0px;height: 237px;background-color: #D4EFDF" >					                                
+					                               			<div id="photo_one_desc" style="height: 237px;">
+					                               				<br><br><center><font color="black" size="4"><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>
+					                               			</div>						                               		
 					                                </div>
 					                            </div>
 					                        </div>
@@ -210,40 +196,28 @@ body {
 					                </section>
 						                <!-- navigations swiper ends -->						                
 								    </div>           
+									
 									<div class="col-lg-6 col-12">                                    
 						                <!-- navigations swiper start -->
 					                <section id="component-swiper-progress_two">
 					                    <div class="card ">
-					                        <div class="card-header">
-					                            <font size="3px">drag & drop sample here</font>
+					                        <div id="card-header_two" class="card-header">
+					                            <font size="3px">Sample #2</font>
 					                        </div>
 					                        <div class="card-content">
 					                            <div class="card-body">
-					                                <div class="swiper-progress swiper-container">
-					                                    <div style="height: 237px;" class="swiper-wrapper">
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2326.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2437.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2449.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2458.JPG" alt="banner">
-					                                        </div>
-					                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;width: 100%;" src="../../uploads/database/phenotype_img/43/IMG_2473.JPG" alt="banner">
-					                                        </div>
-					                                    </div>
-					                                    <!-- Add Pagination -->
-					                                    <div class="swiper-pagination"></div>
-					                                    <!-- Add Arrows -->
-					                                    <div class="swiper-button-next"></div>
-					                                    <div class="swiper-button-prev"></div>
-					                                </div>
+					                                <div id="photo_two" style="border:2px dashed; padding:0px;height: 237px;background-color: #FAE5D3" >
+					                               			<div id="photo_two_desc" style="height: 237px;">
+					                               				<br><br><center><font color="black" size="4"><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>
+					                               			</div>						                                
+					                               	</div>
 					                            </div>
 					                        </div>
 					                    </div>
 					                </section>
 						                <!-- navigations swiper ends -->						                
 								    </div>	
+								    
 								</div>
 								<div class="row">
 									<div class="col-lg-12 col-12">                                    
@@ -354,7 +328,8 @@ body {
 	            <div class="modal-content">
 	                <div class="modal-header bg-warning white">
 	                    <h4 class="modal-title" id="myModalLabel4">Photo gallery</h4>
-	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                   <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+	                  	<button type="button" class="close" aria-label="Close" onclick="$('#backdrop').modal('hide');">	                    
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
 	                </div>

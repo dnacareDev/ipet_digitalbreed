@@ -54,12 +54,9 @@ if (request.getMethod().equals("POST"))
 
 	    File from = new File(savePath+_orig_filename);
         File to = new File(savePath+no+"/"+_orig_filename);
-        
-        System.out.println(savePath+no+"/"+_orig_filename);
-        
+               
         try {
             Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("File moved successfully.");
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -79,7 +76,6 @@ if (request.getMethod().equals("POST"))
 				date = new java.util.Date();						
 			}
 		}catch(Exception e){
-			System.out.println("AA : " + e);
 			date = new java.util.Date();
 			}
     	
@@ -87,9 +83,7 @@ if (request.getMethod().equals("POST"))
     	
     	try {
 			gps_value = String.valueOf(gpsDirectory.getGeoLocation());
-			System.out.println("gps_value : " + gps_value);
 		}catch(Exception e){
-			System.out.println("BB : " + e);
 			gps_value="nothing";
 		}
     	
@@ -99,10 +93,11 @@ if (request.getMethod().equals("POST"))
 		
 		String insertphoto_sql="insert into sampledata_img_t(sampleno, comment, photogps, photodate, filename, creuser, cre_dt) values("+no+", '"+comment+"', '"+gps_value+"', '"+simpleDateFormat.format(date)+"', '"+_orig_filename+"', 'dnacare', now());";	
 		
-		System.out.println(insertphoto_sql);
+		String updatephoto_sql="update sampledata_info_t set photo_status='1' where no="+no;			
 		
 		try{
 			ipetdigitalconndb.stmt.executeUpdate(insertphoto_sql);
+			ipetdigitalconndb.stmt.executeUpdate(updatephoto_sql);
 		}catch(Exception e){
     		System.out.println(e);	
     		ipetdigitalconndb.stmt.close();

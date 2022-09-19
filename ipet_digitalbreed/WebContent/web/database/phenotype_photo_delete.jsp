@@ -9,14 +9,31 @@
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
 	String deleteSql=null;
+	String seleccntSql=null;
+	String updateSql=null;
+	int imgcnt=0;
 	
 	String[] deleteitems = request.getParameterValues("params[]");
+	String sampleno = request.getParameter("sampleno");
 
 	try{
 		for (int i = 0; i < deleteitems.length; i++) {
 			deleteSql = "delete from sampledata_img_t where no='"+deleteitems[i]+"';";	    
 		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);
 		}
+		
+		seleccntSql = "select count(*) as cnt from sampledata_img_t where sampleno='"+sampleno+"';";	    
+		   
+	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(seleccntSql);	
+	    
+	  	 while (ipetdigitalconndb.rs.next()) { 		
+	  		imgcnt =  Integer.parseInt(ipetdigitalconndb.rs.getString("cnt"));
+	  	 }
+	  	 
+	  	 if(imgcnt==0){	  		 
+	  		updateSql = "update sampledata_info_t set photo_status='0' where no='"+sampleno+"';";	
+		    ipetdigitalconndb.stmt.executeUpdate(updateSql);
+	  	 }
 	}catch(Exception e){
 		System.out.println(e);
 	}finally { 

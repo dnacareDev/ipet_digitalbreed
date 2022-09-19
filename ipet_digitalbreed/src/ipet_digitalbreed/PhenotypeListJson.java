@@ -38,7 +38,6 @@ public class PhenotypeListJson {
 						ipetdigitalconndb.stmt1 = ipetdigitalconndb.conn.createStatement();
 						sql_trait="SELECT group_concat( value SEPARATOR  ',' ) as val FROM sampledata_traitval_t where sampleid='"+ipetdigitalconndb.rs.getString("sampleid")+"' GROUP BY sampleid order by sampleid desc;";
 						
-						System.out.println("sql_trait : " + sql_trait);
 						ipetdigitalconndb.rs1=ipetdigitalconndb.stmt1.executeQuery(sql_trait);
 						while (ipetdigitalconndb.rs1.next()) { 	
 							int trait_cnt=0;		

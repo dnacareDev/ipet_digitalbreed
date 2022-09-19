@@ -47,7 +47,7 @@
 		
 	<script type="text/javascript">
 
-			function getSelectedRowData() {
+			function getSelectedphoto() {
 			    var chkArray = new Array();
 
 			    $("input[name='imgno[]']:checked").each(function() { 
@@ -64,7 +64,7 @@
 			  	  $.ajax({
 					    url:"./phenotype_photo_delete.jsp",
 					    type:"POST",
-					    data:{'params':chkArray},
+					    data:{'params':chkArray, 'sampleno':<%=no%>},
 					    success: function(result) {
 					        if (result) {
 								alert("정상적으로 삭제되었습니다.");
@@ -74,9 +74,9 @@
 									 type:"POST",
 								     data:{'no': <%=no%>},
 									 success: function(result) {	
-										 console.log(result);
 									 	$("#photo_list").html(result);		
 										$('#backdrop').modal({ show: true });	
+										refresh();
 									 }
 								});									
 								
@@ -112,7 +112,6 @@
 									 type:"POST",
 								     data:{'no': <%=no%>},
 									 success: function(result) {	
-										 console.log(result);
 									 	$("#photo_list").html(result);		
 										$('#backdrop').modal({ show: true });	
 									 }
@@ -180,8 +179,7 @@
 	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 	            <div class="modal-content">
 	                <div class="modal-header bg-primary white">
-	                    <h4 class="modal-title" id="myModalLabel4">Photo Files Upload</h4>
-	                   
+	                    <h4 class="modal-title" id="myModalLabel4">Photo Files Upload</h4>	                   
 	                    <button type="button" class="close" aria-label="Close" onclick="$('#popup_uploader').modal('hide');">
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
@@ -221,7 +219,7 @@
 		</td>
 		<td style="float:right;">	
 			<input type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="javascript:updateComment();" value=" Save ">	
-			<input type="button" class="btn btn-danger mr-1 mb-1" style="float: left;" onclick="javascript:getSelectedRowData();" value="  Del ">			
+			<input type="button" class="btn btn-danger mr-1 mb-1" style="float: left;" onclick="javascript:getSelectedphoto();" value="  Del ">			
 		</td>
 	</tr>
 	</table>
@@ -340,12 +338,11 @@
 						 type:"POST",
 					     data:{'no': <%=no%>},
 						 success: function(result) {	
-							 console.log(result);
 						 	$("#photo_list").html(result);		
 							$('#backdrop').modal({ show: true });	
 						 }
 					});						             	   	 	
-					
+		            refresh();
                 });
             function FileUpload() {
 	            var postObj = new Object();
@@ -354,6 +351,7 @@
 	            postObj.no = <%=no%>;
 	            box.setPostData(postObj);
 	            box.upload();
+	            $('#popup_uploader').modal('hide');
             }            
          
 	</script>    		
