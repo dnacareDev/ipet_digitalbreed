@@ -343,6 +343,8 @@
 						 }
 					});						             	   	 	
 		            refresh();
+		    		$("#photo_one_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
+		    		$("#photo_two_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
                 });
             function FileUpload() {
 	            var postObj = new Object();

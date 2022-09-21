@@ -62,7 +62,7 @@
 		}
 	];
 		
-			var variety_id = $( "#variety-select option:selected" ).val();
+		var variety_id = $( "#variety-select option:selected" ).val();
 	 	var grid_array;	
 		$.ajax({
 			url : "../../web/database/traitnamertn.jsp",
@@ -86,6 +86,17 @@
     .then(function(data) {
       gridOptions.api.setRowData(data);
     });
+    
+    	$("#photo_one_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
+		$("#photo_two_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
+
+		one_sampleno="";
+		two_sampleno="";
+		$("#spyderplot").attr('src', "");			
+		
+		$("#card-header_one").html("<font size='3px'><b>Sample #1</b></font>");
+		$("#card-header_two").html("<font size='3px'><b>Sample #2</b></font>");
+
 	}
   
 	function getSelectedRowData() {
@@ -112,6 +123,13 @@
 		
 		$("#photo_one_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
 		$("#photo_two_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
+
+		one_sampleno="";
+		two_sampleno="";
+		$("#spyderplot").attr('src', "");		
+		
+		$("#card-header_one").html("<font size='3px'><b>Sample #1</b></font>");
+		$("#card-header_two").html("<font size='3px'><b>Sample #2</b></font>");
 	}	
 	    
 	  const deltaIndicator = (params) => {
@@ -188,6 +206,9 @@
 		}
 	];
     
+  	    var old_one_check;
+  	    var old_two_check;
+  	    
 		function addDropZonesone(params) {
 		
 		  var tileContainer = document.querySelector('#photo_one_desc');
@@ -198,6 +219,14 @@
 		    },
 		    onDragStop: (params) => {
 		      createTileone(params.node.data);
+		      
+		      if(!old_one_check==""){
+      		      old_one_check.setSelected(false);
+		      
+		      }
+		      params.node.setSelected(true);
+		      old_one_check=params.node;
+		      
 		      //tileContainer.appendChild(tile);
 		    },
 		  };	
@@ -216,6 +245,12 @@
 		    },
 		    onDragStop: (params) => {
 		      createTiletwo(params.node.data);
+		      if(!old_two_check==""){
+      		      old_two_check.setSelected(false);
+		      
+		      }
+		      params.node.setSelected(true);
+		      old_two_check=params.node;
 		    },
 		  };	
 
@@ -233,26 +268,61 @@
 	  }
 
 
+	var one_sampleno;
+	var two_sampleno;
+
 	function createTileone(data_one) {
+		one_sampleno = data_one.selectfiles;
 		$.ajax({
 				url:"../../web/database/phenotype_swiper_one.jsp",
 				type:"POST",
 				data:{'sampleno': data_one.selectfiles},
 				success: function(result_one) {	
-					$("#photo_one_desc").html(result_one);												
+					$("#photo_one_desc").html(result_one);		
 			}
-		});	
+		});			
+		
+		$.ajax({
+				url:"../../web/database/phenotype_spyder.jsp",
+				type:"POST",
+				data:{'one_sampleno': one_sampleno, 'two_sampleno': two_sampleno, 'varietyid':$( "#variety-select option:selected" ).val()},
+				beforeSend: function() {
+				    $("#spyderplot_div").append("<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>");
+				},
+				complete: function() {
+					$('#spyderplot_div').empty();				   
+				},
+				success: function(jobid) {	
+					$("#spyderplot").attr('src', "../../result/database/phenotype_img/phenotype_spyderplot/"+jobid.trim()+"/"+jobid.trim()+"_spyder.html");								
+			}
+		});			
 	}
 
 	function createTiletwo(data_two) {
+		two_sampleno = data_two.selectfiles;
 		$.ajax({
 				url:"../../web/database/phenotype_swiper_two.jsp",
 				type:"POST",
 				data:{'sampleno': data_two.selectfiles},
 				success: function(result_two) {	
-					$("#photo_two_desc").html(result_two);												
+					$("#photo_two_desc").html(result_two);
 			}
-		});	
+		});
+			
+		$.ajax({
+				url:"../../web/database/phenotype_spyder.jsp",
+				type:"POST",
+				data:{'one_sampleno': one_sampleno, 'two_sampleno': two_sampleno, 'varietyid':$( "#variety-select option:selected" ).val()},
+				beforeSend: function() {
+				    $("#spyderplot_div").append("<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>");
+				},
+				complete: function() {
+					$('#spyderplot_div').empty();				   
+				},
+				success: function(jobid) {	
+					$("#spyderplot").attr('src', "../../result/database/phenotype_img/phenotype_spyderplot/"+jobid.trim()+"/"+jobid.trim()+"_spyder.html");								
+			}
+		});				
 	}
 	
 	  /*** GRID OPTIONS ***/
@@ -276,7 +346,7 @@
 	    onGridReady: (params) => {
 	      addDropZonesone(params);
 	      addDropZonestwo(params);
-	      addCheckboxListener(params);
+	      //addCheckboxListener(params);
 	    },
 		onCellClicked: params => {
 			if(params.column.getId() == "photo_status"){
@@ -284,7 +354,7 @@
 						 url:"../../web/database/phenotype_photo_view.jsp",
 						 type:"POST",
 					     data:{'no':params.data.selectfiles},
-						 success: function(result) {						 	
+						 success: function(result) {											 
 						 	$("#photo_list").html(result);												
 						 }
 					});						             	   	 	

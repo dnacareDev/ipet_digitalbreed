@@ -181,7 +181,7 @@ body {
 					                <section id="component-swiper-progress_one">
 					                    <div class="card ">
 					                        <div id="card-header_one" class="card-header">
-					                            <font size="3px">Sample #1</font>
+					                            <font size="3px"><b>Sample #1</b></font>
 					                        </div>
 					                        <div class="card-content">
 					                            <div class="card-body">
@@ -202,7 +202,7 @@ body {
 					                <section id="component-swiper-progress_two">
 					                    <div class="card ">
 					                        <div id="card-header_two" class="card-header">
-					                            <font size="3px">Sample #2</font>
+					                            <font size="3px"><b>Sample #2</b></font>
 					                        </div>
 					                        <div class="card-content">
 					                            <div class="card-body">
@@ -224,22 +224,17 @@ body {
 						                <!-- navigations swiper start -->
 						                <section id="component-swiper-navigations">
 						                    <div class="card ">
-						                        <div class="card-header">
-						                            <h4 class="card-title">Spyder Plot</h4>
-						                        </div>
+						                        
 						                        <div class="card-content">
-						                            <div class="card-body">
-						                                <div class="swiper-navigations swiper-container">
-						                                    <div style="height: 237px;" class="swiper-wrapper">
-						                                       sdfsdf
+						                            <div style="height: 321px;" class="card-body"><font size="3px"><b>Spyder Plot</b></font>
+						                                    <div  class="swiper-wrapper" >
+						                                       <iframe id="spyderplot" frameBorder="0" src="" style="display:block; width:100vw; height: 321"></iframe>
 						                                    </div>
-
-						                                </div>
 						                            </div>
 						                        </div>
 						                    </div>
 						                </section>
-						                <!-- navigations swiper ends -->						                
+						                <!-- navigations swiper ends -->					                
 						                						                
 								    </div>	
 								</div>
@@ -251,10 +246,6 @@ body {
         </div>        
     </div>
     <!-- END: Content-->
-
-
-
-
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -322,7 +313,6 @@ body {
 	</script>
 	
 		<!-- Modal start-->
-
 	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
 	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
 	            <div class="modal-content">
@@ -345,10 +335,9 @@ body {
 						</form>
 	                </div>
 	            </div>
-	    </div>
-                          
-			<!-- Modal end-->
-	       
+	    </div>                          
+		<!-- Modal end-->
+     
 </body>
 <!-- END: Body-->
 
