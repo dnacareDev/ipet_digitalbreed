@@ -71,7 +71,6 @@ public class PhenotypeListJson {
 				ipetdigitalconndb.conn.close();
 			}
 			
-			System.out.println(jsonArray);
 			return jsonArray;
 	}
 

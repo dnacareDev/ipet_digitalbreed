@@ -239,7 +239,6 @@
 		imgno=ipetdigitalconndb.rs.getString(6);
 		comment=ipetdigitalconndb.rs.getString(5);
 		photogps=ipetdigitalconndb.rs.getString(1);
-		System.out.println("filename : " + path+filename);
 	
 	if(count==0){
 		count_old=0;
