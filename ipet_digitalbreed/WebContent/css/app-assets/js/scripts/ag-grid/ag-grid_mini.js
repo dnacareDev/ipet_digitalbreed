@@ -98,7 +98,6 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
-	      cellStyle: {'background-color' : '#F0F0F0'},
 	      width: 296
 	    },
 		{

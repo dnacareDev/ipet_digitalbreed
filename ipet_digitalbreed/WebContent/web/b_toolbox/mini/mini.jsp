@@ -215,7 +215,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-					<form class="form" id="uploadGenocoreForm">
+					<form class="form" id="uploadMiniForm">
 					    <div class="form-body">
 					        <div class="row">
 					            <br>
@@ -330,9 +330,7 @@
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
     	
-   		//console.log("ba")
-   		
-   		document.getElementById('uploadGenocoreForm').reset();
+   		document.getElementById('uploadMiniForm').reset();
     	vcfFileList();
     	
     	//box.removeAllFiles();
@@ -364,6 +362,8 @@
    					},
    				success: function(result) {
   					console.log("genocore_analysis.jsp");
+  					refresh();
+  					$("#backdrop").modal("hide");
    				}
   		});
     }

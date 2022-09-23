@@ -12,8 +12,9 @@
 		agGrid
 		    .simpleHttpRequest({ url: "../../../web/b_toolbox/upgma/upgma_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
-		      gridOptions.api.setRowData(data);
+		    	gridOptions.api.setRowData(data);
 		    });
+		vcfFileList();
 	}
 
 	function getSelectedRowData() {
@@ -95,7 +96,6 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
-	      cellStyle: {'background-color' : '#F0F0F0'},
 	      width: 296
 	    },
 		{
@@ -173,7 +173,7 @@
 				   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
 				   */
 			       
-			       gridOptions.api.sizeColumnsToFit();
+			       //gridOptions.api.sizeColumnsToFit();
 			}
 		}
 	};
@@ -198,7 +198,7 @@
 		  //console.log(agGrid.getColumns());
 		  
 		  gridOptions.api.setRowData(data);
-		  
+		  gridOptions.api.sizeColumnsToFit();
 	  });
   
 
@@ -237,12 +237,16 @@
   } else {
    // gridOptions.columnApi.setColumnPinned("email", "left");
   }
+  
   $(window).on("resize", function() {
-    if ($(window).width() < 768) {
+	gridOptions.api.sizeColumnsToFit();
+    /*
+	if ($(window).width() < 768) {
       //gridOptions.columnApi.setColumnPinned("email", null);
     } else {
      // gridOptions.columnApi.setColumnPinned("email", "left");
     }
+    */
   });
   
   
