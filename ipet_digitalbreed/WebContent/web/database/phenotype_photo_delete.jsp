@@ -14,7 +14,8 @@
 	int imgcnt=0;
 	
 	String[] deleteitems = request.getParameterValues("params[]");
-	String sampleno = request.getParameter("sampleno");
+	String samplename = request.getParameter("samplename");
+	String variety = request.getParameter("variety");
 
 	try{
 		for (int i = 0; i < deleteitems.length; i++) {
@@ -22,8 +23,7 @@
 		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);
 		}
 		
-		seleccntSql = "select count(*) as cnt from sampledata_img_t where sampleno='"+sampleno+"';";	    
-		   
+		seleccntSql = "select count(*) as cnt from sampledata_img_t where samplename='"+samplename+"' and varietyid='"+variety+"';";	    
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(seleccntSql);	
 	    
 	  	 while (ipetdigitalconndb.rs.next()) { 		
@@ -31,7 +31,7 @@
 	  	 }
 	  	 
 	  	 if(imgcnt==0){	  		 
-	  		updateSql = "update sampledata_info_t set photo_status='0' where no='"+sampleno+"';";	
+	  		updateSql = "update sampledata_info_t set photo_status='0' where samplename='"+samplename+"' and varietyid='"+variety+"';";	
 		    ipetdigitalconndb.stmt.executeUpdate(updateSql);
 	  	 }
 	}catch(Exception e){

@@ -8,31 +8,13 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	String sampleno = request.getParameter("sampleno");		
-	String samplename = null;
-	String sql = null;
-	
-	try{
-
-		sql = "select samplename from sampledata_info_t where no='"+sampleno+"';";
-		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		
-		
-		while (ipetdigitalconndb.rs.next()) { 		
-  			samplename = ipetdigitalconndb.rs.getString("samplename");
-		}
-
-	}catch(Exception e){
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.rs.close();
-	}finally { 
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.rs.close();
-	}
+	String samplename = request.getParameter("samplename");		
+	String varietyid = request.getParameter("variety");		
 
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();	
 	
-	sql = "select filename from sampledata_img_t where sampleno='"+sampleno+"' order by no asc;";		
-	String img_p = "../../uploads/database/phenotype_img/"+sampleno+"/";
+	String sql = "select filename from sampledata_img_t where samplename='"+samplename+"' order by no asc;";		
+	String img_p = "../../uploads/database/phenotype_img/"+varietyid+"_"+samplename+"/";
 	
 %>
 <body>

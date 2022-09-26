@@ -12,10 +12,11 @@
 	   
 	String[] imgnoArray = request.getParameterValues("imgnoArray[]");
 	String[] cmtArray = request.getParameterValues("cmtArray[]");
-	
+	String varietyid = request.getParameter("variety");		
+
 	try{
 		for (int i = 1; i < imgnoArray.length; i++) {
-			deleteSql = "update sampledata_img_t set comment='"+cmtArray[i]+"' where no='"+imgnoArray[i]+"';";	    
+			deleteSql = "update sampledata_img_t set comment='"+cmtArray[i]+"' where no='"+imgnoArray[i]+"' and varietyid='"+varietyid+"';";	    
 		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);		
 		}
 	}catch(Exception e){

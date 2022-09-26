@@ -276,7 +276,8 @@
 		$.ajax({
 				url:"../../web/database/phenotype_swiper_one.jsp",
 				type:"POST",
-				data:{'sampleno': data_one.selectfiles},
+				//data:{'sampleno': data_one.selectfiles},
+				data:{'samplename':data_one.samplename, variety:$( "#variety-select option:selected" ).val()},				
 				success: function(result_one) {	
 					$("#photo_one_desc").html(result_one);		
 			}
@@ -303,9 +304,10 @@
 		$.ajax({
 				url:"../../web/database/phenotype_swiper_two.jsp",
 				type:"POST",
-				data:{'sampleno': data_two.selectfiles},
+				//data:{'sampleno': data_two.selectfiles},
+				data:{'samplename':data_two.samplename, variety:$( "#variety-select option:selected" ).val()},			
 				success: function(result_two) {	
-					$("#photo_two_desc").html(result_two);
+				$("#photo_two_desc").html(result_two);
 			}
 		});
 			
@@ -353,7 +355,8 @@
 					$.ajax({
 						 url:"../../web/database/phenotype_photo_view.jsp",
 						 type:"POST",
-					     data:{'no':params.data.selectfiles},
+					     //data:{'no':params.data.selectfiles},
+					     data:{'samplename':params.data.samplename, variety:$( "#variety-select option:selected" ).val()},
 						 success: function(result) {											 
 						 	$("#photo_list").html(result);												
 						 }

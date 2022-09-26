@@ -11,7 +11,7 @@
 		gridOptions.api.refreshCells(); 
 		agGrid
 		    //.simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-			.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+			.simpleHttpRequest({ url: "../../../web/b_toolbox/mini/mini_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
@@ -36,7 +36,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../web/b_toolbox/pca/pca_delete.jsp",
+		    url:"../../../web/b_toolbox/mini/mini_delete.jsp",
 		    type:"POST",
 		    data:{'params':deleteitems},
 		    success: function(result) {
@@ -98,7 +98,6 @@
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
-	      //cellStyle: {'background-color' : '#F0F0F0'},
 	      width: 296
 	    },
 		{
@@ -123,7 +122,6 @@
 		// 주석처리한 옵션 작동안함. 전부 다른 이름으로 바꿔야한다.
 		columnDefs: columnDefs,
 		rowHeight: 35,
-		rowSelection: "multiple",
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
 		//rowSelection: "multiple",
@@ -151,26 +149,27 @@
 		   									<div class='row'>
 		   										<div class='col-12'>
 		   											<ul class='nav nav-pills nav-active-bordered-pill'>
-		   												<li class='nav-item'><a class='nav-link active' id='pca1_2d' data-toggle='pill' href='#pill1' aria-expanded='true'>PCA 1-2 </a></li>
-						   								<li class='nav-item'><a class='nav-link' id='pca2_2d' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA 2-3</a></li>
-						   								<li class='nav-item'><a class='nav-link' id='pca3_2d' data-toggle='pill' href='#pill3' aria-expanded='false'>PCA 1-3</a></li>
+		   												<li class='nav-item'><a class='nav-link' id='pca1_2d' data-toggle='pill' href='#pill1' aria-expanded='true'>PCA1 (2D)</a></li>
+						   								<li class='nav-item'><a class='nav-link' id='pca2_2d' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA2 (2D)</a></li>
+						   								<li class='nav-item'><a class='nav-link' id='pca3_2d' data-toggle='pill' href='#pill3' aria-expanded='false'>PCA3 (2D)</a></li>
 						   								<li class='nav-item'><a class='nav-link' id='pca_3d' data-toggle='pill' href='#pill4' aria-expanded='false'>PCA (3D)</a></li>
 		   											</ul>
 		   											<div class='tab-content'>
 		   												<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+		   													<div>jobid + "_iteration.xlsx"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
 		   												</div>
 		   												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
+		   													<div>jobid + "_length.len"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe>
 		   												</div>
 		   												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
+		   													<div>jobid + "_minimal_markers.csv"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame'></iframe>
 		   												</div>
 		   												<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
+		   													<div>jobid + "_minimal_markers.xlsx"</div>
 		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill4_frame' id='pill4_frame'></iframe>
-		   												</div>
-		   												<div class='tab-pane' id='pill5' aria-labelledby='base-pill5'>
-		   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill5_frame' id='pill5_frame'></iframe>
 		   												</div>
 		   											</div>
 		   										</div>
@@ -183,10 +182,13 @@
 				$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
 				$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
 				*/
-		   		$('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
-		   		$('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
+		   		$('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
+			    $('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
 				$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
 				$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca.html");
+				
+				gridOptions.api.sizeColumnsToFit();
+				
 			}
 		}
 	};
@@ -206,7 +208,7 @@
 	/*** GET TABLE DATA FROM URL ***/
 
   	agGrid
-		.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+		.simpleHttpRequest({ url: "../../../web/b_toolbox/mini/mini_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		.then(function(data) {
 		console.log("data : ", data);
 		  

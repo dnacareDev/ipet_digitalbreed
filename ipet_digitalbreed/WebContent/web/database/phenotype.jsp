@@ -200,7 +200,8 @@ body {
 						                        
 						                        <div class="card-content">
 						                            <div style="height: 321px;" class="card-body"><font size="3px"><b>Spyder Plot</b></font>
-						                                    <div  class="swiper-wrapper" >
+						                                    <div class="swiper-wrapper" >
+															   <div id="spyderplot_div" ></div>
 						                                       <iframe id="spyderplot" frameBorder="0" src="" style="display:block; width:100vw; height: 321"></iframe>
 						                                    </div>
 						                            </div>

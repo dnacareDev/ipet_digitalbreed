@@ -96,7 +96,7 @@
 				ipetdigitalconndb.stmt.executeUpdate(updatesql);
 				
 				for(int j=5; j<sampleinfo_array.length; j++) { 
-					updatetraitsql="update sampledata_traitval_t set value='"+sampleinfo_array[j].replaceAll("\"","").trim()+"' where sampleno='"+sampleinfo_array[1].replaceAll("\"","")+"'and seq='"+traitno+"'";
+					updatetraitsql="update sampledata_traitval_t set value='"+sampleinfo_array[j].replaceAll("\"","").trim()+"' where sampleno='"+sampleinfo_array[1].replaceAll("\"","")+"' and seq='"+traitno+"'";
 					traitno++;						
 					ipetdigitalconndb.stmt.executeUpdate(updatetraitsql);
 				}

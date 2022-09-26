@@ -34,14 +34,14 @@ if (request.getMethod().equals("POST"))
 	String _type            = uploader.getParameter("type");            // 커스텀 정의 POST Param 1
 	String _part            = uploader.getParameter("part");            // 커스텀 정의 POST Param 2
 	String comment = uploader.getParameter("comment");
-	String no = uploader.getParameter("no");
+	String samplename = uploader.getParameter("samplename");
 	String varietyid = uploader.getParameter("varietyid");
 	
 	String _run_retval = uploader.run();
 	
 	if (uploader.isUploadDone()) {	
 
-		File folder_savePath = new File(savePath+no);
+		File folder_savePath = new File(savePath+varietyid+"_"+samplename);
 
 		if (!folder_savePath.exists()) {
 		try{
@@ -53,7 +53,7 @@ if (request.getMethod().equals("POST"))
 		}
 
 	    File from = new File(savePath+_orig_filename);
-        File to = new File(savePath+no+"/"+_orig_filename);
+        File to = new File(savePath+varietyid+"_"+samplename+"/"+_orig_filename);
                
         try {
             Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -91,10 +91,9 @@ if (request.getMethod().equals("POST"))
 		
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
-		String insertphoto_sql="insert into sampledata_img_t(sampleno, comment, photogps, photodate, filename, creuser, cre_dt) values("+no+", '"+comment+"', '"+gps_value+"', '"+simpleDateFormat.format(date)+"', '"+_orig_filename+"', 'dnacare', now());";	
-		
-		String updatephoto_sql="update sampledata_info_t set photo_status='1' where no="+no;			
-		
+		String insertphoto_sql="insert into sampledata_img_t(varietyid, samplename, comment, photogps, photodate, filename, creuser, cre_dt) values('"+varietyid+"','"+samplename+"', '"+comment+"', '"+gps_value+"', '"+simpleDateFormat.format(date)+"', '"+_orig_filename+"', 'dnacare', now());";	
+		String updatephoto_sql="update sampledata_info_t set photo_status='1' where samplename='"+samplename+"'";			
+
 		try{
 			ipetdigitalconndb.stmt.executeUpdate(insertphoto_sql);
 			ipetdigitalconndb.stmt.executeUpdate(updatephoto_sql);
@@ -103,7 +102,7 @@ if (request.getMethod().equals("POST"))
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}finally { 
-			System.out.println("vcf file upload Success");
+			System.out.println("phonetype photo upload Success");
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}

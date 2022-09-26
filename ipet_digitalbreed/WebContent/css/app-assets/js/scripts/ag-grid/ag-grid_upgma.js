@@ -10,20 +10,52 @@
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
-		    .simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+		    .simpleHttpRequest({ url: "../../../web/b_toolbox/upgma/upgma_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
-		      gridOptions.api.setRowData(data);
+		    	gridOptions.api.setRowData(data);
 		    });
+		vcfFileList();
 	}
 
+	function getSelectedRowData() {
+		
+		if( !confirm("삭제하시겠습니까?") ) {
+			return;
+		}
+		
+		let selectedData = gridOptions.api.getSelectedRows();
+		var deleteitems = new Array();
+		  
+		for (var i = 0; i < selectedData.length; i++) {
+		    deleteitems.push(selectedData[i].no);
+		}
+		
+		console.log("delete row : ", deleteitems);
+		
+		$.ajax(
+		{
+		    url:"../../../web/b_toolbox/upgma/upgma_delete.jsp",
+		    type:"POST",
+		    data:{'params':deleteitems},
+		    success: function(result) {
+		        if (result) {
+					alert("정상적으로 삭제되었습니다.");
+					refresh();
+		        } else {
+		            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+		        }
+		    }
+		});
+	}
+	
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
 	      headerName: "번호",
-	      field: "check_number",
+	      field: "no",
 	      editable: false,
 	      sortable: true,
-	      width: 180,
+	      width: 150,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -37,11 +69,11 @@
 	      sortable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
-	      width: 280,
+	      width: 400,
 	    },
 	    {
 	      headerName: "분석상태",
-	      field: "analysis_status",
+	      field: "status",
 	      editable: false,
 	      sortable: true,
 	      filter: true,
@@ -50,22 +82,21 @@
 	    },
 	    {
 	      headerName: "상세내용",
-	      field: "note",
+	      field: "comment",
 	      editable: false,
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered",      
-	      width: 600
+	      width: 750
 	    },
 	    {
 	      headerName: "분석일",
-	      field: "analysis_date",
+	      field: "cre_dt",
 	      editable: false,
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
-	      cellStyle: {'background-color' : '#F0F0F0'},
-	      width: 300
+	      width: 296
 	    },
 		{
 	      headerName: "jobid",
@@ -83,171 +114,69 @@
 	      hide: true
 	    }        
 	];
-	
-  /*
-  var columnDefs = [
-    {
-      headerName: "체크",
-      field: "selectfiles",
-      enableRangeSelection: true,
-	  suppressMultiRangeSelection: true,
-      editable: false,
-      sortable: true,
-      width: 120,
-      filter: 'agMultiColumnFilter',
-      cellClass: "grid-cell-centered",      
-      checkboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      headerCheckboxSelection: true
-    },
-    {
-      headerName: "번호",
-      field: "filename",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 275,
-	  cellRenderer: function(params){
-      return params.value+"<a href='../../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
-        + params.value 
-        + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
-    }
-    },
-    {
-      headerName: "결과보기",
-      field: "comment",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "ag-header-cell-label",
-      width: 750
-    },
-    {
-      headerName: "파일명",
-      field: "cropid",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 180,
-      hide: true
-    },
-    {
-      headerName: "분석일",
-      field: "cre_dt",
-      editable: false,
-      sortable: true,
-      filter: 'agDateColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-    {
-      headerName: "분석상태",
-      field: "refgenome",
-      editable: false,
-      sortable: true,
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 275,
-    },
-    {
-      headerName: "샘플수",
-      field: "samplecnt",
-      editable: false,
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-    {
-      headerName: "변이수",
-      field: "variablecnt",
-      editable: false,
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
-    },
-	{
-      headerName: "jobid",
-      field: "jobid",
-      hide: true
-    },  
-	{
-      headerName: "uploadpath",
-      field: "uploadpath",
-      hide: true
-    },  
-	{
-      headerName: "resultpath",
-      field: "resultpath",
-      hide: true
-    }        
-  ];
-  */
 
   /*** GRID OPTIONS ***/
-var gridOptions = {
-	// 주석처리한 옵션 전부 작동안함. 다른 이름으로 바꿔야한다.
-	columnDefs: columnDefs,
-	rowHeight: 35,
-	//rowSelection: "multiple",
-	//floatingFilter: true,
-	//filter: 'agMultiColumnFilter',
-	pagination: true,
-	paginationPageSize: 20,
-	pivotPanelShow: "always",
-	colResizeDefault: "shift",
-	animateRows: true,
-	//resizable: true,
-	serverSideInfiniteScroll: true,
-	
-	onCellClicked: params => {
-	
-		console.log("cell clicked : " + params.column.getId());
-		//console.log("params : ", params);
+	var gridOptions = {
+		// 주석처리한 옵션 전부 작동안함. 다른 이름으로 바꿔야한다.
+		columnDefs: columnDefs,
+		rowHeight: 35,
+		//rowSelection: "multiple",
+		//floatingFilter: true,
+		//filter: 'agMultiColumnFilter',
+		pagination: true,
+		paginationPageSize: 20,
+		pivotPanelShow: "always",
+		colResizeDefault: "shift",
+		animateRows: true,
+		//resizable: true,
+		serverSideInfiniteScroll: true,
 		
-		if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
-				console.log('cell was clicked', params.data.jobid);
-				console.log('cell was clicked', params.data.resultpath);
-				const element = document.getElementById('vcf_status');
-				element.innerHTML  = `
-									<div class='card-content'>
-										<div class='card-body'>
-											<div class='row'>
-												<div class='col-12'>
-													<ul class='nav nav-pills nav-active-bordered-pill'>
-														<li class='nav-item'><a class='nav-link' id='Linear' data-toggle='pill' href='#pill1' aria-expanded='true'>Linear</a></li>
-					   									<li class='nav-item'><a class='nav-link' id='Circular' data-toggle='pill' href='#pill2' aria-expanded='false'>Circular</a></li>
-													</ul>
-													<div class='tab-content'>
-														<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-															<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
-														</div>
-														<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-															<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe>
+		onCellClicked: params => {
+		
+			console.log("cell clicked : " + params.column.getId());
+			//console.log("params : ", params);
+			
+			if(params.column.getId() != "no"){
+					console.log('cell was clicked', params.data.jobid);
+					console.log('cell was clicked', params.data.resultpath);
+					const element = document.getElementById('vcf_status');
+					element.innerHTML  = `
+										<div class='card-content'>
+											<div class='card-body'>
+												<div class='row'>
+													<div class='col-12'>
+														<ul class='nav nav-pills nav-active-bordered-pill'>
+															<li class='nav-item'><a class='nav-link' id='Linear' data-toggle='pill' href='#pill1' aria-expanded='true'>Linear</a></li>
+						   									<li class='nav-item'><a class='nav-link' id='Circular' data-toggle='pill' href='#pill2' aria-expanded='false'>Circular</a></li>
+														</ul>
+														<div class='tab-content'>
+															<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+																<!--
+																<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
+																-->
+															</div>
+															<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
+																<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									`;
-		       replaceClass("base-pill31", "nav-link", "nav-link active");
-		       replaceClass("base-pill32", "nav-link", "nav-link");
-		       replaceClass("base-pill33", "nav-link", "nav-link");
-		       replaceClass("base-pill34", "nav-link", "nav-link");
-		       replaceClass("base-pill35", "nav-link", "nav-link");	  
-			   
-			   $('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
-			   $('#pill2_frame').attr('src', "");
-			   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
-			   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
-			   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
+										`;	  
+				   
+			       /*
+				   $('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
+				   $('#pill2_frame').attr('src', "");
+				   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
+				   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
+				   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
+				   */
+			       
+			       //gridOptions.api.sizeColumnsToFit();
+			}
 		}
-	}
-};
+	};
 
 
 	function replaceClass(id, oldClass, newClass) {
@@ -262,54 +191,14 @@ var gridOptions = {
   var gridTable = document.getElementById("myGrid");
 
   /*** GET TABLE DATA FROM URL ***/
-  /*
   agGrid
-    .simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-    .then(function(data) {
-    	console.log("data : ", data);
-    	gridOptions.api.setRowData(data);
-    });
-  */
-  agGrid
-	  .simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+	  .simpleHttpRequest({ url: "../../../web/b_toolbox/upgma/upgma_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 	  .then(function(data) {
 		  console.log("data : ", data);
 		  //console.log(agGrid.getColumns());
 		  
-		  const pseudo_data = [
-			  {
-				  check_number : '12',
-				  file_name : 'upgma_5789.vcf',
-				  analysis_status : 'progress',
-				  note : 'code',
-				  analysis_date : '2022-08-22',
-				  jobid : '20233331',
-				  uploadpath : '/digit/path/upload',
-				  resultpath : '/digit/path/upload'
-			  },
-			  {
-				  check_number : '12',
-				  file_name : 'upgma_34356.vcf',
-				  analysis_status : 'fail',
-				  note : 'code',
-				  analysis_date : '2022-08-22',
-				  jobid : '20233331',
-				  uploadpath : '/digit/path/upload',
-				  resultpath : '/digit/path/upload'
-			  },
-			  {
-				  check_number : '12',
-				  file_name : 'upgma_85659.vcf',
-				  analysis_status : 'success',
-				  note : 'code111',
-				  analysis_date : '2022-08-22',
-				  jobid : '20233331',
-				  uploadpath : '/digit/path/upload',
-				  resultpath : '/digit/path/upload'
-			  },
-		  ];
-		  gridOptions.api.setRowData(pseudo_data);
-		  
+		  gridOptions.api.setRowData(data);
+		  gridOptions.api.sizeColumnsToFit();
 	  });
   
 
@@ -348,12 +237,16 @@ var gridOptions = {
   } else {
    // gridOptions.columnApi.setColumnPinned("email", "left");
   }
+  
   $(window).on("resize", function() {
-    if ($(window).width() < 768) {
+	gridOptions.api.sizeColumnsToFit();
+    /*
+	if ($(window).width() < 768) {
       //gridOptions.columnApi.setColumnPinned("email", null);
     } else {
      // gridOptions.columnApi.setColumnPinned("email", "left");
     }
+    */
   });
   
   

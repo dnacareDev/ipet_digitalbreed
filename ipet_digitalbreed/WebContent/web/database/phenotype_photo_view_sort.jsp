@@ -30,25 +30,32 @@
 	}
 </style>
 
-
-
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	String permissionUid = session.getAttribute("permissionUid")+"";	
 	String varietyid = request.getParameter("variety");		
-	String samplename = request.getParameter("samplename");		
-	String sql = "SELECT photogps, photodate, filename, cre_dt, comment, no FROM sampledata_img_t where samplename='"+samplename+"' order by no desc";
+	String samplename = request.getParameter("samplename");	
+	String sortmethod = request.getParameter("sortmethod");
+	String sql = null;
+	String checkcss = null;
 	
+	if(sortmethod.equals("photo")){
+		sql = "SELECT photogps, photodate, filename, cre_dt, comment, no FROM sampledata_img_t where samplename='"+samplename+"' order by photodate desc";	
+		checkcss = "";
+	}
+	else{
+		sql = "SELECT photogps, photodate, filename, cre_dt, comment, no FROM sampledata_img_t where samplename='"+samplename+"' order by cre_dt desc";	
+		checkcss = "checked";
+	}
+
 	String path = "../../uploads/database/phenotype_img/"+varietyid+"_"+samplename+"/";
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		
 %>
 
-
-    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>	
-		
+    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>			
 	<script type="text/javascript">
 
 			function getSelectedphoto() {
@@ -232,10 +239,13 @@
 	
 	<div class="custom-control custom-switch custom-control-inline">
 	     <span class="switch-label w-100"><font size=3><b>photo-date</b></font></span>
-	     <input type="checkbox" onclick='javascript:sortmethod(this);' class="custom-control-input" id="accountSwitch3">
-	     <label class="custom-control-label mr-1" for="accountSwitch3"></label>
+	     <input type="checkbox" onclick='javascript:sortmethod(this);' <%=checkcss%> class="custom-control-input" id="accountSwitch2">
+		 <label class="custom-control-label mr-1" for="accountSwitch2"></label>	     
+	     
 	     <span class="switch-label w-100"><font size=3><b>upload-date</b></font></span>
 	</div>
+	
+	
 	
 	<div id="photo_list">
 	
@@ -401,6 +411,7 @@
 		}
 	}
 	</script>
+	
 	
 	
 	
