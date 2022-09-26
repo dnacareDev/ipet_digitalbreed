@@ -20,12 +20,12 @@
 	try{
 		for (int i = 0; i < deleteitems.length; i++) {
 			deleteSql = "delete from sampledata_img_t where no='"+deleteitems[i]+"';";	    
-			System.out.println(deleteSql);   
+
 		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);
 		}
 		
 		seleccntSql = "select count(*) as cnt from sampledata_img_t where samplename='"+samplename+"' and varietyid='"+variety+"';";	    
-		System.out.println(seleccntSql);   
+
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(seleccntSql);	
 	    
 	  	 while (ipetdigitalconndb.rs.next()) { 		
@@ -34,7 +34,7 @@
 	  	 
 	  	 if(imgcnt==0){	  		 
 	  		updateSql = "update sampledata_info_t set photo_status='0' where samplename='"+samplename+"' and varietyid='"+variety+"';";	
-	  		System.out.println(updateSql);   
+
 		    ipetdigitalconndb.stmt.executeUpdate(updateSql);
 	  	 }
 	}catch(Exception e){

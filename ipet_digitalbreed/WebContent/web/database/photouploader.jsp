@@ -92,9 +92,9 @@ if (request.getMethod().equals("POST"))
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
 		String insertphoto_sql="insert into sampledata_img_t(varietyid, samplename, comment, photogps, photodate, filename, creuser, cre_dt) values('"+varietyid+"','"+samplename+"', '"+comment+"', '"+gps_value+"', '"+simpleDateFormat.format(date)+"', '"+_orig_filename+"', 'dnacare', now());";	
-		System.out.println(insertphoto_sql);
+
 		String updatephoto_sql="update sampledata_info_t set photo_status='1' where samplename='"+samplename+"'";			
-		System.out.println(updatephoto_sql);
+
 		try{
 			ipetdigitalconndb.stmt.executeUpdate(insertphoto_sql);
 			ipetdigitalconndb.stmt.executeUpdate(updatephoto_sql);

@@ -30,8 +30,11 @@
 	}
 </style>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 8d55763ae141b9d789015e907443b2c9d6b563c6
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -40,7 +43,7 @@
 	String varietyid = request.getParameter("variety");		
 	String samplename = request.getParameter("samplename");	
 	String sortmethod = request.getParameter("sortmethod");
-	System.out.println("sortmethod : " + sortmethod);
+
 	String sql = null;
 	String checkcss = null;
 	
@@ -52,15 +55,19 @@
 		sql = "SELECT photogps, photodate, filename, cre_dt, comment, no FROM sampledata_img_t where samplename='"+samplename+"' order by cre_dt desc";	
 		checkcss = "checked";
 	}
-	System.out.println("checkcss : " + checkcss);
+
 	String path = "../../uploads/database/phenotype_img/"+varietyid+"_"+samplename+"/";
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		
 %>
 
+<<<<<<< HEAD
 
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>	
 		
+=======
+    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>			
+>>>>>>> 8d55763ae141b9d789015e907443b2c9d6b563c6
 	<script type="text/javascript">
 
 			function getSelectedphoto() {

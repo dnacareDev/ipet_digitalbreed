@@ -97,7 +97,7 @@
 				
 				for(int j=5; j<sampleinfo_array.length; j++) { 
 					updatetraitsql="update sampledata_traitval_t set value='"+sampleinfo_array[j].replaceAll("\"","").trim()+"' where sampleno='"+sampleinfo_array[1].replaceAll("\"","")+"' and seq='"+traitno+"'";
-					System.out.println(updatetraitsql);
+
 					traitno++;						
 					ipetdigitalconndb.stmt.executeUpdate(updatetraitsql);
 				}
@@ -115,7 +115,6 @@
 											
 				for(int k=5; k<sampleinfo_array.length; k++) { 
 					inserttraitsql="insert into sampledata_traitval_t(cropid, varietyid, sampleid, sampleno, seq, value, creuser, cre_dt) values('"+cropid+"','"+varietyid+"','"+conv_newsampleid+"','"+newsampleno+"','"+traitno+"', '"+sampleinfo_array[k].replaceAll("\"","").trim()+"','"+permissionUid+"',now());";
-					System.out.println(inserttraitsql);
 
 					traitno++;						
 					ipetdigitalconndb.stmt.executeUpdate(inserttraitsql);
