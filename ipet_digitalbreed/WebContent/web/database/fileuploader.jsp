@@ -85,18 +85,12 @@ if (request.getMethod().equals("POST"))
             ex.printStackTrace();
         }
 
-
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		
-		System.out.println("genotype_sequence : " + genotype_sequence);
 		runanalysistools.execute(genotype_sequence);
-
-		System.out.println("genotype_statistics : " + genotype_statistics);
 		runanalysistools.execute(genotype_statistics);
-
-		System.out.println("vcf_statistcs : " + vcf_statistcs);
 		runanalysistools.execute(vcf_statistcs);
 
 		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");

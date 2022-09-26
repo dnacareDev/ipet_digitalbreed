@@ -9,7 +9,6 @@
 		String varietyid = request.getParameter("varietyid");
 		JSONArray jsonArray = new JSONArray();
 		String cropvari_sql = "select seq, traitname, varietyid from sampledata_traitname_t where varietyid='"+varietyid+"' order by seq asc;";
-				
 		 try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
@@ -27,7 +26,6 @@
         		ipetdigitalconndb.rs.close();
         		ipetdigitalconndb.conn.close();
         	}
-		 System.out.println(jsonArray);
 		 out.println(jsonArray);
 %>
 

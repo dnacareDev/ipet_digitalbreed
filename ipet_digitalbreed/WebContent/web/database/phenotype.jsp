@@ -19,8 +19,6 @@
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
-	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/swiper.min.css">    
- 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/innorix/innorix.css">    
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether.min.css">
@@ -66,36 +64,9 @@ body {
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
-    <!-- BEGIN: Header-->
-    <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu navbar-fixed navbar-shadow navbar-brand-center">
-        <div class="navbar-wrapper">
-            <div class="navbar-container content">
-                <div class="navbar-collapse" id="navbar-mobile">
-                    <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
-                        </ul>
-			            <ul class="nav navbar-nav flex-row">
-			                <li class="nav-item"><a class="navbar-brand" href="../mainboard.jsp">
-									<img src="../../images/logo.png"><font size="4px"  color="#4c8aa9"><b>&nbsp;Digital Breeding</b></font>           
-			                    </a></li>
-			            </ul>
-                    </div>
-                    <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">DNACARE(master)</span><span class="user-status">Available</span></div><span><img class="round" src="../../css/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="page-user-profile.html"><i class="feather icon-user"></i> Edit Profile</a><a class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My Inbox</a><a class="dropdown-item" href="app-todo.html"><i class="feather icon-check-square"></i> Task</a><a class="dropdown-item" href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="auth-login.html"><i class="feather icon-power"></i> Logout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+	<jsp:include page="../../css/topmenu.jsp" flush="true"/>
 
-		<jsp:include page="../../css/menu.jsp?menu_active=phenotype" flush="true"/>
+	<jsp:include page="../../css/menu.jsp?menu_active=phenotype" flush="true"/>
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -126,10 +97,8 @@ body {
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 <div class="card" style="height:675px;">
-                                    <div class="card-body">   
-
 									<div class="card-content">				
-			                            <div class="card-body">
+			                            <div class="card-body">		
 			                                <div class="row">
 			                                    <div class="col-12">
 			                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
@@ -172,111 +141,74 @@ body {
 			                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:450px;" ></div><br>
 			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
 											<button class="btn btn-danger mr-1 mb-1" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
-			                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop"><i class="feather icon-save"></i> Save</button>
+			                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
 			                            </div>
-                                    </div>                                    
                                 </div>
                             </div>
 
 							<div class="col-lg-6 col-12">
 								<div class="row">
+									
 									<div class="col-lg-6 col-12">                                    
 						                <!-- navigations swiper start -->
-						                <section id="component-swiper-navigations">
-						                    <div class="card ">
-						                        <div class="card-header">
-						                            <h4 class="card-title">Navigations</h4>
-						                        </div>
-						                        <div class="card-content">
-						                            <div class="card-body">
-						                                <div class="swiper-navigations swiper-container">
-						                                    <div style="height: 237px;" class="swiper-wrapper">
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
-						                                        </div>
-						                                    </div>
-						                                    <!-- Add Arrows -->
-						                                    <div class="swiper-button-next"></div>
-						                                    <div class="swiper-button-prev"></div>
-						                                </div>
-						                            </div>
-						                        </div>
-						                    </div>
-						                </section>
+					                <section id="component-swiper-progress_one">
+					                    <div class="card ">
+					                        <div id="card-header_one" class="card-header">
+					                            <font size="3px"><b>Sample #1</b></font>
+					                        </div>
+					                        <div class="card-content">
+					                            <div class="card-body">
+					                                <div id="photo_one" style="border:2px dashed; padding:0px;height: 237px;background-color: #D4EFDF" >					                                
+					                               			<div id="photo_one_desc" style="height: 237px;">
+					                               				<br><br><center><font color="black" size="4"><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>
+					                               			</div>						                               		
+					                                </div>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </section>
 						                <!-- navigations swiper ends -->						                
 								    </div>           
+									
 									<div class="col-lg-6 col-12">                                    
 						                <!-- navigations swiper start -->
-						                <section id="component-swiper-navigations">
-						                    <div class="card ">
-						                        <div class="card-header">
-						                            <h4 class="card-title">Navigations</h4>
-						                        </div>
-						                        <div class="card-content">
-						                            <div class="card-body">
-						                                <div class="swiper-navigations swiper-container">
-						                                    <div style="height: 237px;" class="swiper-wrapper">
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
-						                                        </div>
-						                                    </div>
-						                                    <!-- Add Arrows -->
-						                                    <div class="swiper-button-next"></div>
-						                                    <div class="swiper-button-prev"></div>
-						                                </div>
-						                            </div>
-						                        </div>
-						                    </div>
-						                </section>
+					                <section id="component-swiper-progress_two">
+					                    <div class="card ">
+					                        <div id="card-header_two" class="card-header">
+					                            <font size="3px"><b>Sample #2</b></font>
+					                        </div>
+					                        <div class="card-content">
+					                            <div class="card-body">
+					                                <div id="photo_two" style="border:2px dashed; padding:0px;height: 237px;background-color: #FAE5D3" >
+					                               			<div id="photo_two_desc" style="height: 237px;">
+					                               				<br><br><center><font color="black" size="4"><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>
+					                               			</div>						                                
+					                               	</div>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </section>
 						                <!-- navigations swiper ends -->						                
 								    </div>	
+								    
 								</div>
 								<div class="row">
 									<div class="col-lg-12 col-12">                                    
 						                <!-- navigations swiper start -->
 						                <section id="component-swiper-navigations">
 						                    <div class="card ">
-						                        <div class="card-header">
-						                            <h4 class="card-title">Navigations</h4>
-						                        </div>
+						                        
 						                        <div class="card-content">
-						                            <div class="card-body">
-						                                <div class="swiper-navigations swiper-container">
-						                                    <div style="height: 237px;" class="swiper-wrapper">
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;" src="../../uploads/database/phenotype_img/1/banner-7.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-4.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-14.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-3.jpg" alt="banner">
-						                                        </div>
-						                                        <div style="height: 237px;" class="swiper-slide"> <img class="img-fluid" style="height: 100%; width:100%;"  src="../../uploads/database/phenotype_img/1/banner-2.jpg" alt="banner">
-						                                        </div>
+						                            <div style="height: 321px;" class="card-body"><font size="3px"><b>Spyder Plot</b></font>
+						                                    <div class="swiper-wrapper" >
+															   <div id="spyderplot_div" ></div>
+						                                       <iframe id="spyderplot" frameBorder="0" src="" style="display:block; width:100vw; height: 321"></iframe>
 						                                    </div>
-						                                    <!-- Add Arrows -->
-						                                    <div class="swiper-button-next"></div>
-						                                    <div class="swiper-button-prev"></div>
-						                                </div>
 						                            </div>
 						                        </div>
 						                    </div>
 						                </section>
-						                <!-- navigations swiper ends -->						                
+						                <!-- navigations swiper ends -->					                
 						                						                
 								    </div>	
 								</div>
@@ -288,10 +220,6 @@ body {
         </div>        
     </div>
     <!-- END: Content-->
-
-
-
-
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -307,7 +235,6 @@ body {
 
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
-    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
     <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
     <!-- BEGIN Vendor JS-->
@@ -324,83 +251,21 @@ body {
     <script src="../../css/app-assets/js/scripts/components.js"></script>
     <!-- END: Theme JS-->
 
- 	<script>
- 	
- 	var variety_id = $( "#variety-select option:selected" ).val();
- 	var grid_array;	
-	$.ajax({
-		url : "traitnamertn.jsp",
-		type : "post",
-		async: false,
-		data : {"varietyid" : variety_id},
-		dataType : "json",
-		success : function(result){
-			grid_array = result;
-			
-		}
-	});
-	
-
-	/*$.each(grid_array, function(key, value){
-	    console.log('key:' + key + ' / ' + 'value:' + value);
-	});*/
-		
-	
-    var columnDefs = [
-        {
-            headerName: "순번",
-            field: "selectfiles",
-            editable: false,
-            sortable: true,
-            width: 140,	
-            filter: 'agMultiColumnFilter',
-            cellClass: "grid-cell-centered",      
-            checkboxSelection: true,
-            headerCheckboxSelectionFilteredOnly: true,
-            headerCheckboxSelection: true	
-		},
-        {
-            headerName: "사진",
-            field: "photo_status",
-            editable: false,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 120,	
-		},
-        {
-            headerName: "번호",
-            field: "selectfiles",
-            editable: false,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 120,	
-		},
-        {
-            headerName: "등록일자",
-            field: "cre_dt",
-            editable: false,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 150
-		},
-        {
-            headerName: "개체명",
-            field: "samplename",
-            editable: true,
-            sortable: true,
-            filter: true,
-            cellClass: "grid-cell-centered",      
-            width: 150
-		}
-	];
-    
-    
+ 	<script> 	
+	 	var variety_id = $( "#variety-select option:selected" ).val();
+	 	var grid_array;	
+		$.ajax({
+			url : "traitnamertn.jsp",
+			type : "post",
+			async: false,
+			data : {"varietyid" : variety_id},
+			dataType : "json",
+			success : function(result){
+				grid_array = result;			
+			}
+		});    
     </script>
-    
-    
+        
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_phenotype.js"></script>
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
@@ -411,26 +276,24 @@ body {
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/extensions/swiper.js"></script>
     <!-- END: Page JS-->
-    
-       
-    <script>   
-    
-	for (var i=0; i<grid_array.length; i++) {
-		for (key in grid_array[i]) {		
-			addCol(key, grid_array[i][key] );
+           
+    <script>
+		for (var i=0; i<grid_array.length; i++) {
+			for (key in grid_array[i]) {		
+				//addCol(key, grid_array[i][key] );
+				addCol(i+"_key", grid_array[i][key] );				
+			}
 		}
-	}
+	</script>
 	
-	
-</script>
-<!-- Modal start-->
-
-	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
-	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-	            <div class="modal-content">s
+		<!-- Modal start-->
+	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+	            <div class="modal-content">
 	                <div class="modal-header bg-warning white">
-	                    <h4 class="modal-title" id="myModalLabel4">VCF File Upload</h4>
-	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <h4 class="modal-title" id="myModalLabel4">Photo gallery</h4>
+	                   <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+	                  	<button type="button" class="close" aria-label="Close" onclick="$('#backdrop').modal('hide');">	                    
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
 	                </div>
@@ -438,110 +301,17 @@ body {
 						<form class="form" id="uploadvcfform">
 						     <div class="form-body">
 						         <div class="row">
-						             <br><div class="col-md-12 col-12">
-						                 <br><div class="form-label-group">
-						                     <input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
-						                     <label for="first-name-column">Comment</label>
-						                 </div>
-						             </div>
-						             <!-- 
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="maf" class="form-control" placeholder="Maf" name="maf">
-						                     <label for="city-column">Maf</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="mindp" class="form-control" name="mindp" placeholder="minDP">
-						                     <label for="country-floating">minDP</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="mingq" class="form-control" name="mingq" placeholder=minGQ>
-						                     <label for="company-column">minGQ</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="email" id="missing" class="form-control" name="missing" placeholder="Missing">
-						                     <label for="email-id-column">Missing</label>
-						                 </div>
-						             </div>		
-						             -->				             
 						             <div class="col-md-12 col-12">
-										<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div><br>
-						             </div>	
-						             <div class="col-12">
-						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
-						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
-						             </div>						             
+						                 <div style="height: 680px" class="form-label-group" id="photo_list"></div>
+						             </div>					             
 						         </div>
 						     </div>
 						</form>
 	                </div>
-	                <!-- 
-		                <div class="modal-footer">
-		                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
-		                </div>
-	                 -->
 	            </div>
-	        </div>
-                          
-	<!-- Modal end-->
-	
-        <script>    
-            var box = new Object();
-            window.onload = function() {
-                // 파일전송 컨트롤 생성
-                box = innorix.create({
-                    el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-                    height          : 130,
-                    maxFileCount   : 1,  
-                    allowType : ["vcf"],
-					addDuplicateFile : false,
-                    agent: false, // true = Agent 설치, false = html5 모드 사용                    
-                    uploadUrl: './fileuploader.jsp' // 업로드 URL
-                });
-
-                // 업로드 완료 이벤트
-                box.on('uploadComplete', function (p) {
-             	    
-                    /*var f = p.files;
-                    var r = "Upload complete\n\n";
-                    for (var i = 0; i < f.length; i++ ) {
-                        r += f[i].clientFileName + " " + f[i].fileSize + "\n";
-                    }
-                    alert(r);*/
-					//window.close();
-					//self.opener.location.reload(); 
-					document.getElementById('uploadvcfform').reset();
-	        		box.removeAllFiles();
-					backdrop.style.display = "none";					
-					refresh();
-                });
-            };
-            function FileUpload() {
-            	if(document.getElementById("comment").value==''){
-            		alert("Comment must be entered.");   
-            		document.getElementById("comment").focus();
-            	  return false;  
-            	}
-	            var postObj = new Object();
-	            postObj.comment = document.getElementById("comment").value;;	       
-	            postObj.varietyid = $( "#variety-select option:selected" ).val();
-	            box.setPostData(postObj);
-	            box.upload();
-            }            
-            
-            $('#backdrop').on('hidden.bs.modal', function (e) {
-	        	//$(this).find('form')[0].reset();
-	        	//alert("AAAAAAAAAAAAAAA");
-	        	document.getElementById('uploadvcfform').reset();
-	        	box.removeAllFiles();
-	        });            
-        </script>
+	    </div>                          
+		<!-- Modal end-->
+     
 </body>
 <!-- END: Body-->
 
