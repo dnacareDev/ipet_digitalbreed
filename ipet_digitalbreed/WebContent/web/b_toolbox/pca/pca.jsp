@@ -81,7 +81,7 @@ body {
 --%>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
-    <jsp:include page="../../css/topmenu.jsp" flush="true"/>
+    <jsp:include page="../../../css/topmenu.jsp" flush="true"/>
 
 	<jsp:include page="../../../css/menu.jsp?menu_active=pca" flush="true"/>
 
@@ -373,11 +373,14 @@ body {
 	        .then(function(response) {
 	    		response.text()
 	    		.then(function(data) {
-	    			//data = data.replace(/\n\s*/g, "");
-	    			//console.log(data);
 	    			console.log("pca_population.jsp");
 	    		})
 	    	})
+	    	
+    		setTimeout( function () {
+	   			refresh();
+	   			$("#backdrop").modal("hide");
+	   		}, 1000);
 	        
     	} else {
     		

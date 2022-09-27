@@ -130,6 +130,12 @@
 		animateRows: true,
 		//resizable: true,
 		serverSideInfiniteScroll: true,
+		defaultCsvExportParams:{
+			columnKeys:["no","status","cre_dt"]
+		},
+		defaultExcelExportParams:{
+			columnKeys:["no","status","cre_dt"]
+		},
 		
 		onCellClicked: params => {
 		

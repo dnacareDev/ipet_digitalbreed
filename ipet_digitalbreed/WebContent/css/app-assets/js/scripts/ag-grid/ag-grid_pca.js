@@ -136,6 +136,13 @@
 		animateRows: true,
 		//resizable: true,
 		serverSideInfiniteScroll: true,
+		defaultCsvExportParams:{
+			columnKeys:["no","status","cre_dt"]
+		},
+		defaultExcelExportParams:{
+			columnKeys:["no","status","cre_dt"]
+		},
+		
 		
 		onCellClicked: params => {
 		
@@ -210,14 +217,13 @@
 		.then(function(data) {
 		console.log("data : ", data);
 		  
-		//pca 테이블이 만들어질때까지는 하드코딩 데이터
 		gridOptions.api.setRowData(data);
 		gridOptions.api.sizeColumnsToFit();
-		
-		// 모달창에 genotype vcf파일 리스트 option목록 생성
-		
-	  
 	});
+  	
+  	function getParams() {
+  		return 
+  	}
   
 
 	/*** FILTER TABLE ***/
@@ -266,6 +272,5 @@
 	    }
 	});
   
-  
-  
+	//console.log(gridOptions);
   

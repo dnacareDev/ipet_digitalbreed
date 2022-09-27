@@ -160,7 +160,7 @@ body {
     
     
 	<!-- Modal start-->
-    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
@@ -253,7 +253,7 @@ body {
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-    <script>                  
+<script type="text/javascript">                  
     $(document).ready(function(){
     	vcfFileList();
     	$(".select2.select2-container.select2-container--default").eq(1).width("444px");
@@ -354,16 +354,29 @@ body {
 	        box.setPostData(postObj);
 	        box.upload();
 	        
+		    // with_population 영역
+	    	fetch('./upgma_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_upgma=' +jobid_upgma+ '&population_name=' +population_name+ '&filename=' +filename) 
+	        	.then((response) => response.text())
+	    		.then((data) => console.log("upgma_population.jsp"))
+	    	
+	        
+	        /*
 			// with_population 영역
 	    	fetch('./upgma_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_upgma=' +jobid_upgma+ '&population_name=' +population_name+ '&filename=' +filename) 
 	        .then(function(response) {
 	    		response.text()
 	    		.then(function(data) {
-	    			//data = data.replace(/\n\s*/g, "");
 	    			//console.log(data);
 	    			console.log("pca_population.jsp");
 	    		})
 	    	})
+	    	*/
+	    	
+    		setTimeout( function () {
+	   			refresh();
+	   			$("#backdrop").modal("hide");
+	   		}, 1000);
+	    	
 	        
     	} else {
     		
@@ -379,7 +392,7 @@ body {
  						"jobid_upgma" : "<%=jobid_upgma%>",
  						"filename" : filename },
  					success: function(result) {
-						console.log("pca_non_population.jsp");
+						console.log("upgma_non_population.jsp");
  					}
 	  		});
     		
