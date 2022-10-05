@@ -69,7 +69,7 @@ body {
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
-	System.out.println(cropvari_sql);
+	//System.out.println(cropvari_sql);
 	
 	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
 	String jobid_upgma = runAnalysisTools.getCurrentDateTime();
@@ -148,9 +148,10 @@ body {
                                 </div>
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
                         </div>
+                    </div>
                     <div id="vcf_status" class="card"></div>
                 </section>
                 <!-- // Basic example section end -->
@@ -161,7 +162,7 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title" id="myModalLabel5">UPGMA Clustering New Analysis</h4>

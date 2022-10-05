@@ -7,6 +7,60 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+	/*
+	class DatePicker {
+	  // gets called once before the renderer is used
+	  init(params) {
+	    // create the cell
+	    this.eInput = document.createElement('input');
+	    this.eInput.value = params.value;
+	    this.eInput.classList.add('ag-input');
+	    this.eInput.style.height = '100%';
+	    
+	    const $j = jQuery.noConflict();
+	
+	    // https://jqueryui.com/datepicker/
+	    $j(this.eInput).datepicker({
+	      dateFormat: 'yy-mm-dd',
+	      onSelect: () => {
+	        this.eInput.focus();
+	      }
+	    });
+	  }
+	
+	  // gets called once when grid ready to insert the element
+	  getGui() {
+	    return this.eInput;
+	  }
+	
+	  // focus and select can be done after the gui is attached
+	  afterGuiAttached() {
+	    this.eInput.focus();
+	    this.eInput.select();
+	  }
+	
+	  // returns the new value after editing
+	  getValue() {
+	    return this.eInput.value;
+	  }
+	
+	  // any cleanup we need to be done here
+	  destroy() {
+	    // but this example is simple, no cleanup, we could
+	    // even leave this method out as it's optional
+	  }
+	
+	  // if true, then this editor will appear in a popup
+	  isPopup() {
+	    // and we could leave this method out also, false is the default
+	    return false;
+	  }
+	}
+	*/
+	
+	
+	
+
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
@@ -94,12 +148,13 @@
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
-	      editable: false,
+	      editable: true,
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
-	      cellClass: "grid-cell-centered", 
-	      //cellStyle: {'background-color' : '#F0F0F0'},
-	      width: 296
+	      width: 296,
+	      //cellClass: "grid-cell-centered", 
+	      //cellEditor: DatePicker,
+	      //cellEditorPopup: true
 	    },
 		{
 	      headerName: "jobid",
@@ -126,16 +181,13 @@
 		rowSelection: "multiple",
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
-		//rowSelection: "multiple",
-		//floatingFilter: true,
-		//filter: 'agMultiColumnFilter',
 		pagination: true,
 		paginationPageSize: 20,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		//resizable: true,
 		serverSideInfiniteScroll: true,
+		
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
 		},
@@ -143,13 +195,12 @@
 			columnKeys:["no","status","cre_dt"]
 		},
 		
-		
 		onCellClicked: params => {
 		
 			console.log("cell clicked : " + params.column.getId());
 			//console.log("params : ", params);
 			
-			if(params.column.getId() != "no"){
+			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				console.log('cell was clicked', params.data.jobid);
 				console.log('cell was clicked', params.data.resultpath);
 				const element = document.getElementById('vcf_status');
@@ -184,12 +235,6 @@
 		   									</div>
 		   								</div>
 		   							</div>`;
-		   		/*
-			    $('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca.html");
-			    $('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
-				$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
-				$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
-				*/
 		   		$('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
 		   		$('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
 				$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");

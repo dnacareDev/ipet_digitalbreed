@@ -28,6 +28,12 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
 	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/forms/validation/form-validation.css">
 	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/forms/select/select2.min.css">
+	
+	<!--  
+	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.structure.min.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.theme.min.css">
+    -->
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -69,7 +75,7 @@ body {
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
-	System.out.println(cropvari_sql);
+	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
 	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
@@ -150,7 +156,7 @@ body {
                                   
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
@@ -163,7 +169,7 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title" id="myModalLabel5">PCA New Analysis</h4>
@@ -205,8 +211,8 @@ body {
 						            </div>
 						        </div>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">실행</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">초기화</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -234,7 +240,11 @@ body {
     <script src="../../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
+    <script src="../../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
+    <!--  
+    <script src="../../../css/app-assets/vendors/js/jquery-ui/jquery-ui.min.js"></script>
+    -->
+        
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
@@ -370,12 +380,14 @@ body {
 	        
 			// with_population 영역
 	    	fetch('./pca_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_pca=<%=jobid_pca%>' + '&population_name=' +population_name+ '&filename=' +filename) 
-	        .then(function(response) {
+			/*
+			.then(function(response) {
 	    		response.text()
 	    		.then(function(data) {
 	    			console.log("pca_population.jsp");
 	    		})
 	    	})
+	    	*/
 	    	
     		setTimeout( function () {
 	   			refresh();

@@ -108,31 +108,7 @@
                 </div>
             </div>
             <div class="content-body">
-                <!-- Basic Switches Starts -->
-                <section id="basic-switches">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Switch</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="demo-inline-spacing">
-                                        <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input" id="customSwitch1" />
-                                            <label class="form-check-label" for="customSwitch1">Toggle this switch element</label>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input" disabled id="customSwitch2" />
-                                            <label class="form-check-label" for="customSwitch2">Disabled switch element</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <!-- Basic Switches Ends -->
+                
 
             </div>
         </div>
@@ -173,16 +149,30 @@
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../../css/app-assets/js/scripts/ag-grid/ag-grid_genotype.js"></script>
     <script src="../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
 	<script src="../../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-        <script>                  
-        	
+<script>      
+
+
+	$(document).ready(function() {
+
+		//fetch('./phonotypeDB_20220929163027.xls')
+		fetch('./test.jsp')
+			.then((response) => response.text())
+			.then((data) => {
+				//$(".content-body").html(data)
+				//console.log(data);
+				data_arr = data.replaceAll(/\n\r|\r|\s*/g, "").split("]");
+				console.log(data_arr);
+			})
+			
+		
+	})        	
    
-        </script>
+</script>
 </body>
 <!-- END: Body-->
 

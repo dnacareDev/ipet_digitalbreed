@@ -88,7 +88,7 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
-	System.out.println(cropvari_sql);
+	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 %>
 <%--
@@ -166,7 +166,7 @@
                                 </div>
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false">New Analysis</button>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  
                         </div>
                     </div>
