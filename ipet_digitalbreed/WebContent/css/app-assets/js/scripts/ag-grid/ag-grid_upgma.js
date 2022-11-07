@@ -19,6 +19,11 @@
 
 	function getSelectedRowData() {
 		
+		if(!gridOptions.api.getSelectedRows().length) {
+			alert("선택 된 항목이 없습니다.")
+			return;
+		}
+		
 		if( !confirm("삭제하시겠습니까?") ) {
 			return;
 		}
@@ -52,7 +57,8 @@
 	var columnDefs = [
 		{
 	      headerName: "번호",
-	      field: "no",
+	      //field: "no",
+	      valueGetter: inverseRowCount,
 	      editable: false,
 	      sortable: true,
 	      width: 150,
@@ -72,13 +78,24 @@
 	      width: 400,
 	    },
 	    {
-	      headerName: "분석상태",
-	      field: "status",
-	      editable: false,
-	      sortable: true,
-	      filter: true,
-	      cellClass: "grid-cell-centered",      
-	      width: 200,
+	    	headerName: "분석상태",
+	    	field: "status",
+	    	editable: false,
+	    	sortable: true,
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 200,
+	    	cellRenderer: function(params) {
+		    	//console.log("params : ", params.value);
+		    	switch(Number(params.value)) {
+					case 0: 
+						return "<span title='분석 중'><i class='feather icon-loader'></i></span>";
+					case 1:
+						return "<span title='분석 완료'><i class='feather icon-check-circle'></i></span>";
+					case 2:
+						return "<span title='분석 실패'><i class='feather icon-x-circle'></i></span>";
+		    	}
+		    }
 	    },
 	    {
 	      headerName: "상세내용",
@@ -86,7 +103,6 @@
 	      editable: false,
 	      sortable: true,
 	      filter: 'agNumberColumnFilter',
-	      cellClass: "grid-cell-centered",      
 	      width: 750
 	    },
 	    {
@@ -114,6 +130,10 @@
 	      hide: true
 	    }        
 	];
+	
+	function inverseRowCount(params) {
+		return params.api.getDisplayedRowCount() - params.node.rowIndex;
+	}
 
   /*** GRID OPTIONS ***/
 	var gridOptions = {
@@ -130,6 +150,7 @@
 		animateRows: true,
 		//resizable: true,
 		serverSideInfiniteScroll: true,
+		suppressHorizontalScroll: true,
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
 		},
@@ -142,9 +163,15 @@
 			console.log("cell clicked : " + params.column.getId());
 			//console.log("params : ", params);
 			
-			if(params.column.getId() != "no"){
-					console.log('cell was clicked', params.data.jobid);
-					console.log('cell was clicked', params.data.resultpath);
+			if(params.column.getId() != "no" && params.column.getId() != "cre_dt"){
+				
+				switch (Number(params.data.status)) {
+				case 0:
+					//$("#analysis_process").modal('show');
+					alert("분석 중입니다.");
+					break;
+				case 1:
+					console.log("분석완료");
 					const element = document.getElementById('vcf_status');
 					element.innerHTML  = `
 										<div class='card-content'>
@@ -152,17 +179,15 @@
 												<div class='row'>
 													<div class='col-12'>
 														<ul class='nav nav-pills nav-active-bordered-pill'>
-															<li class='nav-item'><a class='nav-link' id='Linear' data-toggle='pill' href='#pill1' aria-expanded='true'>Linear</a></li>
-						   									<li class='nav-item'><a class='nav-link' id='Circular' data-toggle='pill' href='#pill2' aria-expanded='false'>Circular</a></li>
+															<li class='nav-item'><a class='nav-link' id='upgma_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Hierarchical Tree</a></li>
+						   									<li class='nav-item'><a class='nav-link' id='upgma_2' data-toggle='pill' href='#pill2' aria-expanded='false'>Circular Tree</a></li>
 														</ul>
 														<div class='tab-content'>
 															<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-																<!--
-																<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
-																-->
+																<iframe src = '' loading="lazy" height='1000px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
 															</div>
 															<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-																<iframe src = '' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe>
+																<iframe src = '' loading="lazy" height='1000px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe>
 															</div>
 														</div>
 													</div>
@@ -171,15 +196,23 @@
 										</div>
 										`;	  
 				   
-			       /*
-				   $('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
-				   $('#pill2_frame').attr('src', "");
-				   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
-				   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
-				   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
-				   */
-			       
-			       //gridOptions.api.sizeColumnsToFit();
+					$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_hierarchical_tree.html");
+					$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_circular_tree.html");
+					/*
+					document.addEventListener('click', function(event) {
+						if(event.target.id == 'upgma_2' && !$('#pill2_frame').attr('src')) {
+							$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_circular_tree.html");
+						}
+						
+					})
+					;*/
+					gridOptions.api.sizeColumnsToFit();
+					break;
+				case 2:
+					//$("#analysis_fail").modal('show');
+					alert("분석에 실패했습니다.");
+					break;
+				}
 			}
 		}
 	};

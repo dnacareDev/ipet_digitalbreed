@@ -33,11 +33,11 @@
 	
 	//pca를 genocore로 변경
 	String savePath = rootFolder + "uploads/database/db_input/" + jobid + "/";
-	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/miniamlmarker/";
+	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/minimalmarker/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	String db_savePath = "uploads/database/db_input/";
-	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/miniamlmarker/";
+	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/minimalmarker/";
 	
 	File folder_savePath = new File(savePath);
 	
@@ -67,12 +67,6 @@
 	System.out.println("outputPath : " + outputPath);
 	System.out.println();
 	
-	String minimalMarker = "perl " +script_path+ "breedertoolbox_minimal_markers_final.pl " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename;
-	
-	System.out.println("minimalMarker parameter : " + minimalMarker);
-			
-	runanalysistools.execute(minimalMarker);
-	
 	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
@@ -89,5 +83,16 @@
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();
 	}	
+	
+	
+	
+	String minimalMarker = "perl " +script_path+ "breedertoolbox_minimal_markers_final.pl " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename;
+	
+	System.out.println("minimalMarker parameter : " + minimalMarker);
+			
+	runanalysistools.execute(minimalMarker);
+	
+	
+	
 	
 %>

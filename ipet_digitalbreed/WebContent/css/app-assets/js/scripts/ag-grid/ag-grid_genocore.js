@@ -19,6 +19,11 @@
 	
 	function getSelectedRowData() {
 		
+		if(!gridOptions.api.getSelectedRows().length) {
+			alert("선택 된 항목이 없습니다.")
+			return;
+		}
+		
 		if( !confirm("삭제하시겠습니까?") ) {
 			return;
 		}
@@ -52,7 +57,8 @@
 	var columnDefs = [
 		{
 	      headerName: "번호",
-	      field: "no",
+	      //field: "no",
+	      valueGetter: inverseRowCount,
 	      editable: false,
 	      sortable: true,
 	      width: 150,
@@ -72,13 +78,24 @@
 	      width: 400,
 	    },
 	    {
-	      headerName: "분석상태",
-	      field: "status",
-	      editable: false,
-	      sortable: true,
-	      filter: true,
-	      cellClass: "grid-cell-centered",      
-	      width: 200,
+	    	headerName: "분석상태",
+	    	field: "status",
+	    	editable: false,
+	    	sortable: true,
+	    	filter: true,
+	    	width: 200,
+	    	cellClass: "grid-cell-centered",      
+	    	cellRenderer: function(params) {
+	    		//console.log("params : ", params.value);
+	    		switch(Number(params.value)) {
+					case 0: 
+						return "<span title='분석 중'><i class='feather icon-loader'></i></span>";
+					case 1:
+						return "<span title='분석 완료'><i class='feather icon-check-circle'></i></span>";
+					case 2:
+						return "<span title='분석 실패'><i class='feather icon-x-circle'></i></span>";
+	    		}
+	    	}
 	    },
 	    {
 	      headerName: "상세내용",
@@ -86,8 +103,7 @@
 	      editable: false,
 	      sortable: true,
 	      filter: true,
-	      cellClass: "grid-cell-centered",      
-	      width: 750
+	      width: 650
 	    },
 	    {
 	      headerName: "분석일",
@@ -117,6 +133,9 @@
 	    }        
 	];
 	
+	function inverseRowCount(params) {
+		return params.api.getDisplayedRowCount() - params.node.rowIndex;
+	}
 
     /*** GRID OPTIONS ***/
 	var gridOptions = {
@@ -132,6 +151,7 @@
 		colResizeDefault: "shift",
 		animateRows: true,
 		//resizable: true,
+		suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
@@ -149,66 +169,79 @@
 			if(params.column.getId() != "no"){
 				//console.log('cell jobid', params.data.jobid);
 				//console.log('cell resultpath', params.data.resultpath);
-				const element = document.getElementById('vcf_status');
-			   	element.innerHTML  = `<div class='card-content'>
-			   							<div class='card-body'>
-			   								<div class='row'>
-			   									<div class='col-12'>
-			   										<ul class='nav nav-pills nav-active-bordered-pill'>
-			   											<li class='nav-item'><a class='nav-link active' id='info' data-toggle='pill' href='#pill1' aria-expanded='true'>INFO</a></li>
-						   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>GENOCORE</a></li>
-			   										</ul>
-			   										<div class='tab-content'>
-			   											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-			   												<div id='pill1_frame' style='width:75%; height:130px; float:left;'></div>
-			   											</div>
-			   											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-			   												<div class="row">
-			   													<div class="col-12">
-			   														<input type="text" class="form-control w-25 float-left" id="select_count" autocomplete="off">
-			   														<input type="button" class="btn btn-primary ml-1 float-left" onclick="executeSelectCount()" value="execute">
-			   													</div>
-			   												</div>
-			   												<div class="row">
-			   													<div id='pill2_frame' class="col-12 col-xl-6 ag-theme-alpine" style='height:445px; margin-top:25px; float:left;'></div>
-			   													<div class="col-12 col-xl-6">
-			   														<iframe src = '' width='100%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' ></iframe>
-			   													</div>
-			   												</div>
-			   											</div>
-			   										</div>
-			   										<div class="hidden-parameter">
-			   											<!-- parameters -->
-			   											<input type='text' id='jobid' style='display:none;'>
-			   											<input type='text' id='filename' style='display:none;'>
-			   											<input type='text' id='resultpath' style='display:none;'>
-			   											<input type='text' id='coresamples' style='display:none;'>
-			   										</div>
-			   									</div>
-			   								</div>
-			   							</div>
-			   						</div>`;
-			   	
-			    //$('#pill1_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
-			    
-			    
-			    // 단순 텍스트를 table화하고 sample값을 뽑아낸다. -> input count 제한값에 적용해야 함
-			    const text_url = params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt";
-			    //console.log(text_url);
-			    textToTable(text_url);
-			   	
-			    
-			   	
-			   	//$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
-			    
-			    /** #pill2_frame | 두번째 ag-grid */
-			   	const csv_url = params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore_table.csv";
-			   	csvToGrid(csv_url);
-			   	
-		  	  	// input에 parameter 주입
-			    $('#jobid').val(params.data.jobid);
-			    $('#filename').val(params.data.file_name);
-			    $('#resultpath').val(params.data.resultpath);
+				
+				switch (Number(params.data.status)) {
+				case 0:
+					//$("#analysis_process").modal('show');
+					alert("분석 중입니다.");
+					break;
+				case 1:
+					const element = document.getElementById('vcf_status');
+				   	element.innerHTML  = `<div class='card-content'>
+				   							<div class='card-body'>
+				   								<div class='row'>
+				   									<div class='col-12'>
+				   										<ul class='nav nav-pills nav-active-bordered-pill'>
+				   											<li class='nav-item'><a class='nav-link active' id='info' data-toggle='pill' href='#pill1' aria-expanded='true'>INFO</a></li>
+							   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>GENOCORE</a></li>
+				   										</ul>
+				   										<div class='tab-content'>
+				   											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+				   												<div id='pill1_frame' style='width:75%; height:130px; float:left;'></div>
+				   											</div>
+				   											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
+				   												<div class="row">
+				   													<div class="col-12">
+				   														<input type="text" class="form-control w-25 float-left" id="select_count" autocomplete="off">
+				   														<input type="button" id="executeSelectCount" class="btn btn-primary ml-1 float-left" onclick="executeSelectCount()" value="Execute">
+				   													</div>
+				   												</div>
+				   												<div class="row">
+				   													<div id='pill2_frame' class="col-12 col-xl-6 ag-theme-alpine" style='height:445px; margin-top:25px; float:left;'></div>
+				   													<div class="col-12 col-xl-6">
+				   														<iframe src = '' loading="lazy" width='100%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' ></iframe>
+				   													</div>
+				   												</div>
+				   											</div>
+				   										</div>
+				   										<div class="hidden-parameter">
+				   											<!-- parameters -->
+				   											<input type='text' id='jobid' style='display:none;'>
+				   											<input type='text' id='filename' style='display:none;'>
+				   											<input type='text' id='resultpath' style='display:none;'>
+				   											<input type='text' id='coresamples' style='display:none;'>
+				   										</div>
+				   									</div>
+				   								</div>
+				   							</div>
+				   						</div>`;
+				   	
+				    //$('#pill1_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
+				    
+				    
+				    // 단순 텍스트를 table화하고 sample값을 뽑아낸다. -> input count 제한값에 적용해야 함
+				    const text_url = params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt";
+				    //console.log(text_url);
+				    textToTable(text_url);
+				   	
+				    
+				   	
+				   	$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
+				    
+				    /** #pill2_frame | 두번째 ag-grid */
+				   	const csv_url = params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore_table.csv";
+				   	csvToGrid(csv_url);
+				   	
+			  	  	// input에 parameter 주입
+				    $('#jobid').val(params.data.jobid);
+				    $('#filename').val(params.data.file_name);
+				    $('#resultpath').val(params.data.resultpath);
+				    break;
+				case 2:
+					//$("#analysis_fail").modal('show');
+					alert("분석에 실패했습니다.");
+					break;
+				}
 			}
 		}
 	};
@@ -261,7 +294,8 @@
 
   	const gridOptions2 = {
 	  	columnDefs: columnDefs2,
-	  	animateRows: true
+	  	animateRows: true,
+	  	suppressHorizontalScroll: true
   	}
 	
 	function csvToGrid(csv_url) {
@@ -304,6 +338,7 @@
 	}
 	
 	function executeSelectCount() {
+		
 		const count = $("#select_count").val();
 		const filename = $('#filename').val();
 		const jobid = $('#jobid').val();
@@ -322,6 +357,7 @@
 			return;
 		}
 		
+		$("#executeSelectCount").val('Loading...');
    		$.ajax({
    				url: "./genocore_select_count.jsp",
    				method: 'POST',
@@ -341,6 +377,8 @@
   				    gridOptions2.api.destroy();
   				    csvToGrid(csv_url);
   				    gridOptions2.api.sizeColumnsToFit();
+  				    
+  				  $("#executeSelectCount").val('Excute');
    				}
   		});
 	}
@@ -353,6 +391,7 @@
 	    elem.addClass(newClass);
 	}
 	
+	/*
 	document.addEventListener('click', function(event) {
 		if(event.target.id == "genocore" && !$("#pill3_frame").attr('src')) {
 			
@@ -363,6 +402,7 @@
 			$('#pill3_frame').attr('src', resultpath + jobid +"/"+ jobid+"_genocore.html");
 		}
 	})
+	*/
 	
   	$(".sort-dropdown .dropdown-item").on("click", function() {
   		var $this = $(this);

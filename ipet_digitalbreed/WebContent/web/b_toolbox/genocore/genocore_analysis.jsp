@@ -67,13 +67,6 @@
 	System.out.println("outputPath : " + outputPath);
 	System.out.println();
 	
-	String Genocore = "Rscript " +script_path+ "breedertoolbox_genocore_final.R " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename;
-	
-	System.out.println("Genocore parameter : " + Genocore);
-			
-	runanalysistools.execute(Genocore);
-	
-	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	String insertPcainfo_sql="insert into genocore_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";	
@@ -89,5 +82,15 @@
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();
 	}	
+	
+	
+	String Genocore = "Rscript " +script_path+ "breedertoolbox_genocore_final.R " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename;
+	
+	System.out.println("Genocore parameter : " + Genocore);
+			
+	runanalysistools.execute(Genocore);
+	
+	
+	
 	
 %>

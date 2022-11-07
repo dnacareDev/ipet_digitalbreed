@@ -82,7 +82,9 @@ body {
     
     <jsp:include page="../../../css/topmenu.jsp" flush="true"/>
 
-	<jsp:include page="../../../css/menu.jsp?menu_active=upgma" flush="true"/>
+	<jsp:include page="../../../css/menu.jsp" flush="true">
+		<jsp:param name="menu_active" value="upgma"/>
+	</jsp:include>
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -174,7 +176,6 @@ body {
 					<form class="form" id="uploadUpgmaForm">
 					    <div class="form-body">
 					        <div class="row">
-					            <br>
 					            <div class="col-md-12 col-12 ml-1">
 					                <br>
 					             	<div class="form-label-group">
@@ -196,7 +197,10 @@ body {
 					            </div>
 					            <div class="col-md-12 col-12">
 									<div class="form-label-group">
-							            <h5>&nbsp;&nbsp;population</h5>
+										<!--
+							            <h5 style="display:inline">&nbsp;&nbsp;Population <a href="/ipet_digitalbreed/uploads/upgma_population.xlsx" download="upgma_population.xlsx" >(예시파일)</a></h5>
+							            -->
+							            <h5 style="display:inline; margin-left:13px;">Population <button type="button" class="btn btn-light">Light</button> (Example - <a href="/ipet_digitalbreed/uploads/upgma_population.xlsx" download="upgma_population.xlsx" ><i class='feather icon-download'></i></a>)</h5>
 							            <div class="col-md-12 col-12">
 											<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
 											<br>
@@ -213,7 +217,39 @@ body {
                 </div>
             </div>
         </div>
-    </div>                      
+    </div>   
+    
+    <div class="modal fade" id="analysis_process" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	    		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalLongTitle">분석 중</h5>
+	      		</div>
+	      		<div class="modal-body">
+	      			분석이 진행중입니다.
+	      		</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	
+	<div class="modal fade" id="analysis_fail" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalLongTitle">분석 실패</h5>
+	      		</div>
+		      	<div class="modal-body">
+		      		분석에 실패했습니다.
+		      	</div>
+		      	<div class="modal-footer">
+		       		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      	</div>
+	    	</div>
+	  	</div>
+	</div>                   
 	<!-- Modal end-->
                         
     <!-- END: Content-->
@@ -276,7 +312,7 @@ body {
     function makeOptions(data) {
    		$("#VcfSelect").empty();
    		
-   		$("#VcfSelect").append(`<option disabled hidden selected>Select VCF File</option>`);
+   		$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
     	for(let i=0 ; i<data.length ; i++) {
 			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
 			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
@@ -338,6 +374,11 @@ body {
     	console.log("filename : ", filename);
     	console.log("jobid_vcf : ", jobid_vcf);
     	*/
+    	
+    	if(Number(jobid_vcf) == -1) {
+    		alert("선택된 VCF 파일이 없습니다.");
+    		return;
+    	}
     	
     	if(box.fileList.files.length) {
 			console.log("file exists -> with_population");

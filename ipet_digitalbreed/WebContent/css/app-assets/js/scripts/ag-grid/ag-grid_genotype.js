@@ -256,5 +256,6 @@
       //gridOptions.columnApi.setColumnPinned("email", null);
     } else {
      // gridOptions.columnApi.setColumnPinned("email", "left");
+    	gridOptions.api.sizeColumnsToFit();
     }
   });

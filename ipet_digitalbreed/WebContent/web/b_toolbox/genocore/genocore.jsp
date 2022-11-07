@@ -99,7 +99,9 @@
 
 	<jsp:include page="../../../css/topmenu.jsp" flush="true"/>
 
-	<jsp:include page="../../../css/menu.jsp?menu_active=genocore" flush="true"/>
+	<jsp:include page="../../../css/menu.jsp" flush="true">
+		<jsp:param value="genocore" name="menu_active"/>
+	</jsp:include>
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -221,7 +223,39 @@
                 </div>
             </div>
         </div>
-    </div>                      
+    </div>
+    
+    <div class="modal fade" id="analysis_process" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	    		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalLongTitle">분석 중</h5>
+	      		</div>
+	      		<div class="modal-body">
+	      			분석이 진행중입니다.
+	      		</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	
+	<div class="modal fade" id="analysis_fail" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalLongTitle">분석 실패</h5>
+	      		</div>
+		      	<div class="modal-body">
+		      		분석에 실패했습니다.
+		      	</div>
+		      	<div class="modal-footer">
+		       		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      	</div>
+	    	</div>
+	  	</div>
+	</div>
 	<!-- Modal end-->
                         
     <!-- END: Content-->
@@ -283,7 +317,7 @@
    	function makeOptions(data) {
    		$("#VcfSelect").empty();
    		
-   		$("#VcfSelect").append(`<option disabled hidden selected>Select VCF File</option>`);
+   		$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
     	for(let i=0 ; i<data.length ; i++) {
 			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
 			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
@@ -307,11 +341,18 @@
    		let filename = $('#VcfSelect').find(':selected').data('filename');
    		let uploadpath = $('#VcfSelect').find(':selected').data('uploadpath');
    		
+   		/*
    		console.log("comment : ", comment);
    		console.log("varietyid : ", varietyid);
    		console.log("jobid : ", jobid);
    		console.log("filename : ", filename);
    		console.log("uploadpath : ", uploadpath);
+   		*/
+   		
+    	if(Number(jobid) == -1) {
+    		alert("선택된 VCF 파일이 없습니다.");
+    		return;
+    	}
    		
    		$.ajax({
    				url: "./genocore_analysis.jsp",

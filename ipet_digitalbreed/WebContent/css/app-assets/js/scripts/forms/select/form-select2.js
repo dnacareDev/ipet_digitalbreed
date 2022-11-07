@@ -42,8 +42,8 @@
     $(".max-length").select2({
       dropdownAutoWidth: true,
       width: '100%',
-      maximumSelectionLength: 2,
-      placeholder: "Select maximum 2 items"
+      maximumSelectionLength: 3,
+      placeholder: " (Required) Select Phenotype",
     });
 
 

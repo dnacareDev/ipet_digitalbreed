@@ -1,5 +1,7 @@
 package ipet_digitalbreed;
 
+import java.util.HashMap;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -11,7 +13,7 @@ public class GenotypeListJson {
 	{
 		 ipetdigitalconndb = new IPETDigitalConnDB();	
 		 JSONArray jsonArray = new JSONArray();
-
+		 
 			try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
