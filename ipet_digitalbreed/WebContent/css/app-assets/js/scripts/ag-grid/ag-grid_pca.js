@@ -262,8 +262,8 @@
 				   											</div>
 				   										</div>
 				   									</div>
-				   									<input type='text' id='jobid'>
-				   									<input type='text' id='resultpath'>
+				   									<input type='hidden' id='jobid'>
+				   									<input type='hidden' id='resultpath'>
 				   								</div>
 				   							</div>`;
 						
@@ -316,59 +316,10 @@
 				}
 				break;
 		}
-		
-
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			//console.log($(`#${iframe_id}`).src);
-			/*
-			console.log("iframe src :");
-			console.log($(`#${iframe_id}`).attr('src'));
-			console.log("ready state");
-			console.log(iframe.contentDocument.readyState);
-			
-			//$("#iframeLoading").modal('show');
-			//if($(`#${iframe_id}`).attr('src').includes(jobid) && iframe.contentDocument.readyState == 'complete') {
-			if($(`#${iframe_id}`).attr('src') == "") {
-				//$("#iframeLoading").modal('hide');
-				$(iframe_id).attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
-				console.log("loading??");
-			}
-			*/
-			
-			//$("#iframeLoading").modal('show');
-			/*
-			if(!$(`#${iframe_id}`).attr('src').includes(jobid)) {
-				$("#iframeLoading").modal('show');
-			}
-			*/
-			
-	})
+	});
 	
 	// 로딩이 완료되면 로딩창 소멸
 	function hideSpinner(target, jobid) {
-		//console.log(target);
-		//console.log(target.src);
-		//console.log(jobid);
-		
 		if(target.src.includes(jobid)) {
 			$("#iframeLoading").modal('hide');
 		}
