@@ -36,6 +36,7 @@ if (request.getMethod().equals("POST"))
 	String comment = uploader.getParameter("comment");
 	String samplename = uploader.getParameter("samplename");
 	String varietyid = uploader.getParameter("varietyid");
+	String sampleno = uploader.getParameter("sampleno");
 	
 	String _run_retval = uploader.run();
 	
@@ -91,9 +92,8 @@ if (request.getMethod().equals("POST"))
 		
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
-		String insertphoto_sql="insert into sampledata_img_t(varietyid, samplename, comment, photogps, photodate, filename, creuser, cre_dt) values('"+varietyid+"','"+samplename+"', '"+comment+"', '"+gps_value+"', '"+simpleDateFormat.format(date)+"', '"+_orig_filename+"', 'dnacare', now());";	
-
-		String updatephoto_sql="update sampledata_info_t set photo_status='1' where samplename='"+samplename+"'";			
+		String insertphoto_sql="insert into sampledata_img_t(varietyid, samplename, comment, photogps, photodate, filename, creuser, cre_dt, sampleno) values('"+varietyid+"','"+samplename+"', '"+comment+"', '"+gps_value+"', '"+simpleDateFormat.format(date)+"', '"+_orig_filename+"', '"+permissionUid+"', now(), '"+sampleno+"');";	
+		String updatephoto_sql="update sampledata_info_t set photo_status='1' where no='"+sampleno+"'";			
 
 		try{
 			ipetdigitalconndb.stmt.executeUpdate(insertphoto_sql);

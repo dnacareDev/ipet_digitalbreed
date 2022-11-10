@@ -55,7 +55,9 @@
 	
 	<jsp:include page="../css/topmenu.jsp" flush="true"/>
 
-	<jsp:include page="../css/menu.jsp?menu_active=main" flush="true"/>
+	<jsp:include page="../css/menu.jsp" flush="true">
+		<jsp:param name="menu_active" value="main"/>
+	</jsp:include>
 
     <!-- BEGIN: Content-->
     <div class="app-content content">

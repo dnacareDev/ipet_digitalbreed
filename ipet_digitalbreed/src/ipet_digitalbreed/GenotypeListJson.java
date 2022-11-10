@@ -1,7 +1,5 @@
 package ipet_digitalbreed;
 
-import java.util.HashMap;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -13,15 +11,16 @@ public class GenotypeListJson {
 	{
 		 ipetdigitalconndb = new IPETDigitalConnDB();	
 		 JSONArray jsonArray = new JSONArray();
-		 
+
 			try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-				String sql="select no, uploadpath, filename,resultpath, comment, refgenome, cropid, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from vcfdata_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
-
+				String sql="SELECT * FROM (SELECT @ROWNUM:=@ROWNUM+1 AS ROWNUM,  a.no, a.uploadpath, a.filename, a.resultpath, a.comment, a.refgenome, a.cropid, a.samplecnt, a.variablecnt, a.jobid, DATE_FORMAT(a.cre_dt, '%Y-%m-%d') AS cre_dt FROM (SELECT @ROWNUM := 0) R, vcfdata_info_t a  where a.creuser='"+permissionUid+"' and a.varietyid='"+varietyid+"') SUB ORDER BY ROWNUM DESC;";			
+				
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 
 					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("displayno",ipetdigitalconndb.rs.getInt("ROWNUM"));
 					jsonObject.put("selectfiles",ipetdigitalconndb.rs.getString("no"));
 					jsonObject.put("uploadpath",ipetdigitalconndb.rs.getString("uploadpath"));
 					jsonObject.put("filename",ipetdigitalconndb.rs.getString("filename"));

@@ -10,10 +10,11 @@
 	
 	String samplename = request.getParameter("samplename");		
 	String varietyid = request.getParameter("variety");		
+	String sampleno = request.getParameter("two_sampleno");
 
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();	
 	
-	String sql = "select filename from sampledata_img_t where samplename='"+samplename+"' order by no asc;";		
+	String sql = "select filename from sampledata_img_t where sampleno='"+sampleno+"' order by no desc;";		
 	String img_p = "../../uploads/database/phenotype_img/"+varietyid+"_"+samplename+"/";
 %>
 <body>

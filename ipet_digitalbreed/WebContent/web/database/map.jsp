@@ -24,6 +24,9 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
+var mapTypeControl = new kakao.maps.MapTypeControl();
+map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
 // 마커가 표시될 위치입니다 
 var markerPosition  = new kakao.maps.LatLng(<%=imggps%>); 
 

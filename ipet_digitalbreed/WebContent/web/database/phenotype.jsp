@@ -66,7 +66,9 @@ body {
 
 	<jsp:include page="../../css/topmenu.jsp" flush="true"/>
 
-	<jsp:include page="../../css/menu.jsp?menu_active=phenotype" flush="true"/>
+	<jsp:include page="../../css/menu.jsp" flush="true">
+		<jsp:param name="menu_active" value="phenotype"/>
+	</jsp:include>
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -141,14 +143,20 @@ body {
 			                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:450px;" ></div><br>
 			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
 											<button class="btn btn-danger mr-1 mb-1" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
-			                                <button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
+											<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
+											<!-- <button class="btn btn-info mr-1 mb-1"  style="float: right;" onclick="ajaxFileUpload()"><i class="feather icon-upload"></i> Upload</button> -->
+											<button class="btn btn-info dropdown-toggle mr-1" type="button" style="float: right;" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                                                    <a class="dropdown-item" href="javascript:ajaxFileDownload();">Template Download</a>
+                                                    <a class="dropdown-item" href="javascript:ajaxFileUpload();">Template Upload</a>
+                                                </div>
+											<input type="file" id="ajaxFile" name="ajaxFile" onChange="ajaxFileTransmit();" style="display:none;"/> 
 			                            </div>
                                 </div>
                             </div>
 
 							<div class="col-lg-6 col-12">
-								<div class="row">
-									
+								<div class="row">									
 									<div class="col-lg-6 col-12">                                    
 						                <!-- navigations swiper start -->
 					                <section id="component-swiper-progress_one">
@@ -241,9 +249,16 @@ body {
 
     <!-- BEGIN: Page Vendor JS-->
     <script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
+  	<script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-enterprise.min.js">
+    
 	<script src="../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
 	<script src="../../css/app-assets/vendors/js/extensions/swiper.min.js"></script>
-    <!-- END: Page Vendor JS-->
+	
+    <link rel="stylesheet" href="../../css/app-assets/vendors/css/jquery-ui/jquery-ui.css">
+
+    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>	
+
+      <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
     <script src="../../css/app-assets/js/core/app-menu.js"></script>
@@ -278,6 +293,43 @@ body {
     <!-- END: Page JS-->
            
     <script>
+
+	    function ajaxFileDownload() {       
+			location.href="./phenotype_downloadfile.jsp?varietyid="+$("#variety-select option:selected").val();		
+		}
+    
+	    function ajaxFileUpload() {       
+			jQuery("#ajaxFile").click();  
+		}
+	
+	    function ajaxFileChange() {        
+	    	ajaxFileTransmit();   
+	    }
+    
+	    function ajaxFileTransmit() {     
+		 
+	     	if (!confirm("업로드 엑셀 화일의 데이타가 입력 됩니다. 계속 진행하시겠습니까?")) {
+	            //alert("취소 되었습니다.");
+	        } 
+	     	else {	       	    
+		    	var formData = new FormData();
+		        formData.append("variety", $("#variety-select option:selected").val());
+	      		formData.append("ajaxFile", $("input[name=ajaxFile]")[0].files[0]);
+	   	
+		    	jQuery.ajax({             
+		    		url : "./phenotype_uploadfile.jsp", 
+		    		 data: formData,
+		       	    processData: false,
+		       	    contentType: false,
+		       	    type: 'POST',	 
+					success:function(data) {	
+						alert("업데이트가 정상적으로 처리 되었습니다.");  
+						refresh();
+				}       
+				});	           
+	        }
+	    }
+    	
 		for (var i=0; i<grid_array.length; i++) {
 			for (key in grid_array[i]) {		
 				//addCol(key, grid_array[i][key] );

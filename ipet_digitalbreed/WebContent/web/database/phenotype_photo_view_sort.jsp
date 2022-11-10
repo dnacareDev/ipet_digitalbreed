@@ -30,11 +30,6 @@
 	}
 </style>
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 8d55763ae141b9d789015e907443b2c9d6b563c6
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -43,31 +38,25 @@
 	String varietyid = request.getParameter("variety");		
 	String samplename = request.getParameter("samplename");	
 	String sortmethod = request.getParameter("sortmethod");
-
+	String sampleno = request.getParameter("sampleno");
 	String sql = null;
 	String checkcss = null;
-	
+		
 	if(sortmethod.equals("photo")){
-		sql = "SELECT photogps, photodate, filename, cre_dt, comment, no FROM sampledata_img_t where samplename='"+samplename+"' order by photodate desc";	
+		sql = "SELECT photogps, photodate, filename, cre_dt, comment, no, sampleno FROM sampledata_img_t where sampleno='"+sampleno+"' and samplename='"+samplename+"' order by no desc";	
 		checkcss = "";
 	}
 	else{
-		sql = "SELECT photogps, photodate, filename, cre_dt, comment, no FROM sampledata_img_t where samplename='"+samplename+"' order by cre_dt desc";	
+		sql = "SELECT photogps, photodate, filename, cre_dt, comment, no, sampleno FROM sampledata_img_t where sampleno='"+sampleno+"' and samplename='"+samplename+"' order by photodate desc";	
 		checkcss = "checked";
 	}
-
+System.out.println(sql);
 	String path = "../../uploads/database/phenotype_img/"+varietyid+"_"+samplename+"/";
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		
 %>
 
-<<<<<<< HEAD
-
-    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>	
-		
-=======
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>			
->>>>>>> 8d55763ae141b9d789015e907443b2c9d6b563c6
 	<script type="text/javascript">
 
 			function getSelectedphoto() {
@@ -87,7 +76,7 @@
 			  	  $.ajax({
 					    url:"./phenotype_photo_delete.jsp",
 					    type:"POST",
-					    data:{'params':chkArray, 'samplename':'<%=samplename%>', 'variety':'<%=varietyid%>'},
+					    data:{'params':chkArray, 'selectfiles':'<%=sampleno%>', 'samplename':'<%=samplename%>', 'variety':'<%=varietyid%>'},
 					    success: function(result) {
 					        if (result) {
 								alert("정상적으로 삭제되었습니다.");
@@ -95,8 +84,8 @@
 								$.ajax({
 									 url:"./phenotype_photo_view.jsp",
 									 type:"POST",
-								     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
-									 success: function(result) {	
+								     data:{'selectfiles': '<%=sampleno%>', 'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
+								     success: function(result) {	
 									 	$("#photo_list").html(result);		
 										$('#backdrop').modal({ show: true });	
 										refresh();
@@ -125,7 +114,7 @@
 			  	  $.ajax({
 					    url:"./phenotype_photo_update.jsp",
 					    type:"POST",
-					    data:{'imgnoArray':imgnoArray, 'cmtArray':cmtArray, 'variety': '<%=varietyid%>'},
+					    data:{'imgnoArray':imgnoArray, 'cmtArray':cmtArray, 'selectfiles': '<%=sampleno%>', 'variety': '<%=varietyid%>'},
 					    success: function(result) {
 					        if (result) {
 								alert("정상적으로 수정되었습니다.");
@@ -133,8 +122,8 @@
 								$.ajax({
 									 url:"./phenotype_photo_view.jsp",
 									 type:"POST",
-								     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
-									 success: function(result) {	
+								     data:{'selectfiles': '<%=sampleno%>', 'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
+								     success: function(result) {	
 									 	$("#photo_list").html(result);		
 										$('#backdrop').modal({ show: true });	
 									 }
@@ -250,14 +239,12 @@
 	</table>
 	
 	<div class="custom-control custom-switch custom-control-inline">
-	     <span class="switch-label w-100"><font size=3><b>photo-date</b></font></span>
+	     <span class="switch-label w-100"><font size=3><b>upload-date</b></font></span>
 	     <input type="checkbox" onclick='javascript:sortmethod(this);' <%=checkcss%> class="custom-control-input" id="accountSwitch2">
 		 <label class="custom-control-label mr-1" for="accountSwitch2"></label>	     
 	     
-	     <span class="switch-label w-100"><font size=3><b>upload-date</b></font></span>
-	</div>
-	
-	
+	     <span class="switch-label w-100"><font size=3><b>photo-date</b></font></span>
+	</div><br><br>	
 	
 	<div id="photo_list">
 	
@@ -400,7 +387,7 @@
 			$.ajax({
 				 url:"./phenotype_photo_view_sort.jsp",
 				 type:"POST",
-			     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'upload'},
+			     data:{'sampleno':<%=sampleno%>, 'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'upload'},
 				 success: function(result) {	
 				 	$("#photo_list").html(result);		
 					$('#backdrop').modal({ show: true });	
@@ -413,7 +400,7 @@
 			$.ajax({
 				 url:"./phenotype_photo_view_sort.jsp",
 				 type:"POST",
-			     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'photo'},
+			     data:{'sampleno':<%=sampleno%>,'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'photo'},
 				 success: function(result) {	
 				 	$("#photo_list").html(result);		
 					$('#backdrop').modal({ show: true });	

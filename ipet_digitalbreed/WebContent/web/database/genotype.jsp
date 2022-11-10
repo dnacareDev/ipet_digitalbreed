@@ -52,9 +52,12 @@
 
 <!-- BEGIN: Body-->
 <style>
-body {
-	font-family: 'SDSamliphopangche_Outline';
-}
+	body {
+		font-family: 'SDSamliphopangche_Outline';
+	}
+	.irx-file-inner-wrapper {
+    height: 30px !important;
+	}	
 </style>
 <%
 
@@ -66,7 +69,9 @@ body {
 
 	<jsp:include page="../../css/topmenu.jsp" flush="true"/>
 
-	<jsp:include page="../../css/menu.jsp?menu_active=genotype" flush="true"/>
+	<jsp:include page="../../css/menu.jsp" flush="true">
+		<jsp:param name="menu_active" value="genotype"/>
+	</jsp:include>
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -264,11 +269,15 @@ body {
                     el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
                     height          : 130,
                     maxFileCount   : 1,  
-                    allowType : ["vcf"],
+                    allowExtension: ["vcf", "gvcf"],
 					addDuplicateFile : false,
                     agent: false, // true = Agent 설치, false = html5 모드 사용                    
                     uploadUrl: './fileuploader.jsp' // 업로드 URL
                 });
+
+				box.on("addFileError", function(p) {
+                    alert("VCF 화일만 업로드 가능 합니다.")
+                }),
 
                 // 업로드 완료 이벤트
                 box.on('uploadComplete', function (p) {
@@ -283,7 +292,10 @@ body {
 					//self.opener.location.reload(); 
 					document.getElementById('uploadvcfform').reset();
 	        		box.removeAllFiles();
-					backdrop.style.display = "none";					
+					//backdrop.style.display = "none";		
+					$('#backdrop').modal('hide');
+					jQuery('#vcf_status').html('');
+					$('html').scrollTop(0);
 					refresh();
                 });
             };
@@ -291,7 +303,7 @@ body {
             	if(document.getElementById("comment").value==''){
             		alert("Comment must be entered.");   
             		document.getElementById("comment").focus();
-            	  return false;  
+            	    return false;  
             	}
 	            var postObj = new Object();
 	            postObj.comment = document.getElementById("comment").value;      
@@ -301,8 +313,6 @@ body {
             }            
             
             $('#backdrop').on('hidden.bs.modal', function (e) {
-	        	//$(this).find('form')[0].reset();
-	        	//alert("AAAAAAAAAAAAAAA");
 	        	document.getElementById('uploadvcfform').reset();
 	        	box.removeAllFiles();
 	        });            

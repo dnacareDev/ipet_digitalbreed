@@ -48,33 +48,33 @@
 	File fromfile = new File(savePath+jobid+"/"+jobid+".txt");
 	File fromfile_full = new File(savePath+jobid+"/"+jobid+"_full.txt");
 	
-
 	fromfile.createNewFile();
 	fromfile_full.createNewFile();
 	
 	FileWriter fw = new FileWriter(fromfile, true) ;
 	FileWriter fw_full = new FileWriter(fromfile_full, true) ;
-	
+
 	int traitcnt=0;
 	
 	try{		
-		sql = "select traitname from sampledata_traitname_t where varietyid='"+varietyid+"' order by seq asc;";	
-	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		    
-	    	    
-	    fw.write("Taxa"+"\t");		
-	    fw_full.write("Taxa"+"\t");	
-	  	 while (ipetdigitalconndb.rs.next()) { 		
-	  		fw.write(ipetdigitalconndb.rs.getString("traitname")+"\t");		
-	  		fw_full.write(ipetdigitalconndb.rs.getString("traitname")+"\t");		
-	  		traitcnt++;
-	  	 }	  	 
-	  	fw.write("\n");
-	  	fw_full.write("\n");
-	}catch(Exception e){
-		System.out.println(e);
-	}finally { 
-		ipetdigitalconndb.rs.close();
-	}
+			sql = "select traitname from sampledata_traitname_t where varietyid='"+varietyid+"' order by seq asc;";	
+			ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		    
+					
+			fw.write("Taxa"+"\t");
+			fw_full.write("Taxa"+"\t");
+
+			 while (ipetdigitalconndb.rs.next()) { 		
+				fw.write(ipetdigitalconndb.rs.getString("traitname")+"\t");		
+				fw_full.write(ipetdigitalconndb.rs.getString("traitname")+"\t");	
+				traitcnt++;
+			 }	  	 
+			fw.write("\n");
+			fw_full.write("\n");
+		}catch(Exception e){
+			System.out.println(e);
+		}finally { 
+			ipetdigitalconndb.rs.close();
+		}
 			
 	try{		
 		sql = "select samplename from sampledata_info_t where no='"+one_sampleno+"';";	
@@ -140,7 +140,7 @@
   	try{		
 		sql = "select a.samplename, b.value from sampledata_info_t a, sampledata_traitval_t b where a.varietyid='"+varietyid+"' and a.no=b.sampleno order by b.sampleno desc, b.seq asc;";	
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);	
-	    
+
 	  	 while (ipetdigitalconndb.rs.next()) { 		
 	  		fullsamplename.add(ipetdigitalconndb.rs.getString("samplename"));
 	  		fulltraitval.add(ipetdigitalconndb.rs.getString("value"));
@@ -164,7 +164,6 @@
   			fw_full.write(fulltraitval.get(j)+"\t");
   			i++;
   		}
-		System.out.println("traitcnt_loop : " + traitcnt_loop);
 		fw_full.write("\n");
 		traitcnt_loop +=traitcnt;  		
 	}

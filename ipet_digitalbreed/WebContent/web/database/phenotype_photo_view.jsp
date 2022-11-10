@@ -3,7 +3,6 @@
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
 <%@ page import="ipet_digitalbreed.*"%>    
 
-<script src="../../css/app-assets/vendors/js/jquery.bpopup.min.js"></script>
 <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/innorix/innorix.css">    
 
 <style>
@@ -28,9 +27,10 @@
 	   display : inline-block;
 	   cursor : pointer;
 	}
+	.irx-file-inner-wrapper {
+    height: 30px !important;
+	}	
 </style>
-
-
 
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -38,9 +38,11 @@
 	
 	String permissionUid = session.getAttribute("permissionUid")+"";	
 	String varietyid = request.getParameter("variety");		
-	String samplename = request.getParameter("samplename");		
-	String sql = "SELECT photogps, photodate, filename, cre_dt, comment, no FROM sampledata_img_t where samplename='"+samplename+"' order by no desc";
+	String samplename = request.getParameter("samplename");
+	String selectfiles = request.getParameter("selectfiles");	
 	
+	String sql = "SELECT photogps, photodate, filename, cre_dt, comment, no, sampleno FROM sampledata_img_t where sampleno='"+selectfiles+"' order by no desc";
+	System.out.println(sql);
 	String path = "../../uploads/database/phenotype_img/"+varietyid+"_"+samplename+"/";
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		
@@ -64,32 +66,36 @@
 			      return;
 			    }
 			    
-			    else{			    	
-			  	  $.ajax({
-					    url:"./phenotype_photo_delete.jsp",
-					    type:"POST",
-					    data:{'params':chkArray, 'samplename':'<%=samplename%>', 'variety':'<%=varietyid%>'},
-					    success: function(result) {
-					        if (result) {
-								alert("정상적으로 삭제되었습니다.");
-
-								$.ajax({
-									 url:"./phenotype_photo_view.jsp",
-									 type:"POST",
-								     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
-									 success: function(result) {	
-									 	$("#photo_list").html(result);		
-										$('#backdrop').modal({ show: true });	
-										refresh();
-									 }
-								});									
-								
-					        } else {
-					            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
-					        }
+			    else{			
+			    	
+			    	var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
+			    	if(result){
+					  	  $.ajax({
+							    url:"./phenotype_photo_delete.jsp",
+							    type:"POST",
+							    data:{'params':chkArray, 'selectfiles':'<%=selectfiles%>', 'samplename':'<%=samplename%>', 'variety':'<%=varietyid%>'},
+							    success: function(result) {
+							        if (result) {
+										alert("정상적으로 삭제되었습니다.");
+		
+										$.ajax({
+											 url:"./phenotype_photo_view.jsp",
+											 type:"POST",
+										     data:{'selectfiles': '<%=selectfiles%>', 'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
+											 success: function(result) {	
+											 	$("#photo_list").html(result);		
+												$('#backdrop').modal({ show: true });	
+												refresh();
+											 }
+										});									
+										
+							        } else {
+							            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+							        }
+							    }
+							  });
+							}			
 					    }
-					  });
-					}				
 			    }
 	
 			
@@ -106,7 +112,7 @@
 			  	  $.ajax({
 					    url:"./phenotype_photo_update.jsp",
 					    type:"POST",
-					    data:{'imgnoArray':imgnoArray, 'cmtArray':cmtArray, 'variety': '<%=varietyid%>'},
+					    data:{'imgnoArray':imgnoArray, 'cmtArray':cmtArray, 'selectfiles': '<%=selectfiles%>', 'variety': '<%=varietyid%>'},
 					    success: function(result) {
 					        if (result) {
 								alert("정상적으로 수정되었습니다.");
@@ -114,7 +120,7 @@
 								$.ajax({
 									 url:"./phenotype_photo_view.jsp",
 									 type:"POST",
-								     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
+								     data:{'selectfiles': '<%=selectfiles%>', 'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
 									 success: function(result) {	
 									 	$("#photo_list").html(result);		
 										$('#backdrop').modal({ show: true });	
@@ -231,11 +237,12 @@
 	</table>
 	
 	<div class="custom-control custom-switch custom-control-inline">
-	     <span class="switch-label w-100"><font size=3><b>photo-date</b></font></span>
+	     <span class="switch-label w-100"><font size=3><b>upload-date</b></font></span>
 	     <input type="checkbox" onclick='javascript:sortmethod(this);' class="custom-control-input" id="accountSwitch3">
 	     <label class="custom-control-label mr-1" for="accountSwitch3"></label>
-	     <span class="switch-label w-100"><font size=3><b>upload-date</b></font></span>
+	     <span class="switch-label w-100"><font size=3><b>photo-date</b></font></span>
 	</div>
+	<br><br>
 	
 	<div id="photo_list">
 	
@@ -324,6 +331,7 @@
                 // 파일전송 컨트롤 생성
                 box = innorix.create({
                     el: '#fileControl_photo', // 컨트롤 출력 HTML 객체 ID
+                    allowType : ["jpg", "gif", "png"],
                     height          : 130,
 					addDuplicateFile : false,
                     agent: false, // true = Agent 설치, false = html5 모드 사용                    
@@ -349,7 +357,7 @@
 					$.ajax({
 						 url:"./phenotype_photo_view.jsp",
 						 type:"POST",
-					     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
+					     data:{'selectfiles': '<%=selectfiles%>', 'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>'},
 						 success: function(result) {	
 						 	$("#photo_list").html(result);		
 							$('#backdrop').modal({ show: true });	
@@ -364,6 +372,7 @@
 	            postObj.comment = document.getElementById("upload_comment").value;      
 	            postObj.varietyid = $( "#variety-select option:selected" ).val();
 	            postObj.samplename = '<%=samplename%>';
+	            postObj.sampleno = '<%=selectfiles%>';	            
 	            box.setPostData(postObj);
 	            box.upload();
 	            $('#popup_uploader').modal('hide');
@@ -378,7 +387,7 @@
 			$.ajax({
 				 url:"./phenotype_photo_view_sort.jsp",
 				 type:"POST",
-			     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'upload'},
+			     data:{'sampleno': '<%=selectfiles%>','samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'upload'},
 				 success: function(result) {	
 				 	$("#photo_list").html(result);		
 					$('#backdrop').modal({ show: true });	
@@ -391,7 +400,7 @@
 			$.ajax({
 				 url:"./phenotype_photo_view_sort.jsp",
 				 type:"POST",
-			     data:{'samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'photo'},
+			     data:{'sampleno': '<%=selectfiles%>','samplename': '<%=samplename%>', 'variety': '<%=varietyid%>', 'sortmethod': 'photo'},
 				 success: function(result) {	
 				 	$("#photo_list").html(result);		
 					$('#backdrop').modal({ show: true });	

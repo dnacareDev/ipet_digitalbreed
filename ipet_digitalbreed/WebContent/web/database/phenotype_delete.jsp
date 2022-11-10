@@ -15,13 +15,10 @@
 	try{
 		for (int i = 0; i < deleteitems.length; i++) {
 			deleteSql = "delete from sampledata_info_t where no='"+deleteitems[i]+"';";	  
-		    System.out.println("deleteSql : " + deleteSql);
 
-		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);
-		    
+		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);		    
 		    
 		    deleteSql = "delete from sampledata_traitval_t where sampleno='"+deleteitems[i]+"';";	  
-		    System.out.println("deleteSql : " + deleteSql);
 		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);		    
 		}
 	}catch(Exception e){

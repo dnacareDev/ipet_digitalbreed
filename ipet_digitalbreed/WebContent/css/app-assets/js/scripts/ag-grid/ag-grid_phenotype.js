@@ -19,42 +19,68 @@
 		      }
 		      return params.rowNode.data.athlete;
 		    },
-		  },		
-        {
-            headerName: "순번",
-            field: "selectfiles",
-            editable: false,
-            sortable: true,
-            width: 140,	
-            filter: 'agMultiColumnFilter',
-            cellClass: "grid-cell-centered",      
-            checkboxSelection: true,
-            headerCheckboxSelectionFilteredOnly: true,
-            headerCheckboxSelection: true,
-		},
+		  },
+		{
+	      headerName: "실제순번",
+	      field: "selectfiles",
+	      hide: true,	
+	      },		
+	    {
+	      headerName: "순번",
+	      field: "displayno",
+	      editable: false,
+	      sortable: true,
+	      width: 140,	
+	      filter: 'agMultiColumnFilter',
+	      cellClass: "grid-cell-centered",      
+	      checkboxSelection: true,
+	      headerCheckboxSelectionFilteredOnly: true,
+	      headerCheckboxSelection: true,
+	      resizable: true	
+	    },
         {
             headerName: "사진",
             field: "photo_status",
             editable: false,
             sortable: true,
             filter: true,
+            resizable: true,
+            resizable: true,
             cellClass: "grid-cell-centered",      
             width: 120,	
             cellRenderer: deltaIndicator,
+            cellStyle: {'cursor': 'pointer'}
 		},
         {
             headerName: "등록일자",
             field: "cre_dt",
             editable: false,
             sortable: true,
+            resizable: true,
+            resizable: true,
             filter: true,
             cellClass: "grid-cell-centered",      
+            width: 150
+		},
+        {
+            headerName: "조사일자",
+            field: "act_dt",
+            editable: true,
+            cellEditor: DatePicker,
+            sortable: true,
+            resizable: true,
+            resizable: true,
+            filter: true,
+            cellEditorPopup: true,
+            cellClass: "grid-cell-centered",                  
             width: 150
 		},
         {
             headerName: "개체명",
             field: "samplename",
             editable: true,
+            resizable: true,
+            resizable: true,
             sortable: true,
             filter: true,
             cellClass: "grid-cell-centered",      
@@ -74,7 +100,7 @@
 				grid_array = result;	
 				for (var i=0; i<grid_array.length; i++) {
 					for (key in grid_array[i]) {		
-						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], width: "120",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], resizable: true, width: "120",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 						gridOptions.api.setColumnDefs(columnDefs);										
 					}
 				}		
@@ -103,24 +129,33 @@
 	  let selectedData = gridOptions.api.getSelectedRows();
 	  var deleteitems = new Array();
 	  
+	  if(selectedData.length==0){
+	    		alert("선택 된 항목이 없습니다.");	
+	    		return;	   		
+	  }
+	  	  
 	  for (var i = 0; i < selectedData.length; i++) {
 		    deleteitems.push(selectedData[i].selectfiles);
 	  }    
 		
-		  	$.ajax({
-			    url:"../../web/database/phenotype_delete.jsp",
-			    type:"POST",
-			    data:{'params':deleteitems},
-			    success: function(result) {
-			        if (result) {
-						alert("정상적으로 삭제되었습니다.");
-						refresh();
-			        } else {
-			            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
-			        }
-			    }
-		  	});
-		
+		var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
+
+		if(result){
+					$.ajax({
+						url:"../../web/database/phenotype_delete.jsp",
+						type:"POST",
+						data:{'params':deleteitems},
+						success: function(result) {
+							if (result) {
+								alert("정상적으로 삭제되었습니다.");
+								refresh();
+							} else {
+								alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+							}
+						}
+					});
+		}
+
 		$("#photo_one_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
 		$("#photo_two_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
 
@@ -150,7 +185,56 @@
 	  element.appendChild(document.createTextNode(params.value));
 	  return element;
 	};
-		
+
+	class DatePicker {
+      // gets called once before the renderer is used
+      init(params) {
+        // create the cell
+        this.eInput = document.createElement('input');
+        this.eInput.value = params.value;
+        this.eInput.classList.add('ag-input');
+        this.eInput.style.height = '100%';
+        
+        const $j = jQuery.noConflict();
+    
+        //  https://jqueryui.com/datepicker/
+        $j(this.eInput).datepicker({
+          dateFormat: 'yy-mm-dd',
+          onSelect: () => {
+            this.eInput.focus();
+          }
+        });
+      }
+    
+      // gets called once when grid ready to insert the element
+      getGui() {
+        return this.eInput;
+      }
+    
+      // focus and select can be done after the gui is attached
+      afterGuiAttached() {
+        this.eInput.focus();
+        this.eInput.select();
+      }
+    
+      // returns the new value after editing
+      getValue() {
+        return this.eInput.value;
+      }
+    
+      // any cleanup we need to be done here
+      destroy() {
+        // but this example is simple, no cleanup, we could
+        // even leave this method out as it's optional
+      }
+    
+      // if true, then this editor will appear in a popup
+      isPopup() {
+        // and we could leave this method out also, false is the default
+        return false;
+      }
+    }
+
 	var columnDefs = [
 		  {
 		    rowDrag: true,
@@ -162,20 +246,25 @@
 		      }
 		      return params.rowNode.data.athlete;
 		    },
-		  },	
-        {
-            headerName: "순번",
-            field: "selectfiles",
-            editable: false,
-            sortable: true,
-            width: 140,	
-            filter: 'agMultiColumnFilter',
-            cellClass: "grid-cell-centered",      
-            checkboxSelection: true,
-            headerCheckboxSelectionFilteredOnly: true,
-            headerCheckboxSelection: true,
-            
-		},
+		  },
+		{
+	      headerName: "실제순번",
+	      field: "selectfiles",
+	      hide: true,	
+	    },	
+	      {
+	      headerName: "순번",
+	      field: "displayno",
+	      editable: false,
+	      sortable: true,
+	      width: 140,	
+	      filter: 'agMultiColumnFilter',
+	      cellClass: "grid-cell-centered",      
+	      checkboxSelection: true,
+	      headerCheckboxSelectionFilteredOnly: true,
+	      headerCheckboxSelection: true,
+	      resizable: true	
+	    },
         {
             headerName: "사진",
             field: "photo_status",
@@ -184,7 +273,9 @@
             filter: true,
             cellClass: "grid-cell-centered",      
             width: 120,	
+            resizable: true,
             cellRenderer: deltaIndicator,
+            cellStyle: {'cursor': 'pointer'}
 		},
         {
             headerName: "등록일자",
@@ -192,7 +283,20 @@
             editable: false,
             sortable: true,
             filter: true,
+            resizable: true,
             cellClass: "grid-cell-centered",      
+            width: 150
+		},
+        {
+            headerName: "조사일자",
+            field: "act_dt",
+            editable: true,
+            cellEditor: DatePicker,
+            sortable: true,
+            resizable: true,
+            filter: true,
+            cellEditorPopup: true,
+            cellClass: "grid-cell-centered",                  
             width: 150
 		},
         {
@@ -200,11 +304,13 @@
             field: "samplename",
             editable: true,
             sortable: true,
+            resizable: true,
             filter: true,
             cellClass: "grid-cell-centered",      
             width: 150
-		}
+        }
 	];
+    
     
   	    var old_one_check;
   	    var old_two_check;
@@ -277,7 +383,7 @@
 				url:"../../web/database/phenotype_swiper_one.jsp",
 				type:"POST",
 				//data:{'sampleno': data_one.selectfiles},
-				data:{'samplename':data_one.samplename, variety:$( "#variety-select option:selected" ).val()},				
+				data:{'one_sampleno': one_sampleno, 'samplename':data_one.samplename, variety:$( "#variety-select option:selected" ).val()},				
 				success: function(result_one) {	
 					$("#photo_one_desc").html(result_one);		
 			}
@@ -305,7 +411,7 @@
 				url:"../../web/database/phenotype_swiper_two.jsp",
 				type:"POST",
 				//data:{'sampleno': data_two.selectfiles},
-				data:{'samplename':data_two.samplename, variety:$( "#variety-select option:selected" ).val()},			
+				data:{'two_sampleno': two_sampleno, 'samplename':data_two.samplename, variety:$( "#variety-select option:selected" ).val()},			
 				success: function(result_two) {	
 				$("#photo_two_desc").html(result_two);
 			}
@@ -340,6 +446,8 @@
 	    filter: 'agMultiColumnFilter',
 	    //pagination: true,
 	    //paginationPageSize: 20,
+	    allowContextMenuWithControlKey: true,
+  		getContextMenuItems: getContextMenuItems,
 	    pivotPanelShow: "always",
 	    colResizeDefault: "shift",
 	    animateRows: true,
@@ -356,7 +464,7 @@
 						 url:"../../web/database/phenotype_photo_view.jsp",
 						 type:"POST",
 					     //data:{'no':params.data.selectfiles},
-					     data:{'samplename':params.data.samplename, variety:$( "#variety-select option:selected" ).val()},
+					     data:{'selectfiles':params.data.selectfiles, 'samplename':params.data.samplename, variety:$( "#variety-select option:selected" ).val()},
 						 success: function(result) {											 
 						 	$("#photo_list").html(result);												
 						 }
@@ -374,6 +482,51 @@
 	    }
 	    elem.addClass(newClass);
 	}
+ 
+	 
+	 function createFlagImg(flag) {
+	  return (
+	    '<img border="0" width="15" height="10" src="https://flags.fmcdn.net/data/flags/mini/' +
+	    flag +
+	    '.png"/>'
+	  );
+	}
+	 
+	function getContextMenuItems(params) {
+	  var result = [	  
+		{
+            name: 'Export',
+             action: function () {
+	        	console.log('Windows Item Selected');
+	    	  },
+	     			icon: '<span class="feather icon-download" unselectable="on" role="presentation"></span>',
+            subMenu: [
+                {
+                    name: 'CSV Export',
+                    action: function() {
+                    	 location.href="../../web/database/phenotype_csv.jsp?varietyid="+$( "#variety-select option:selected" ).val(); 
+                    },
+	     				 icon: '<span class="feather icon-file-text" unselectable="on" role="presentation"></span>',
+                },
+                {
+                    name: 'Excel Export',
+                    action: function() {                    
+                    	 location.href="../../web/database/phenotype_xls.jsp?varietyid="+$( "#variety-select option:selected" ).val(); 
+                    },
+	     				 icon: '<span class="feather icon-file-text" unselectable="on" role="presentation"></span>',
+                }
+            ]
+        },
+	    'separator', 
+	    'copyWithHeaders',
+	    'separator',    
+	    'autoSizeAll',
+	  ];
+	
+	  return result;
+	}
+	 
+	 
  
   /*** DEFINED TABLE VARIABLE ***/
   var gridTable = document.getElementById("myGrid");
@@ -394,11 +547,9 @@
 
   function addCol(fieldp, headerNamep) {
 	var columnDefs = gridOptions.columnDefs;
-	columnDefs.push({ field:fieldp, headerName: headerNamep, width: "120",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+	columnDefs.push({ field:fieldp, headerName: headerNamep, width: "120",  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 	gridOptions.api.setColumnDefs(columnDefs);
   }
-
-
 
   function addnewrow() {
 		var newRows = [{                
@@ -406,13 +557,21 @@
 		}]; 		           
 		gridOptions.api.updateRowData({add: newRows, addIndex:0});
   }
-   		 
+   		
+	function getBoolean(id) {
+	  return true;
+	}
+	
+	function getParams() {
+	  return {
+	    allColumns: getBoolean('allColumns'),
+	  };
+	}
+	   		 
   function getAllData() {
 
-		let saveList = [];
-		
-		saveList.push(gridOptions.api.getDataAsCsv());
-		
+		let saveList = [];		
+		saveList.push(gridOptions.api.getDataAsCsv(getParams()));
 			$.ajax({
 			    url:"../../web/database/phenotype_update.jsp",
 			    type:"POST",

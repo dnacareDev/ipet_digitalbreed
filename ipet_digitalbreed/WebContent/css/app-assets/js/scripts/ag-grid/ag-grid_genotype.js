@@ -19,12 +19,21 @@
 	function getSelectedRowData() {
 	  let selectedData = gridOptions.api.getSelectedRows();
 	  var deleteitems = new Array();
-	  
+	
+	  if(selectedData.length==0){
+	    		alert("선택 된 항목이 없습니다.");	
+	    		return;	    		
+	  }
+
 	  for (var i = 0; i < selectedData.length; i++) {
 		    deleteitems.push(selectedData[i].selectfiles);
 	  }    
 	  
 	  //location.href="../../web/database/genotype_delete.jsp?deleteitems="+deleteitems;
+	  
+	  var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
+	  
+ 	  if(result){
 	  
 	  $.ajax({
 		    url:"../../web/database/genotype_delete.jsp",
@@ -40,13 +49,14 @@
 		    }
 		  });
 		}
+  	  }
 	
   /*** COLUMN DEFINE ***/
   
   var columnDefs = [
-    {
+      {
       headerName: "순번",
-      field: "selectfiles",
+      field: "displayno",
       editable: false,
       sortable: true,
       width: 140,	
@@ -54,7 +64,13 @@
       cellClass: "grid-cell-centered",      
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
-      headerCheckboxSelection: true	
+      headerCheckboxSelection: true,
+      resizable: true	
+    },
+    {
+      headerName: "실제순번",
+      field: "selectfiles",
+      hide: true,	
     },
     /**{
       headerName: "VCF 파일 다운로드",
@@ -64,6 +80,7 @@
       filter: 'agMultiColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 175,
+      resizable: true,
       cellRenderer: function(params){
       return "<a href='http://example.com/edit/" 
         + params.value 
@@ -76,6 +93,7 @@
       editable: false,
       sortable: true,
       filter: true,
+      resizable: true,
       cellClass: "grid-cell-centered",      
       width: 300,
 	  cellRenderer: function(params){
@@ -90,8 +108,10 @@
       editable: false,
       sortable: true,
       filter: true,
+      resizable: true,
       cellClass: "ag-header-cell-label",
-      width: 670
+      width: 670,
+      cellStyle: {'cursor': 'pointer'}
     },
     {
       headerName: "작물",
@@ -99,6 +119,7 @@
       editable: false,
       sortable: true,
       filter: true,
+      resizable: true,
       cellClass: "grid-cell-centered",      
       width: 180,
       hide: true
@@ -108,6 +129,7 @@
       field: "cre_dt",
       editable: false,
       sortable: true,
+      resizable: true,
       filter: 'agDateColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 150
@@ -118,6 +140,7 @@
       editable: false,
       sortable: true,
       filter: true,
+      resizable: true,
       cellClass: "grid-cell-centered",      
       width: 275,
     },
@@ -126,6 +149,7 @@
       field: "samplecnt",
       editable: false,
       sortable: true,
+      resizable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 120
@@ -135,6 +159,7 @@
       field: "variablecnt",
       editable: false,
       sortable: true,
+      resizable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 120
@@ -256,6 +281,5 @@
       //gridOptions.columnApi.setColumnPinned("email", null);
     } else {
      // gridOptions.columnApi.setColumnPinned("email", "left");
-    	gridOptions.api.sizeColumnsToFit();
     }
   });

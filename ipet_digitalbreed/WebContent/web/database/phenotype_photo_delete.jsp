@@ -16,16 +16,15 @@
 	String[] deleteitems = request.getParameterValues("params[]");
 	String samplename = request.getParameter("samplename");
 	String variety = request.getParameter("variety");
+	String sampleno = request.getParameter("selectfiles");
 
 	try{
 		for (int i = 0; i < deleteitems.length; i++) {
-			deleteSql = "delete from sampledata_img_t where no='"+deleteitems[i]+"';";	    
-
+			deleteSql = "delete from sampledata_img_t where sampleno='"+sampleno+"' and no='"+deleteitems[i]+"';";	    
 		    ipetdigitalconndb.stmt.executeUpdate(deleteSql);
 		}
 		
-		seleccntSql = "select count(*) as cnt from sampledata_img_t where samplename='"+samplename+"' and varietyid='"+variety+"';";	    
-
+		seleccntSql = "select count(*) as cnt from sampledata_img_t where sampleno='"+sampleno+"' and samplename='"+samplename+"' and varietyid='"+variety+"';";	    
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(seleccntSql);	
 	    
 	  	 while (ipetdigitalconndb.rs.next()) { 		
@@ -33,8 +32,7 @@
 	  	 }
 	  	 
 	  	 if(imgcnt==0){	  		 
-	  		updateSql = "update sampledata_info_t set photo_status='0' where samplename='"+samplename+"' and varietyid='"+variety+"';";	
-
+	  		updateSql = "update sampledata_info_t set photo_status='0' where sampleno='"+sampleno+"' and samplename='"+samplename+"' and varietyid='"+variety+"';";	
 		    ipetdigitalconndb.stmt.executeUpdate(updateSql);
 	  	 }
 	}catch(Exception e){
