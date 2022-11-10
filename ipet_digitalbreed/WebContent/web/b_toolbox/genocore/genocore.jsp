@@ -256,6 +256,13 @@
 	    	</div>
 	  	</div>
 	</div>
+	
+	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
+			<div><strong>Loading Core Selection Result...</strong></div>
+	  	</div>
+	</div>  
 	<!-- Modal end-->
                         
     <!-- END: Content-->

@@ -204,7 +204,7 @@
 				   												<div class="row">
 				   													<div id='pill2_frame' class="col-12 col-xl-6 ag-theme-alpine" style='height:445px; margin-top:25px; float:left;'></div>
 				   													<div class="col-12 col-xl-6">
-				   														<iframe src = '' loading="lazy" width='100%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' ></iframe>
+				   														<iframe src = '' loading="lazy" width='100%' height='500px'; frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill3_frame' float:'left' onload='hideSpinner(this, ${params.data.jobid})' ></iframe>
 				   													</div>
 				   												</div>
 				   											</div>
@@ -231,7 +231,7 @@
 				   	
 				    
 				   	
-				   	$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
+				   	//$('#pill3_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_genocore.html");
 				    
 				    /** #pill2_frame | 두번째 ag-grid */
 				   	const csv_url = params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_genocore_table.csv";
@@ -288,6 +288,32 @@
 	        	$('#pill1_frame').html(text_table);
 	        }
 	    });
+	}
+	
+	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
+	document.addEventListener('click', function(event) {
+		console.log(event.target.id);
+		
+		const jobid = $("#jobid").val();
+		const resultpath = $("#resultpath").val();
+		
+		switch(event.target.id) {
+			case 'upgma_1':
+				break;
+			case 'genocore':
+				if(!$('#pill3_frame').attr('src')){
+					$("#iframeLoading").modal('show');
+					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_genocore.html");
+				}
+				break;
+		}
+	});
+	
+	// 로딩이 완료되면 로딩창 소멸
+	function hideSpinner(target, jobid) {
+		if(target.src.includes(jobid)) {
+			$("#iframeLoading").modal('hide');
+		}
 	}
 	
 	const columnDefs2 = [
@@ -363,6 +389,7 @@
 		}
 		
 		$("#executeSelectCount").val('Loading...');
+		$("#iframeLoading").modal('show');
    		$.ajax({
    				url: "./genocore_select_count.jsp",
    				method: 'POST',

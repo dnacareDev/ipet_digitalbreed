@@ -75,6 +75,32 @@ body {
 .select2-search__field:placeholder-shown {
     width: 100% !important; /*makes the placeholder to be 100% of the width while there are no options selected*/
 }
+/*로딩 아이콘 회전 시도*/
+/*
+@keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.feather.icon-loader {
+animation-name: rotate;
+animation-duration: 2s;
+animation-timing-function: linear;
+animation-delay: 0s;
+animation-iteration-count: infinite;
+animation-direction: normal;
+animation-fill-mode: none;
+animation-play-state: running;
+}
+*/
 
 </style>
 <%
