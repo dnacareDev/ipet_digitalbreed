@@ -117,6 +117,7 @@
 			valueGetter: inverseRowCount,
 			editable: false,
 			sortable: true,
+			resizable: true,
 			width: 150,
 			filter: 'agMultiColumnFilter',
 			cellClass: "grid-cell-centered",      
@@ -129,6 +130,7 @@
 	    	field: "file_name",
 	    	editable: false,
 	    	sortable: true,
+	    	resizable: true,
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 400,
@@ -138,6 +140,7 @@
 	    	field: "status",
 	    	editable: false,
 	    	sortable: true,
+	    	resizable: true,
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
@@ -158,14 +161,16 @@
 	      field: "comment",
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      filter: 'agNumberColumnFilter',
-	      width: 750
+	      width: 650
 	    },
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      filter: 'agNumberColumnFilter',
 	      width: 296,
 	      cellClass: "grid-cell-centered", 
@@ -218,7 +223,6 @@
 		
 		onCellClicked: params => {
 		
-			console.log("cell clicked : " + params.column.getId());
 			//console.log("params : ", params);
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
@@ -229,6 +233,8 @@
 						alert("분석 중입니다.");
 						break;
 					case 1:
+						$("#iframeLoading").modal('show');
+						
 						const element = document.getElementById('vcf_status');
 				   		element.innerHTML  = `<div class='card-content'>
 				   								<div class='card-body'>
@@ -242,47 +248,130 @@
 				   											</ul>
 				   											<div class='tab-content'>
 				   												<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-				   													<iframe src = '' loading="lazy" height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
+				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
 				   												</div>
 				   												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-				   													<iframe src = '' loading="lazy" height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame'></iframe>
+				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='hideSpinner(this, ${params.data.jobid}); console.log("pca2")'></iframe>
 				   												</div>
 				   												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
-				   													<iframe src = '' loading="lazy" height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame'></iframe>
+				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
 				   												</div>
 				   												<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
-				   													<iframe src = '' loading="lazy" height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill4_frame' id='pill4_frame'></iframe>
+				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill4_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
 				   												</div>
 				   											</div>
 				   										</div>
 				   									</div>
+				   									<input type='text' id='jobid'>
+				   									<input type='text' id='resultpath'>
 				   								</div>
 				   							</div>`;
-				   		
+						
 				   		$('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
-				   		$('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
-				   		$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
-				   		$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca.html");
-
-						gridOptions.api.sizeColumnsToFit();
+				   		//$('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
+				   		//$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
+				   		//$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca.html");
+				   		
+				   		// input에 jobid값 저장
+				   		$("#jobid").val(params.data.jobid);
+				   		$("#resultpath").val(params.data.resultpath);
+				   		
+						//gridOptions.api.sizeColumnsToFit();
 						break;
 					case 2:
 						//$("#analysis_fail").modal('show');
 						alert("분석에 실패했습니다.");
 						break;
 				}
-				
-				
 			}
 		}
 	};
+	
+	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
+	document.addEventListener('click', function(event) {
+		console.log(event.target.id);
+		
+		const jobid = $("#jobid").val();
+		const resultpath = $("#resultpath").val();
+		
+		switch(event.target.id) {
+			case 'pca_1':
+				break;
+			case 'pca_2':
+				if(!$('#pill2_frame').attr('src')){
+					$("#iframeLoading").modal('show');
+					$('#pill2_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_vcf_2_pca_pc2_pc3.html");
+				}
+				break;
+			case 'pca_3':
+				if(!$('#pill3_frame').attr('src')){
+					$("#iframeLoading").modal('show');
+					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_vcf_2_pca_pc1_pc3.html");
+				}
+				break;
+			case 'pca_4':
+				if(!$('#pill4_frame').attr('src')){
+					$("#iframeLoading").modal('show');
+					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_vcf_2_pca.html");
+				}
+				break;
+		}
+		
 
-	function replaceClass(id, oldClass, newClass) {
-	    var elem = $(`#${id}`);
-	    if (elem.hasClass(oldClass)) {
-	        elem.removeClass(oldClass);
-	    }
-	    elem.addClass(newClass);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//console.log($(`#${iframe_id}`).src);
+			/*
+			console.log("iframe src :");
+			console.log($(`#${iframe_id}`).attr('src'));
+			console.log("ready state");
+			console.log(iframe.contentDocument.readyState);
+			
+			//$("#iframeLoading").modal('show');
+			//if($(`#${iframe_id}`).attr('src').includes(jobid) && iframe.contentDocument.readyState == 'complete') {
+			if($(`#${iframe_id}`).attr('src') == "") {
+				//$("#iframeLoading").modal('hide');
+				$(iframe_id).attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
+				console.log("loading??");
+			}
+			*/
+			
+			//$("#iframeLoading").modal('show');
+			/*
+			if(!$(`#${iframe_id}`).attr('src').includes(jobid)) {
+				$("#iframeLoading").modal('show');
+			}
+			*/
+			
+	})
+	
+	// 로딩이 완료되면 로딩창 소멸
+	function hideSpinner(target, jobid) {
+		//console.log(target);
+		//console.log(target.src);
+		//console.log(jobid);
+		
+		if(target.src.includes(jobid)) {
+			$("#iframeLoading").modal('hide');
+		}
 	}
  
 	/*** DEFINED TABLE VARIABLE ***/

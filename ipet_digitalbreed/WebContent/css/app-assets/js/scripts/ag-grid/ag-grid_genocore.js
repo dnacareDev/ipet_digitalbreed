@@ -61,6 +61,7 @@
 	      valueGetter: inverseRowCount,
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      width: 150,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
@@ -73,6 +74,7 @@
 	      field: "file_name",
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
 	      width: 400,
@@ -82,6 +84,7 @@
 	    	field: "status",
 	    	editable: false,
 	    	sortable: true,
+	    	resizable: true,
 	    	filter: true,
 	    	width: 200,
 	    	cellClass: "grid-cell-centered",      
@@ -102,6 +105,7 @@
 	      field: "comment",
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      filter: true,
 	      width: 650
 	    },
@@ -110,6 +114,7 @@
 	      field: "cre_dt",
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      filter: "agDateColumnFilter",
 	      cellClass: "grid-cell-centered", 
 	      //cellStyle: {'background-color' : '#F0F0F0'},
@@ -183,7 +188,7 @@
 				   									<div class='col-12'>
 				   										<ul class='nav nav-pills nav-active-bordered-pill'>
 				   											<li class='nav-item'><a class='nav-link active' id='info' data-toggle='pill' href='#pill1' aria-expanded='true'>INFO</a></li>
-							   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>GENOCORE</a></li>
+							   								<li class='nav-item'><a class='nav-link' id='genocore' data-toggle='pill' href='#pill2' aria-expanded='false'>CORE SELECTION</a></li>
 				   										</ul>
 				   										<div class='tab-content'>
 				   											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
@@ -193,7 +198,7 @@
 				   												<div class="row">
 				   													<div class="col-12">
 				   														<input type="text" class="form-control w-25 float-left" id="select_count" autocomplete="off">
-				   														<input type="button" id="executeSelectCount" class="btn btn-primary ml-1 float-left" onclick="executeSelectCount()" value="Execute">
+				   														<input type="button" id="executeSelectCount" class="btn btn-primary ml-1 float-left" onclick="executeSelectCount()" value="Run">
 				   													</div>
 				   												</div>
 				   												<div class="row">
@@ -286,10 +291,10 @@
 	}
 	
 	const columnDefs2 = [
-	  		{ field: "Iteration", cellClass: "grid-cell-centered", width: 212, filter: 'agNumberColumnFilter', },
-	  		{ field: "Sample_name", cellClass: "grid-cell-centered", width: 215, filter: 'agTextColumnFilter', },
-	  		{ field: "Coverage", cellClass: "grid-cell-centered", width: 220, filter: 'agNumberColumnFilter', },
-	  		{ field: "Difference", cellClass: "grid-cell-centered", width: 220, filter: 'agNumberColumnFilter', }
+	  		{ field: "Iteration", cellClass: "grid-cell-centered", width: 212, filter: 'agNumberColumnFilter', resizable: true, },
+	  		{ field: "Sample_name", cellClass: "grid-cell-centered", width: 215, filter: 'agTextColumnFilter', resizable: true, },
+	  		{ field: "Coverage", cellClass: "grid-cell-centered", width: 220, filter: 'agNumberColumnFilter', resizable: true, },
+	  		{ field: "Difference", cellClass: "grid-cell-centered", width: 220, filter: 'agNumberColumnFilter', resizable: true, }
 	  	];
 
   	const gridOptions2 = {
@@ -378,7 +383,7 @@
   				    csvToGrid(csv_url);
   				    gridOptions2.api.sizeColumnsToFit();
   				    
-  				  $("#executeSelectCount").val('Excute');
+  				  $("#executeSelectCount").val('Run');
    				}
   		});
 	}

@@ -200,7 +200,7 @@ body {
 										<!--
 							            <h5 style="display:inline">&nbsp;&nbsp;Population <a href="/ipet_digitalbreed/uploads/upgma_population.xlsx" download="upgma_population.xlsx" >(예시파일)</a></h5>
 							            -->
-							            <h5 style="display:inline; margin-left:13px;">Population <button type="button" class="btn btn-light">Light</button> (Example - <a href="/ipet_digitalbreed/uploads/upgma_population.xlsx" download="upgma_population.xlsx" ><i class='feather icon-download'></i></a>)</h5>
+							            <h6 style="margin-left:13px; font-weight:bold;">Population &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm"><a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button></h6>
 							            <div class="col-md-12 col-12">
 											<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
 											<br>
@@ -208,8 +208,8 @@ body {
 						            </div>
 						        </div>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">실행</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">초기화</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
 					            </div>
 					        </div>
 					    </div>

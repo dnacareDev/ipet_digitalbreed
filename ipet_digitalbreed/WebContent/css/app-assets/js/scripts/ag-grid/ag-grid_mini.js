@@ -63,6 +63,7 @@
 	      valueGetter: inverseRowCount,
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      width: 150,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
@@ -75,6 +76,7 @@
 	      field: "file_name",
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
 	      width: 400,
@@ -84,6 +86,7 @@
 	    	field: "status",
 	    	editable: false,
 	    	sortable: true,
+	    	resizable: true,
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
@@ -104,6 +107,7 @@
 	    	field: "comment",
 	    	editable: false,
 	    	sortable: true,
+	    	resizable: true,
 	    	filter: 'agNumberColumnFilter',
 	    	//cellClass: "grid-cell-centered",      
 	    	width: 650,
@@ -113,6 +117,7 @@
 	      field: "cre_dt",
 	      editable: false,
 	      sortable: true,
+	      resizable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
 	      width: 296
@@ -236,7 +241,7 @@
 		        
 		        const colDefs = [];
 		        const keys = Object.keys(rowObj[0]);
-		        keys.forEach(key => colDefs.push({field: key, sortable: true, cellClass: "grid-cell-centered",  width: 200}))
+		        keys.forEach(key => colDefs.push({field: key, sortable: true,resizable: true, cellClass: "grid-cell-centered",  width: 200}))
 		        
 		        gridOptions2.api.setColumnDefs([]);
 		        gridOptions2.api.setColumnDefs(colDefs);

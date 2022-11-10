@@ -193,7 +193,7 @@
 	fw.flush();	
 	fw.close();
 	
-	
+	/* 
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	String insertGwasinfo_sql = "insert into gwas_info_t(cropid, varietyid, status, genotype_filename, phenotype_name, model, uploadpath, resultpath,comment, jobid, creuser,cre_dt) ";
@@ -211,7 +211,7 @@
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();
 	}
-	
+	*/
 	
 	File folder_outputdir = new File(outputdir+jobid_gwas);
 
@@ -230,20 +230,23 @@
 	System.out.println("===========================================");
 	runanalysistools.execute(Gwas);
 
-	
-	BufferedReader reader = new BufferedReader(new FileReader(outputdir+jobid_gwas+"/"+jobid_gwas+"_samplecheck.txt"));
-	
-	out.clear();
-	String str;
-	boolean first_line = true;
-	while((str = reader.readLine()) != null) {
-		if(first_line) {
-			first_line = false;
-			continue;
+	try {
+		BufferedReader reader = new BufferedReader(new FileReader(outputdir+jobid_gwas+"/"+jobid_gwas+"_samplecheck.txt"));
+		out.clear();
+		String str;
+		boolean first_line = true;
+		while((str = reader.readLine()) != null) {
+			if(first_line) {
+				first_line = false;
+				continue;
+			}
+			//System.out.println(str);
+			out.print(str+",");
 		}
-		//System.out.println(str);
-		out.print(str+",");
+		reader.close();	
+	} catch(IOException e) {
+		e.printStackTrace();
 	}
-	reader.close();
+	
 	out.print(jobid_gwas);
 %>

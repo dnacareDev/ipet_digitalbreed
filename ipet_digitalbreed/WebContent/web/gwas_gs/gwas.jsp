@@ -76,7 +76,6 @@ body {
     width: 100% !important; /*makes the placeholder to be 100% of the width while there are no options selected*/
 }
 
-
 </style>
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -193,56 +192,57 @@ body {
 					            <div class="col-md-12 col-12 ml-1">
 					                <br>
 					             	<div class="form-label-group">
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:93%;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 					                </div>
 					            </div>
 					            <div class="col-md-12 col-12 ml-1">
 					            	<div class="form-label-group" >
-					                    <select class="select2 form-select" id="VcfSelect" style="width: 444px;">
+					                    <select class="select2 form-select" id="VcfSelect" style="width:50%;">
 					                    </select>
 					                </div>
 					            </div>
-					            <div class="col-md-12 col-12 ml-1" style="margin-bottom:4px;">
-					            	<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" name="radio_phenotype" id="inlineRadio1" onclick="radioSelect(false)" value="0" checked>
-										<label class="form-check-label" for="inlineRadio1"> Phenotype Database</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio" name="radio_phenotype" id="inlineRadio2" onclick="radioSelect(true)" value="1">
-										<label class="form-check-label" for="inlineRadio2"> New Phenotype</label>
-									</div>
-									<!--  
-					            	<input type="radio" name="radio_phenotype" onclick="radioSelect(false)" value="0"" checked ><span> Phenotype DB</span><br>
-					            	<input type="radio" name="radio_phenotype" onclick="radioSelect(true)" value="1" ><span> 신규 등록</span>
-					            	-->
-					            </div>
-					            <div class="col-md-12 col-12 ml-1">
-						            <div id="isPhenotype" class="form-label-group" >
-						            	<!--  
-						            	<input type="radio" name="radio_phenotype" onclick="radioSelect(false)" value="0" checked><span> Phenotype DB</span><br>
-						            	-->
-					                    <select class="select2 form-select max-length" id="PhenotypeSelect" style="width: 444px;" multiple>
-					                    </select>
-						                <br>
-						                <br>
-                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="background-color:white; width:444px;" name="cre_date" placeholder=" (Optional) 등록일자" />
-                                    	<br>
-                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="background-color:white; width:444px;" name="inv_date" placeholder=" (Optional) 조사일자" />
-                                    	<br>
+					            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
+					            	<legend  class="w-auto">Phenotype Selection</legend>
+						            <div style="margin-bottom:4px;">
+						            	<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false)" value="0" checked>
+											<label class="form-check-label" for="RadioPhenotype"> Phenotype Database</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true)" value="1">
+											<label class="form-check-label" for="RadioCsvFile"> New Phenotype</label>
+										</div>
+										<div class="form-check form-check-inline" style="margin-top:5px; margin-left:45px;">
+											<div>
+												<button type="button" id="exampleButton" style="float: right; display:none;" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/phenotype.csv" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>	 
+											</div>
+										</div>
 						            </div>
-						        </div>
-						        <div class="col-md-12 col-12 ml-1">
-									<div id="isNewFile" class="form-label-group" style="display:none">
-							            <!--  
-							            <input type="radio" name="radio_phenotype" onclick="radioSelect(true)" value="1" ><span> 신규 등록</span>
-							            -->
-							            <input type="file" id="Csvfile" style="display:none">
-					                	<br>
-						            </div>
-						        </div>
-						        <div class="col-md-12 col-12 ml-1">
+						            <div>
+							            <div id="isPhenotype" class="form-label-group" >
+						                    <select class="select2 form-select max-length" id="PhenotypeSelect" style="width: 97%;" multiple>
+						                    </select>
+							                <br>
+							                <br>
+	                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
+	                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
+							            </div>
+							        </div>
+							        <div>
+										<div id="isNewFile" class="form-label-group" style="display:none">
+								            <div id="PhenotypeCsvFile" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
+											<br>
+						                	<!--  
+						                	<div style="float: left; margin-top:5px;">
+												<button type="button" style="float: left;" class="btn btn-danger btn-sm" ><a href="/ipet_digitalbreed/uploads/phenotype.csv" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>	 
+											</div>
+											-->
+							            </div>
+							        </div>
+						        </fieldset>
+						        <fieldset class="border w-100 m-1 pl-1">
+						        	<legend  class="w-auto">Model</legend>
 									<div class="form-label-group">
-							            <h6>Model</h6>
 							            <div class="demo-inline-spacing">
 	                                        <div class="form-check form-check-inline">
 	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="modelGroup" value="GLM" />
@@ -281,7 +281,7 @@ body {
 	                                        </div>
 	                                    </div>
 						            </div>
-						        </div>
+                                </fieldset>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
 					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
@@ -294,11 +294,20 @@ body {
         </div>
     </div>
     
+    
+   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
+			<div><strong>Loading GWAS Result...</strong></div>
+	  	</div>
+	</div>
 	<!-- Modal end-->
                         
     <!-- END: Content-->
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
+    <input type="hidden" id="jobid_gwas">
+    <input type="hidden" id="phenotype_input">
 
     <!-- BEGIN: Footer-->
     <footer class="footer footer-static footer-light navbar-shadow">
@@ -311,9 +320,7 @@ body {
 
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
-    <!--  
-    <script src="../../css/app-assets/vendors/js/vendors_v2.min.js"></script>
-    -->
+    <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
     <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
     <script src="../../css/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
@@ -340,6 +347,8 @@ body {
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
+    <script src="../../css/app-assets/js/scripts/loadingoverlay/loadingoverlay.js"></script>
+	<script src="../../css/app-assets/js/scripts/loadingoverlay/loadingoverlay.min.js"></script>
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_gwas.js"></script>
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>
 	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
@@ -354,8 +363,137 @@ body {
 
    		vcfFileList();
    		phenotypeList();
-   		$(".select2-container--default:gt(0)").width("444px");
+   		//$(".select2-container--default:gt(0)").width("444px");
+   		$(".select2-container--default:eq(1)").width("93%");
+   		$(".select2-container--default:eq(2)").width("99%");
    	});
+	
+	var box = new Object();
+    window.onload = function() {
+    	
+    	// 파일전송 컨트롤 생성
+	    box = innorix.create({
+	    	el: '#PhenotypeCsvFile', // 컨트롤 출력 HTML 객체 ID
+	        width			: 445,
+	    	height          : 130,
+	        maxFileCount   : 1,  
+	        //allowType : ["vcf"],
+	        allowType : ["csv"],
+	        charset : "utf-8",
+			addDuplicateFile : false,
+	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
+	        uploadUrl: '/ipet_digitalbreed/web/gwas_gs/gwas_file_check.jsp',
+	    });
+    	
+    	
+
+	    // 업로드 완료 이벤트
+	    box.on('uploadComplete', function (p) {
+			//document.getElementById('uploadGwasForm').reset();
+	    	box.removeAllFiles();
+	    	const jobid_gwas = $("#jobid_gwas").val();
+	    	console.log("jobid_gwas : ", jobid_gwas);
+	    	
+	    	$.ajax({
+	    		url: "./gwas_samplecheck.jsp",
+	    		method: "POST",
+	    		data: {"jobid_gwas": jobid_gwas},
+	    		success: function(data) {
+					console.log("없는 표현형 : ", data);
+   	    			
+   	    			let data_arr = data.split(",");
+   	    			data_arr.pop();
+   	    	    	
+   	    			
+   	    			
+   	    			$.ajax({
+   	    				url: "./gwas_phenotypeFromCsv.jsp",
+   	    				method: "POST",
+   	    				data: {"jobid_gwas": jobid_gwas},
+   	    				success: function(phenotype) {
+   	    					//console.log("phenotype_input : ", phenotype_input);
+   	    					console.log("phenotype : ", phenotype);
+   	    					$("#phenotype_input").val(phenotype);
+   	    					//const phenotype_input = $("#phenotype_input").val();
+   	    					
+   	    					if(confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?")) {
+   	    	    	    		
+   	    	    	    		const permissionUid = "<%=permissionUid%>";
+   	    	   	    	   		const variety_id = $( "#variety-select option:selected" ).val();
+   	    	   	    	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
+   	    	   	    	    	const filename_vcf = $('#VcfSelect :selected').data('filename');
+   	    	   	    	    	
+   	    	   	    	    	
+   	    	   	    	    	let traitname_arr = new Array();
+   	    	   	    	    	let traitname_key_arr = new Array();
+   	    	   	    	    	
+   	    	   	    	    	const phenotype = $("#phenotype_input").val();
+   	    	   	    	    	
+   	    	   	    	    	for(let i=0 ; i<phenotype.length ; i++) {
+   	    	   	    	    		traitname_arr.push( $(this).data('traitname'));
+   	 	   	    	    			traitname_key_arr.push( $(this).data('traitname_key'));
+   	    	   	    	    	}
+   	    	   	    	    	
+   	    	   	    	    	
+   	    	   	    	    	/*
+   	    	   	    	    	$("#PhenotypeSelect :selected").each(function(index) {
+   	    	   	    	    		traitname_arr.push( $(this).data('traitname'));
+   	    	   	    	    		traitname_key_arr.push( $(this).data('traitname_key'));
+   	    	   	    	    	})
+   	    	   	    	    	*/
+   	    	   	    	    	
+   	    	   	    	    	//console.log(traitname_arr);
+   	    	   	    	    	//console.log(traitname_key_arr);
+   	    	    	    		
+   	    	   	    	    	let formData = new FormData($("#uploadGwasForm")[0]);
+   	    	   	   	    	
+   	    			   	    	formData.append('permissionUid', permissionUid);
+   	    			   	    	formData.append('variety_id', variety_id);
+   	    			   	    	formData.append('jobid_gwas', jobid_gwas);
+   	    			   	  		formData.append('jobid_vcf', jobid_vcf);
+   	    			   	    	formData.append('filename_vcf', filename_vcf);
+   	    			   	    	formData.append('traitname_arr', traitname_arr);
+   	    			   	    	formData.append('traitname_key_arr', traitname_key_arr);
+   	    			   	    	formData.append('phenotype', phenotype);
+   	    			   	    	
+   	    			   	  		let queryString = new URLSearchParams(formData).toString();
+   	    	    	    		
+   	    	    				$.ajax(
+   	    	    				{
+   	    	    					url: "./gwas_analysis.jsp",
+   	    	    					method: "POST",
+   	    	    					data: queryString,
+   	    	    					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+   	    	    					success: function(result) {
+   	    	    						
+   	    	    					}
+   	    	    					
+   	    	    				})
+   	    	    				
+   	    	    				setTimeout( function () {
+   	    	    		   			refresh();
+   	    	    		   			$("#backdrop").modal("hide");
+   	    	    		   		}, 1000);
+   	    	    			} 
+   	    				}
+   	    			})
+	    		}
+	    	})
+			
+			/*
+	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+	   		setTimeout( function () {
+	   			//backdrop.style.display = "none";
+	   			refresh();
+	   			$("#backdrop").modal("hide");
+	   			}
+	   		, 1000);
+			*/
+        });
+	    
+	    //console.log("box? : ", box);
+    };
+	
 	
    	function vcfFileList() {
    		
@@ -366,7 +504,7 @@ body {
 	  			//console.log("vcf file list : ", data);
 	  			
 	  			$("#VcfSelect").empty();
-	  	    	$("#VcfSelect").append(`<option disabled hidden selected>Select VCF File</option>`);
+	  	    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
 	  	    	for(let i=0 ; i<data.length ; i++) {
 	  				// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
 	  				$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
@@ -400,14 +538,14 @@ body {
    	
 	//radio 선택에 따라 파일창 노출여부 결정
 	function radioSelect(flag) {
-		console.log(flag);
+		//console.log(flag);
 		if(flag) {
 			$("#isNewFile").css('display','block');
-			$("#Csvfile").css('display','inline');
+			$("#exampleButton").css('display','block');
 			$("#isPhenotype").css('display','none');
 		} else {
 			$("#isNewFile").css('display','none');
-			$("#Csvfile").css('display','none');
+			$("#exampleButton").css('display','none');
 			$("#isPhenotype").css('display','block');
 		}
 	}
@@ -424,87 +562,155 @@ body {
    	
    	function execute() {
    		
-   		const permissionUid = "<%=permissionUid%>";
-   		const variety_id = $( "#variety-select option:selected" ).val();
-    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
-    	const filename_vcf = $('#VcfSelect :selected').data('filename');
-    	
-    	//const traitname = $("#PhenotypeSelect :selected").data('traitname');
-    	//const traitname_seq = $("#PhenotypeSelect :selected").data('traitname_key');
-    	
-    	
-    	
-    	let traitname_arr = new Array();
-    	let traitname_key_arr = new Array();
-    	
-    	$("#PhenotypeSelect :selected").each(function(index) {
-    		traitname_arr.push( $(this).data('traitname'));
-    		traitname_key_arr.push( $(this).data('traitname_key'));
-    	})
-    	
-    	//console.log(traitname_arr);
-    	//console.log(traitname_key_arr);
-    	
-    	
-    	let formData = new FormData($("#uploadGwasForm")[0]);
-    	
-    	formData.append('permissionUid', permissionUid);
-    	formData.append('variety_id', variety_id);
-    	formData.append('jobid_vcf', jobid_vcf);
-    	formData.append('filename_vcf', filename_vcf);
-    	//formData.append('traitname', traitname);
-    	//formData.append('traitname_seq', traitname_seq);
-    	formData.append('traitname_arr', traitname_arr);
-    	formData.append('traitname_key_arr', traitname_key_arr);
-    	
-    	let queryString = new URLSearchParams(formData).toString();
-		
-    	console.log(queryString);
-    	
-    	$.ajax(
-    	{
-    		url: "./gwas_check.jsp",
-    		method: "POST",
-    		data: queryString,
-    		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-    		//dataType:"json",
-    		success: function(data) {
-    			
-    			//$("#backdrop").modal("hide");
-    			
-    			
-    			console.log("없는 표현형 : ", data);
-    			
-    			let data_arr = data.split(",");
-    			
-    			const jobid_gwas = data_arr.pop();
-    			formData.append('jobid_gwas', jobid_gwas);
-    			let queryString2 = new URLSearchParams(formData).toString();
-    			
-    			console.log(data_arr);
-    			
-    			if(confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?")) {
-    				$.ajax(
-    				{
-    					url: "./gwas_analysis.jsp",
-    					method: "POST",
-    					data: queryString2,
-    					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-    					success: function(result) {
-    						refresh();
-    			   			$("#backdrop").modal("hide");
-    					}
-    					
-    				})
-    			} else {
-    				//$("#backdrop").modal("hide");
-    			}
-    			
-    			//refresh();
-	   			//$("#backdrop").modal("hide");
-    		}
-    		
-    	})
+   		//VCF파일 목록 선택 안했으면 return
+   		if($("#VcfSelect :selected").data('jobid') == '-1') {
+   			alert("VCF파일을 선택하세요.");
+   			return;
+   		} 
+   		
+   		//select Phenotype Database
+   		if(document.querySelector('input[name="radio_phenotype"]:checked').value == '0') {
+   			
+   			// phenotype option
+   			if($("#PhenotypeSelect :selected").length == 0) {
+   	   			alert("Phenotype을 선택하세요.");
+   	   			return;
+   	   		}
+   			
+   			//modelGroup
+   			if(document.querySelectorAll('input[name="modelGroup"]:checked').length == 0) {
+   				alert("Model을 최소 1개 선택하세요.")
+   				return;
+   			}
+   			
+   			 
+   			const permissionUid = "<%=permissionUid%>";
+   	   		const variety_id = $( "#variety-select option:selected" ).val();
+   	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
+   	    	const filename_vcf = $('#VcfSelect :selected').data('filename');
+   	    	
+   	    	
+   	    	let traitname_arr = new Array();
+   	    	let traitname_key_arr = new Array();
+   	    	
+   	    	$("#PhenotypeSelect :selected").each(function(index) {
+   	    		traitname_arr.push( $(this).data('traitname'));
+   	    		traitname_key_arr.push( $(this).data('traitname_key'));
+   	    	})
+   	    	
+   	    	//console.log(traitname_arr);
+   	    	//console.log(traitname_key_arr);
+   	    	
+   	    	
+   	    	let formData = new FormData($("#uploadGwasForm")[0]);
+   	    	
+   	    	formData.append('permissionUid', permissionUid);
+   	    	formData.append('variety_id', variety_id);
+   	    	formData.append('jobid_vcf', jobid_vcf);
+   	    	formData.append('filename_vcf', filename_vcf);
+   	    	formData.append('traitname_arr', traitname_arr);
+   	    	formData.append('traitname_key_arr', traitname_key_arr);
+   	    	
+   	    	let queryString = new URLSearchParams(formData).toString();
+   			
+   	    	console.log(queryString);
+   	    	
+   	    	$.ajax(
+   	    	{
+   	    		url: "./gwas_check.jsp",
+   	    		method: "POST",
+   	    		data: queryString,
+   	    		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+   	    		//dataType:"json",
+   	    		success: function(data) {
+   	    			
+   	    			//$("#backdrop").modal("hide");
+   	    			
+   	    			
+   	    			console.log("없는 표현형 : ", data);
+   	    			
+   	    			let data_arr = data.split(",");
+   	    			
+   	    			const jobid_gwas = data_arr.pop();
+   	    			console.log("jobid_gwas : ", jobid_gwas);
+   	    			formData.append('jobid_gwas', jobid_gwas);
+   	    			let queryString2 = new URLSearchParams(formData).toString();
+   	    			
+   	    			console.log(data_arr);
+   	    			
+   	    			if(confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?")) {
+   	    				$.ajax(
+   	    				{
+   	    					url: "./gwas_analysis.jsp",
+   	    					method: "POST",
+   	    					data: queryString2,
+   	    					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+   	    					success: function(result) {
+   	    						
+   	    					}
+   	    					
+   	    				})
+   	    				
+   	    				setTimeout( function () {
+   	    		   			refresh();
+   	    		   			$("#backdrop").modal("hide");
+   	    		   		}, 1000);
+   	    			} 
+   	    			
+   	    		}
+   	    		
+   	    	})
+   			
+   			
+   			
+   		// select New Phenotype File	
+   		} else {
+   			console.log(box.fileList.files.length);
+   			if(!box.fileList.files.length) {
+   				alert("파일을 아래 영역에 넣어주세요.");
+   				return;
+   			}
+   			
+   			//modelGroup
+   			if(document.querySelectorAll('input[name="modelGroup"]:checked').length == 0) {
+   				alert("Model을 최소 1개 선택하세요.")
+   				return;
+   			}
+   			
+   			const permissionUid = "<%=permissionUid%>";
+   	   		const varietyid = $( "#variety-select option:selected" ).val();
+   	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
+   	    	const filename = $('#VcfSelect :selected').data('filename');
+   			
+   	    	let model_arr = [];
+   			document.querySelectorAll('input[name="modelGroup"]:checked').forEach(function(item) {
+   				model_arr.push(item.value);
+   			})
+   			
+   			
+   			
+   			fetch("./gwas_getJobId.jsp")
+   			.then((response) => response.text())
+   			.then((jobid_gwas) => {
+   				$("#jobid_gwas").val(jobid_gwas);
+					
+   				// 파일 업로드 영역
+		    	var postObj = new Object();
+		   		postObj.permissionUid = permissionUid;
+		    	postObj.comment = $("#comment").val();	       
+		        postObj.varietyid = varietyid;
+		        postObj.jobid_vcf = jobid_vcf;
+		        postObj.filename = filename;
+		        postObj.model_arr = model_arr;
+		        postObj.jobid_gwas_ = jobid_gwas;
+		        box.setPostData(postObj);
+		        box.upload();
+   			});
+   			
+   		}
+   		
+   		
+   		
     	
     }
    	

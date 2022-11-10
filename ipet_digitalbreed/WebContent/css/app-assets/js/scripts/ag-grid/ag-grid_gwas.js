@@ -63,6 +63,7 @@
 			valueGetter: inverseRowCount,
 			editable: false,
 			sortable: true,
+			resizable: true,
 			width: 200,
 			filter: 'agMultiColumnFilter',
 			cellClass: "grid-cell-centered",      
@@ -75,6 +76,7 @@
 		    field: "status",
 		    editable: false,
 		    sortable: true,
+		    resizable: true,
 		    width: 200,
 		    filter: true,
 		    cellClass: "grid-cell-centered",      
@@ -95,6 +97,7 @@
 			field: "genotype_filename",
 			editable: false,
 			sortable: true,
+			resizable: true,
 			filter: true,
 			cellClass: "grid-cell-centered",      
 			width: 300,
@@ -104,6 +107,7 @@
 			field: "phenotype_name",
 			editable: false,
 			sortable: true,
+			resizable: true,
 			filter: true,
 			cellClass: "grid-cell-centered",      
 			width: 300,
@@ -113,6 +117,7 @@
 			field: "model",
 			editable: false,
 			sortable: true,
+			resizable: true,
 			filter: true,
 			cellClass: "grid-cell-centered",      
 			width: 300,
@@ -122,6 +127,7 @@
 	    	field: "comment",
 	    	editable: false,
 	    	sortable: true,
+	    	resizable: true,
 	    	filter: 'agNumberColumnFilter',
 	    	cellClass: "grid-cell-centered",      
 	    	width: 450
@@ -131,6 +137,7 @@
 	    	field: "cre_dt",
 	    	editable: false,
 	    	sortable: true,
+	    	resizable: true,
 	    	filter: 'agNumberColumnFilter',
 	    	width: 296,
 	    	cellClass: "grid-cell-centered", 
@@ -237,7 +244,7 @@
 							$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_${model_arr[i]}' aria-expanded='true'>
 															<div class="row">
 																<div class="col-12 col-xl-8 style="height:445px; margin-top:25px; float:left;">
-																	<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='${model_arr[i]}'></iframe>
+																	<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='${model_arr[i]}' onload="$('#iframeLoading').modal('hide')"></iframe>
 																</div>
 																<div id='grid_${model_arr[i]}' class="col-12 col-xl-4 ag-theme-alpine">
 																</div>
@@ -264,7 +271,7 @@
 														</div>
 														<div class="row">
 															<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
-																<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='Multi'></iframe>
+																<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='Multi' onload="$('#iframeLoading').modal('hide')"></iframe>
 															</div>
 														</div>
 													</div>`)
@@ -280,7 +287,7 @@
 														</div>
 														<div class="row">
 															<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
-																<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='QQ'></iframe>
+																<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='QQ' onload="$('#iframeLoading').modal('hide')"></iframe>
 															</div>
 														</div>
 													</div>`)
@@ -307,12 +314,12 @@
 								} else {
 									
 								}
-								//$('iframe#Multi').attr('src', params.data.resultpath+params.data.jobid+"/"+`multi_QQ_${value}.html`);
-								//$('iframe#Multi').attr('src', params.data.resultpath+params.data.jobid+"/"+`multi_${value}.html`);
 							} else if(model_name == 'QQ') {
 								
-								//$('iframe#QQ').attr('src', params.data.resultpath+params.data.jobid+"/"+`QQ_BLINK_${value}.html`);
 							} else {
+								//console.log("model_name : ", model_name);
+								//$('iframe#'+model_name).attr('src', "");
+								
 								showPlot(value);
 								showGrid(value);
 							}
@@ -327,6 +334,7 @@
 								alert("특성을 선택해주세요");
 								$("#QQ_model").val("-1");
 							} else {
+								$("#iframeLoading").modal('show');
 								$('iframe#QQ').attr('src', params.data.resultpath+params.data.jobid+"/"+`QQ_${model_name}_${param_phenotype}.html`);
 							}
 						})
@@ -343,8 +351,10 @@
 								$("#isQQ").val("-1");
 							} else {
 								if(isQQ == "QQ") {
+									$("#iframeLoading").modal('show');
 									$('iframe#Multi').attr('src', params.data.resultpath+params.data.jobid+"/"+`multi_QQ_${param_phenotype}.html`);
 								} else {
+									$("#iframeLoading").modal('show');
 									$('iframe#Multi').attr('src', params.data.resultpath+params.data.jobid+"/"+`multi_${param_phenotype}.html`);
 								}
 							}
@@ -365,7 +375,22 @@
 	document.addEventListener('click', function(event) {
 		if(event.target.id.includes('gwas_')) {
 			$("#param_phenotype").val('-1');
+			$("#QQ_model").val('-1');
 			$('#model_name').val(event.target.id.replaceAll("gwas_",""));
+			
+			const model_name = $('#model_name').val();
+			
+			$('iframe').each(function(index, item) {
+				item.src = "";
+			});
+			//$('iframe#'+model_name).attr('src', "");
+			
+			//console.log(document.getElementById('grid_'+model_name));
+			if(document.getElementById('grid_'+model_name)) {
+				document.getElementById('grid_'+model_name).innerHTML = "";
+			}
+			
+			
 		}
 	})
 
@@ -377,43 +402,53 @@
 		
 		//console.log(`iframe#${model_name}`);
 		//console.log(resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
+		$("#iframeLoading").modal('show');
 		$(`iframe#${model_name}`).attr('src', resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
 		
 	}
 
 	var columnDefs2 = [
-		{field: "SNP",cellClass: "grid-cell-centered", width: 100},
-		{field: "Chr",cellClass: "grid-cell-centered", width: 100},
-		{field: "Pos",cellClass: "grid-cell-centered", width: 100},
-		{field: "P-value",cellClass: "grid-cell-centered", width: 100},
-		{field: "MAF",cellClass: "grid-cell-centered", width: 100},
-		{field: "nobs",cellClass: "grid-cell-centered", width: 100},
-		{field: "H&B P-Value",cellClass: "grid-cell-centered", width: 100},
-		{field: "Effect",cellClass: "grid-cell-centered", width: 100}]
+		{field: "SNP",cellClass: "grid-cell-centered", width: 110, resizable: true,},
+		{field: "Chr",cellClass: "grid-cell-centered", width: 80,  resizable: true,},
+		{field: "Pos",cellClass: "grid-cell-centered", width: 90,  resizable: true,},
+		{field: "P-value",cellClass: "grid-cell-centered", width: 90, sortable: true, resizable: true,},
+		{field: "MAF",cellClass: "grid-cell-centered", width: 80, resizable: true,},
+		{field: "Effect",cellClass: "grid-cell-centered", width: 90, resizable: true,}]
 	
 	var gridOptions2 = {
 			columnDefs: columnDefs2,
+			colResizeDefault: "shift",
 			rowHeight: 35,
 			rowSelection: "single",
 			animateRows: true,
+			suppressHorizontalScroll: true,
 			serverSideInfiniteScroll: true,
 	}
 	
 	//var modelGrid = [];
 	function showGrid(value) {
+		
+		
 		const model_name = $('#model_name').val();
 		const resultpath = $('#resultpath').val();
 		const jobid_param = $('#jobid_param').val();
 		
-		
-		
-		
-		
 		//const csv_to_grid = $(`#grid_${model_name}`);
 		const csv_to_grid = document.getElementById(`grid_${model_name}`);
 		
+		try {
+			//console.log(csv_to_grid.innerText.trim());
+			if(csv_to_grid.innerText.trim()) {
+				gridOptions2.api.destroy();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+		
+		
+		
 		//console.log(`#grid_${model_name}`);
-		console.log("path : ", resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv");
+		//console.log("path : ", resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv");
 		
 		fetch(resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv")
 		.then((response) => response.blob())
@@ -424,12 +459,12 @@
 		        var wb = XLSX.read(fileData, {type : 'binary'});
 		        
 		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-		        console.log("rowObj : ", rowObj);
+		        //console.log("rowObj : ", rowObj);
 		        //console.log(csv_to_grid);
 		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
 		        //modelGrid[model_name] = new agGrid.Grid(csv_to_grid, gridOptions2);
 		        gridOptions2.api.setRowData(rowObj);
-		        //gridOptions2.api.sizeColumnsToFit();
+		        gridOptions2.api.sizeColumnsToFit();
 		        //console.log(document.querySelector(`#grid_${model_name}`));
 		    };
 		    reader.readAsBinaryString(file);

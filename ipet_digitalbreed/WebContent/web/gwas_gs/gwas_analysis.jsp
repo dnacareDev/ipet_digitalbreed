@@ -16,10 +16,14 @@
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String filename_vcf = request.getParameter("filename_vcf");
 	String traitname = request.getParameter("traitname");
-	String[] traitname_seq = request.getParameterValues("traitname_seq");
+	String[] traitname_arr = request.getParameterValues("traitname_arr");
+	//String[] traitname_seq = request.getParameterValues("traitname_seq");
 	String cre_date = request.getParameter("cre_date");
 	String inv_date = request.getParameter("inv_date");
 	String[] modelArr = request.getParameterValues("modelGroup");
+	String phenotype = request.getParameter("phenotype");
+	String radio_phenotype = request.getParameter("radio_phenotype");
+	System.out.println("radio_phenotype :  "+ radio_phenotype);
 	
 	String[] cre_date_arr = cre_date.split(" to ");
 	String[] inv_date_arr = inv_date.split(" to ");
@@ -62,11 +66,16 @@
 	System.out.println("===========================================");
 	*/
 
-	/*
+	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	String insertGwasinfo_sql = "insert into gwas_info_t(cropid, varietyid, status, genotype_filename, phenotype_name, model, uploadpath, resultpath,comment, jobid, creuser,cre_dt) ";
-	insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+traitname+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+	
+	if(Integer.parseInt(radio_phenotype) == 0) {
+		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+	} else {
+		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+phenotype+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+	}
 	
 
 	System.out.println("insert gwas_info_t sql : " + insertGwasinfo_sql);
@@ -80,7 +89,7 @@
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();
 	}
-	*/
+	
 
 	
 	String GwasGapit = "Rscript " +script_path+ "gwas_gapit_final.R " +vcf_path+ " " +gwas_pheno_path+ " " +outputdir+ " " +jobid_gwas+ " " +filename_vcf+ " " +jobid_gwas+"_phenotype.csv ";

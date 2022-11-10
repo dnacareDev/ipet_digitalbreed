@@ -112,7 +112,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">&nbsp;Genocore</h2>
+                            <h2 class="content-header-title float-left mb-0">&nbsp;Core Selection</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="../../mainboard.jsp">Home</a>
@@ -184,7 +184,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">Genocore New Analysis</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Core Selection New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -214,8 +214,8 @@
 					                </div>
 					            </div>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">실행</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">초기화</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
 					            </div>
 					        </div>
 					    </div>

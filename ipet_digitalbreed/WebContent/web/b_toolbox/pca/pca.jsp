@@ -70,17 +70,6 @@ body {
 	height: 30px !important;
 }
 
-#loader {
-  width: 48px;
-  height: 48px;
-  border: 5px dotted #FFF;
-  border-radius: 50%;
-  display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  animation: rotation 2s linear infinite;
-}
-
 </style>
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -218,7 +207,7 @@ body {
 							            <!--  
 							            <h5 style="display:inline">&nbsp;&nbsp;Population <a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" >(예시파일)</a></h5>
 							            -->
-							            <h5 style="margin-left:13px;">Population (Example - <a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" ><i class='feather icon-download'></i></a>)</h5>
+							            <h6 style="margin-left:13px; font-weight:bold;">Population &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button></h6>
 							            <div class="col-md-12 col-12">
 											<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
 											<br>
@@ -237,37 +226,13 @@ body {
         </div>
     </div>
     
-	<div class="modal fade" id="analysis_process" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-	    	<div class="modal-content">
-	    		<div class="modal-header">
-	        		<h5 class="modal-title" id="exampleModalLongTitle">분석 중</h5>
-	      		</div>
-	      		<div class="modal-body">
-	      			분석이 진행중입니다.
-	      		</div>
-	      		<div class="modal-footer">
-	        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	      		</div>
-	    	</div>
+   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
+			<div><strong>Loading PCA Result...</strong></div>
 	  	</div>
 	</div>
 	
-	<div class="modal fade" id="analysis_fail" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-	  	<div class="modal-dialog modal-dialog-centered" role="document">
-	    	<div class="modal-content">
-	      		<div class="modal-header">
-	        		<h5 class="modal-title" id="exampleModalLongTitle">분석 실패</h5>
-	      		</div>
-		      	<div class="modal-body">
-		      		분석에 실패했습니다.
-		      	</div>
-		      	<div class="modal-footer">
-		       		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		      	</div>
-	    	</div>
-	  	</div>
-	</div>
 	<!-- Modal end-->
                         
     <!-- END: Content-->
@@ -312,7 +277,8 @@ body {
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-<script type="text/javascript">                  
+<script type="text/javascript">
+
    	$(document).ready(function(){
    		vcfFileList();
    		$(".select2.select2-container.select2-container--default").eq(1).width("444px");

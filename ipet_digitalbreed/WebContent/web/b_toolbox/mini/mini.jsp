@@ -216,8 +216,8 @@
 					                </div>
 					            </div>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="excute();">실행</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">초기화</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="excute();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
 					            </div>
 					        </div>
 					    </div>
