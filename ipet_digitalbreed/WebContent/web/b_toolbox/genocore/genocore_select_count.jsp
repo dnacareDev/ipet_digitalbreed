@@ -5,9 +5,6 @@
 <%@ page import="ipet_digitalbreed.*"%>    
 
 <%
-	
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
 	String count = request.getParameter("count");

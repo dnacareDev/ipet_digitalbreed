@@ -208,9 +208,9 @@
 						
 						const phenotype_arr = params.data.phenotype_name.split(",");
 						//console.log("phenotype[] : ", phenotype_arr);
-						
+						$("#gwas_status").css('display','block');
+						/*
 						const element = document.getElementById('gwas_status');
-						
 						element.innerHTML  = `	<div class='card-content'>
 													<div class='card-body'>
 														<div class='row'>
@@ -236,9 +236,11 @@
 				   										</div>
 													</div>
 												</div>`;
-						
+						*/
 						//console.log(model_arr.length); 
 						
+						$("#button_list").empty();
+						$("#content-list").empty();
 						for(let i=0 ; i<model_arr.length ; i++) {
 							$('#button_list').append(`<li class='nav-item'><a class='nav-link' id='gwas_${model_arr[i]}' data-toggle='pill' href='#panel_${model_arr[i]}' aria-expanded='true'>${model_arr[i]}</a></li>`);
 							$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_${model_arr[i]}' aria-expanded='true'>
@@ -263,11 +265,6 @@
 						$('#button_list').append(`<li class='nav-item'><a class='nav-link' id='gwas_Multi' data-toggle='pill' href='#panel_Multi' aria-expanded='true'>Multiple Model</a></li>`);
 						$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_Multi' aria-expanded='true'>
 														<div class="row">
-															<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' style="width:450px;">
-																<option value='-1' hidden disabled selected>Select plot type</option>
-																<option value='QQ'>QQ plot</option>
-																<option value='noQQ'>Manhattan plot</option>
-															</select>
 														</div>
 														<div class="row">
 															<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
@@ -281,9 +278,6 @@
 						$('#button_list').append(`<li class='nav-item'><a class='nav-link' id='gwas_QQ' data-toggle='pill' href='#panel_QQ' aria-expanded='true'>QQ Plot</a></li>`);
 						$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_QQ' aria-expanded='true'>
 														<div class="row">
-															<select id='QQ_model' class='select2 form-select ml-1 mb-1 float-left' style="width:450px;">
-																<option value='-1' hidden disabled selected>Select Model</option>
-															</select>
 														</div>
 														<div class="row">
 															<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
@@ -293,89 +287,43 @@
 													</div>`)
 						
 						
-						
-						
+						$("#param_phenotype").empty();
+						$("#param_phenotype").append(`<option value="-1" hidden disabled selected>Select Phenotype</option>`)
 						for(let j=0 ; j<phenotype_arr.length ; j++) {
-							//$("#content-list select").append(`<option value="${phenotype_arr[j]}" >${phenotype_arr[j]}</option>`);
-							document.getElementById('param_phenotype').options.add(new Option(phenotype_arr[j], phenotype_arr[j]))
+							$("#param_phenotype").append(`<option value="${phenotype_arr[j]}" >${phenotype_arr[j]}</option>`);
+							//document.getElementById('param_phenotype').options.add(new Option(phenotype_arr[j], phenotype_arr[j]))
 						}
 						
+						$("#QQ_model").empty();
+						$("#QQ_model").append(`<option value="-1" hidden disabled selected>Select Model</option>`)
 						for(let j=0 ; j<model_arr.length ; j++) {
 							document.getElementById('QQ_model').options.add(new Option(model_arr[j], model_arr[j]))
 						}
 						
-						document.querySelector('#param_phenotype').addEventListener('change', function(event) {
-							const value = event.target.value;
-							const model_name = $('#model_name').val();
-							
-							if(model_name == 'Multi') {
-								if(document.getElementById('isQQ').checked) {
-									
-								} else {
-									
-								}
-							} else if(model_name == 'QQ') {
-								
-							} else {
-								//console.log("model_name : ", model_name);
-								//$('iframe#'+model_name).attr('src', "");
-								
-								showPlot(value);
-								showGrid(value);
-							}
-						});
 						
-						document.querySelector('#QQ_model').addEventListener('change', function(event) {
-							//const value = event.target.value;
-							const model_name = document.getElementById('QQ_model').value;
-							const param_phenotype = document.getElementById('param_phenotype').value;
-							
-							if(param_phenotype == "-1") {
-								alert("특성을 선택해주세요");
-								$("#QQ_model").val("-1");
-							} else {
-								$("#iframeLoading").modal('show');
-								$('iframe#QQ').attr('src', params.data.resultpath+params.data.jobid+"/"+`QQ_${model_name}_${param_phenotype}.html`);
-							}
-						})
 						
-						document.querySelector('#isQQ').addEventListener('change', function(event) {
-							const value = event.target.value;
-							const isQQ = document.getElementById('isQQ').value;
-							const param_phenotype = document.getElementById('param_phenotype').value;
-							
-							console.log(isQQ);
-							
-							if(param_phenotype == "-1") {
-								alert("특성을 선택해주세요");
-								$("#isQQ").val("-1");
-							} else {
-								if(isQQ == "QQ") {
-									$("#iframeLoading").modal('show');
-									$('iframe#Multi').attr('src', params.data.resultpath+params.data.jobid+"/"+`multi_QQ_${param_phenotype}.html`);
-								} else {
-									$("#iframeLoading").modal('show');
-									$('iframe#Multi').attr('src', params.data.resultpath+params.data.jobid+"/"+`multi_${param_phenotype}.html`);
-								}
-							}
-						});
 						break;
 					case 2:
 						alert("분석에 실패했습니다.");
 						break;
 				}
 
-			} else {	
-				
-				
-			}
+			} 
 		}
 	};
 	
 	document.addEventListener('click', function(event) {
 		if(event.target.id.includes('gwas_')) {
-			$("#param_phenotype").val('-1');
-			$("#QQ_model").val('-1');
+//			$("#param_phenotype").val('-1').trigger('change');
+			document.getElementById('param_phenotype').value = '-1';
+			document.getElementById('param_phenotype').dispatchEvent(new Event('change'));
+			
+			document.getElementById('isQQ').value = '-1';
+			document.getElementById('isQQ').dispatchEvent(new Event('change'));
+			
+			document.getElementById('QQ_model').value = '-1';
+			document.getElementById('QQ_model').dispatchEvent(new Event('change'));
+			
 			$('#model_name').val(event.target.id.replaceAll("gwas_",""));
 			
 			const model_name = $('#model_name').val();
@@ -383,16 +331,98 @@
 			$('iframe').each(function(index, item) {
 				item.src = "";
 			});
-			//$('iframe#'+model_name).attr('src', "");
 			
 			//console.log(document.getElementById('grid_'+model_name));
 			if(document.getElementById('grid_'+model_name)) {
 				document.getElementById('grid_'+model_name).innerHTML = "";
 			}
 			
+			if (event.target.id == "gwas_Multi") {
+				$("#isQQ").parent().css('display','');
+				$("#QQ_model").parent().css('display','none');
+			} else if (event.target.id == "gwas_QQ") {
+				$("#isQQ").parent().css('display','none');
+				$("#QQ_model").parent().css('display','');
+			} else {
+				$("#isQQ").parent().css('display','none');
+				$("#QQ_model").parent().css('display','none');
+			}
 			
+		} 
+	})
+	
+	document.querySelector('#param_phenotype').addEventListener('change', function(event) {
+		console.log("param_phenotype changed");
+		const value = event.target.value;
+		if(value == '-1') {
+			return;
+		}
+
+		const model_name = $('#model_name').val();
+		if( !(model_name == 'Multi' || model_name == 'QQ') ) {
+			showPlot(value);
+			showGrid(value);
+		}
+	});
+	
+	// form-select2_gwas의 'select2:select' 
+	// => document.getElementById('isQQ').dispatchEvent(new Event('change'));를 거쳐서 온다. 
+	document.querySelector('#isQQ').addEventListener('change', function(event) {
+		
+		const value = event.target.value;
+		const isQQ = document.getElementById('isQQ').value;
+		const param_phenotype = document.getElementById('param_phenotype').value;
+		
+//		console.log(event.target.value);
+//		console.log(isQQ);
+//		console.log(param_phenotype);
+		
+		if(isQQ == '-1') {
+			return;
+		}
+		
+		const resultpath = document.getElementById('resultpath').value;
+		const jobid = document.getElementById('jobid_param').value;
+		
+		console.log("isQQ : ", isQQ);
+		
+		if(param_phenotype == "-1") {
+			alert("특성을 선택해주세요");
+			$("#isQQ").val("-1").trigger('change');
+		} else {
+			if(isQQ == "QQ") {
+				$("#iframeLoading").modal('show');
+				$('iframe#Multi').attr('src', `${resultpath}${jobid}/multi_QQ_${param_phenotype}.html`);
+			} else {
+				$("#iframeLoading").modal('show');
+				$('iframe#Multi').attr('src', `${resultpath}${jobid}/multi_${param_phenotype}.html`);
+			}
+		}
+	});
+	
+	document.querySelector('#QQ_model').addEventListener('change', function(event) {
+		const value = event.target.value;
+		const param_phenotype = document.getElementById('param_phenotype').value;
+		const model_name = document.getElementById('QQ_model').value;
+
+		if(model_name == '-1') {
+			return;
+		}
+		
+		const resultpath = document.getElementById('resultpath').value;
+		const jobid = document.getElementById('jobid_param').value;
+		
+		if(param_phenotype == "-1") {
+			alert("특성을 선택해주세요");
+			$("#QQ_model").val("-1").trigger('change');
+		} else {
+			$("#iframeLoading").modal('show');
+			$('iframe#QQ').attr('src', `${resultpath}${jobid}/QQ_${model_name}_${param_phenotype}.html`);
 		}
 	})
+	
+	
+	
 
 	function showPlot(value) {
 		

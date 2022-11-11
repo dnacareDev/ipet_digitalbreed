@@ -75,32 +75,6 @@ body {
 .select2-search__field:placeholder-shown {
     width: 100% !important; /*makes the placeholder to be 100% of the width while there are no options selected*/
 }
-/*로딩 아이콘 회전 시도*/
-/*
-@keyframes rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-.feather.icon-loader {
-animation-name: rotate;
-animation-duration: 2s;
-animation-timing-function: linear;
-animation-delay: 0s;
-animation-iteration-count: infinite;
-animation-direction: normal;
-animation-fill-mode: none;
-animation-play-state: running;
-}
-*/
 
 </style>
 <%
@@ -191,7 +165,67 @@ animation-play-state: running;
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
-                    <div id="gwas_status" class="card"></div>
+                    <div id="gwas_status" class="card" style="display:none;">
+                    	<div class='card-content'>
+							<div class='card-body'>
+								<div class='row'>
+									<div class='col-12'>
+										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
+										</ul>
+										<div class='row'>
+											<div class='col-12'>
+												<div style="width:15%; padding:0px;"> 
+													<select id='param_phenotype' class='select2 form-selectfloat-left'>
+													</select>
+												</div>
+												<div style="display:none; width:15%; margin-top:1px; padding:0px;"> 
+													<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
+														<option value='-1' hidden disabled selected>Select plot type</option>
+														<option value='QQ'>QQ plot</option>
+														<option value='noQQ'>Manhattan plot</option>
+													</select>
+												</div>
+												<div style="display:none; width:15%; margin-top:1px; padding:0px;"> 
+													<select id='QQ_model' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
+														<option value='-1' hidden disabled selected>Select Model</option>
+													</select>
+												</div>
+												<!--  
+												<div style="margin-bottom:4px;">
+									            	<div style="width:10%; margin-right=0px;" class="form-check form-check-inline">
+														<select id='param_phenotype' class='select2 form-selectfloat-left'>
+															<option value='-1' hidden disabled selected>Select Phenotype</option>
+														</select>
+													</div>
+													<div style="width:10%;" class="form-check form-check-inline">
+														<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
+															<option value='-1' hidden disabled selected>Select plot type</option>
+															<option value='QQ'>QQ plot</option>
+															<option value='noQQ'>Manhattan plot</option>
+														</select>
+													</div>
+													<div style="width:10%;" class="form-check form-check-inline" style="margin-top:5px; margin-left:45px;">
+														<select id='QQ_model' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
+															<option value='-1' hidden disabled selected>Select Model</option>
+														</select>
+													</div>
+									            </div>
+									            -->
+											</div>
+										</div>
+										<div id='content-list' class='tab-content'>
+										</div>
+									</div>
+								</div>
+								<div class='hidden-parameter'>
+									<!-- parameters -->
+									<input type='hidden' id='model_name'>
+									<input type='hidden' id='resultpath'>
+									<input type='hidden' id='jobid_param'>
+								</div>
+							</div>
+						</div>
+                    </div>
                 </section>
                 <!-- // Basic example section end -->
             </div>
@@ -278,7 +312,6 @@ animation-play-state: running;
 	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="modelGroup" value="MLM" />
 	                                            <label class="form-check-label" for="inlineCheckbox2">MLM(Mixed Linear Model)</label>
 	                                        </div>
-	                                        
 	                                    </div>
 	                                    <div class="demo-inline-spacing">
 	                                    	<div class="form-check form-check-inline">
@@ -348,7 +381,7 @@ animation-play-state: running;
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
+    <script src="../../css/app-assets/js/scripts/forms/select/form-select2_gwas.js"></script>
     <script src="../../css/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
     <script src="../../css/app-assets/js/scripts/sheetjs/xlsx.full.min.js"></script>  
     <!--  
@@ -373,12 +406,12 @@ animation-play-state: running;
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../css/app-assets/js/scripts/loadingoverlay/loadingoverlay.js"></script>
-	<script src="../../css/app-assets/js/scripts/loadingoverlay/loadingoverlay.min.js"></script>
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_gwas.js"></script>
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>
-	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
+	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>  
+    <!--  
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
+    -->
     <!-- END: Page JS-->
 
 <script type="text/javascript">    
@@ -389,9 +422,10 @@ animation-play-state: running;
 
    		vcfFileList();
    		phenotypeList();
+   		
    		//$(".select2-container--default:gt(0)").width("444px");
-   		$(".select2-container--default:eq(1)").width("93%");
-   		$(".select2-container--default:eq(2)").width("99%");
+   		//$(".select2-container--default:eq(1)").width("93%");
+   		//$(".select2-container--default:eq(2)").width("99%");
    	});
 	
 	var box = new Object();
@@ -532,7 +566,7 @@ animation-play-state: running;
 	  			$("#VcfSelect").empty();
 	  	    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
 	  	    	for(let i=0 ; i<data.length ; i++) {
-	  				// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+	  				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
 	  				$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
 	  			}
    			}
@@ -713,8 +747,6 @@ animation-play-state: running;
    				model_arr.push(item.value);
    			})
    			
-   			
-   			
    			fetch("./gwas_getJobId.jsp")
    			.then((response) => response.text())
    			.then((jobid_gwas) => {
@@ -732,14 +764,8 @@ animation-play-state: running;
 		        box.setPostData(postObj);
 		        box.upload();
    			});
-   			
    		}
-   		
-   		
-   		
-    	
     }
-   	
    	
    	function printCSV(text) {
    		console.log("iframe param(text) : ", text);
