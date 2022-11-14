@@ -11,10 +11,7 @@
 	String permissionUid = null;
 	
 	String username = request.getParameter("user-name");
-	System.out.println("username : " + username);
-	
 	String userpassword = request.getParameter("user-password");
-	System.out.println("userpassword : " + userpassword);
 	
 	String validresult=null;
 
@@ -28,10 +25,10 @@
 	  	 }	  	 
 	  	 
 	  	 if(validresult.equals("0")){	 		 
-	  		//out.println("<script>alert('The password you entered is incorrect.'); window.history.back(); </script>");
-	  		permissionUid = "dnacare";
-	  		session.setAttribute("permissionUid", permissionUid);
-	  		
+	  		out.println("<script>alert('The password you entered is incorrect.'); window.history.back(); </script>");
+	  		//permissionUid = "dnacare";
+	  		//session.setAttribute("permissionUid", permissionUid);
+	  		//response.sendRedirect("/ipet_digitalbreed/web/mainboard.jsp");	  		
 	  	 }
 	  	 else{
 	  		permissionUid = username;
