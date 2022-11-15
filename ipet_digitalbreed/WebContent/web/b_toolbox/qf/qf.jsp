@@ -12,8 +12,8 @@
     <meta name="keywords" content="digital breeding ipet dnacare">
     <meta name="author" content="DNACARE">
     <title>Digital Breeding System- DNACARE</title>
-    <link rel="apple-touch-icon" href="../../css/app-assets/images/ico/apple-icon-120.png">
-    <link rel="shortcut icon" type="image/x-icon" href="../../css/app-assets/images/ico/favicon.ico">
+    <link rel="apple-touch-icon" href="../../../css/app-assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../css/app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
@@ -28,6 +28,12 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
 	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/forms/validation/form-validation.css">
 	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/forms/select/select2.min.css">
+	
+	<!--  
+	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.structure.min.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.theme.min.css">
+    -->
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -45,13 +51,27 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/aggrid.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/bootstrap5_custom.css">
     <!-- END: Page CSS-->
 
 </head>
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
+<style>
+body {
+	font-family: 'SDSamliphopangche_Outline';
+}
 
+.select2-container--default .select2-results__option[aria-disabled=true] {
+    display: none;
+}
+
+/* placeholder float-right */
+::-webkit-input-placeholder { text-align:right; }
+
+
+</style>
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	String permissionUid = session.getAttribute("permissionUid")+"";
@@ -62,38 +82,15 @@
 	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
 	String jobid_pca = runAnalysisTools.getCurrentDateTime();
 %>
+<%--
+	GenotypeListJson genotypeListJson = new GenotypeListJson();
+	String vcf_sql = "select no, uploadpath, filename,resultpath, comment, refgenome, cropid, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from vcfdata_info_t where creuser='"+permissionUid+"' and varietyid='" + varietyid + "' order by no desc;";
+--%>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
-    <!-- BEGIN: Header-->
-    <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu navbar-fixed navbar-shadow navbar-brand-center">
-        <div class="navbar-wrapper">
-            <div class="navbar-container content">
-                <div class="navbar-collapse" id="navbar-mobile">
-                    <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
-                        </ul>
-			            <ul class="nav navbar-nav flex-row">
-			                <li class="nav-item"><a class="navbar-brand" href="../mainboard.jsp">
-									<img src="../../../images/logo.png"><font size="4px"  color="#4c8aa9"><b>&nbsp;Digital Breeding</b></font>           
-			                    </a></li>
-			            </ul>
-                    </div>
-                    <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">DNACARE(master)</span><span class="user-status">Available</span></div><span><img class="round" src="../../../css/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="page-user-profile.html"><i class="feather icon-user"></i> Edit Profile</a><a class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My Inbox</a><a class="dropdown-item" href="app-todo.html"><i class="feather icon-check-square"></i> Task</a><a class="dropdown-item" href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="auth-login.html"><i class="feather icon-power"></i> Logout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <jsp:include page="../../../css/topmenu.jsp" flush="true"/>
 
-		<jsp:include page="../../../css/menu.jsp" flush="true">
+	<jsp:include page="../../../css/menu.jsp" flush="true">
 		<jsp:param name="menu_active" value="qf"/>
 	</jsp:include>
 
@@ -106,12 +103,12 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">&nbsp;Genotype Database</h2>
+                            <h2 class="content-header-title float-left mb-0">&nbsp;Quality Filter</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="../mainboard.jsp">Home</a>
+                                    <li class="breadcrumb-item"><a href="../../mainboard.jsp">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item active">Database
+                                    <li class="breadcrumb-item">Breeder's toolbox
                                     </li>
                                 </ol>
                             </div>
@@ -127,40 +124,33 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
+                                    	My data <i class='feather icon-database'></i> 남은 용량
+                                    </div>
+                                    <div class="col-12">
                                         <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
                                             <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
-                                                <select class="select2-bg form-control" id="excel-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
-                                                    <option value="-1" hidden="hidden" selected disabled>Select Excel File</option>
+                                                <select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
                                                     <%
-	                                                    int new_excel_id = 0;
-
-                                                    	try{
-                                                    		//엑셀 정보 리스트
-                                                    		String sql = "select * from test_excel_file";
-                                                    		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-                                                    		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
-                                                    		while(ipetdigitalconndb.rs.next()) {
-                                                    			out.println("<option data-excel_id='" +ipetdigitalconndb.rs.getString("excel_id")+ "' data-column_length='" +ipetdigitalconndb.rs.getString("column_length")+    "' >" + ipetdigitalconndb.rs.getString("file_name") + "</option>");
-                                                    		}
-                                                    		
-                                                    		//엑셀 개수
-                                                    		String count_id_sql = "select max(excel_id) max from test_excel_file";
-                                                    		ipetdigitalconndb.stmt1 = ipetdigitalconndb.conn.createStatement();
-                                                			ipetdigitalconndb.rs1 = ipetdigitalconndb.stmt1.executeQuery(count_id_sql);
-                                                			while(ipetdigitalconndb.rs1.next()) {
-                                                				new_excel_id = ipetdigitalconndb.rs1.getInt("max") + 1;
-                                                			}
-                                                			
-                                                    	} catch(Exception e) {
+	                                                	try{
+	                                                		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	                                                		int selected_cnt=0;
+	                                                		String selected_flag=null;
+	
+	                                                		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
+	                                                		while (ipetdigitalconndb.rs.next()) { 	
+	                                                			if(selected_cnt==0) {selected_flag = "selected";};   
+	                                                			out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
+	                                                			selected_cnt++;
+	                                                			selected_flag="";
+	                                                		}
+	                                                	}catch(Exception e){
 	                                                		System.out.println(e);
-	                                                	} finally { 
+	                                                	}finally { 
 	                                                		ipetdigitalconndb.stmt.close();
-	                                                		ipetdigitalconndb.stmt1.close();
 	                                                		ipetdigitalconndb.rs.close();
-	                                                		ipetdigitalconndb.rs1.close();
 	                                                		ipetdigitalconndb.conn.close();
 	                                                	}
-                                                    %>
+                                                    %>       
                                                      </select>                                          
                                             </div>           
                                             <div class="ag-btns d-flex flex-wrap">                                            
@@ -172,21 +162,179 @@
                                   
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-                            <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
-							<button id="excel_upload" class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> new Excel</button>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
-                            <input type="file" id="excel_file" style="display:none;">
                         </div>
                     </div>
-                    <div id="vcf_status" class="card"></div>
+                    <div id="vcf_status" class="card">
+                    	<div class='card-content'>
+							<div class='card-body'>
+								<div class='row'>
+									<div class='col-12'>
+										<ul class='nav nav-pills nav-active-bordered-pill'>
+											<li class='nav-item'><a class='nav-link active' id='qf_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Result </a></li>
+										</ul>
+										<div class='tab-content'>
+											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+												<!--  
+												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
+												-->
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--  
+								<input type='hidden' id='jobid'>
+								<input type='hidden' id='resultpath'>
+								-->
+							</div>
+						</div>
+                    </div>
                 </section>
                 <!-- // Basic example section end -->
-                
-                <!-- hidden input parameter -->
             </div>
         </div>
     </div>
-                        
+    
+	<!-- Modal start-->
+    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning white">
+                    <h4 class="modal-title" id="myModalLabel5">Quality Filter</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+					<form class="form" id="uploadForm">
+					    <div class="form-body">
+					        <div class="row">
+					        	<!--
+					            <div class="col-md-12 col-12 ml-1">
+					                <br>
+					             	<div class="form-label-group">
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+					             		<label for="first-name-column">Comment</label>
+					                </div>
+					            </div>
+					            -->
+					            <fieldset class="border w-100 mt-1 pt-1 ml-1 mr-1">
+						        <legend class="w-auto ml-1 mr-1">Quality Filter</legend>
+						            <div class="col-md-12 col-12">
+						            	<div class="form-label-group" >
+						                    <select class="select2 form-select" id="VcfSelect">
+						                    </select>
+						                </div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+					            		<div class="row">
+							            	<div class="col-4">Variant Type</div>
+							            	<div class="col-3">
+							            		<input type="radio" id="variant_snp" name="variant_type" value="SNP" />
+		                                        <label for="variant_snp">SNP</label>
+							            	</div>
+							            	<div class="col-4">
+							            		<input type="radio" id="variant_indel" name="variant_type" value="INDEL" />
+		                                        <label for="variant_indel">INDEL</label>
+							            	</div>
+					            		</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+							            	<div class="col-4">Allelic Type</div>
+							            	
+							            	<div class="col-3">
+							            		<input type="radio" id="allelic_bi" name="allelic_type" value="bi" />
+		                                        <label for="allelic_bi">Bi-allelic</label>
+							            	</div>
+							            	<div class="col-4">
+							            		<input type="radio" id="allelic_multi" name="allelic_type" value="multi" />
+		                                        <label for="allelic_multi">Multi-allelic</label>
+							            	</div>
+					            		</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4">Missing (%)</div>
+						            		<div class="col-6">
+						            			<input type="range" class="form-range" id="basic-range" min="0" max="100" step="1" />
+						            		</div>
+						            	</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+											<div class="col-4">MAF (%)</div>
+	                                        <div class="col-6">
+	                                        	<input type="range" class="form-range" id="basic-range" min="0" max="100" step="1" />
+	                                        </div>
+	                                    </div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+											<div class="col-4" style="margin-top:2%">MinDP</div>
+											<div class="col-6">
+												<input class="form-control" type="text" id="variant_snp" name="variant_type">
+											</div>
+										</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+											<div class="col-4" style="margin-top:2%">MinGQ</div>
+											<div class="col-6">
+												<input class="form-control" type="text" id="variant_snp" name="variant_type">
+											</div>
+										</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+											<div class="col-4" style="margin-top:2%">Thin</div>
+											<div class="col-6">
+												<input class="form-control" type="text" id="variant_snp" name="variant_type" placeholder="(unit : bp)">
+											</div>
+										</div>
+						            </div>
+						            <div class="col-md-12 col-12">
+						            	<div class="demo-inline-spacing">
+											<div class="form-check form-check-inline">
+	                                            CMPlot
+	                                        </div>
+	                                        <div class="form-check form-check-inline">
+	                                            <input class="form-check-input" type="radio" id="variant_snp" name="variant_type" value="SNP" />
+	                                            <label class="form-check-label" for="variant_snp">사용안함</label>
+	                                        </div>
+	                                        <div class="form-check form-check-inline">
+	                                            <input class="form-check-input" type="radio" id="variant_indel" name="variant_type" value="INDEL" />
+	                                            <label class="form-check-label" for="variant_indel">조건</label>
+	                                        </div>
+	                                        <div class="form-check form-check-inline">
+		                                        <div>
+		                                        	<input class="form-check-input" type="text" id="variant_indel" name="variant_type" value="INDEL" />
+		                                        </div>
+	                                        </div>
+	                                    </div>
+						            </div>
+						        </fieldset>
+					            <div class="col-12">
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+					            </div>
+					        </div>
+					    </div>
+					</form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
+			<div><strong>Loading QF Result...</strong></div>
+	  	</div>
+	</div>
+	
+	<!-- Modal end-->
                         
     <!-- END: Content-->
     <div class="sidenav-overlay"></div>
@@ -205,8 +353,11 @@
     <script src="../../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
-    <script src="../../../css/app-assets/js/scripts/sheetjs/xlsx.full.min.js"></script>
+    <script src="../../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
+    <!--  
+    <script src="../../../css/app-assets/vendors/js/jquery-ui/jquery-ui.min.js"></script>
+    -->
+        
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
@@ -221,121 +372,63 @@
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../../css/app-assets/js/scripts/ag-grid/ag-grid_test.js"></script>
+    <script src="../../../css/app-assets/js/scripts/ag-grid/ag-grid_qf.js"></script>
     <script src="../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
 	<script src="../../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-<script>      
-	
-	$(document).ready(function() {
+<script type="text/javascript">
 
-		/*
-		fetch('./test.jsp')
-		.then((response) => response.json())
-		.then((data) => {
-			//console.log(data);
-			
-			const column_length = data.pop();
-			
-			console.log(column_length);
-			console.log(data);
-		})
-		*/
-		
-	})
-	
-	$("#excel_upload").click( function() {
-		$("#excel_file").click();
-	})
-	
-	
-	document.getElementById("excel_file").onchange = (evt) => {
-		 
-		var reader = new FileReader(); 
-	 
-		reader.addEventListener("loadend", (evt) => {
-		
-	    	let workbook = XLSX.read(
-	    		evt.target.result, {type: "binary"}),
-	    	    worksheet = workbook.Sheets[workbook.SheetNames[0]],
-	    	    range = XLSX.utils.decode_range(worksheet["!ref"]
-	    	    );
-	 
-	    	var data = [];
-	    	for (let row=range.s.r; row<=range.e.r; row++) {
-	    		let i = data.length;
-	    		data.push([]);
-	    		for (let col=range.s.c; col<=range.e.c; col++) {
-	    	    	let cell = worksheet[XLSX.utils.encode_cell({r:row, c:col})];
-	    	    	if(!cell?.v) {
-	    	    		data[i].push("");
-	    	    	} else {
-			    	    data[i].push(cell.v);
-	    	    	}
-	    		}
-	    	}
-	    uploadExcel(data);
-	    
-	  	});
-	 
-		reader.readAsArrayBuffer(evt.target.files[0]);
-		
-	};
-	
-	function uploadExcel(data) {
-		console.log(data);
-		
-		const new_excel_id = <%=new_excel_id%>;
-		const file_name = $("#excel_file")[0].files[0].name;
-		const row_length = data.length;
-		const column_length = data[0].length;
-		const header = data[0];
-		
-		console.log("file_name : ", file_name);
-		
-		
-		let json_header = [];
-		for(let i=0 ; i<column_length ; i++) {
-			json_header.push("column_"+i);
-		}
-		console.log(json_header);
-		
-		let json_array = [];
-		for(let i=0 ; i<row_length ; i++) {
-			const obj = {};
-			for(let j=0 ; j<column_length ; j++) {
-				obj[json_header[j]] = data[i][j];
-			}
-			json_array.push(obj);
-			
-		}
-		
-		console.log("json_array : ", json_array);
-		
-		$.ajax({
-			url: './insertExcel.jsp',
-			method: 'POST',
-			data: {
-				new_excel_id : new_excel_id,
-				file_name : file_name, 
-				column_length : column_length,
-				file_contents : JSON.stringify(json_array),
-				},
-			succenss: function(result) {
-				//console.log(result);
-				//refresh();
-				alert("엑셀 업로드 성공");
-			}
-			
-		})
-	}
-	
+   	$(document).ready(function(){
+   		vcfFileList();
+   		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
+   	});
 
-	
-   
+   	function vcfFileList() {
+   		
+   		$.ajax(
+   			{
+ 	   			//url: "./pca_non_population.jsp",
+ 	   			url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
+ 	   			method: 'POST',
+ 	   			success: function(data) {
+ 		  			console.log("vcf file list : ", data);
+ 		  			
+ 		  			makeOptions(data);
+ 	   			}
+   	  	});
+   	}
+   	
+    function makeOptions(data) {
+    	$("#VcfSelect").empty();
+    	
+    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
+    	for(let i=0 ; i<data.length ; i++) {
+			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
+		}
+    }
+   	
+   	$('#backdrop').on('hidden.bs.modal', function (e) {
+
+   		// 모달창 닫으면 초기화
+    	document.getElementById('uploadPcaForm').reset();
+    	vcfFileList();
+    	box.removeAllFiles();
+    });    
+   	
+    
+    function Execute() {
+    	
+    	
+    }
+    
+       
+
+       
 </script>
+
 </body>
 <!-- END: Body-->
 

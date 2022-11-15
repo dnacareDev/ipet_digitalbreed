@@ -52,12 +52,35 @@
 
 <!-- BEGIN: Body-->
 <style>
-	body {
-		font-family: 'SDSamliphopangche_Outline';
-	}
-	.irx-file-inner-wrapper {
-    height: 30px !important;
-	}	
+body {
+	font-family: 'SDSamliphopangche_Outline';
+}
+
+.irx-file-inner-wrapper {
+   height: 30px !important;
+}
+
+/********* 헤더 수직 *************
+
+#pill2_frame .ag-header-cell-label {
+    height: 100%;
+    padding: 0 !important;
+}
+
+#pill2_frame .ag-header-cell-label .ag-header-cell-text {
+    width: 30px;
+    height: 100%;
+    padding: 0 !important;
+    transform: rotate(90deg);
+    margin-top: 50px;
+    display: inline-block;
+}
+
+#pill2_frame .ag-floating-filter-button {
+    margin-top: -49px;
+}
+
+********* 헤더 수직 *************/
 </style>
 <%
 

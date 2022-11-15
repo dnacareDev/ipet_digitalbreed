@@ -5,7 +5,7 @@
 <%@ page import="ipet_digitalbreed.*"%>    
 
 <%
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 
 	String jobid_vcf = request.getParameter("jobid_vcf");

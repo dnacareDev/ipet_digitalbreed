@@ -209,35 +209,6 @@
 						const phenotype_arr = params.data.phenotype_name.split(",");
 						//console.log("phenotype[] : ", phenotype_arr);
 						$("#gwas_status").css('display','block');
-						/*
-						const element = document.getElementById('gwas_status');
-						element.innerHTML  = `	<div class='card-content'>
-													<div class='card-body'>
-														<div class='row'>
-															<div class='col-12'>
-																<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
-																</ul>
-																<div class='row'>
-																	<div class='col-12'>
-																		<select id='param_phenotype' class='select2 form-select w-25 mb-1 float-left'>
-																			<option value='-1' hidden disabled selected>Select Phenotype</option>
-																		</select>
-																	</div>
-																</div>
-																<div id='content-list' class='tab-content'>
-																</div>
-															</div>
-														</div>
-														<div class='hidden-parameter'>
-				   											<!-- parameters -->
-				   											<input type='hidden' id='model_name'>
-				   											<input type='hidden' id='resultpath'>
-				   											<input type='hidden' id='jobid_param'>
-				   										</div>
-													</div>
-												</div>`;
-						*/
-						//console.log(model_arr.length); 
 						
 						$("#button_list").empty();
 						$("#content-list").empty();
@@ -299,8 +270,6 @@
 						for(let j=0 ; j<model_arr.length ; j++) {
 							document.getElementById('QQ_model').options.add(new Option(model_arr[j], model_arr[j]))
 						}
-						
-						
 						
 						break;
 					case 2:
@@ -372,10 +341,6 @@
 		const value = event.target.value;
 		const isQQ = document.getElementById('isQQ').value;
 		const param_phenotype = document.getElementById('param_phenotype').value;
-		
-//		console.log(event.target.value);
-//		console.log(isQQ);
-//		console.log(param_phenotype);
 		
 		if(isQQ == '-1') {
 			return;
