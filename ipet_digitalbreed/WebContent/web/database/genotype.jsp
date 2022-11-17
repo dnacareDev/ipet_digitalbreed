@@ -60,27 +60,17 @@ body {
    height: 30px !important;
 }
 
-/********* 헤더 수직 *************
-
-#pill2_frame .ag-header-cell-label {
-    height: 100%;
-    padding: 0 !important;
-}
-
+/********************* 헤더 수직 **************************/
 #pill2_frame .ag-header-cell-label .ag-header-cell-text {
-    width: 30px;
-    height: 100%;
-    padding: 0 !important;
-    transform: rotate(90deg);
-    margin-top: 50px;
-    display: inline-block;
+    writing-mode: vertical-lr; /* vertical text */
+}
+/********************* 헤더 수직 **************************/
+
+#pill2_frame .ag-header-cell, #pill2_frame .ag-header-group-cell, #pill2_frame .ag-cell {
+    border-right: 1px solid #dde2eb !important;
 }
 
-#pill2_frame .ag-floating-filter-button {
-    margin-top: -49px;
-}
 
-********* 헤더 수직 *************/
 </style>
 <%
 
@@ -195,7 +185,8 @@ body {
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>    
+    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
+    <script src="../../css/app-assets/js/scripts/sheetjs/xlsx.full.min.js"></script>    
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->

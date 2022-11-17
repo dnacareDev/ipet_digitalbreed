@@ -249,11 +249,14 @@
 	       replaceClass("base-pill34", "nav-link", "nav-link");
 	       replaceClass("base-pill35", "nav-link", "nav-link");	  
 		   
+	       $("#base-pill32").data('jobid', params.data.jobid);
 	       
 		   $('#pill1_frame').attr('height',"130px");
 		   $('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/database/genotype_vcfinfo.jsp?jobid="+params.data.jobid);
+		   $('#pill2_frame').empty();
 		   //$('#pill2_frame').attr('height',"500px", 'src', "/ipet_digitalbreed/web/database/genotype_vcfviewer.jsp?jobid="+params.data.jobid);
 		   print_pill2_frame(params.data.jobid);
+		   //print_pill2_frame_xlsx(params.data.jobid);
 		   $('#pill2_frame').data('jobid',params.data.jobid);
 		   $('#pill3_frame').attr('height',"500px");
 		   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
@@ -280,11 +283,70 @@
 	var gridOptions2 = {
 		columnDefs: columnDefs2,
 	    rowHeight: 35,
-	    pagination: true,
-		paginationPageSize: 11,
+	    headerHeight: 100,
 	    animateRows: true,
+	    suppressFieldDotNotation: true,
 	}
 
+	/*
+	document.addEventListener('click', function(event) {
+		const id = event.target.id;
+		if(id == 'base-pill32') {
+			const jobid = $("#base-pill32").data('jobid');
+		
+			
+			if(!document.getElementById("pill2_frame").innerHTML) {
+				print_pill2_frame_xlsx(jobid);
+			}
+			
+		}
+	})
+	
+	function print_pill2_frame_xlsx(jobid) {
+		
+		const gridTable2 = document.getElementById("pill2_frame");
+		//gridTable2.innerHTML  = "";
+		const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
+		
+		fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix.xlsx`)
+		.then((response) => response.blob())
+		.then((file) => {
+			
+			let reader = new FileReader();
+		    reader.onload = function(){
+		        let fileData = reader.result;
+		        let wb = XLSX.read(fileData, {type : 'binary'});
+		        let rowObj = XLSX.utils.sheet_to_json(wb.Sheets['Sheet1']);;
+		        //console.log(rowObj);
+		        
+		        columnDefs2 = [];
+		        let pill2_frame_width = 0;
+				for(key in rowObj[0]) {
+					if(key == 'chr_pos') {
+						columnDefs2.push({field: key, sortable: true, cellClass: "grid-cell-centered", width: 120, cellRenderer: cellRenderder, cellStyle: cellStyle});
+						pill2_frame_width += 120
+					} else if(key == 'alleles') {
+						continue;
+					} else {
+						columnDefs2.push({field: key, sortable: true, cellClass: "grid-cell-centered", width: 50, menuTabs: [], cellRenderer: cellRenderder, cellStyle: cellStyle});
+						pill2_frame_width += 50
+					}
+				}
+				if(pill2_frame_width < 1780) {
+					$("#pill2_frame").css('width', pill2_frame_width + 3);
+				}
+				
+				gridOptions2.api.setColumnDefs(columnDefs2);
+				gridOptions2.api.setRowData(rowObj);
+				
+				//첫번째 컬럼은 수평
+				document.querySelector('#pill2_frame .ag-header-cell-label .ag-header-cell-text').style.writingMode = 'horizontal-tb'
+		    };
+		    reader.readAsBinaryString(file);
+		})
+	}
+	*/
+	
 	function print_pill2_frame(jobid) {
 		const gridTable2 = document.getElementById("pill2_frame");
 		const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
@@ -297,15 +359,29 @@
 			//console.log(data);
 			
 			columnDefs2 = [];
-			let i=0;
+			//let i=0;
+			let pill2_frame_width = 0;
 			for(key in header) {
-				columnDefs2.push({headerName: header[key], field: `column_${i++}`, cellClass: "grid-cell-centered", width: 100, cellRenderer: cellRenderder, cellStyle: cellStyle});
+				if(key == 'column_0') {
+					columnDefs2.push({headerName:  header[key], field: key, sortable: true, filter: true, cellClass: "grid-cell-centered", width: 130, cellRenderer: cellRenderder, cellStyle: cellStyle});
+					pill2_frame_width += 130
+				} else {
+					columnDefs2.push({headerName: header[key], field: key, cellClass: "grid-cell-centered", width: 50, menuTabs: [], cellRenderer: cellRenderder, cellStyle: cellStyle});
+					pill2_frame_width += 50
+				}
 			}
-			console.log(columnDefs2);
-			gridOptions2.api.setColumnDefs(columnDefs2);
 			
+			//grid 길이가 짧으면 div영역도 축소
+			if(pill2_frame_width < 1780) {
+				$("#pill2_frame").css('width', pill2_frame_width + 30);
+			}
+			//console.log(columnDefs2);
+			gridOptions2.api.setColumnDefs(columnDefs2);
 			gridOptions2.api.setRowData(data);
 			//gridOptions2.api.sizeColumnsToFit();
+			
+			//첫번째 컬럼은 수평
+			document.querySelector('#pill2_frame .ag-header-cell-label .ag-header-cell-text').style.writingMode = 'horizontal-tb'
 		})
 	}
  

@@ -384,12 +384,6 @@ body {
     <script src="../../css/app-assets/js/scripts/forms/select/form-select2_gwas.js"></script>
     <script src="../../css/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
     <script src="../../css/app-assets/js/scripts/sheetjs/xlsx.full.min.js"></script>  
-    <!--  
-    <script src="../../css/app-assets/core/libraries/bootstrap.min.js"></script>
-    -->  
-	<!--  
-	<script src="../../css/app-assets/vendors/js/jquery-ui/jquery-ui.min.js"></script>
-	-->
     <!-- END Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
