@@ -22,11 +22,9 @@ if (request.getMethod().equals("POST"))
 	
 	String db_savePath = "uploads/database/db_input/";
 	String db_outputPath = "/ipet_digitalbreed/result/database/genotype_statistics/";	
-
-	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
-	
-
-	
+	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";	
+	String java_cmd_path = "/usr/bin/java -cp ./:/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/WEB-INF/classes/:/data/apache-tomcat-9.0.64/lib/mysql-connector-java-8.0.16.jar ipet_digitalbreed.VcfToMysql ";
+	 
 	InnorixUpload uploader = new InnorixUpload(request, response, maxPostSize, savePath);
 
 	String _action          = uploader.getParameter("_action");         // 동작 플래그
@@ -88,11 +86,25 @@ if (request.getMethod().equals("POST"))
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
+		String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
+				
+		runanalysistools.execute(genotype_sequence, "cmd");
+		runanalysistools.execute(genotype_statistics, "cmd");
+		runanalysistools.execute(vcf_statistcs, "cmd");
+		//runanalysistools.execute(vcf_parsing, "java");
 		
-		runanalysistools.execute(genotype_sequence);
-		runanalysistools.execute(genotype_statistics);
-		runanalysistools.execute(vcf_statistcs);
-
+		try {	
+			Process process = null;
+			Runtime runtime = Runtime.getRuntime();		
+			process = Runtime.getRuntime().exec(vcf_parsing);				
+			process.getErrorStream().close(); 
+			process.getInputStream().close(); 
+			process.getOutputStream().close(); 
+	    } catch (Exception e) {
+			System.out.println(e);
+	        e.printStackTrace();
+	    }
+		
 		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		

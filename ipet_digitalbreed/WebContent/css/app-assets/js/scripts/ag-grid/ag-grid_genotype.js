@@ -196,6 +196,7 @@
     colResizeDefault: "shift",
     animateRows: true,
     resizable: true,
+    suppressHorizontalScroll: true,
     serverSideInfiniteScroll: true,
 	onCellClicked: params => {
 	
@@ -254,7 +255,6 @@
 		   $('#pill1_frame').attr('height',"130px");
 		   $('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/database/genotype_vcfinfo.jsp?jobid="+params.data.jobid);
 		   $('#pill2_frame').empty();
-		   //$('#pill2_frame').attr('height',"500px", 'src', "/ipet_digitalbreed/web/database/genotype_vcfviewer.jsp?jobid="+params.data.jobid);
 		   print_pill2_frame(params.data.jobid);
 		   //print_pill2_frame_xlsx(params.data.jobid);
 		   $('#pill2_frame').data('jobid',params.data.jobid);
@@ -348,23 +348,94 @@
 	*/
 	
 	function print_pill2_frame(jobid) {
-		const gridTable2 = document.getElementById("pill2_frame");
-		const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
 		
-		fetch(`/ipet_digitalbreed/web/database/genotype_vcfviewer.jsp?jobid=${jobid}`)
+		let filter_arr = [];
+		
+		fetch(`/ipet_digitalbreed/web/database/genotype_parsing_status.jsp?jobid=${jobid}`)
+		.then((response) => response.text())
+		.then((data) => {
+			
+			const map = new Map([
+				["1/3", "업로드 된 VCF 파일을"],
+				["2/3", "SNP 데이타 저장을 위한 데이터 베이스를"],
+				["3/3", "SNP 데이터를 데이터 베이스에"]
+			])
+			
+			const map2 = new Map([
+				["1/3", "분석 중입니다."],
+				["2/3", "생성 중입니다."],
+				["3/3", "저장 중입니다."]
+			])
+			
+			switch(data) {
+				case "1/3": case "2/3": case "3/3":
+					document.getElementById("pill2_frame").style.height = "300px";
+					document.getElementById("pill2_frame").innerHTML = `<div class="container h-100">
+																		    <div class="row align-items-center h-100">
+																		        <div class="col-10 mx-auto">
+																		            <div class="jumbotron bg-white">
+																		                <div class="d-flex justify-content-center align-middle">
+																							<svg width="60px" height="60px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g data-name="Layer 2"><g data-name="alert-triangle"><rect width="24" height="24" transform="rotate(90 12 12)" opacity="0"/><path d="M22.56 16.3L14.89 3.58a3.43 3.43 0 0 0-5.78 0L1.44 16.3a3 3 0 0 0-.05 3A3.37 3.37 0 0 0 4.33 21h15.34a3.37 3.37 0 0 0 2.94-1.66 3 3 0 0 0-.05-3.04zm-1.7 2.05a1.31 1.31 0 0 1-1.19.65H4.33a1.31 1.31 0 0 1-1.19-.65 1 1 0 0 1 0-1l7.68-12.73a1.48 1.48 0 0 1 2.36 0l7.67 12.72a1 1 0 0 1 .01 1.01z"/><circle cx="12" cy="16" r="1"/><path d="M12 8a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V9a1 1 0 0 0-1-1z"/></g></g></svg>
+																						</div>
+																						<div class="d-flex justify-content-center align-middle mt-1">
+																							<h4 class="font-weight-bold">${map.get(data)}</h4>
+																						</div>
+																						<div class="d-flex justify-content-center align-middle">
+																							<h4 class="font-weight-bold">${map2.get(data)}</h4>
+																						</div>
+																		            </div>
+																		        </div>
+																		    </div>
+																		</div>`;
+					break;
+				case "t":
+					const gridTable2 = document.getElementById("pill2_frame");
+					const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
+					return fetch(`/ipet_digitalbreed/web/database/genotype_position_filter.jsp?jobid=${jobid}`);
+				default:
+					console.log("genotype_parsing_status default case");
+			}
+		})
+		.then((response) => response.text())
+		.then((data) => {
+			filter_arr = data.slice(1, data.length-1).split(", ");
+			
+			return fetch(`/ipet_digitalbreed/web/database/genotype_vcfviewer.jsp?jobid=${jobid}`);
+		})
 		.then((response) => response.json())
 		.then((data) => {
+			//console.log(data);
+			
 			const header = data.shift();
 			//console.log(header);
 			//console.log(data);
 			
+			
 			columnDefs2 = [];
-			//let i=0;
 			let pill2_frame_width = 0;
 			for(key in header) {
 				if(key == 'column_0') {
-					columnDefs2.push({headerName:  header[key], field: key, sortable: true, filter: true, cellClass: "grid-cell-centered", width: 130, cellRenderer: cellRenderder, cellStyle: cellStyle});
-					pill2_frame_width += 130
+					//columnDefs2.push({headerName:  header[key], field: key, sortable: true, filter: true, cellClass: "grid-cell-centered", width: 130, cellRenderer: cellRenderder, cellStyle: cellStyle});
+					columnDefs2.push({
+						headerName:  header[key], 
+						field: key, 
+						sortable: true, 
+						filter: true,
+						filterParams: { 
+							values: filter_arr, 
+							comparator: (a, b) => {
+			                    const valA = parseInt(a.replace(/[^0-9]/g,""));
+			                    const valB = parseInt(b.replace(/[^0-9]/g,""));
+			                    if (valA === valB) return 0;
+			                    return valA > valB ? 1 : -1;
+			                    } 
+							}, 
+						cellClass: "grid-cell-centered", 
+						width: 140, 
+						menuTabs: ["filterMenuTab"], 
+						cellRenderer: cellRenderder, 
+						cellStyle: cellStyle});
+					pill2_frame_width += 140
 				} else {
 					columnDefs2.push({headerName: header[key], field: key, cellClass: "grid-cell-centered", width: 50, menuTabs: [], cellRenderer: cellRenderder, cellStyle: cellStyle});
 					pill2_frame_width += 50
@@ -373,8 +444,10 @@
 			
 			//grid 길이가 짧으면 div영역도 축소
 			if(pill2_frame_width < 1780) {
-				$("#pill2_frame").css('width', pill2_frame_width + 30);
+				//$("#pill2_frame").css('width', pill2_frame_width + 20);
+				$("#pill2_frame").css('width', 6 * 50 + 80);
 			}
+			
 			//console.log(columnDefs2);
 			gridOptions2.api.setColumnDefs(columnDefs2);
 			gridOptions2.api.setRowData(data);
@@ -386,81 +459,50 @@
 	}
  
 	function cellRenderder(params) {
-		//console.log("params : ", params.value);
-		switch(params.value) {
-			case "A": 
-				return "<span title='A'>A</span>";
-			case "C":
-				return "<span title='C'>C</span>";
-			case "G":
-				return "<span title='G'>G</span>";
-			case "T":
-				return "<span title='T'>T</span>";
-			case "I":
-				return "<span title='I'>I</span>";
-			case "R":
-				return "<span title='A or G'>R</span>";
-			case "Y":
-				return "<span title='C or T'>Y</span>";
-			case "M":
-				return "<span title='A or C'>M</span>";
-			case "K":
-				return "<span title='G or T'>K</span>";
-			case "S":
-				return "<span title='C or G'>S</span>";
-			case "W":
-				return "<span title='A or T'>W</span>";
-			case "H":
-				return "<span title='A or C or T'>H</span>";
-			case "B":
-				return "<span title='C or G or T'>B</span>";
-			case "V":
-				return "<span title='A or C or G'>V</span>";
-			case "D":
-				return "<span title='A or G or T'>D</span>";
-			case "N":
-				return "<span title='A or C or G or T'>N</span>";
-			default:
-				return params.value;
+		const map = new Map([
+			["A", "<span title='A'>A</span>"], ["C", "<span title='C'>C</span>"], ["G", "<span title='G'>G</span>"],
+			["T", "<span title='T'>T</span>"], ["I", "<span title='I'>I</span>"], ["R", "<span title='A or G'>R</span>"],
+			["Y", "<span title='C or T'>Y</span>"], ["M", "<span title='A or C'>M</span>"], ["K", "<span title='G or T'>K</span>"],
+			["S", "<span title='C or G'>S</span>"], ["W", "<span title='A or T'>W</span>"], ["H", "<span title='A or C or T'>H</span>"],
+			["B", "<span title='C or G or T'>B</span>"], ["V", "<span title='A or C or G'>V</span>"], ["V", "<span title='A or C or G'>V</span>"],
+			["D", "<span title='A or G or T'>D</span>"], ["N", "<span title='A or C or G or T'>N</span>"]
+		]);
+		
+		const key = params.value;
+		
+		if(map.has(key)) {
+			return map.get(key);
+		} else {
+			return params.value;
 		}
 	}
 	
 	function cellStyle(params) {
-		switch(params.value) {
-			case "A":
-				return {backgroundColor : '#FFC800'};
-			case "C":
-				return {backgroundColor : '#CBFF75'};
-			case "G":
-				return {backgroundColor : '#79B9B1'};
-			case "T":
-				return {backgroundColor : '#FF92B1'};
-			case "I":
-				return {backgroundColor : '#9DF0E1'};
-			case "R":
-				return {backgroundColor : '#2C952C'};
-			case "Y":
-				return {backgroundColor : '#00AFFF'};
-			case "M":
-				return {backgroundColor : '#6495ED'};
-			case "K":
-				return {backgroundColor : '#28A0FF'};
-			case "S":
-				return {backgroundColor : '#0A9696'};
-			case "W":
-				return {backgroundColor : '#AD733A'};
-			case "H":
-				return {backgroundColor : '#F3B600'};
-			case "B":
-				return {backgroundColor : '#182605'};
-			case "V":
-				return {backgroundColor : '#4D0088'};
-			case "D":
-				return {backgroundColor : '#808080'};
-			case "N":
-				return {color: 'white', backgroundColor : '#182605'};
-			default:
-				return null;
+		const map = new Map([
+			["A", {backgroundColor : '#FFC800'}], ["C", {backgroundColor : '#CBFF75'}], ["G", {backgroundColor : '#79B9B1'}],
+			["T", {backgroundColor : '#79B9B1'}], ["I", {backgroundColor : '#9DF0E1'}], ["R", {backgroundColor : '#2C952C'}],
+			["Y", {backgroundColor : '#00AFFF'}], ["M", {backgroundColor : '#6495ED'}], ["K", {backgroundColor : '#28A0FF'}],
+			["S", {backgroundColor : '#0A9696'}], ["W", {backgroundColor : '#AD733A'}], ["H", {backgroundColor : '#F3B600'}],
+			["B", {backgroundColor : '#182605'}], ["V", {backgroundColor : '#4D0088'}], ["V", {backgroundColor : '#4D0088'}],
+			["D", {backgroundColor : '#808080'}], ["N", {color: 'white', backgroundColor : '#182605'}]
+		]);
+		
+		const key = params.value;
+		
+		if(map.has(key)) {
+			return map.get(key);
+		} else {
+			return null;
+		}
+	}
+	
+	class customFilter {
+		init(params) {
+			this.consoleLog(params);
+		}
+		
+		consoleLog(params) {
+			console.log("aaa??");
 		}
 	}
 	

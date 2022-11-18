@@ -7,6 +7,7 @@
 
 <%
 	String jobid = request.getParameter("jobid");
+	//System.out.println("jobid : " + jobid);
 
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	
@@ -30,10 +31,9 @@
 	} 
 	
 	List<String> chrnoList = new LinkedList<>();
-	
 	try {
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-		String chrnoSql = "select distinct chrno from chr_pos_t order by no;";
+		String chrnoSql = "select distinct chrno from chr_pos_t where jobid = '" +jobid+ "'order by no;";
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(chrnoSql);
 		while(ipetdigitalconndb.rs.next()) {
 			chrnoList.add(ipetdigitalconndb.rs.getString("chrno"));
@@ -43,7 +43,6 @@
 	} 
 	
 	//System.out.println(chrnoList);
-	
 	for(int i=0 ; i<chrnoList.size() ; i++) {
 		try {
 			ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -62,12 +61,26 @@
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			ipetdigitalconndb.stmt.close();
-			ipetdigitalconndb.rs.close();
-			ipetdigitalconndb.conn.close();
-		}	
+		}
 	}
+	
+	try {
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.rs.close();
+		ipetdigitalconndb.conn.close();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	/*
+	try {
+		BufferedWriter writer = new BufferedWriter(new FileWriter("/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/web/" +jobid+ "/" +jobid+ "_genotype_matrix.json"));
+        writer.write(jsonArray);
+        writer.close();
+	} catch(IOException e) {
+		e.printStackTrace();
+	}
+	*/
 	
 	//System.out.println(jsonArray);
 	out.clear();
