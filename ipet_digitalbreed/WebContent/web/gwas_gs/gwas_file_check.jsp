@@ -72,9 +72,6 @@
 		
 		String vcf_path = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/uploads/database/db_input/" + jobid_vcf + "/";
 		
-
-		
-		
 		File folder_outputdir = new File(outputdir+jobid_gwas);
 
 		if (!folder_outputdir.exists()) {
@@ -91,7 +88,7 @@
 		System.out.println("===========================================");
 		System.out.println("Gwas parameter : " + Gwas);
 		System.out.println("===========================================");
-		runanalysistools.execute(Gwas);
+		runanalysistools.execute(Gwas, "cmd");
 		
 		
 	}

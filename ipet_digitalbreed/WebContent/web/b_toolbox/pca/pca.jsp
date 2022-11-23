@@ -78,8 +78,8 @@ body {
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
-	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
-	String jobid_pca = runAnalysisTools.getCurrentDateTime();
+	//RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
+	//String jobid_pca = runAnalysisTools.getCurrentDateTime();
 %>
 <%--
 	GenotypeListJson genotypeListJson = new GenotypeListJson();
@@ -164,7 +164,13 @@ body {
                     </div>
                     <div id="vcf_status" class="card"></div>
                 </section>
-                <!-- // Basic example section end -->
+                <!-- Basic example section end -->
+                
+                <!-- Hidden Parameters -->
+                <input type="hidden" id="jobid_pca">
+                <input type='hidden' id='jobid'>
+				<input type='hidden' id='resultpath'>
+				<!-- Hidden Parameters -->
             </div>
         </div>
     </div>
@@ -193,12 +199,6 @@ body {
 					            <div class="col-md-12 col-12 ml-1">
 					            	<div class="form-label-group" >
 					                    <select class="select2 form-select" id="VcfSelect" style="width: 444px;">
-					                    	<!--  
-					                    	<option value="-1" selected disabled>목록 선택</option>
-					                    	<option value="1">Alaska</option>
-					                    	<option value="2">22</option>
-					                    	<option value="3">33</option>
-					                    	-->
 					                    </select>
 					                </div>
 					            </div>
@@ -279,10 +279,11 @@ body {
 
 <script type="text/javascript">
 
-   	$(document).ready(function(){
+   	$(document).ready(function(){ 
    		vcfFileList();
    		$(".select2.select2-container.select2-container--default").eq(1).width("444px");
    	});
+   	 
 
    	function vcfFileList() {
    		
@@ -310,7 +311,6 @@ body {
     }
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-
    		// 모달창 닫으면 초기화
     	document.getElementById('uploadPcaForm').reset();
     	vcfFileList();
@@ -320,6 +320,9 @@ body {
    	
     var box = new Object();
     window.onload = function() {
+    	
+    	const jobid_pca = $("#jobid_pca").val();
+    	console.log("innorix jobid_pca : ", jobid_pca);
     	
     	// 파일전송 컨트롤 생성
 	    box = innorix.create({
@@ -332,7 +335,7 @@ body {
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
 	        //uploadUrl: './pca_population.jsp'
-	        uploadUrl: './pca_fileuploader.jsp?jobid_pca=<%=jobid_pca%>',
+	        uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
 	    });
     	
     	
@@ -352,27 +355,22 @@ body {
 	   			}
 	   		, 1000);
         });
-	    
-	    //console.log("box? : ", box);
     };
     
-    function FileUpload() {
+    async function FileUpload() {
     	
     	const comment = $('#comment').val();
     	const varietyid = $( "#variety-select option:selected" ).val();
     	const jobid_vcf = $('#VcfSelect').find(':selected').data('jobid');
+    	const jobid_pca = await fetch("../../getJobid.jsp")
+   						.then((response) => response.text())
+   	
+   		console.log("jobid_pca : ", jobid_pca);
+    	$("#jobid_pca").val(jobid_pca);
     	const filename = $('#VcfSelect').find(':selected').data('filename');
     	// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
     	// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
     	
-    	
-    	/*
-    	console.log("comment : ", comment);
-    	console.log("varietyid : ", varietyid);
-    	console.log("jobid : ", jobid);
-    	console.log("filename : ", filename);
-    	console.log("jobid2 : ", jobid2);
-    	*/
     	
     	if(Number(jobid_vcf) == -1) {
     		alert("선택된 VCF 파일이 없습니다.");
@@ -398,15 +396,7 @@ body {
 	        
 	        
 			// with_population 영역
-	    	fetch('./pca_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_pca=<%=jobid_pca%>' + '&population_name=' +population_name+ '&filename=' +filename) 
-			/*
-			.then(function(response) {
-	    		response.text()
-	    		.then(function(data) {
-	    			console.log("pca_population.jsp");
-	    		})
-	    	})
-	    	*/
+	    	fetch('./pca_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_pca=' +jobid_pca+ '&population_name=' +population_name+ '&filename=' +filename) 
 	    	
     		setTimeout( function () {
 	   			refresh();
@@ -424,7 +414,7 @@ body {
  						"comment" : comment, 
  						"varietyid" : varietyid, 
  						"jobid_vcf" : jobid_vcf, 
- 						"jobid_pca" : "<%=jobid_pca%>",
+ 						"jobid_pca" : jobid_pca,
  						"filename" : filename },
  					success: function(result) {
 						console.log("pca_non_population.jsp");
@@ -438,6 +428,7 @@ body {
 	   			$("#backdrop").modal("hide");
 	   			}
 	   		, 1000);
+    		
     	}
     }
     

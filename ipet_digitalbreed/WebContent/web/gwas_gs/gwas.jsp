@@ -150,7 +150,7 @@ body {
 	                                                		ipetdigitalconndb.conn.close();
 	                                                	}
                                                     %>       
-                                                     </select>                                          
+                                                </select>                                          
                                             </div>           
                                             <div class="ag-btns d-flex flex-wrap">                                            
                                                 <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
@@ -190,27 +190,6 @@ body {
 														<option value='-1' hidden disabled selected>Select Model</option>
 													</select>
 												</div>
-												<!--  
-												<div style="margin-bottom:4px;">
-									            	<div style="width:10%; margin-right=0px;" class="form-check form-check-inline">
-														<select id='param_phenotype' class='select2 form-selectfloat-left'>
-															<option value='-1' hidden disabled selected>Select Phenotype</option>
-														</select>
-													</div>
-													<div style="width:10%;" class="form-check form-check-inline">
-														<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
-															<option value='-1' hidden disabled selected>Select plot type</option>
-															<option value='QQ'>QQ plot</option>
-															<option value='noQQ'>Manhattan plot</option>
-														</select>
-													</div>
-													<div style="width:10%;" class="form-check form-check-inline" style="margin-top:5px; margin-left:45px;">
-														<select id='QQ_model' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
-															<option value='-1' hidden disabled selected>Select Model</option>
-														</select>
-													</div>
-									            </div>
-									            -->
 											</div>
 										</div>
 										<div id='content-list' class='tab-content'>

@@ -9,13 +9,13 @@
 
 	function refresh() {
 		gridOptions.api.refreshCells(); 
-		agGrid
-		    //.simpleHttpRequest({ url: "../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-			.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-		    .then(function(data) {
-		    	console.log("data : ", data);
-		    	gridOptions.api.setRowData(data);
-		    });
+  		fetch("../../../web/b_toolbox/qf/qf_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log(data);
+			gridOptions.api.setRowData(data);
+			gridOptions.api.sizeColumnsToFit();
+  		})
 		vcfFileList();
 	}
 
@@ -41,7 +41,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../web/b_toolbox/pca/pca_delete.jsp",
+		    url:"../../../web/b_toolbox/qf/qf_delete.jsp",
 		    type:"POST",
 		    data:{'params':deleteitems},
 		    success: function(result) {
@@ -73,7 +73,17 @@
 	    },
 	    {
 	    	headerName: "파일명",
-	    	field: "file_name",
+	    	field: "filename",
+	    	editable: false,
+	    	sortable: true,
+	    	resizable: true,
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 400,
+	    },
+	    {
+	    	headerName: "처리내용",
+	    	field: "manufacture",
 	    	editable: false,
 	    	sortable: true,
 	    	resizable: true,
@@ -103,13 +113,19 @@
 		    }
 	    },
 	    {
-	      headerName: "상세내용",
-	      field: "comment",
+	      headerName: "저장",
+	      field: "save_cmd",
 	      editable: false,
 	      sortable: true,
 	      resizable: true,
 	      filter: 'agNumberColumnFilter',
-	      width: 650
+	      cellClass: "grid-cell-centered",
+	      width: 250,
+	      cellRenderer: function(params) {
+	    	  if(params.value != "1") {
+	    		  return `<span style='cursor:pointer;' onclick='saveToVcf("${params.data.filename}", "${params.data.jobid}")'><i class='feather icon-save'></i></span>`;
+	    	  }
+	      }
 	    },
 	    {
 	      headerName: "분석일",
@@ -117,11 +133,10 @@
 	      editable: false,
 	      sortable: true,
 	      resizable: true,
+	      hide: true,
 	      filter: 'agNumberColumnFilter',
 	      width: 296,
 	      cellClass: "grid-cell-centered", 
-	      //cellEditor: DatePicker,
-	      //cellEditorPopup: true
 	    },
 		{
 	      headerName: "jobid",
@@ -158,7 +173,6 @@
 		animateRows: true,
 		suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
-		cellClass: "grid-cell-centered",
 		
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
@@ -168,63 +182,27 @@
 		},
 		
 		onCellClicked: params => {
-		
 			//console.log("params : ", params);
 			
-			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
+			if(params.colDef.headerName != "번호" &&params.colDef.headerName != "저장"){
+				
+				document.getElementById('vcf_status').style.display = "block";
 				
 				switch (Number(params.data.status)) {
 					case 0:
-						//$("#analysis_process").modal('show');
 						alert("분석 중입니다.");
 						break;
 					case 1:
 						$("#iframeLoading").modal('show');
 						
-						/*
-						const element = document.getElementById('vcf_status');
-				   		element.innerHTML  = `<div class='card-content'>
-				   								<div class='card-body'>
-				   									<div class='row'>
-				   										<div class='col-12'>
-				   											<ul class='nav nav-pills nav-active-bordered-pill'>
-				   												<li class='nav-item'><a class='nav-link active' id='pca_1' data-toggle='pill' href='#pill1' aria-expanded='true'>PCA 1-2 </a></li>
-								   								<li class='nav-item'><a class='nav-link' id='pca_2' data-toggle='pill' href='#pill2' aria-expanded='false'>PCA 2-3</a></li>
-								   								<li class='nav-item'><a class='nav-link' id='pca_3' data-toggle='pill' href='#pill3' aria-expanded='false'>PCA 1-3</a></li>
-								   								<li class='nav-item'><a class='nav-link' id='pca_4' data-toggle='pill' href='#pill4' aria-expanded='false'>PCA (3D)</a></li>
-				   											</ul>
-				   											<div class='tab-content'>
-				   												<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
-				   												</div>
-				   												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='hideSpinner(this, ${params.data.jobid}); console.log("pca2")'></iframe>
-				   												</div>
-				   												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
-				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
-				   												</div>
-				   												<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
-				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill4_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
-				   												</div>
-				   											</div>
-				   										</div>
-				   									</div>
-				   									<input type='hidden' id='jobid'>
-				   									<input type='hidden' id='resultpath'>
-				   								</div>
-				   							</div>`;
-						*/
-						
-				   		$('#pill1_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc2.html");
-				   		//$('#pill2_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc2_pc3.html");
-				   		//$('#pill3_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca_pc1_pc3.html");
-				   		//$('#pill4_frame').attr('src', params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_vcf_2_pca.html");
+						$('#pill1_frame').attr('height',"130px");
+						$('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/b_toolbox/qf/qf_vcfinfo.jsp?jobid="+params.data.jobid);
 				   		
 				   		// input에 jobid값 저장
 				   		$("#jobid").val(params.data.jobid);
 				   		$("#resultpath").val(params.data.resultpath);
 				   		
-						//gridOptions.api.sizeColumnsToFit();
+						gridOptions.api.sizeColumnsToFit();
 						break;
 					case 2:
 						//$("#analysis_fail").modal('show');
@@ -235,65 +213,74 @@
 		}
 	};
 	
-	/*
+	
 	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
 	document.addEventListener('click', function(event) {
-		console.log(event.target.id);
+		//console.log(event.target.id);
 		
 		const jobid = $("#jobid").val();
 		const resultpath = $("#resultpath").val();
 		
 		switch(event.target.id) {
-			case 'pca_1':
-				break;
-			case 'pca_2':
+			case 'qf_2':
 				if(!$('#pill2_frame').attr('src')){
 					$("#iframeLoading").modal('show');
-					$('#pill2_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_vcf_2_pca_pc2_pc3.html");
+					$('#pill2_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_variant.html");
 				}
 				break;
-			case 'pca_3':
+			case 'qf_3':
 				if(!$('#pill3_frame').attr('src')){
 					$("#iframeLoading").modal('show');
-					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_vcf_2_pca_pc1_pc3.html");
+					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_depth.html");
 				}
 				break;
-			case 'pca_4':
+			case 'qf_4':
 				if(!$('#pill4_frame').attr('src')){
+					$("#iframeLoading").modal('show');
+					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_miss.html");
+				}
+				break;
+			/*
+			case 'qf_5':
+				if(!$('#pill5_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_vcf_2_pca.html");
 				}
 				break;
+			*/
 		}
 	});
-	*/
-	/*
-	// 로딩이 완료되면 로딩창 소멸
-	function hideSpinner(target, jobid) {
-		if(target.src.includes(jobid)) {
-			$("#iframeLoading").modal('hide');
-		}
-	}
-	*/
- 
-	/*** DEFINED TABLE VARIABLE ***/
-	var gridTable = document.getElementById("myGrid");
+	
+	document.addEventListener('DOMContentLoaded', () => {
+  		/*** DEFINED TABLE VARIABLE ***/
+  		const gridTable = document.getElementById("myGrid");
 
-	/*** GET TABLE DATA FROM URL ***/
+  	  	/*** FILTER TABLE ***/
+  	  	function updateSearchQuery(val) {
+  	  		gridOptions.api.setQuickFilter(val);
+  	  	}
 
-  	agGrid
-		.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-		.then(function(data) {
-		console.log("data : ", data);
-		  
-		gridOptions.api.setRowData(data);
-		gridOptions.api.sizeColumnsToFit();
-	});
-  	
-  	function getParams() {
-  		return 
-  	}
-  
+  	  	$(".ag-grid-filter").on("keyup", function() {
+  	  		updateSearchQuery($(this).val());
+  	  	});
+
+  	  	/*** CHANGE DATA PER PAGE ***/
+  	  	function changePageSize(value) {
+  	  		gridOptions.api.paginationSetPageSize(Number(value));
+  	  	}
+  		
+  		const myGrid = new agGrid.Grid(gridTable, gridOptions);
+  		
+  		/*** GET TABLE DATA FROM URL ***/
+  		fetch("../../../web/b_toolbox/qf/qf_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log(data);
+			gridOptions.api.setRowData(data);
+			gridOptions.api.sizeColumnsToFit();
+  		})
+	})	
+	  	
 
 	/*** FILTER TABLE ***/
 	function updateSearchQuery(val) {
@@ -320,26 +307,7 @@
 	    gridOptions.api.exportDataAsCsv();
 	});
 	
-	/*** INIT TABLE ***/
-	new agGrid.Grid(gridTable, gridOptions);
-	
-	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
-	
-	if ($(window).width() < 768) {
-	    //gridOptions.columnApi.setColumnPinned("email", null);
-	} else {
-	   // gridOptions.columnApi.setColumnPinned("email", "left");
-	}
-	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
-		
-	    if ($(window).width() < 768) {
-	      //gridOptions.columnApi.setColumnPinned("email", null);
-	    } else {
-	     // gridOptions.columnApi.setColumnPinned("email", "left");
-	    }
 	});
-  
-	//console.log(gridOptions);
   

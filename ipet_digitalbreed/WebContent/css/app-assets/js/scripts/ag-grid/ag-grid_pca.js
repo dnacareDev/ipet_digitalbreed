@@ -251,7 +251,7 @@
 				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
 				   												</div>
 				   												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='hideSpinner(this, ${params.data.jobid}); console.log("pca2")'></iframe>
+				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='hideSpinner(this, ${params.data.jobid});'></iframe>
 				   												</div>
 				   												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
 				   													<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
@@ -262,8 +262,6 @@
 				   											</div>
 				   										</div>
 				   									</div>
-				   									<input type='hidden' id='jobid'>
-				   									<input type='hidden' id='resultpath'>
 				   								</div>
 				   							</div>`;
 						
@@ -289,7 +287,7 @@
 	
 	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
 	document.addEventListener('click', function(event) {
-		console.log(event.target.id);
+		//console.log(event.target.id);
 		
 		const jobid = $("#jobid").val();
 		const resultpath = $("#resultpath").val();

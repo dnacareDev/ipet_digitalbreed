@@ -80,7 +80,7 @@
 	String PCA = "Rscript " +script_path+ "pca_plot.R " +savePath+ " " +outputPath+ " " +jobid_pca+ " " +filename+ " NA NA";
 	System.out.println("PCA parameter(without population) : " + PCA);
 
-	runanalysistools.execute(PCA);
+	runanalysistools.execute(PCA, "cmd");
 	
 	/*
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();

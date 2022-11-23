@@ -91,7 +91,7 @@ if (request.getMethod().equals("POST"))
 		runanalysistools.execute(genotype_sequence, "cmd");
 		runanalysistools.execute(genotype_statistics, "cmd");
 		runanalysistools.execute(vcf_statistcs, "cmd");
-		//runanalysistools.execute(vcf_parsing, "java");
+		runanalysistools.execute(vcf_parsing, "java");
 		
 		try {	
 			Process process = null;

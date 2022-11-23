@@ -172,7 +172,7 @@
   	
 	String spyerplot_cmd = "Rscript "+script_path+"phenotype_spyderplot_final.R "+savePath+" "+outputPath+" "+ jobid +" " + jobid+".txt"+" " + jobid+"_full.txt";		
 	
-	runanalysistools.execute(spyerplot_cmd);
+	runanalysistools.execute(spyerplot_cmd, "cmd");
 	
 	out.println(jobid);
 %>

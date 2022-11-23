@@ -104,6 +104,6 @@
 	System.out.println("Gwasgapit parameter : " + GwasGapit);
 	System.out.println("=========================================");
 			
-	runanalysistools.execute(GwasGapit);
+	runanalysistools.execute(GwasGapit, "cmd");
 
 %>

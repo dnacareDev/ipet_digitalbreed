@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
+<%@ page import="java.io.*"%>
 <%@ page import="ipet_digitalbreed.*"%>    
 
 <head>
@@ -23,7 +24,12 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/tether.min.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/shepherd-theme-default.css">
+    <!--  
+	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/nouislider.min.css">
+	-->
+    <!--  
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/vendors.min.css">
+    -->
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
 	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/forms/validation/form-validation.css">
@@ -50,6 +56,9 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/dashboard-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/tour/tour.css">
+    <!--  
+    <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/extensions/ext-component-sliders.css">
+    -->
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/aggrid.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/bootstrap5_custom.css">
     <!-- END: Page CSS-->
@@ -68,8 +77,14 @@ body {
 }
 
 /* placeholder float-right */
-::-webkit-input-placeholder { text-align:right; }
+::-webkit-input-placeholder { 
+	text-align:right; 
+}
 
+.min-range-max {
+	color: gray;
+	cursor: pointer;
+}
 
 </style>
 <%
@@ -78,14 +93,7 @@ body {
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
-	
-	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
-	String jobid_pca = runAnalysisTools.getCurrentDateTime();
 %>
-<%--
-	GenotypeListJson genotypeListJson = new GenotypeListJson();
-	String vcf_sql = "select no, uploadpath, filename,resultpath, comment, refgenome, cropid, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from vcfdata_info_t where creuser='"+permissionUid+"' and varietyid='" + varietyid + "' order by no desc;";
---%>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
     <jsp:include page="../../../css/topmenu.jsp" flush="true"/>
@@ -123,9 +131,7 @@ body {
                         <div class="card-content">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12">
-                                    	My data <i class='feather icon-database'></i> 남은 용량
-                                    </div>
+                                    
                                     <div class="col-12">
                                         <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
                                             <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
@@ -158,6 +164,20 @@ body {
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                    	<i class='feather icon-database'></i>
+                                    	<% 
+	                                    	String  drive;
+	                                    	double  totalSize, freeSize, useSize;        
+	
+	                                    	File[] roots = File.listRoots();
+	                                    	totalSize = roots[0].getTotalSpace() / Math.pow(1024, 3);
+	                                    	useSize = roots[0].getUsableSpace() / Math.pow(1024, 3);
+	                                    	freeSize = totalSize - useSize;
+	
+	                                    	out.println(String.format("%.2f",freeSize) + " GB Remained");
+                                    	%>
+                                    </div>
                                 </div>
                                   
                             </div>
@@ -166,27 +186,39 @@ body {
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
-                    <div id="vcf_status" class="card">
+                    <div id="vcf_status" class="card" style="display:none">
                     	<div class='card-content'>
 							<div class='card-body'>
 								<div class='row'>
 									<div class='col-12'>
 										<ul class='nav nav-pills nav-active-bordered-pill'>
-											<li class='nav-item'><a class='nav-link active' id='qf_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Result </a></li>
+											<li class='nav-item'><a class='nav-link active' id='qf_1' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info </a></li>
+											<li class='nav-item'><a class='nav-link' id='qf_2' data-toggle='pill' href='#pill2' aria-expanded='false'>Variant </a></li>
+											<li class='nav-item'><a class='nav-link' id='qf_3' data-toggle='pill' href='#pill3' aria-expanded='false'>DP </a></li>
+											<li class='nav-item'><a class='nav-link' id='qf_4' data-toggle='pill' href='#pill4' aria-expanded='false'>Missing </a></li>
+											<li class='nav-item'><a class='nav-link' id='qf_5' data-toggle='pill' href='#pill5' aria-expanded='false'>CM Plot </a></li>
 										</ul>
 										<div class='tab-content'>
 											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-												<!--  
-												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
-												-->
+												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner()'></iframe>
+											</div>
+											<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
+												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='hideSpinner()'></iframe>
+											</div>
+											<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
+												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame' onload='hideSpinner()'></iframe>
+											</div>
+											<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
+												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill4_frame' onload='hideSpinner()'></iframe>
+											</div>
+											<div class='tab-pane' id='pill5' aria-labelledby='base-pill4'>
+												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill5_frame' onload='hideSpinner()'></iframe>
 											</div>
 										</div>
 									</div>
 								</div>
-								<!--  
 								<input type='hidden' id='jobid'>
 								<input type='hidden' id='resultpath'>
-								-->
 							</div>
 						</div>
                     </div>
@@ -198,7 +230,7 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title" id="myModalLabel5">Quality Filter</h4>
@@ -210,16 +242,7 @@ body {
 					<form class="form" id="uploadForm">
 					    <div class="form-body">
 					        <div class="row">
-					        	<!--
-					            <div class="col-md-12 col-12 ml-1">
-					                <br>
-					             	<div class="form-label-group">
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
-					             		<label for="first-name-column">Comment</label>
-					                </div>
-					            </div>
-					            -->
-					            <fieldset class="border w-100 mt-1 pt-1 ml-1 mr-1">
+					            <fieldset class="border w-100 m-1 pt-1">
 						        <legend class="w-auto ml-1 mr-1">Quality Filter</legend>
 						            <div class="col-md-12 col-12">
 						            	<div class="form-label-group" >
@@ -230,93 +253,104 @@ body {
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 					            		<div class="row">
 							            	<div class="col-4">Variant Type</div>
-							            	<div class="col-3">
-							            		<input type="radio" id="variant_snp" name="variant_type" value="SNP" />
-		                                        <label for="variant_snp">SNP</label>
+							            	<div class="form-check col-3">
+							            		<input type="checkbox" class="form-check-input" id="variant_snp" />
+		                                        <label class="form-check form-check-label" for="variant_snp" style="margin-left:-16px;" >SNP</label>
 							            	</div>
-							            	<div class="col-4">
-							            		<input type="radio" id="variant_indel" name="variant_type" value="INDEL" />
-		                                        <label for="variant_indel">INDEL</label>
+							            	<div class="form-check col-3">
+							            		<input type="checkbox" class="form-check-input" id="variant_indel" />
+		                                        <label class="form-check-label" for="variant_indel" style="margin-left:6px;" >INDEL</label>
 							            	</div>
 					            		</div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
 							            	<div class="col-4">Allelic Type</div>
-							            	
-							            	<div class="col-3">
-							            		<input type="radio" id="allelic_bi" name="allelic_type" value="bi" />
-		                                        <label for="allelic_bi">Bi-allelic</label>
-							            	</div>
-							            	<div class="col-4">
-							            		<input type="radio" id="allelic_multi" name="allelic_type" value="multi" />
-		                                        <label for="allelic_multi">Multi-allelic</label>
+							            	<div class="form-check col-3">
+							            		<input type="checkbox" class="form-check-input" id="allelic_bi" />
+		                                        <label class="form-check-label" for="allelic_bi" style="margin-left:6px;">Bi-allelic</label>
 							            	</div>
 					            		</div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
-						            		<div class="col-4">Missing (%)</div>
-						            		<div class="col-6">
-						            			<input type="range" class="form-range" id="basic-range" min="0" max="100" step="1" />
+						            		<div class="col-4" style="margin-top:8px;">Missing (%)</div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('missing-range').value = 0; document.getElementById('missing-number').value = 0;">0</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="missing-range" min="0" max="100" value="50" step="1" oninput="document.getElementById('missing-number').value = this.value" />
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('missing-range').value = 100; document.getElementById('missing-number').value = 100">100</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="missing-number" autocomplete="off" value="50" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>100)this.value=100; document.getElementById('missing-range').value = this.value;" />
 						            		</div>
 						            	</div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
-											<div class="col-4">MAF (%)</div>
-	                                        <div class="col-6">
-	                                        	<input type="range" class="form-range" id="basic-range" min="0" max="100" step="1" />
+											<div class="col-4" style="margin-top:8px;">MAF (%)</div>
+	                                        <div class="col-5" style="margin-top:8px;">
+	                                        	<div class="row">
+	                                        		<div class="col-1 min-range-max" onclick="document.getElementById('maf-range').value = 0; document.getElementById('maf-number').value = 0;">0</div>
+	                                        		<div class="col-8" style="margin-right:-3px; padding-left:3px; padding-right:0px;">
+			                                        	<input type="range" class="form-range" id="maf-range" min="0" max="50" value="25" step="1" oninput="document.getElementById('maf-number').value = this.value" />
+	                                        		</div>
+	                                        		<div class="col-1 min-range-max" onclick="document.getElementById('maf-range').value = 50; document.getElementById('maf-number').value = 50;"> 50</div>
+	                                        	</div>
 	                                        </div>
+	                                        <div class="col-3">
+						            			<input type="text" class="form-control" id="maf-number" autocomplete="off" value="25" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>50)this.value=50; document.getElementById('maf-range').value = this.value;" />
+						            		</div>
 	                                    </div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
 											<div class="col-4" style="margin-top:2%">MinDP</div>
-											<div class="col-6">
-												<input class="form-control" type="text" id="variant_snp" name="variant_type">
+											<div class="col-8">
+												<input type="text" class="form-control" id="minDP" autocomplete="off" />
 											</div>
 										</div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
 											<div class="col-4" style="margin-top:2%">MinGQ</div>
-											<div class="col-6">
-												<input class="form-control" type="text" id="variant_snp" name="variant_type">
+											<div class="col-8">
+												<input type="text" class="form-control" id="minGQ" autocomplete="off" />
 											</div>
 										</div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
-											<div class="col-4" style="margin-top:2%">Thin</div>
-											<div class="col-6">
-												<input class="form-control" type="text" id="variant_snp" name="variant_type" placeholder="(unit : bp)">
+											<div class="col-4" style="margin-top:5px;">Thin</div>
+											<div class="form-check col-3">
+							            		<input type="checkbox" class="form-check-input" id="useThin" style="margin-top:9px; margin-left:-11px;" onclick="if(this.checked){document.getElementById('thin').style.display = 'block'}else{document.getElementById('thin').style.display ='none'; document.getElementById('thin').value='';}" checked/>
+		                                        <label for="useThin"  style="margin-top:9px; margin-left:12px;">사용</label>
+							            	</div>
+											<div class="col-5">
+												<input class="form-control" type="text" id="thin" placeholder="(unit : bp)" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 											</div>
 										</div>
 						            </div>
-						            <div class="col-md-12 col-12">
-						            	<div class="demo-inline-spacing">
-											<div class="form-check form-check-inline">
-	                                            CMPlot
-	                                        </div>
-	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="radio" id="variant_snp" name="variant_type" value="SNP" />
-	                                            <label class="form-check-label" for="variant_snp">사용안함</label>
-	                                        </div>
-	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="radio" id="variant_indel" name="variant_type" value="INDEL" />
-	                                            <label class="form-check-label" for="variant_indel">조건</label>
-	                                        </div>
-	                                        <div class="form-check form-check-inline">
-		                                        <div>
-		                                        	<input class="form-check-input" type="text" id="variant_indel" name="variant_type" value="INDEL" />
-		                                        </div>
-	                                        </div>
-	                                    </div>
+						            <!--  
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row mb-1">
+							            	<div class="col-4" style="margin-top:5px;">CMPlot</div>
+							            	<div class="form-check col-3">
+							            		<input type="checkbox" class="form-check-input" id="CMPlot_use" style="margin-top:9px; margin-left:-11px;" value="CMPlot_without_condition" checked/>
+		                                        <label for="CMPlot_use"  style="margin-top:9px; margin-left:12px;">사용</label>
+							            	</div>
+							            	<div class="col-5">
+							            		<input class="form-control" type="text" id="CMPlot" name="variant_type" placeholder="(unit : mb)">
+							            	</div>
+					            		</div>
 						            </div>
+						            -->
 						        </fieldset>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="Execute();">Run</button>
 					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
 					            </div>
 					        </div>
@@ -330,7 +364,7 @@ body {
    	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
-			<div><strong>Loading QF Result...</strong></div>
+			<div><strong>Loading...</strong></div>
 	  	</div>
 	</div>
 	
@@ -373,7 +407,9 @@ body {
 
     <!-- BEGIN: Page JS-->
     <script src="../../../css/app-assets/js/scripts/ag-grid/ag-grid_qf.js"></script>
-    <script src="../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
+    <!--  
+    <script src="../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>
+    -->   
 	<script src="../../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
@@ -386,7 +422,6 @@ body {
    	});
 
    	function vcfFileList() {
-   		
    		$.ajax(
    			{
  	   			//url: "./pca_non_population.jsp",
@@ -409,7 +444,43 @@ body {
 			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
 		}
     }
+    
+	// 로딩이 완료되면 로딩창 소멸
+	function hideSpinner() {
+		$("#iframeLoading").modal('hide');
+	}
    	
+	function saveToVcf(filename, jobid) { 
+		if(!confirm("결과를 Gynotype DB에 저장하시겠습니까?")) {
+			return;
+		}
+		
+		
+	   	const variety_id = $( "#variety-select option:selected" ).val();
+	   	
+	   	//console.log(variety_id);
+	   	//console.log(filename);
+	   	//console.log(jobid);
+	   	
+	   	
+	   	fetch(`../../database/fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&varietyid=${variety_id}`);
+	   	
+	   	/*
+		$.ajax({
+			url: "./qf_saveToVcf.jsp",
+			method: "POST",
+			data: {
+				"variety_id": variety_id,
+				"filename": filename,
+				"jobid": jobid,
+			},
+			success: function(result) {
+				
+			}
+		})
+		*/
+	}
+	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
 
    		// 모달창 닫으면 초기화
@@ -418,9 +489,113 @@ body {
     	box.removeAllFiles();
     });    
    	
-    
-    function Execute() {
+    async function Execute() {
     	
+	   	const variety_id = $( "#variety-select option:selected" ).val();
+    	
+    	const select_vcf = document.getElementById('VcfSelect');
+    	const jobid_vcf = select_vcf.options[select_vcf.selectedIndex].dataset.jobid;
+    	const file_name = select_vcf.options[select_vcf.selectedIndex].dataset.filename;
+    	
+    	const jobid_qf = await fetch('../../getJobid.jsp')
+    					.then((response) => response.text());
+    	
+    	const snp_checked = document.getElementById('variant_snp').checked;
+    	const indel_checked = document.getElementById('variant_indel').checked;
+    	const allelic_bi_checked = document.getElementById('allelic_bi').checked;
+    	const missing = document.getElementById('missing-number').value;
+    	const maf = document.getElementById('maf-number').value;
+    	const minDP = document.getElementById('minDP').value;
+    	const minGQ = document.getElementById('minGQ').value;
+    	//thin input이 빈칸이면 false로 판단(사용 체크해제해도 값을 비우므로 false)
+    	let thin = document.getElementById('thin').value;
+    	
+    	if(jobid_vcf == -1) {
+    		alert("vcf파일을 선택하세요");
+    		return;
+    	}
+    	
+    	if(!snp_checked && !indel_checked) {
+    		alert("Variant Type을 적어도 하나 선택하세요.");
+    		return;
+    	}
+    	
+    	if(!minDP) {
+    		alert("MinDP를 입력하세요.");
+    		return;
+    	}
+    	
+    	if(!minGQ) {
+    		alert("MinGQ를 입력하세요.");
+    		return;
+    	}
+    	
+    	// thin이 빈값이면 0으로 간주
+    	if(!thin) {
+    		thin = 0;
+    	}
+ 
+    	// snp체크 = 1, indel체크 = 2, 둘다체크 = 0
+    	let variant_type;
+    	if(snp_checked && indel_checked) {
+    		variant_type = 0;
+    	} else if(snp_checked && !indel_checked) {
+    		variant_type = 1;
+    	} else if(!snp_checked && indel_checked) {
+    		variant_type = 2;
+    	}
+    	
+    	// Bi-allelic체크 = 1, 체크x = 0
+    	let allelic_type;
+    	if(allelic_bi_checked) {
+    		allelic_type = 1;
+    	} else {
+    		allelic_type = 0;
+    	}
+    	
+    	/*
+    	const data = {
+    			"jobid_vcf": jobid_vcf, "jobid_qf": jobid_qf, "variant_type": variant_type, "file_name":file_name,
+    			"allelic_type": allelic_type, "missing": missing, "maf": maf,
+    			"minDP": minDP, "minGQ": minGQ, "thin": thin
+    	}
+    	console.log(data);
+    	*/
+    	
+    	
+    	$.ajax({
+    		url: './qf_analysis.jsp',
+    		method: 'POST',
+    		data: {
+    			"jobid_vcf": jobid_vcf, "jobid_qf": jobid_qf, "variant_type": variant_type, "file_name":file_name,
+    			"allelic_type": allelic_type, "missing": missing, "maf": maf,
+    			"minDP": minDP, "minGQ": minGQ, "thin": thin
+    		},
+    		success: function(result) {
+    			console.log("success");
+    		}
+    	})
+    	
+    	
+    	$.ajax({
+    		url: './qf_insertSql.jsp',
+    		method: 'POST',
+    		data: {
+    			"permissionUid": permissionUid,
+    			"variety_id": variety_id,
+    			"jobid_qf": jobid_qf,
+    			"file_name": file_name
+    		},
+    		sucess: function(result) {
+    		}
+    	})
+    	
+    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+   		setTimeout( function () {
+   			refresh();
+   			$("#backdrop").modal("hide");
+   			}
+   		, 1000);
     	
     }
     

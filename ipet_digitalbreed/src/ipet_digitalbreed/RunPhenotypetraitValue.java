@@ -86,6 +86,7 @@ public class RunPhenotypetraitValue {
 	                    int cells=row.getPhysicalNumberOfCells();
 	                    
 	                    for(columnindex=0; columnindex<=(trait_cnt+2); columnindex++){
+	                    	//System.out.println("columnindex : " + columnindex);
 	                        //셀값을 읽는다
 	                        XSSFCell cell=row.getCell(columnindex);
 	                        String value="";
@@ -100,7 +101,12 @@ public class RunPhenotypetraitValue {
 	                                value=cell.getCellFormula();
 	                                break;
 	                            case XSSFCell.CELL_TYPE_NUMERIC:
-	                                value=cell.getNumericCellValue()+"";
+	                            	if(columnindex==1) {
+	                            		//columnindex == 1(개체명)일때 정수를 double로 변환해서 서로 matching이 안되는 문제. -> 강제 int화
+	                            		value=(int)cell.getNumericCellValue()+"";
+	                            	} else {
+	                            		value=cell.getNumericCellValue()+"";
+	                            	}
 	                                break;
 	                            case XSSFCell.CELL_TYPE_STRING:
 	                                value=cell.getStringCellValue()+"";
@@ -126,7 +132,6 @@ public class RunPhenotypetraitValue {
 		                				newsampleid++;	  
 		                				
 		                				//conv_newsampleid = "s-"+String.format("%05d", newsampleid);	    
-		                				
 		                				conv_newsampleid = "s-"+String.format("%05d", newsampleid_arr.get(newsampleid_rows--));		                						                        
 		                				
 		                				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();	
@@ -141,6 +146,7 @@ public class RunPhenotypetraitValue {
 		                				//insert into sampledata_traitval_t(cropid, varietyid, sampleid, sampleno, seq, value, creuser, cre_dt) values((select cropid from variety_t where varietyid='v-00001'), 'v-00001','s-00009','211','1','10', 'dnacare', now());
 	
 		                		}catch(Exception e){
+		                				//System.out.println("Cannot get a numeric value");
 		                				System.out.println(e);
 		                				ipetdigitalconndb.stmt.close();
 		                		}finally { 
@@ -160,6 +166,7 @@ public class RunPhenotypetraitValue {
 		                				//insert into sampledata_traitval_t(cropid, varietyid, sampleid, sampleno, seq, value, creuser, cre_dt) values((select cropid from variety_t where varietyid='v-00001'), 'v-00001','s-00009','211','1','10', 'dnacare', now());
 	
 		                		}catch(Exception e){
+		                				System.out.println("nullPointerException");
 		                				System.out.println(e);
 		                				ipetdigitalconndb.stmt.close();
 		                		}finally { 

@@ -228,7 +228,7 @@
 	System.out.println("===========================================");
 	System.out.println("Gwas parameter : " + Gwas);
 	System.out.println("===========================================");
-	runanalysistools.execute(Gwas);
+	runanalysistools.execute(Gwas, "cmd");
 
 	try {
 		BufferedReader reader = new BufferedReader(new FileReader(outputdir+jobid_gwas+"/"+jobid_gwas+"_samplecheck.txt"));

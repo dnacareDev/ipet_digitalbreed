@@ -264,7 +264,7 @@
 		   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
 		   $('#pill5_frame').attr('height',"500px");
 		   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
-	}
+		}
 	}    
   };
 
@@ -468,10 +468,8 @@
 			["D", "<span title='A or G or T'>D</span>"], ["N", "<span title='A or C or G or T'>N</span>"]
 		]);
 		
-		const key = params.value;
-		
-		if(map.has(key)) {
-			return map.get(key);
+		if(map.has(params.value)) {
+			return map.get(params.value);
 		} else {
 			return params.value;
 		}
@@ -479,30 +477,18 @@
 	
 	function cellStyle(params) {
 		const map = new Map([
-			["A", {backgroundColor : '#FFC800'}], ["C", {backgroundColor : '#CBFF75'}], ["G", {backgroundColor : '#79B9B1'}],
-			["T", {backgroundColor : '#79B9B1'}], ["I", {backgroundColor : '#9DF0E1'}], ["R", {backgroundColor : '#2C952C'}],
-			["Y", {backgroundColor : '#00AFFF'}], ["M", {backgroundColor : '#6495ED'}], ["K", {backgroundColor : '#28A0FF'}],
-			["S", {backgroundColor : '#0A9696'}], ["W", {backgroundColor : '#AD733A'}], ["H", {backgroundColor : '#F3B600'}],
-			["B", {backgroundColor : '#182605'}], ["V", {backgroundColor : '#4D0088'}], ["V", {backgroundColor : '#4D0088'}],
-			["D", {backgroundColor : '#808080'}], ["N", {color: 'white', backgroundColor : '#182605'}]
+			["A", {backgroundColor : '#46FF2D'}], ["C", {backgroundColor : '#F24641'}], ["G", {backgroundColor : '#FFAE01'}],
+			["T", {backgroundColor : '#4192FC'}], ["I", {backgroundColor : '#FFFFFF'}], ["R", {backgroundColor : '#FCFC0F'}],
+			["Y", {backgroundColor : '#E280EF'}], ["M", {backgroundColor : '#838308'}], ["K", {backgroundColor : '#8A4913'}],
+			["S", {backgroundColor : '#FF9D81'}], ["W", {backgroundColor : '#81FFF3'}], ["H", {backgroundColor : '#C0D8FB'}],
+			["B", {backgroundColor : '#F7C1C3'}], ["V", {backgroundColor : '#FDE4B9'}], ["D", {backgroundColor : '#C7FFBA'}],
+			["N", {backgroundColor : '#E7E7E7'}]
 		]);
 		
-		const key = params.value;
-		
-		if(map.has(key)) {
-			return map.get(key);
+		if(map.has(params.value)) {
+			return map.get(params.value);
 		} else {
 			return null;
-		}
-	}
-	
-	class customFilter {
-		init(params) {
-			this.consoleLog(params);
-		}
-		
-		consoleLog(params) {
-			console.log("aaa??");
 		}
 	}
 	

@@ -42,23 +42,10 @@
 		br = new BufferedReader(new FileReader(csv));
 		String line = "";
 		
-		/*
-		while((line=br.readLine()) != null) {
-			String[] token = line.split(",");
-			List<String> tempList = new ArrayList<String>(Arrays.asList(token));
-			list.add(tempList);
-		}
-		*/
-		
 		if((line=br.readLine()) != null) {
 			//out.clear();
 			out.print(line.substring(line.indexOf(",")+1));
 			System.out.println(line.substring(line.indexOf(",")+1));
-			/* 
-			for(int i=1 ; i<token.length ; i++) {
-				out.println
-			}
-			*/
 			
 		}
 		

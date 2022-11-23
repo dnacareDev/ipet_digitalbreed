@@ -403,7 +403,7 @@
 	}
 
 	var columnDefs2 = [
-		{field: "SNP",cellClass: "grid-cell-centered", width: 110, resizable: true,},
+		{field: "SNP",cellClass: "grid-cell-centered", width: 110, resizable: true, hide: true, },
 		{field: "Chr",cellClass: "grid-cell-centered", width: 80,  resizable: true,},
 		{field: "Pos",cellClass: "grid-cell-centered", width: 90,  resizable: true,},
 		{field: "P-value",cellClass: "grid-cell-centered", width: 90, sortable: true, resizable: true,},
