@@ -440,7 +440,7 @@ body {
     	
     	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
     	for(let i=0 ; i<data.length ; i++) {
-			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+			// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
 			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
 		}
     }
@@ -463,28 +463,39 @@ body {
 	   	//console.log(jobid);
 	   	
 	   	
-	   	fetch(`../../database/fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&varietyid=${variety_id}`);
+	   	fetch(`../../database/fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&variety_id=\${variety_id}`);
 	   	
-	   	/*
-		$.ajax({
-			url: "./qf_saveToVcf.jsp",
-			method: "POST",
-			data: {
-				"variety_id": variety_id,
-				"filename": filename,
-				"jobid": jobid,
-			},
-			success: function(result) {
-				
-			}
-		})
-		*/
+	   	$("#iframeLoading").modal('show');
+	   	
+	   	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+   		setTimeout( function () {
+   			refresh();
+   			hideSpinner();
+   			$("#backdrop").modal("hide");
+   			}
+   		, 2000);
+	}
+	
+	function moveToVcf(jobid) {
+		console.log(jobid);
+		
+		let form = document.createElement('form'); // 폼객체 생성
+		let objs;
+		objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+		objs.setAttribute('type', 'text'); // 값이 들어있는 녀석의 type
+		objs.setAttribute('name', 'linkedJobid'); // 객체이름
+		objs.setAttribute('value', jobid); //객체값
+		form.appendChild(objs);
+		form.setAttribute('method', 'post'); //get,post 가능
+		form.setAttribute('action', "../../database/genotype.jsp"); //보내는 url
+		document.body.appendChild(form);
+		form.submit();
 	}
 	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
 
    		// 모달창 닫으면 초기화
-    	document.getElementById('uploadPcaForm').reset();
+    	//document.getElementById('uploadPcaForm').reset();
     	vcfFileList();
     	box.removeAllFiles();
     });    
@@ -581,7 +592,6 @@ body {
     		url: './qf_insertSql.jsp',
     		method: 'POST',
     		data: {
-    			"permissionUid": permissionUid,
     			"variety_id": variety_id,
     			"jobid_qf": jobid_qf,
     			"file_name": file_name

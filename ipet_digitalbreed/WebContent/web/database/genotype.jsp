@@ -73,10 +73,12 @@ body {
 
 </style>
 <%
-
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
+
+	String linkedJobid = request.getParameter("linkedJobid");
+	
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
@@ -275,7 +277,12 @@ body {
                           
 	<!-- Modal end-->
 	
-        <script>    
+        <script>
+        
+        // Quality Filter에서 링크를 타고 왔을때 받는 parameter(jobid)를 .js파일에 넘겨주기 위한 전역변수. 전역변수 안 쓰려 했는데 어쩔수없다
+        // "null"인 경우를 구분해야함
+        var linkedJobid = "<%=linkedJobid%>";
+        
             var box = new Object();
             window.onload = function() {
                 // 파일전송 컨트롤 생성

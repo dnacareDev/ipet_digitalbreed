@@ -122,9 +122,13 @@
 	      cellClass: "grid-cell-centered",
 	      width: 250,
 	      cellRenderer: function(params) {
-	    	  if(params.value != "1") {
-	    		  return `<span style='cursor:pointer;' onclick='saveToVcf("${params.data.filename}", "${params.data.jobid}")'><i class='feather icon-save'></i></span>`;
+	    	  switch(params.value) {
+	    	  	case "0":
+	    	  		return `<span style='cursor:pointer;' onclick='saveToVcf("${params.data.filename}", "${params.data.jobid}")'><i class='feather icon-save'></i></span>`;
+	    	  	case "1":
+	    	  		return `<span style='cursor:pointer;' onclick='moveToVcf("${params.data.jobid}")'><i class='feather icon-link-2'></i></span>`;
 	    	  }
+	    	  
 	      }
 	    },
 	    {

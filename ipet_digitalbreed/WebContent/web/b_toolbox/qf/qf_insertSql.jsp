@@ -9,7 +9,7 @@
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
-	String permissionUid = request.getParameter("permissionUid");
+	String permissionUid = session.getAttribute("permissionUid")+"";
 	String varietyid = request.getParameter("variety_id");
 	String jobid_qf = request.getParameter("jobid_qf");
 	String filename = request.getParameter("file_name");
