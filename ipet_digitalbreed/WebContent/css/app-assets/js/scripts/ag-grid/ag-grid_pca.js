@@ -112,13 +112,10 @@
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
-			headerName: "번호",
+			headerName: "순번",
 			//field: "no",
 			valueGetter: inverseRowCount,
-			editable: false,
-			sortable: true,
-			resizable: true,
-			width: 150,
+			width: 130,
 			filter: 'agMultiColumnFilter',
 			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
@@ -126,11 +123,8 @@
 			headerCheckboxSelection: true
 	    },
 	    {
-	    	headerName: "파일명",
+	    	headerName: "VCF 파일명",
 	    	field: "file_name",
-	    	editable: false,
-	    	sortable: true,
-	    	resizable: true,
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 400,
@@ -138,9 +132,6 @@
 	    {
 	    	headerName: "분석상태",
 	    	field: "status",
-	    	editable: false,
-	    	sortable: true,
-	    	resizable: true,
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
@@ -159,18 +150,12 @@
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
-	      editable: false,
-	      sortable: true,
-	      resizable: true,
 	      filter: 'agNumberColumnFilter',
 	      width: 650
 	    },
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
-	      editable: false,
-	      sortable: true,
-	      resizable: true,
 	      filter: 'agNumberColumnFilter',
 	      width: 296,
 	      cellClass: "grid-cell-centered", 
@@ -178,17 +163,14 @@
 	      //cellEditorPopup: true
 	    },
 		{
-	      headerName: "jobid",
 	      field: "jobid",
 	      hide: true
 	    },  
 		{
-	      headerName: "uploadpath",
 	      field: "uploadpath",
 	      hide: true
 	    },  
 		{
-	      headerName: "resultpath",
 	      field: "resultpath",
 	      hide: true
 	    }        
@@ -200,6 +182,12 @@
 
 	/*** GRID OPTIONS ***/
 	var gridOptions = {
+		defaultColDef: {
+			editable: false, 
+		    sortable: true,
+			resizable: true,
+			//floatingFilter: true,
+		},
 		columnDefs: columnDefs,
 		rowHeight: 35,
 		rowSelection: "multiple",

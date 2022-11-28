@@ -165,8 +165,10 @@ body {
                                         </div>
                                     </div>
                                     <div class="col-12">
+                                    	<!--  
                                     	<i class='feather icon-database'></i>
-                                    	<% 
+                                    	-->
+                                    	<%-- 
 	                                    	String  drive;
 	                                    	double  totalSize, freeSize, useSize;        
 	
@@ -176,7 +178,7 @@ body {
 	                                    	freeSize = totalSize - useSize;
 	
 	                                    	out.println(String.format("%.2f",freeSize) + " GB Remained");
-                                    	%>
+                                    	--%>
                                     </div>
                                 </div>
                                   
@@ -488,6 +490,7 @@ body {
 		form.appendChild(objs);
 		form.setAttribute('method', 'post'); //get,post 가능
 		form.setAttribute('action', "../../database/genotype.jsp"); //보내는 url
+		form.target = "VCF";
 		document.body.appendChild(form);
 		form.submit();
 	}

@@ -283,60 +283,54 @@ body {
         // "null"인 경우를 구분해야함
         var linkedJobid = "<%=linkedJobid%>";
         
-            var box = new Object();
-            window.onload = function() {
-                // 파일전송 컨트롤 생성
-                box = innorix.create({
-                    el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-                    height          : 130,
-                    maxFileCount   : 1,  
-                    allowExtension: ["vcf", "gvcf"],
-					addDuplicateFile : false,
-                    agent: false, // true = Agent 설치, false = html5 모드 사용                    
-                    uploadUrl: './fileuploader.jsp' // 업로드 URL
-                });
+        var box = new Object();
+        window.onload = function() {
+            // 파일전송 컨트롤 생성
+            box = innorix.create({
+                el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
+                height          : 130,
+                maxFileCount   : 1,  
+                allowExtension: ["vcf", "gvcf"],
+				addDuplicateFile : false,
+                agent: false, // true = Agent 설치, false = html5 모드 사용                    
+                uploadUrl: './fileuploader.jsp' // 업로드 URL
+            });
 
-				box.on("addFileError", function(p) {
-                    alert("VCF 화일만 업로드 가능 합니다.")
-                }),
+			box.on("addFileError", function(p) {
+                alert("VCF 화일만 업로드 가능 합니다.")
+            }),
 
-                // 업로드 완료 이벤트
-                box.on('uploadComplete', function (p) {
-             	    
-                    /*var f = p.files;
-                    var r = "Upload complete\n\n";
-                    for (var i = 0; i < f.length; i++ ) {
-                        r += f[i].clientFileName + " " + f[i].fileSize + "\n";
-                    }
-                    alert(r);*/
-					//window.close();
-					//self.opener.location.reload(); 
-					document.getElementById('uploadvcfform').reset();
-	        		box.removeAllFiles();
-					//backdrop.style.display = "none";		
-					$('#backdrop').modal('hide');
-					jQuery('#vcf_status').html('');
-					$('html').scrollTop(0);
-					refresh();
-                });
-            };
-            function FileUpload() {
-            	if(document.getElementById("comment").value==''){
-            		alert("Comment must be entered.");   
-            		document.getElementById("comment").focus();
-            	    return false;  
-            	}
-	            var postObj = new Object();
-	            postObj.comment = document.getElementById("comment").value;      
-	            postObj.varietyid = $( "#variety-select option:selected" ).val();
-	            box.setPostData(postObj);
-	            box.upload();
-            }            
+            // 업로드 완료 이벤트
+            box.on('uploadComplete', function (p) {
+         	    
+
+				document.getElementById('uploadvcfform').reset();
+			    box.removeAllFiles();
+				$('#backdrop').modal('hide');
+				jQuery('#vcf_status').html('');
+				$('html').scrollTop(0);
+				refresh();
+            });
+        };
+        
+        function FileUpload() {
+        	if(document.getElementById("comment").value==''){
+        		alert("Comment must be entered.");   
+        		document.getElementById("comment").focus();
+        	    return false;  
+        	}
+        	
+			var postObj = new Object();
+			postObj.comment = document.getElementById("comment").value;      
+			postObj.varietyid = $( "#variety-select option:selected" ).val();
+			box.setPostData(postObj);
+			box.upload();
+        }            
             
-            $('#backdrop').on('hidden.bs.modal', function (e) {
-	        	document.getElementById('uploadvcfform').reset();
-	        	box.removeAllFiles();
-	        });            
+		$('#backdrop').on('hidden.bs.modal', function (e) {
+			document.getElementById('uploadvcfform').reset();
+			box.removeAllFiles();
+		});            
         </script>
 </body>
 <!-- END: Body-->

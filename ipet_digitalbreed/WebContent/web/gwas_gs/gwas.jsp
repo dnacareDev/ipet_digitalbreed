@@ -253,7 +253,7 @@ body {
 										</div>
 										<div class="form-check form-check-inline" style="margin-top:5px; margin-left:45px;">
 											<div>
-												<button type="button" id="exampleButton" style="float: right; display:none;" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/phenotype.csv" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>	 
+												<button type="button" id="exampleButton" style="float: right; display:none;" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/phenotype.csv" download="gwas_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>	 
 											</div>
 										</div>
 						            </div>

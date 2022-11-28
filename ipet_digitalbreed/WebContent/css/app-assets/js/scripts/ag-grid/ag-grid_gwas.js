@@ -58,13 +58,10 @@
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
-			headerName: "번호",
+			headerName: "순번",
 			//field: "no",
 			valueGetter: inverseRowCount,
-			editable: false,
-			sortable: true,
-			resizable: true,
-			width: 200,
+			width: 160,
 			filter: 'agMultiColumnFilter',
 			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
@@ -74,10 +71,7 @@
 	    {
 		    headerName: "분석상태",
 		    field: "status",
-		    editable: false,
-		    sortable: true,
-		    resizable: true,
-		    width: 200,
+		    width: 150,
 		    filter: true,
 		    cellClass: "grid-cell-centered",      
 		    cellRenderer: function(params) {
@@ -95,19 +89,13 @@
 	    {
 			headerName: "Genotype",
 			field: "genotype_filename",
-			editable: false,
-			sortable: true,
-			resizable: true,
 			filter: true,
 			cellClass: "grid-cell-centered",      
-			width: 300,
+			width: 400,
 	    },
 	    {
 			headerName: "Phenotype",
 			field: "phenotype_name",
-			editable: false,
-			sortable: true,
-			resizable: true,
 			filter: true,
 			cellClass: "grid-cell-centered",      
 			width: 300,
@@ -115,9 +103,6 @@
 	    {
 			headerName: "Model",
 			field: "model",
-			editable: false,
-			sortable: true,
-			resizable: true,
 			filter: true,
 			cellClass: "grid-cell-centered",      
 			width: 300,
@@ -125,37 +110,28 @@
 	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
-	    	editable: false,
-	    	sortable: true,
-	    	resizable: true,
 	    	filter: 'agNumberColumnFilter',
 	    	cellClass: "grid-cell-centered",      
-	    	width: 450
+	    	width: 400
 	    },
 	    {
 	    	headerName: "분석일",
 	    	field: "cre_dt",
-	    	editable: false,
-	    	sortable: true,
-	    	resizable: true,
 	    	filter: 'agNumberColumnFilter',
-	    	width: 296,
+	    	width: 350,
 	    	cellClass: "grid-cell-centered", 
 	    	//cellEditor: DatePicker,
 	    	//cellEditorPopup: true
 	    },
 		{
-	    	headerName: "jobid",
 	    	field: "jobid",
 	    	hide: true
 	    },  
 		{
-	    	headerName: "uploadpath",
 	    	field: "uploadpath",
 	    	hide: true
 	    },  
 		{
-	    	headerName: "resultpath",
 	    	field: "resultpath",
 	    	hide: true
 	    }        
@@ -167,6 +143,12 @@
 
 	/*** GRID OPTIONS ***/
 	var gridOptions = {
+		defaultColDef: {
+			editable: false, 
+		    sortable: true,
+			resizable: true,
+			//floatingFilter: true,
+		},
 		columnDefs: columnDefs,
 		rowHeight: 35,
 		rowSelection: "multiple",

@@ -4,6 +4,7 @@
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*,java.nio.file.*"%>
 <%@ page import="ipet_digitalbreed.*"%>    
 
+
 <%
 
 if (request.getMethod().equals("POST"))
@@ -87,23 +88,16 @@ if (request.getMethod().equals("POST"))
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
-				
+		
+		
 		runanalysistools.execute(genotype_sequence, "cmd");
 		runanalysistools.execute(genotype_statistics, "cmd");
 		runanalysistools.execute(vcf_statistcs, "cmd");
-		runanalysistools.execute(vcf_parsing, "java");
 		
-		try {	
-			Process process = null;
-			Runtime runtime = Runtime.getRuntime();		
-			process = Runtime.getRuntime().exec(vcf_parsing);				
-			process.getErrorStream().close(); 
-			process.getInputStream().close(); 
-			process.getOutputStream().close(); 
-	    } catch (Exception e) {
-			System.out.println(e);
-	        e.printStackTrace();
-	    }
+		System.out.println("CSV to Json start");
+		CsvToJson csvToJson = new CsvToJson();
+		csvToJson.getJson(outputPath, jobid);
+		System.out.println("CSV to Json complete");
 		
 		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -115,8 +109,8 @@ if (request.getMethod().equals("POST"))
 		String samplecnt = vcf_statistcs_data_strArr[1];
 		String variablecnt = vcf_statistcs_data_strArr[2];
 
-		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		
+		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
 		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+refseq+"','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
@@ -131,7 +125,8 @@ if (request.getMethod().equals("POST"))
 			System.out.println("vcf file upload Success");
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
-    	}		
+    	}
+		
 	}
 }
 %>

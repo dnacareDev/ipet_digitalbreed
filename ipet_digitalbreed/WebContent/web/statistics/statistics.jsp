@@ -9,8 +9,4 @@
 <body>
 
 </body>
-<script type="text/javascript">
-	alert("개발중입니다.");
-	history.back();
-</script>
 </html>

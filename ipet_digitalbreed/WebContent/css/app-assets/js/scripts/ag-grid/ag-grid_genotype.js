@@ -9,11 +9,12 @@
 
 	function refresh() {
 		gridOptions.api.refreshCells(); 
-		  agGrid
-    .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-    .then(function(data) {
-      gridOptions.api.setRowData(data);
-    });
+		
+		agGrid
+	    .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+	    .then(function(data) {
+	      gridOptions.api.setRowData(data);
+	    });
 	}
 
 	function getSelectedRowData() {
@@ -57,15 +58,12 @@
       {
       headerName: "순번",
       field: "displayno",
-      editable: false,
-      sortable: true,
       width: 140,	
       filter: 'agMultiColumnFilter',
       cellClass: "grid-cell-centered",      
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
       headerCheckboxSelection: true,
-      resizable: true	
     },
     {
       headerName: "실제순번",
@@ -90,12 +88,9 @@
     {
       headerName: "VCF 파일명",
       field: "filename",
-      editable: false,
-      sortable: true,
       filter: true,
-      resizable: true,
       cellClass: "grid-cell-centered",      
-      width: 300,
+      width: 500,
 	  cellRenderer: function(params){
       return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
         + params.value 
@@ -105,21 +100,15 @@
     {
       headerName: "상세내용",
       field: "comment",
-      editable: false,
-      sortable: true,
       filter: true,
-      resizable: true,
       cellClass: "ag-header-cell-label",
-      width: 670,
+      width: 470,
       cellStyle: {'cursor': 'pointer'}
     },
     {
       headerName: "작물",
       field: "cropid",
-      editable: false,
-      sortable: true,
       filter: true,
-      resizable: true,
       cellClass: "grid-cell-centered",      
       width: 180,
       hide: true
@@ -127,9 +116,6 @@
     {
       headerName: "등록일자",
       field: "cre_dt",
-      editable: false,
-      sortable: true,
-      resizable: true,
       filter: 'agDateColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 150
@@ -137,19 +123,13 @@
     {
       headerName: "참조유전체",
       field: "refgenome",
-      editable: false,
-      sortable: true,
       filter: true,
-      resizable: true,
       cellClass: "grid-cell-centered",      
       width: 275,
     },
     {
       headerName: "샘플수",
       field: "samplecnt",
-      editable: false,
-      sortable: true,
-      resizable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 120
@@ -157,9 +137,6 @@
     {
       headerName: "변이수",
       field: "variablecnt",
-      editable: false,
-      sortable: true,
-      resizable: true,
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 120
@@ -183,26 +160,29 @@
 
   /*** GRID OPTIONS ***/
   var gridOptions = {
+	defaultColDef: {
+		editable: false, 
+	    sortable: true,
+		resizable: true,
+		//floatingFilter: true,
+	},
     columnDefs: columnDefs,
     rowHeight: 35,
     enableRangeSelection: true,
 	suppressMultiRangeSelection: true,
     rowSelection: "multiple",
-    floatingFilter: true,
-    filter: 'agMultiColumnFilter',
-    pagination: true,
-    paginationPageSize: 20,
+    //pagination: true,
+    //paginationPageSize: 20,
     pivotPanelShow: "always",
     colResizeDefault: "shift",
     animateRows: true,
-    resizable: true,
     suppressHorizontalScroll: true,
     serverSideInfiniteScroll: true,
 	onCellClicked: onCellClicked,
   };
   
   	function onCellClicked(params) {
-  		console.log("onCellClicked params : ", params);
+  		//console.log("onCellClicked params : ", params);
   		
 		if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
 		   const element = document.getElementById('vcf_status');
@@ -260,7 +240,6 @@
 		   $('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/database/genotype_vcfinfo.jsp?jobid="+params.data.jobid);
 		   $('#pill2_frame').empty();
 		   print_pill2_frame(params.data.jobid);
-		   //print_pill2_frame_xlsx(params.data.jobid);
 		   $('#pill2_frame').data('jobid',params.data.jobid);
 		   $('#pill3_frame').attr('height',"500px");
 		   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
@@ -279,10 +258,13 @@
 	    elem.addClass(newClass);
 	}
 
-	var columnDefs2 = [];
+	var columnDefs2 = [{field:"position"}];
 
 	/*** GRID OPTIONS ***/
 	var gridOptions2 = {
+		defaultColDef: {
+			cellClass: "grid-cell-centered", 
+		},
 		columnDefs: columnDefs2,
 	    rowHeight: 35,
 	    headerHeight: 100,
@@ -290,93 +272,92 @@
 	    suppressFieldDotNotation: true,
 	}
 	
-	function print_pill2_frame(jobid) {
+	async function print_pill2_frame(jobid) {
 		
-		let filter_arr = [];
+		// 첫번째 컬럼 filter 대분류(이런식으로 설정하지 않으면 모든 row가 필터에 걸림)
+		const filter_arr = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix.csv`)
+							.then((response) => response.text())
+							.then((data) => {
+								const first_row = data.split("\n")
+								//console.log(first_row);
+								
+								let chr_pos = first_row[0].split(",");
+								chr_pos.shift();
+								//console.log(chr_pos);
+								
+								let filter = [];
+								for(let i=0 ; i< chr_pos.length ; i++) {
+									
+									const element = chr_pos[i].substring(0, chr_pos[i].lastIndexOf("_"));
+									if(!filter.includes(element)){
+										filter.push(element);
+									}
+									
+									//filter.push(chr_pos[i].split("_")[0]);
+								}
+								
+								console.log(filter);
+								return filter;
+							})
+							
+		//console.log(filter_arr);
+							
 		
-		fetch(`/ipet_digitalbreed/web/database/genotype_parsing_status.jsp?jobid=${jobid}`)
-		.then((response) => response.text())
-		.then((data) => {
-			
-			const map = new Map([ 
-				["1/3", "업로드 된 VCF 파일을"],["2/3", "SNP 데이타 저장을 위한 데이터 베이스를"],["3/3", "SNP 데이터를 데이터 베이스에"]
-			])
-			
-			const map2 = new Map([
-				["1/3", "분석 중입니다."],["2/3", "생성 중입니다."],["3/3", "저장 중입니다."]
-			])
-			
-			switch(data) {
-				case "1/3": case "2/3": case "3/3":
-					document.getElementById("pill2_frame").style.height = "300px";
-					document.getElementById("pill2_frame").innerHTML = `<div class="container h-100">
-																		    <div class="row align-items-center h-100">
-																		        <div class="col-10 mx-auto">
-																		            <div class="jumbotron bg-white">
-																		                <div class="d-flex justify-content-center align-middle">
-																							<svg width="60px" height="60px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g data-name="Layer 2"><g data-name="alert-triangle"><rect width="24" height="24" transform="rotate(90 12 12)" opacity="0"/><path d="M22.56 16.3L14.89 3.58a3.43 3.43 0 0 0-5.78 0L1.44 16.3a3 3 0 0 0-.05 3A3.37 3.37 0 0 0 4.33 21h15.34a3.37 3.37 0 0 0 2.94-1.66 3 3 0 0 0-.05-3.04zm-1.7 2.05a1.31 1.31 0 0 1-1.19.65H4.33a1.31 1.31 0 0 1-1.19-.65 1 1 0 0 1 0-1l7.68-12.73a1.48 1.48 0 0 1 2.36 0l7.67 12.72a1 1 0 0 1 .01 1.01z"/><circle cx="12" cy="16" r="1"/><path d="M12 8a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V9a1 1 0 0 0-1-1z"/></g></g></svg>
-																						</div>
-																						<div class="d-flex justify-content-center align-middle mt-1">
-																							<h4 class="font-weight-bold">${map.get(data)}</h4>
-																						</div>
-																						<div class="d-flex justify-content-center align-middle">
-																							<h4 class="font-weight-bold">${map2.get(data)}</h4>
-																						</div>
-																		            </div>
-																		        </div>
-																		    </div>
-																		</div>`;
-					break;
-				case "t":
-					const gridTable2 = document.getElementById("pill2_frame");
-					const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
-					return fetch(`/ipet_digitalbreed/web/database/genotype_position_filter.jsp?jobid=${jobid}`);
-				default:
-					console.log("genotype_parsing_status default case");
-			}
-		})
-		.then((response) => response.text())
-		.then((data) => {
-			filter_arr = data.slice(1, data.length-1).split(", ");
-			
-			return fetch(`/ipet_digitalbreed/web/database/genotype_vcfviewer.jsp?jobid=${jobid}`);
-		})
+		
+		fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix.json`)
 		.then((response) => response.json())
 		.then((data) => {
-			//console.log(data);
+			console.log("json data : ", data)
 			
-			const header = data.shift();
+			// header 정의
+			//let header = ["position"];
+			let header = ["chr_pos"];
+			for(key in data[0]) {
+				if(key == "Reference") {
+					continue;
+				}
+				if(key !== "chr_pos") {
+					header.push(key);
+				} 
+			}
 			//console.log(header);
-			//console.log(data);
 			
 			
-			columnDefs2 = [];
+			let columnDefs2 = [];
 			let pill2_frame_width = 0;
-			for(key in header) {
-				if(key == 'column_0') {
-					//columnDefs2.push({headerName:  header[key], field: key, sortable: true, filter: true, cellClass: "grid-cell-centered", width: 130, cellRenderer: cellRenderder, cellStyle: cellStyle});
+			
+			const gridTable2 = document.getElementById("pill2_frame");
+			const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
+			
+			//Position 컬럼의 filter 정렬 함수
+			function filterProcess(a, b) {
+				const valA = parseInt(a.replace(/[^0-9]/g,""));
+                const valB = parseInt(b.replace(/[^0-9]/g,""));
+                if (valA === valB) return 0;
+                return valA > valB ? 1 : -1;
+			}
+			
+			for(let i=0 ; i<header.length ; i++) {
+				//if(header[i] == 'position') {
+				if(header[i] == 'chr_pos') {
 					columnDefs2.push({
-						headerName:  header[key], 
-						field: key, 
-						sortable: true, 
+						headerName: "Position",
+						field: header[i],
 						filter: true,
 						filterParams: { 
 							values: filter_arr, 
-							comparator: (a, b) => {
-			                    const valA = parseInt(a.replace(/[^0-9]/g,""));
-			                    const valB = parseInt(b.replace(/[^0-9]/g,""));
-			                    if (valA === valB) return 0;
-			                    return valA > valB ? 1 : -1;
-			                    } 
-							}, 
-						cellClass: "grid-cell-centered", 
-						width: 140, 
+							comparator: filterProcess
+						},
+						width: 180, 
 						menuTabs: ["filterMenuTab"], 
-						cellRenderer: cellRenderder, 
-						cellStyle: cellStyle});
-					pill2_frame_width += 140
+						pinned: 'left',
+						lockPinned: true,
+						//cellRenderer: cellRenderder, 
+						//cellStyle: cellStyle
+					});
+					pill2_frame_width += 180
 				} else {
-					columnDefs2.push({headerName: header[key], field: key, cellClass: "grid-cell-centered", width: 50, menuTabs: [], cellRenderer: cellRenderder, cellStyle: cellStyle});
+					columnDefs2.push({field: header[i], width: 50, menuTabs: [], /*cellRenderer: cellRenderder,*/ tooltipField: header[i], cellStyle: cellStyle});
 					pill2_frame_width += 50
 				}
 			}
@@ -390,11 +371,13 @@
 			//console.log(columnDefs2);
 			gridOptions2.api.setColumnDefs(columnDefs2);
 			gridOptions2.api.setRowData(data);
-			//gridOptions2.api.sizeColumnsToFit();
 			
-			//첫번째 컬럼은 수평
-			document.querySelector('#pill2_frame .ag-header-cell-label .ag-header-cell-text').style.writingMode = 'horizontal-tb'
-		})
+			//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
+			//document.querySelector('#pill2_frame .ag-header-cell-label .ag-header-cell-text').style.writingMode = 'horizontal-tb'
+			Array.prototype.slice.call(document.querySelectorAll('#pill2_frame .ag-header-cell-label .ag-header-cell-text'))
+			.filter((el) => el.textContent === 'Position')[0].style.writingMode = 'horizontal-tb'; 
+		});
+		
 	}
  
 	function cellRenderder(params) {

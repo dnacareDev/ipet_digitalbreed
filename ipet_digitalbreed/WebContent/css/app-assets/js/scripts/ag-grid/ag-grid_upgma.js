@@ -56,13 +56,10 @@
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
-	      headerName: "번호",
+	      headerName: "순번",
 	      //field: "no",
 	      valueGetter: inverseRowCount,
-	      editable: false,
-	      sortable: true,
-	      resizable: true,
-	      width: 150,
+	      width: 130,
 	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -70,11 +67,8 @@
 	      headerCheckboxSelection: true
 	    },
 	    {
-	      headerName: "파일명",
+	      headerName: "VCF 파일명",
 	      field: "file_name",
-	      editable: false,
-	      sortable: true,
-	      resizable: true,
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
 	      width: 400,
@@ -82,9 +76,6 @@
 	    {
 	    	headerName: "분석상태",
 	    	field: "status",
-	    	editable: false,
-	    	sortable: true,
-	    	resizable: true,
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
@@ -103,18 +94,12 @@
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
-	      editable: false,
-	      sortable: true,
-	      resizable: true,
 	      filter: 'agNumberColumnFilter',
-	      width: 750
+	      width: 650
 	    },
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
-	      editable: false,
-	      sortable: true,
-	      resizable: true,
 	      filter: 'agNumberColumnFilter',
 	      cellClass: "grid-cell-centered", 
 	      width: 296
@@ -142,18 +127,19 @@
 
   /*** GRID OPTIONS ***/
 	var gridOptions = {
-		// 주석처리한 옵션 전부 작동안함. 다른 이름으로 바꿔야한다.
+		defaultColDef: {
+			editable: false, 
+		    sortable: true,
+			resizable: true,
+			//floatingFilter: true,
+		},
 		columnDefs: columnDefs,
 		rowHeight: 35,
-		//rowSelection: "multiple",
-		//floatingFilter: true,
-		//filter: 'agMultiColumnFilter',
 		pagination: true,
 		paginationPageSize: 20,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		//resizable: true,
 		serverSideInfiniteScroll: true,
 		suppressHorizontalScroll: true,
 		defaultCsvExportParams:{

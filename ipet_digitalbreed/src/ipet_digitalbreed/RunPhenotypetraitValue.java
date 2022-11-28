@@ -97,26 +97,26 @@ public class RunPhenotypetraitValue {
 	                        }else{
 	                            //타입별로 내용 읽기
 	                            switch (cell.getCellType()){
-	                            case XSSFCell.CELL_TYPE_FORMULA:
-	                                value=cell.getCellFormula();
-	                                break;
-	                            case XSSFCell.CELL_TYPE_NUMERIC:
-	                            	if(columnindex==1) {
-	                            		//columnindex == 1(개체명)일때 정수를 double로 변환해서 서로 matching이 안되는 문제. -> 강제 int화
-	                            		value=(int)cell.getNumericCellValue()+"";
-	                            	} else {
-	                            		value=cell.getNumericCellValue()+"";
-	                            	}
-	                                break;
-	                            case XSSFCell.CELL_TYPE_STRING:
-	                                value=cell.getStringCellValue()+"";
-	                                break;
-	                            case XSSFCell.CELL_TYPE_BLANK:
-	                                value=cell.getBooleanCellValue()+"";
-	                                break;
-	                            case XSSFCell.CELL_TYPE_ERROR:
-	                                value=cell.getErrorCellValue()+"";
-	                                break;
+		                            case XSSFCell.CELL_TYPE_FORMULA:
+		                                value=cell.getCellFormula();
+		                                break;
+		                            case XSSFCell.CELL_TYPE_NUMERIC:
+		                            	if(columnindex==1) {
+		                            		//columnindex == 1(개체명)일때 정수를 double로 변환해서 서로 matching이 안되는 문제. -> 강제 int화
+		                            		value=(int)cell.getNumericCellValue()+"";
+		                            	} else {
+		                            		value=cell.getNumericCellValue()+"";
+		                            	}
+		                                break;
+		                            case XSSFCell.CELL_TYPE_STRING:
+		                                value=cell.getStringCellValue()+"";
+		                                break;
+		                            case XSSFCell.CELL_TYPE_BLANK:
+		                                value=cell.getBooleanCellValue()+"";
+		                                break;
+		                            case XSSFCell.CELL_TYPE_ERROR:
+		                                value=cell.getErrorCellValue()+"";
+		                                break;
 	                            }
 	                        }
 	                        

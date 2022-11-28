@@ -103,7 +103,7 @@
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";		
-		String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
+		//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
 				
 		System.out.println("genotype_sequence :" + genotype_sequence);
 		System.out.println("genotype_statistics :" + genotype_statistics);
@@ -126,7 +126,7 @@
 
 		
 		
-		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
+		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+".recode.vcf"+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
 
 		System.out.println("insertVcfinfo_sql : " + insertVcfinfo_sql);
 		
@@ -142,20 +142,12 @@
     		ipetdigitalconndb.conn.close();
     	}	
 		
+		System.out.println("CSV to Json start");
+		CsvToJson csvToJson = new CsvToJson();
+		csvToJson.getJson(outputPath, jobid);
+		System.out.println("CSV to Json complete");
 		
-		runanalysistools.execute(vcf_parsing, "java");
-		
-		try {	
-			Process process = null;
-			Runtime runtime = Runtime.getRuntime();		
-			process = Runtime.getRuntime().exec(vcf_parsing);				
-			process.getErrorStream().close(); 
-			process.getInputStream().close(); 
-			process.getOutputStream().close(); 
-	    } catch (Exception e) {
-			System.out.println(e);
-	        e.printStackTrace();
-	    }
+
 		
 //}
 %>
