@@ -7,6 +7,29 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+	class CustomTooltip {
+		init(params) {
+			const eGui = (this.eGui = document.createElement('div'));
+			const color = params.color || 'white';
+			const data = params.api.getDisplayedRowAtIndex(params.rowIndex).data;
+			console.log("params : ", params);
+	
+			eGui.classList.add('custom-tooltip');
+			//@ts-ignore
+			eGui.style['background-color'] = color;
+			eGui.innerHTML = `
+	            <p>
+	                <span class"name">${cellRenderder(params)}</span>
+	            </p>
+	        `;
+		}
+		
+		getGui() {
+		    return this.eGui;
+		}
+	}
+
+
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		
@@ -270,6 +293,8 @@
 	    headerHeight: 100,
 	    animateRows: true,
 	    suppressFieldDotNotation: true,
+	    tooltipShowDelay: 0,
+	    tooltipHideDelay: 2000,
 	}
 	
 	async function print_pill2_frame(jobid) {
@@ -357,7 +382,7 @@
 					});
 					pill2_frame_width += 180
 				} else {
-					columnDefs2.push({field: header[i], width: 50, menuTabs: [], /*cellRenderer: cellRenderder,*/ tooltipField: header[i], cellStyle: cellStyle});
+					columnDefs2.push({field: header[i], width: 50, menuTabs: [], /*cellRenderer: cellRenderder,*/ tooltipField: header[i], tooltipComponent: CustomTooltip, cellStyle: cellStyle});
 					pill2_frame_width += 50
 				}
 			}
@@ -381,6 +406,8 @@
 	}
  
 	function cellRenderder(params) {
+		
+		/*
 		const map = new Map([
 			["A", "<span title='A'>A</span>"], ["C", "<span title='C'>C</span>"], ["G", "<span title='G'>G</span>"],
 			["T", "<span title='T'>T</span>"], ["I", "<span title='I'>I</span>"], ["R", "<span title='A or G'>R</span>"],
@@ -389,9 +416,18 @@
 			["B", "<span title='C or G or T'>B</span>"], ["V", "<span title='A or C or G'>V</span>"], ["V", "<span title='A or C or G'>V</span>"],
 			["D", "<span title='A or G or T'>D</span>"], ["N", "<span title='A or C or G or T'>N</span>"]
 		]);
+		*/
+		const map = new Map([
+			["A", "A"], ["C", "C"], ["G", "G"],["T", "T"], ["I", "I"], 
+			["R", "A or G"], ["Y", "C or T"], ["M", "A or C"], ["K", "G or T"],
+			["S", "C or G"], ["W", "A or T"], ["H", "A or C or T"], ["B", "C or G or T"], 
+			["V", "A or C or G"], ["V", "A or C or G"], ["D", "A or G or T"], ["N", "A or C or G or T"]
+		]);
 		
 		if(map.has(params.value)) {
+			console.log("it has");
 			return map.get(params.value);
+			console.log("it hasn't");
 		} else {
 			return params.value;
 		}

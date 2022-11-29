@@ -109,8 +109,11 @@
 		System.out.println("genotype_statistics :" + genotype_statistics);
 		System.out.println("vcf_statistcs :" + vcf_statistcs);
 		
+		System.out.println("========genotype_sequence========");
 		runanalysistools.execute(genotype_sequence, "cmd");
+		System.out.println("========genotype_statistics========");
 		runanalysistools.execute(genotype_statistics, "cmd");
+		System.out.println("========vcf_statistcs========");
 		runanalysistools.execute(vcf_statistcs, "cmd");
 		
 		

@@ -89,9 +89,11 @@ if (request.getMethod().equals("POST"))
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
 		
-		
+		System.out.println("========genotype_sequence========");
 		runanalysistools.execute(genotype_sequence, "cmd");
+		System.out.println("========genotype_statistics========");
 		runanalysistools.execute(genotype_statistics, "cmd");
+		System.out.println("========vcf_statistcs========");
 		runanalysistools.execute(vcf_statistcs, "cmd");
 		
 		System.out.println("CSV to Json start");
