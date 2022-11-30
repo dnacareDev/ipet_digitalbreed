@@ -80,5 +80,5 @@
 	String UPGMA = "Rscript " +script_path+ "phylogenetic_tree.R " +savePath+ " " +outputPath+ " " +jobid_upgma+ " " +filename+ " NA NA";
 	System.out.println("UPGMA parameter(without population) : " + UPGMA);
 
-	runanalysistools.execute(UPGMA);
+	runanalysistools.execute(UPGMA, "cmd");
 %>

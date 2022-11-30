@@ -109,6 +109,8 @@
 		System.out.println("genotype_statistics :" + genotype_statistics);
 		System.out.println("vcf_statistcs :" + vcf_statistcs);
 		
+		
+		
 		System.out.println("========genotype_sequence========");
 		runanalysistools.execute(genotype_sequence, "cmd");
 		System.out.println("========genotype_statistics========");
@@ -145,10 +147,12 @@
     		ipetdigitalconndb.conn.close();
     	}	
 		
-		System.out.println("CSV to Json start");
+		/*
+		System.out.println("========CSV to Json start========");
 		CsvToJson csvToJson = new CsvToJson();
 		csvToJson.getJson(outputPath, jobid);
-		System.out.println("CSV to Json complete");
+		System.out.println("========CSV to Json end========");
+		*/
 		
 
 		

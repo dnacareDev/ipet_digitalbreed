@@ -88,7 +88,7 @@
 	
 	System.out.println("Genocore parameter : " + Genocore);
 			
-	runanalysistools.execute(Genocore);
+	runanalysistools.execute(Genocore, "cmd");
 	
 	
 	

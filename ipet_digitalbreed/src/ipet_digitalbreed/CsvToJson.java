@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,14 +15,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class CsvToJson {
-	public void getJson(String outputPath, String jobid) throws IOException {
+	public void getJson(String outputPath, String jobid) {
 	
+		//Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		
 		// create an array called datasets
         JsonArray datasets = new JsonArray();
 		
 		File excelFile = new File(outputPath+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
 
+		System.out.println("file read start");
 		try (BufferedReader br = new BufferedReader(new FileReader(excelFile)))  {
+			
+			
             String line;
             boolean flag = true; 
             List<String> columns = null; 
@@ -34,6 +40,7 @@ public class CsvToJson {
 	                //to store the object temporarily
 	                JsonObject obj = new JsonObject(); 
 	                List<String> chunks = Arrays.asList(line.split(","));
+	                System.out.println(chunks.size());
 	
 	                for(int i = 0; i < columns.size(); i++) {
 	                    obj.addProperty(columns.get(i), chunks.get(i));
@@ -41,6 +48,7 @@ public class CsvToJson {
 	                datasets.add(obj); 
 	            } 
             }
+            System.out.println("file read end");
         } catch(FileNotFoundException fnfe) {
             System.out.println("File not found.");
         } catch(IOException io) {
@@ -59,4 +67,5 @@ public class CsvToJson {
         	e.printStackTrace();
         }
 	}
+	
 }

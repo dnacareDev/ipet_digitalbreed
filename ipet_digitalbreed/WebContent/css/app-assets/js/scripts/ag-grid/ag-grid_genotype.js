@@ -12,14 +12,14 @@
 			const eGui = (this.eGui = document.createElement('div'));
 			const color = params.color || 'white';
 			const data = params.api.getDisplayedRowAtIndex(params.rowIndex).data;
-			console.log("params : ", params);
 	
 			eGui.classList.add('custom-tooltip');
 			//@ts-ignore
 			eGui.style['background-color'] = color;
+			eGui.style['border'] = "1px solid #AAE6E6";
 			eGui.innerHTML = `
-	            <p>
-	                <span class"name">${cellRenderder(params)}</span>
+	            <p style="margin:10px;">
+	                <span class"name">${tooltipRenderder(params)} </span>
 	            </p>
 	        `;
 		}
@@ -294,7 +294,7 @@
 	    animateRows: true,
 	    suppressFieldDotNotation: true,
 	    tooltipShowDelay: 0,
-	    tooltipHideDelay: 2000,
+	    tooltipHideDelay: 20000,
 	}
 	
 	async function print_pill2_frame(jobid) {
@@ -312,22 +312,19 @@
 								
 								let filter = [];
 								for(let i=0 ; i< chr_pos.length ; i++) {
-									
 									const element = chr_pos[i].substring(0, chr_pos[i].lastIndexOf("_"));
+									
 									if(!filter.includes(element)){
 										filter.push(element);
 									}
-									
 									//filter.push(chr_pos[i].split("_")[0]);
 								}
-								
-								console.log(filter);
+
+								//console.log(filter);
 								return filter;
 							})
 							
 		//console.log(filter_arr);
-							
-		
 		
 		fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix.json`)
 		.then((response) => response.json())
@@ -371,18 +368,16 @@
 						filter: true,
 						filterParams: { 
 							values: filter_arr, 
-							comparator: filterProcess
+							comparator: filterProcess // 안하면 filter1, filter10, filter2처럼 정렬됨
 						},
 						width: 180, 
 						menuTabs: ["filterMenuTab"], 
 						pinned: 'left',
 						lockPinned: true,
-						//cellRenderer: cellRenderder, 
-						//cellStyle: cellStyle
 					});
 					pill2_frame_width += 180
 				} else {
-					columnDefs2.push({field: header[i], width: 50, menuTabs: [], /*cellRenderer: cellRenderder,*/ tooltipField: header[i], tooltipComponent: CustomTooltip, cellStyle: cellStyle});
+					columnDefs2.push({field: header[i], width: 50, menuTabs: [], tooltipField: header[i], tooltipComponent: CustomTooltip, cellStyle: cellStyle});
 					pill2_frame_width += 50
 				}
 			}
@@ -405,18 +400,8 @@
 		
 	}
  
-	function cellRenderder(params) {
+	function tooltipRenderder(params) {
 		
-		/*
-		const map = new Map([
-			["A", "<span title='A'>A</span>"], ["C", "<span title='C'>C</span>"], ["G", "<span title='G'>G</span>"],
-			["T", "<span title='T'>T</span>"], ["I", "<span title='I'>I</span>"], ["R", "<span title='A or G'>R</span>"],
-			["Y", "<span title='C or T'>Y</span>"], ["M", "<span title='A or C'>M</span>"], ["K", "<span title='G or T'>K</span>"],
-			["S", "<span title='C or G'>S</span>"], ["W", "<span title='A or T'>W</span>"], ["H", "<span title='A or C or T'>H</span>"],
-			["B", "<span title='C or G or T'>B</span>"], ["V", "<span title='A or C or G'>V</span>"], ["V", "<span title='A or C or G'>V</span>"],
-			["D", "<span title='A or G or T'>D</span>"], ["N", "<span title='A or C or G or T'>N</span>"]
-		]);
-		*/
 		const map = new Map([
 			["A", "A"], ["C", "C"], ["G", "G"],["T", "T"], ["I", "I"], 
 			["R", "A or G"], ["Y", "C or T"], ["M", "A or C"], ["K", "G or T"],
@@ -425,9 +410,7 @@
 		]);
 		
 		if(map.has(params.value)) {
-			console.log("it has");
 			return map.get(params.value);
-			console.log("it hasn't");
 		} else {
 			return params.value;
 		}

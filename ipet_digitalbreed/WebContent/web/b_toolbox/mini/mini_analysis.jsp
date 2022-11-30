@@ -90,7 +90,7 @@
 	
 	System.out.println("minimalMarker parameter : " + minimalMarker);
 			
-	runanalysistools.execute(minimalMarker);
+	runanalysistools.execute(minimalMarker, "cmd");
 	
 	
 	

@@ -87,7 +87,7 @@ if (request.getMethod().equals("POST"))
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
-		String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
+		//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
 		
 		System.out.println("========genotype_sequence========");
 		runanalysistools.execute(genotype_sequence, "cmd");
@@ -96,10 +96,12 @@ if (request.getMethod().equals("POST"))
 		System.out.println("========vcf_statistcs========");
 		runanalysistools.execute(vcf_statistcs, "cmd");
 		
-		System.out.println("CSV to Json start");
+		/*
+		System.out.println("========CSV to Json start========");
 		CsvToJson csvToJson = new CsvToJson();
 		csvToJson.getJson(outputPath, jobid);
-		System.out.println("CSV to Json complete");
+		System.out.println("========CSV to Json end========");
+		*/
 		
 		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);

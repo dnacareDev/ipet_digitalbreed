@@ -32,7 +32,7 @@
 	
 	System.out.println("genocoreCount parameter : " + genocoreCount);
 			
-	runanalysistools.execute(genocoreCount);
+	runanalysistools.execute(genocoreCount, "cmd");
 	
 
 		

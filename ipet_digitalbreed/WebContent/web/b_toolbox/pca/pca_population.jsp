@@ -56,7 +56,7 @@
 	
 	System.out.println("PCA parameter(with population) : " + PCA);
 	
-	runanalysistools.execute(PCA);
+	runanalysistools.execute(PCA, "cmd");
 	
 	
 %>

@@ -56,6 +56,6 @@
 	
 	System.out.println("UPGMA parameter(with population) : " + UPGMA);
 	
-	runanalysistools.execute(UPGMA);
+	runanalysistools.execute(UPGMA, "cmd");
 	
 %>
