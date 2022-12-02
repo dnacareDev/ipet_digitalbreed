@@ -175,7 +175,7 @@ body {
 										<div class='row'>
 											<div class='col-12'>
 												<div style="width:15%; padding:0px;"> 
-													<select id='param_phenotype' class='select2 form-selectfloat-left'>
+													<select id='param_phenotype' class='select2 form-select float-left'>
 													</select>
 												</div>
 												<div style="display:none; width:15%; margin-top:1px; padding:0px;"> 
@@ -560,7 +560,7 @@ body {
 			data : {"varietyid" : variety_id},
 			dataType : "json",
 			success : function(result){
-	   	    	console.log("phenotype traitname : ", result);
+	   	    	//console.log("phenotype traitname : ", result);
 	   	    	//$("#PhenotypeSelect").append(`<option disabled hidden selected>(Required)Select Phenotype</option>`);
 	   	    	for(let i=0 ; i<result.length ; i++) {
 	   	    		$("#PhenotypeSelect").append(`<option data-traitname_key=\${i} data-traitname=\${result[i]} > \${result[i]} </option>`);
@@ -646,7 +646,7 @@ body {
    	    	
    	    	let queryString = new URLSearchParams(formData).toString();
    			
-   	    	console.log(queryString);
+   	    	//console.log(queryString);
    	    	
    	    	$.ajax(
    	    	{
@@ -660,16 +660,16 @@ body {
    	    			//$("#backdrop").modal("hide");
    	    			
    	    			
-   	    			console.log("없는 표현형 : ", data);
+   	    			//console.log("없는 표현형 : ", data);
    	    			
    	    			let data_arr = data.split(",");
    	    			
    	    			const jobid_gwas = data_arr.pop();
-   	    			console.log("jobid_gwas : ", jobid_gwas);
+   	    			//console.log("jobid_gwas : ", jobid_gwas);
    	    			formData.append('jobid_gwas', jobid_gwas);
    	    			let queryString2 = new URLSearchParams(formData).toString();
    	    			
-   	    			console.log(data_arr);
+   	    			//console.log(data_arr);
    	    			
    	    			if(confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?")) {
    	    				$.ajax(
@@ -741,7 +741,7 @@ body {
     }
    	
    	function printCSV(text) {
-   		console.log("iframe param(text) : ", text);
+   		//console.log("iframe param(text) : ", text);
    		let SNP_key = text.split("<br>").shift();
    		SNP_key = SNP_key.replace(/ /gi,"");
    		const SNP_value = SNP_key.split(":").pop();

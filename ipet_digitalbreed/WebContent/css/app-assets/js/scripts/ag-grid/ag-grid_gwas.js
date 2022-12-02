@@ -37,7 +37,7 @@
 		    deleteitems.push(selectedData[i].no);
 		}
 		
-		console.log("delete row : ", deleteitems);
+		//console.log("delete row : ", deleteitems);
 		
 		$.ajax(
 		{
@@ -171,8 +171,8 @@
 		
 		onCellClicked: params => {
 		
-			console.log("cell clicked : " + params.column.getId());
-			console.log("params : ", params);
+			//console.log("cell clicked : " + params.column.getId());
+			//console.log("params : ", params);
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt"){
 
@@ -303,7 +303,7 @@
 	})
 	
 	document.querySelector('#param_phenotype').addEventListener('change', function(event) {
-		console.log("param_phenotype changed");
+		//console.log("param_phenotype changed");
 		const value = event.target.value;
 		if(value == '-1') {
 			return;
@@ -331,7 +331,7 @@
 		const resultpath = document.getElementById('resultpath').value;
 		const jobid = document.getElementById('jobid_param').value;
 		
-		console.log("isQQ : ", isQQ);
+		//console.log("isQQ : ", isQQ);
 		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");

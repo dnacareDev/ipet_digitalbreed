@@ -231,14 +231,12 @@
 					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_miss.html");
 				}
 				break;
-			/*
 			case 'qf_5':
 				if(!$('#pill5_frame').attr('src')){
 					$("#iframeLoading").modal('show');
-					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_vcf_2_pca.html");
+					$('#pill5_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_density.html");
 				}
 				break;
-			*/
 		}
 	});
 	
