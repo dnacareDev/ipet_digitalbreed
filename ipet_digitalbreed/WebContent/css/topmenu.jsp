@@ -135,7 +135,7 @@
                         </ul>
 			            <ul class="nav navbar-nav flex-row">
 			                <li class="nav-item"><a class="navbar-brand" href="../mainboard.jsp">
-									<img src="/ipet_digitalbreed/images/logo.png"><font size="4px"  color="#4c8aa9"><b>&nbsp;Digital Breeding</b></font>           
+									<img src="/ipet_digitalbreed/images/logo.png">   
 			                    </a></li>
 			            </ul>
                     </div>

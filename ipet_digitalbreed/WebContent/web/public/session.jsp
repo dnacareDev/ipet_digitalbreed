@@ -34,7 +34,8 @@
 	  		permissionUid = username;
 	  		session.setAttribute("permissionUid", permissionUid);
 	  		
-	  		response.sendRedirect("/ipet_digitalbreed/web/mainboard.jsp");
+	  		//response.sendRedirect("/ipet_digitalbreed/web/mainboard.jsp");
+	  		response.sendRedirect("/ipet_digitalbreed/web/index.jsp");
 	  	 }
 	}catch(Exception e){
 		System.out.println(e);

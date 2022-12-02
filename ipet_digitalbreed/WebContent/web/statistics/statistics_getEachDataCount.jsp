@@ -23,10 +23,12 @@
 	switch(tableName) {
 		case "genotype_data":
 			System.out.println("tableName - " + tableName);
-			sql = "select count(*) as count from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			sql = "select count(*) count from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			System.out.println(sql);
 			try{
 				ipetdigitalconndb.stmt.executeQuery(sql);
-             	while (ipetdigitalconndb.rs.next()) { 	
+             	while (ipetdigitalconndb.rs.next()) { 
+             		System.out.println("aa");
              		count = ipetdigitalconndb.rs.getInt("count");
              	}
 			} catch(Exception e) {
