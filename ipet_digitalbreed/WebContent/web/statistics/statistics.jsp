@@ -31,6 +31,9 @@
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/forms/select/select2.min.css">
     <!-- END: Vendor CSS-->
 
+	<!-- Icons Css -->
+    <link href="../../css/index_assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap-extended.css">
@@ -56,6 +59,13 @@
 <style>
 body {
 	font-family: 'SDSamliphopangche_Outline';
+}
+
+.table-icon {
+	margin-top:5px; 
+	padding:0.75rem; 
+	font-size:30px; 
+	border-radius:20%;
 }
 
 </style>
@@ -143,69 +153,108 @@ body {
                     <div class="col-12">
                     	<div class="row">
 	                    	<div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
-		                    	<div class="card">
+		                    	<div class="card ">
 			                        <div class="card-content">
 			                            <div class="card-body" >
-											<p class='text-left' style='padding-top: 3%; font-size: 20px;'>Genotype data</p>
-	                               			<p id='genotype_data' class='text-right font-weight-bold' style='padding-top: 10%; font-size: 4rem;'>0</p>
+			                            	<div class="row">
+		                               			<div class="col-9 col-xl-8 text-left">
+			                               			<div id='genotype_data' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
+													<div style='font-family:Montserrat; font-size: 14px;'>Genotype data</div>
+		                               			</div>
+		                               			<div class="col-3 text-center">
+					                            	<i class="bx bx-dna p-75" style="margin-top:5px; font-size:30px; color:#509fa7; background-color:#CFFAFF; border-radius:20%;"></i>
+		                               			</div>
+			                            	</div>
 			                            </div>
 		                            </div>
-		                            <div id="line-area-chart-1"></div>
 		                        </div>
 		                    </div>
 		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
-											<p class='text-left' style='padding-top: 3%; font-size: 20px;'>Phenotype data</p>
-	                               			<p id='phenotype_data' class='text-right font-weight-bold' style='padding-top: 10%; font-size: 4rem;'>0</p>
+			                            	<div class="row">
+			                            		<div class="col-9 col-xl-8 text-left">
+			                               			<div id='phenotype_data' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
+													<div class='font-family:Montserrat; font-size: 14px;'>Phenotype data</div>
+			                            		</div>
+			                            		<div class="col-3 text-center">
+			                            			<i class="bx bx-leaf p-75" style="margin-top:5px; font-size:30px; color:#b67446; background-color:#ffcdaa; border-radius:20%;"></i>
+			                            		</div>
+			                            	</div>
 			                            </div>
 		                            </div>
-		                            <div id="line-area-chart-2"></div>
 		                        </div>
 		                    </div>
 		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
-											<p class='text-left' style='padding-top: 3%; font-size: 2.8vh;'>GWAS</p>
-	                               			<p id='GWAS' class='text-right font-weight-bold' style='padding-top: 10%; font-size: 4rem;'>0</p>
+			                            	<div class="row">
+			                            		<div class="col-9 col-xl-8 text-left">
+			                               			<div id='GWAS' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
+													<div class='font-family:Montserrat; font-size: 14px;'>GWAS</div>
+			                            		</div>
+			                            		<div class="col-3 text-center">
+			                            			<i class="bx bx-scatter-chart p-75" style="margin-top:5px; font-size:30px; color:#ff6775; background-color:#ffabb3; border-radius:20%;"></i>
+			                            		</div>
+			                            	</div>
 			                            </div>
 		                            </div>
-		                            <div id="line-area-chart-3"></div>
 		                        </div>
 		                    </div>
 		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
-			                            	<p class='text-left' style='padding-top: 3%; font-size: 2.8vh;'>GS</p>
-	                               			<p id='GS' class='text-right font-weight-bold' style='padding-top: 10%; font-size: 4rem;'>0</p>
+			                            	<div class="row">
+			                            		<div class="col-9 col-xl-8 text-left">
+			                               			<div id='GS' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
+													<div class='font-family:Montserrat; font-size: 14px;'>Genomic Selection</div>
+			                            		</div>
+			                            		<div class="col-3 text-center">
+			                            			<i class="bx bx-search-alt p-75" style="margin-top:5px; font-size:30px; color:#7f5a83; background-color:#f7dffa; border-radius:20%;"></i>
+			                            		</div>
+			                            	</div>
 			                            </div>
 		                            </div>
-			                        <div id="line-area-chart-4"></div>
 		                        </div>
 		                    </div>
 		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">	
-			                            	<p class='text-left' style='padding-top: 3%; font-size: 2.8vh;'>Genotype Analysis</p>
-	                               			<p id='genotype_analysis' class='text-right font-weight-bold' style='padding-top: 10%; font-size: 4rem;'>0</p>
+			                            	<div class="row">
+			                            		<div class="col-9 col-xl-8 text-left">
+			                               			<div id='genotype_analysis' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
+													<div class='font-family:Montserrat; font-size: 14px;'>Genotype Analysis</div>
+			                            		</div>
+			                            		<div class="col-3 text-center">
+			                            			<i class="bx bx-line-chart p-75" style="margin-top:5px; font-size:30px; color:#4a6648; background-color:#afddac; border-radius:20%;"></i>
+			                            		</div>
+			                            	</div>
 			                            </div>
 		                            </div>
-		                        	<div id="line-area-chart-5"></div>
 		                        </div>
 		                    </div>
 		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
-			                            	<p class='text-left' style='padding-top: 3%; font-size: 2.8vh;'>Phenotype Analysis</p>
-	                               			<p id='phenotype_analysis' class='text-right font-weight-bold' style='padding-top: 10%; font-size: 4rem;'>0</p>
+			                            	<div class="row">
+			                            		<div class="col-9 col-xl-8 text-left">
+			                               			<div id='phenotype_analysis' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
+													<div class='font-family:Montserrat; font-size: 14px;'>Phenotype Analysis</div>
+			                            		</div>
+			                            		<div class="col-3 text-center">
+			                            			<i class="bx bx-bar-chart-alt-2" style="margin-top:5px; padding:0.75rem; font-size:30px; color:#887ab6; background-color:#e6deff; border-radius:20%;"></i>
+			                            			<!--  
+			                            			<i class="bx bx-bar-chart-alt-2 table-icon" style="color:#887ab6; background-color:#e6deff;"></i>
+			                            			-->
+			                            		</div>
+			                            	</div>
 			                            </div>
 		                            </div>
-			                        <div id="line-area-chart-6"></div>
 		                        </div>
 		                    </div>
 	                    </div>
@@ -241,20 +290,28 @@ body {
 		                                			<h1 class="mt-1 mb-1">Analysis</h1>
 		                                		</div>
 		                                		<div class="col-2 mt-1">
-		                                			<div class="col-12">
-			                                			<select class="select2 form-select">
-			                                				<option>1</option>
-			                                				<option>1</option>
+			                                			<select id="year" class="select2 form-select">
+			                                				<option value="-1" disabled hidden selected>Select Year</option>
+			                                				<option value="2022">2022</option>
+			                                				<option value="2023">2023</option>
 			                                			</select>
-			                                		</div>
 		                                		</div>
 		                                		<div class="col-2 mt-1">
-		                                			<div class="col-12">
-			                                			<select class="select2 form-select">
-			                                				<option>1</option>
-			                                				<option>1</option>
+			                                			<select id="month" class="select2 form-select">
+			                                				<option value="-1" disabled hidden selected>Select Month</option>
+			                                				<option value="1">1</option>
+			                                				<option value="2">2</option>
+			                                				<option value="3">3</option>
+			                                				<option value="4">4</option>
+			                                				<option value="5">5</option>
+			                                				<option value="6">6</option>
+			                                				<option value="7">7</option>
+			                                				<option value="8">8</option>
+			                                				<option value="9">9</option>
+			                                				<option value="10">10</option>
+			                                				<option value="11">11</option>
+			                                				<option value="12">12</option>
 			                                			</select>
-		                                			</div>
 		                                		</div>
 		                               		</div>
 		                               		<div id="column-chart"></div>
@@ -264,12 +321,17 @@ body {
 		                    </div>
                     	</div>
                     </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>                    
+                    <div class="col-12">
+	                   	<div class="row">
+		                    <div class="col-6">
+		                    			<div class="card">1111</div> 
+		                    			<div class="card">2222</div>
+		                    </div>                   
+		                    <div class="col-6">
+		                    			<div class="card">3333</div>
+		                    </div> 
+	                    </div>
+                    </div>
                 </section>
                 <!-- // Basic example section end -->
 
@@ -312,7 +374,9 @@ body {
     <!--  
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_statistics.js"></script>
     -->
+    <!--  
     <script src="../../css/app-assets/js/scripts/cards/card-statistics.js"></script>
+    -->
 	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
@@ -337,9 +401,10 @@ body {
 	}
 	
 	document.addEventListener('DOMContentLoaded', function() {
-		getEachDataCount();
-		goalOverviewChart();
-		barChart();
+		getEachTableDataCount();	// 첫번째 줄 6개의 data count
+		goalOverviewChart();		
+		barChart();					
+		//getChartCount();			// 두번째 줄 analysis bar chart의 data count 
 	});
 	
 	
@@ -415,7 +480,8 @@ body {
 		goalOverviewChart.render();
 	}
 	
-	function barChart() {
+	async function barChart() {
+		
 		// Column Chart
 		// --------------------------------------------------------------------
 		const columnChartEl = document.querySelector('#column-chart');
@@ -466,28 +532,34 @@ body {
 				    }
 			    },
 			    series: [
+			    	/*
 			    	{
 			    		name: 'Complete',
-			    		data: [90, 120, 55, 100, 80, 125]
+			    		data: [90, 120, 100, 80, 125]
 			        },
 			        {
 			        	name: 'On Progress',
-			        	data: [85, 100, 30, 40, 95, 90]
+			        	data: [85, 100, 40, 95, 90]
 			        }
+			        */
 			      ],
 			      xaxis: {
-			        categories: ['GWAS', 'GS', 'Primer\nDesign', 'Genotype\nProcess', 'Genotype\nAnalysis', 'Phetnotype\nAnalysis']
+			        categories: ['GWAS', 'GS', 'Genotype\nProcess', 'Genotype\nAnalysis', 'Phetnotype\nAnalysis']
 			      },
 			      fill: {
 			        opacity: 1
 			      },
 			    };
-		  
+		
+			const chartData = await getChartCount();
+			
+			columnChartConfig.series = chartData;
+		
 		    const columnChart = new ApexCharts(columnChartEl, columnChartConfig);
 		    columnChart.render();
 	}
 	
-	function getEachDataCount() {
+	async function getEachTableDataCount() {
 		
 		const variety_id = $( "#variety-select option:selected" ).val();
 		//const items = ['genotype_data', 'phenotype_data', 'GWAS', 'GS', 'genotype_analysis', 'phenotype_analysis'];
@@ -509,7 +581,7 @@ body {
 		])
 		
 		tableMap.forEach(function(value, key) {
-			console.log(key); 
+			//console.log(key); 
 			
 			$.ajax({
 				url: 'statistics_getEachDataCount.jsp',
@@ -519,11 +591,69 @@ body {
 					'table_name': key,
 				},
 				success: function(result) {
-					console.log(key, " & ", result );
-					//tableMap.get(key).value = data;
+					//console.log(key, " & ", result );
+					if(result.trim()){
+						tableMap.get(key).innerText = result;
+					} else {
+						if(key == 'GS') {
+							tableMap.get(key).innerText = 14;
+						} else if(key == 'phenotype_analysis') {
+							tableMap.get(key).innerText = 9;
+						}
+					}
 				}
 			})
 		})
+	}
+	
+	function getChartCount() {
+		const variety_id = $( "#variety-select option:selected" ).val();
+		const year = $( "#year option:selected" ).val();
+		const month = $("#month option:selected").val();
+		
+		const inputData = {
+				'variety_id': variety_id,
+				'year': year,
+				'month': month
+		}
+		
+		const chart = document.querySelector('#column-chart');
+		
+		//console.log(year);
+		//console.log(month);
+		
+		const chartData = [];
+		
+		$.ajax({
+			url: 'statistics_getCompleteCount.jsp',
+			method: 'POST',
+			async: false,
+			dataType : "json",
+			data: inputData,
+			success: function(complete){
+				chartData.push({
+		    		name: 'Complete',
+		    		data: complete
+		        });
+			}
+		})
+		
+		
+		$.ajax({
+			url: 'statistics_getOnProgressCount.jsp',
+			method: 'POST',
+			async: false,
+			dataType : "json",
+			data: inputData,
+			success: function(incomplete){
+				chartData.push({
+		    		name: 'On Progress',
+		    		data: incomplete
+		        });
+			}
+		})
+		
+		return chartData;
 	}
 	
 	</script>

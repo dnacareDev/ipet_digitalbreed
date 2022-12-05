@@ -9,11 +9,9 @@
 	String varietyid = request.getParameter("variety_id");
 	String tableName = request.getParameter("table_name");
 	
-	if(tableName == "genotype_data"){
-		System.out.println("permissionUid : " + permissionUid);
-		System.out.println("varietyid : " + varietyid);
-		System.out.println("tableName : " + tableName);
-	}
+	//System.out.println("permissionUid : " + permissionUid);
+	//System.out.println("varietyid : " + varietyid);
+	//System.out.println("tableName : " + tableName);
 
 	
 
@@ -22,17 +20,16 @@
 	
 	switch(tableName) {
 		case "genotype_data":
-			System.out.println("tableName - " + tableName);
-			sql = "select count(*) count from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
-			System.out.println(sql);
+			sql = "select count(*) as count from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			//System.out.println(sql);
 			try{
-				ipetdigitalconndb.stmt.executeQuery(sql);
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
              	while (ipetdigitalconndb.rs.next()) { 
-             		System.out.println("aa");
              		count = ipetdigitalconndb.rs.getInt("count");
              	}
+             	out.clear();
+             	out.print(count);
 			} catch(Exception e) {
-				System.out.println("genotype_data error");
 				e.printStackTrace();
 			} finally { 
 				ipetdigitalconndb.stmt.close();
@@ -40,28 +37,32 @@
 			}
 			break;
 		case "phenotype_data":
-			sql = "select count(*) from sampledata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			sql = "select count(*) as count from sampledata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
 			try{
-				ipetdigitalconndb.stmt.executeQuery(sql);
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
              		count = ipetdigitalconndb.rs.getInt("count");
              	}
+				out.clear();
+             	out.print(count);
 			} catch(Exception e) {
-				System.out.println("phenotype_data error");
+				e.printStackTrace();
 			} finally { 
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.conn.close();
 			}
 			break;
 		case "GWAS":
-			sql = "select count(*) from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			sql = "select count(*) as count from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
 			try{
-				ipetdigitalconndb.stmt.executeQuery(sql);
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
              		count = ipetdigitalconndb.rs.getInt("count");
              	}
+				out.clear();
+             	out.print(count);
 			} catch(Exception e) {
-				System.out.println("GWAS error");
+				e.printStackTrace();
 			} finally { 
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.conn.close();
@@ -72,7 +73,7 @@
 			/*
 			sql = "select count(*) from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
 			try{
-				ipetdigitalconndb.stmt.executeQuery(sql);
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
              		count = ipetdigitalconndb.rs.getInt("count");
              	}
@@ -85,28 +86,49 @@
 			*/
 			break;
 		case "genotype_analysis":
-			// 쿼리문 미완성. 4개 테이블 count를 모두 합쳐야 함
-			/*
-			sql = "select count(*) from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			// sql 4번 써서 결과값을 더함. 한번에 처리할 쿼리문이 있다면 그걸 쓰는게 좋을듯 
+			
 			try{
-				ipetdigitalconndb.stmt.executeQuery(sql);
+				sql = "select count(*) as count from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
-             		count = ipetdigitalconndb.rs.getInt("count");
+             		count += ipetdigitalconndb.rs.getInt("count");
              	}
+				
+				sql = "select count(*) as count from upgma_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+				while (ipetdigitalconndb.rs.next()) { 	
+             		count += ipetdigitalconndb.rs.getInt("count");
+             	}
+				
+				sql = "select count(*) as count from genocore_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+				while (ipetdigitalconndb.rs.next()) { 	
+             		count += ipetdigitalconndb.rs.getInt("count");
+             	}
+				
+				sql = "select count(*) as count from mini_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+				while (ipetdigitalconndb.rs.next()) { 	
+             		count += ipetdigitalconndb.rs.getInt("count");
+             	}
+				
+				out.clear();
+				out.print(count);
 			} catch(Exception e) {
-				System.out.println("genotype_analysis error");
+				e.printStackTrace();
 			} finally { 
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.conn.close();
 			}
-			*/
+			
 			break;
 		case "phenotype_analysis":
 			// phenotype_analysis 미개발
 			/*
 			String sql = "select count(*) from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
 			try{
-				ipetdigitalconndb.stmt.executeQuery(sql);
+				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 			} catch(Exception e) {
 				System.out.println("phenotype_analysis error");
 			} finally { 

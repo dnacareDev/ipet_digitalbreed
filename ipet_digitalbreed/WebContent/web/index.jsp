@@ -169,7 +169,7 @@
 	                          			 %><a href="javascript:modal_login()" class="btn btn-success">Go to Page</a><%
 	                          		 }
 	                          		 else{
-	                          			 %><a href="#!" class="btn btn-info">Go to Page</a><%                   			 
+	                          			 %><a href="./about/about.jsp" class="btn btn-info">Go to Page</a><%                   			 
 	                          		 }
                                 %>
                             </div>
@@ -255,7 +255,7 @@
 	                          			 %><a href="javascript:modal_login()" class="btn btn-success">Go to Page</a><%
 	                          		 }
 	                          		 else{
-	                          			 %><a href="#!" class="btn btn-info">Go to Page</a><%                   			 
+	                          			 %><a href="./statistics/statistics.jsp" class="btn btn-info">Go to Page</a><%                   			 
 	                          		 }
                                 %>
                             </div>

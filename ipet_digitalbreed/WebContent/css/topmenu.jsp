@@ -134,7 +134,7 @@
                             <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
                         </ul>
 			            <ul class="nav navbar-nav flex-row">
-			                <li class="nav-item"><a class="navbar-brand" href="../mainboard.jsp">
+			                <li class="nav-item"><a class="navbar-brand" href="/ipet_digitalbreed/web/index.jsp">
 									<img src="/ipet_digitalbreed/images/logo.png">   
 			                    </a></li>
 			            </ul>
