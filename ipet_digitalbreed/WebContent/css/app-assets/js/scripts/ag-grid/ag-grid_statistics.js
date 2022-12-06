@@ -9,7 +9,7 @@
 
 	function refresh() {
 		gridOptions.api.refreshCells(); 
-  		fetch("../../../web/b_toolbox/qf/qf_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
+  		fetch("../../../web/statistics/statistics_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
   		.then((response) => response.json())
   		.then((data) => {
   			console.log(data);
@@ -41,7 +41,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../web/b_toolbox/qf/qf_delete.jsp",
+		    url:"../../../web/statistics/statistics_delete.jsp",
 		    type:"POST",
 		    data:{'params':deleteitems},
 		    success: function(result) {
@@ -58,63 +58,36 @@
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
-			headerName: "순번",
+			headerName: "결과보기",
 			//field: "no",
-			valueGetter: inverseRowCount,
 			width: 130,
 			filter: 'agMultiColumnFilter',
-			cellClass: "grid-cell-centered",      
-			checkboxSelection: true,
-			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true
+			cellClass: "grid-cell-centered",    
+			cellRenderer: function(params) {
+				//console.log(params);
+				return "<a href='#'>결과보기</a>";
+			}
 	    },
 	    {
-	    	headerName: "VCF 파일명",
-	    	field: "filename",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
-	    	width: 400,
-	    },
-	    {
-	    	headerName: "처리내용",
-	    	field: "manufacture",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
-	    	width: 400,
-	    },
-	    {
-	    	headerName: "분석상태",
-	    	field: "status",
+	    	headerName: "항목",
+	    	field: "category",
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
-	    	cellRenderer: function(params) {
-	    	  //console.log("params : ", params.value);
-	    	  switch(Number(params.value)) {
-					case 0: 
-						return "<span title='분석 중'><i class='feather icon-loader'></i></span>";
-					case 1:
-						return "<span title='분석 완료'><i class='feather icon-check-circle'></i></span>";
-					case 2:
-						return "<span title='분석 실패'><i class='feather icon-x-circle'></i></span>";
-		    	}
-		    }
 	    },
 	    {
-	      headerName: "저장",
-	      field: "save_cmd",
-	      filter: 'agNumberColumnFilter',
-	      cellClass: "grid-cell-centered",
-	      width: 250,
-	      cellRenderer: function(params) {
-	    	  switch(params.value) {
-	    	  	case "0":
-	    	  		return `<span style='cursor:pointer;' onclick='saveToVcf("${params.data.filename}", "${params.data.jobid}")'><i class='feather icon-save'></i></span>`;
-	    	  	case "1":
-	    	  		return `<span style='cursor:pointer;' onclick='moveToVcf("${params.data.jobid}")'><i class='feather icon-link-2'></i></span>`;
-	    	  }
-	    	  
-	      }
+	    	headerName: "파일명",
+	    	field: "filename",
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 200,
+	    },
+	    {
+	    	headerName: "상세내용",
+	    	field: "comment",
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 300,
 	    },
 	    {
 	      headerName: "분석일",
@@ -158,7 +131,7 @@
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
 		pagination: true,
-		paginationPageSize: 20,
+		paginationPageSize: 6,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
@@ -204,7 +177,7 @@
 		}
 	};
 	
-	
+	/*
 	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
 	document.addEventListener('click', function(event) {
 		//console.log(event.target.id);
@@ -233,6 +206,7 @@
 				break;
 		}
 	});
+	*/
 	
 	document.addEventListener('DOMContentLoaded', () => {
   		/*** DEFINED TABLE VARIABLE ***/
@@ -254,15 +228,42 @@
   		
   		const myGrid = new agGrid.Grid(gridTable, gridOptions);
   		
-  		/*** GET TABLE DATA FROM URL ***/
-  		fetch("../../../web/b_toolbox/qf/qf_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
+  		getAnalysisListGrid();
+  		/*
+  		const varietyid = $("#variety-select option:selected").val();
+  		const year = $("#analysisListYear option:selected").val();
+  		const month = $("#analysisListMonth option:selected").val();
+  		
+  		//console.log(year);
+  		//console.log(month);
+  		
+  		fetch(`/ipet_digitalbreed/web/statistics/statistics_json.jsp?varietyid=${varietyid}&year=${year}&month=${month}`)
   		.then((response) => response.json())
   		.then((data) => {
   			console.log(data);
 			gridOptions.api.setRowData(data);
 			gridOptions.api.sizeColumnsToFit();
   		})
+  		*/
 	})	
+	
+	function getAnalysisListGrid() {
+		const varietyid = $("#variety-select option:selected").val();
+  		const year = $("#analysisListYear option:selected").val();
+  		const month = $("#analysisListMonth option:selected").val();
+  		
+  		console.log(year);
+  		console.log(month);
+  		
+  		/*** GET TABLE DATA FROM URL ***/
+  		fetch(`/ipet_digitalbreed/web/statistics/statistics_json.jsp?varietyid=${varietyid}&year=${year}&month=${month}`)
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log(data);
+			gridOptions.api.setRowData(data);
+			gridOptions.api.sizeColumnsToFit();
+  		})
+	}
 	  	
 
 	/*** FILTER TABLE ***/

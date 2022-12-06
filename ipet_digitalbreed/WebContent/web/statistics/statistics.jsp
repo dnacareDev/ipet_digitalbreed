@@ -61,12 +61,16 @@ body {
 	font-family: 'SDSamliphopangche_Outline';
 }
 
-.table-icon {
-	margin-top:5px; 
-	padding:0.75rem; 
-	font-size:30px; 
-	border-radius:20%;
+.timeline-point-indicator {
+	left: -0.412rem;
+    top: 0.07rem;
+    height: 12px;
+    width: 12px;
+    border: 0;
+    background-color: #7367f0;
 }
+
+
 
 </style>
 <%
@@ -196,7 +200,7 @@ body {
 													<div class='font-family:Montserrat; font-size: 14px;'>GWAS</div>
 			                            		</div>
 			                            		<div class="col-3 text-center">
-			                            			<i class="bx bx-scatter-chart p-75" style="margin-top:5px; font-size:30px; color:#ff6775; background-color:#ffabb3; border-radius:20%;"></i>
+			                            			<i class="bx bx-scatter-chart p-75" style="margin-top:5px; font-size:30px; color:#c94551; background-color:#ffabb3; border-radius:20%;"></i>
 			                            		</div>
 			                            	</div>
 			                            </div>
@@ -248,9 +252,6 @@ body {
 			                            		</div>
 			                            		<div class="col-3 text-center">
 			                            			<i class="bx bx-bar-chart-alt-2" style="margin-top:5px; padding:0.75rem; font-size:30px; color:#887ab6; background-color:#e6deff; border-radius:20%;"></i>
-			                            			<!--  
-			                            			<i class="bx bx-bar-chart-alt-2 table-icon" style="color:#887ab6; background-color:#e6deff;"></i>
-			                            			-->
 			                            		</div>
 			                            	</div>
 			                            </div>
@@ -264,8 +265,8 @@ body {
 		                    <div class="col-sm-12 col-lg-4">
 		                    	<div class="card">
 			                        <div class="card-content">
-					                    	<div class="m-0">
-				                           		<h1 class="ml-1 mt-1">Storage</h1>
+					                    	<div class="card-body" style="height:356px;">
+				                           		<h1>Storage</h1>
 				                           		<div id="goal-overview-radial-bar-chart" class="mb-1"></div>
 			                          			<div class="row border-top text-center mx-0">
 			                                    <div class="col-6 border-right py-1">
@@ -285,36 +286,8 @@ body {
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
-		                               		<div class="row">
-		                                		<div class="col-8">
-		                                			<h1 class="mt-1 mb-1">Analysis</h1>
-		                                		</div>
-		                                		<div class="col-2 mt-1">
-			                                			<select id="year" class="select2 form-select">
-			                                				<option value="-1" disabled hidden selected>Select Year</option>
-			                                				<option value="2022">2022</option>
-			                                				<option value="2023">2023</option>
-			                                			</select>
-		                                		</div>
-		                                		<div class="col-2 mt-1">
-			                                			<select id="month" class="select2 form-select">
-			                                				<option value="-1" disabled hidden selected>Select Month</option>
-			                                				<option value="1">1</option>
-			                                				<option value="2">2</option>
-			                                				<option value="3">3</option>
-			                                				<option value="4">4</option>
-			                                				<option value="5">5</option>
-			                                				<option value="6">6</option>
-			                                				<option value="7">7</option>
-			                                				<option value="8">8</option>
-			                                				<option value="9">9</option>
-			                                				<option value="10">10</option>
-			                                				<option value="11">11</option>
-			                                				<option value="12">12</option>
-			                                			</select>
-		                                		</div>
-		                               		</div>
-		                               		<div id="column-chart"></div>
+			                            	<h1 class="mb-2">DataBase</h1>
+	                            			<div id="line-area-chart"></div>
 			                            </div>
 				                     </div>
 				                 </div>    
@@ -323,12 +296,94 @@ body {
                     </div>
                     <div class="col-12">
 	                   	<div class="row">
-		                    <div class="col-6">
-		                    			<div class="card">1111</div> 
-		                    			<div class="card">2222</div>
+		                    <div class="col-8">
+                    			<div class="card">
+									<div class="card-content">
+	                            		<div class="card-body">
+	                            			<!--  
+	                            			<h1 class="mb-2">DataBase</h1>
+	                            			<div id="line-area-chart"></div>
+	                            			-->
+	                            			<div class="row mt-1">
+		                                		<div class="col-8">
+		                                			<h1 class="mb-1">Analysis</h1>
+		                                		</div>
+		                                		<div class="col-2">
+		                                			<select id="analysisYear" class="select2 form-select">
+		                                				<option value="-1" selected>Select All Year</option>
+		                                				<option value="2022">2022</option>
+		                                				<option value="2023">2023</option>
+		                                			</select>
+		                                		</div>
+		                                		<div class="col-2">
+		                                			<select id="analysisMonth" class="select2 form-select">
+		                                				<option value="-1" selected>Select All Month</option>
+		                                				<option value="1">1</option>
+		                                				<option value="2">2</option>
+		                                				<option value="3">3</option>
+		                                				<option value="4">4</option>
+		                                				<option value="5">5</option>
+		                                				<option value="6">6</option>
+		                                				<option value="7">7</option>
+		                                				<option value="8">8</option>
+		                                				<option value="9">9</option>
+		                                				<option value="10">10</option>
+		                                				<option value="11">11</option>
+		                                				<option value="12">12</option>
+		                                			</select>
+		                                		</div>
+		                               		</div>
+	                                		<div id="column-chart"></div>
+	                            		</div>
+	                            	</div>
+								</div>
+								<div class="card">
+									<div class="card-content">
+	                            		<div class="card-body">
+	                            			<div class="row mt-1">
+		                            			<div class="col-8">
+				                                	<h1 class="mb-2">Analysis List</h1>
+		                                		</div>
+		                                		<div class="col-2">
+		                                			<select id="analysisListYear" class="select2 form-select">
+		                                				<option value="-1" selected>Select All Year</option>
+		                                				<option value="2022">2022</option>
+		                                				<option value="2023">2023</option>
+		                                			</select>
+		                                		</div>
+		                                		<div class="col-2">
+		                                			<select id="analysisListMonth" class="select2 form-select">
+		                                				<option value="-1" selected>Select All Month</option>
+		                                				<option value="1">1</option>
+		                                				<option value="2">2</option>
+		                                				<option value="3">3</option>
+		                                				<option value="4">4</option>
+		                                				<option value="5">5</option>
+		                                				<option value="6">6</option>
+		                                				<option value="7">7</option>
+		                                				<option value="8">8</option>
+		                                				<option value="9">9</option>
+		                                				<option value="10">10</option>
+		                                				<option value="11">11</option>
+		                                				<option value="12">12</option>
+		                                			</select>
+		                                		</div>
+	                                		</div>
+		                               		<div id="myGrid" class="ag-theme-alpine mt-2" style="margin: 0px auto; width: 98%; height:310px;"></div>
+		                               	</div>
+		                            </div>
+								</div> 
 		                    </div>                   
-		                    <div class="col-6">
-		                    			<div class="card">3333</div>
+		                    <div class="col-4">
+                    			<div class="card">
+                    				<div class="row">
+                                		<div class="col-8">
+                                			<h1 class="m-1">Timeline</h1>
+                                		</div>
+		                            </div>
+                    				<ul id="timeline" class="timeline" style="padding-top:15px; height:800px;">
+                                    </ul>
+								</div>
 		                    </div> 
 	                    </div>
                     </div>
@@ -371,9 +426,8 @@ body {
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <!--  
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_statistics.js"></script>
-    -->
+    <script src="../../css/app-assets/js/scripts/charts/chart-apex_statistics.js"></script>
     <!--  
     <script src="../../css/app-assets/js/scripts/cards/card-statistics.js"></script>
     -->
@@ -387,177 +441,23 @@ body {
 	
 	// chartApex 관련 변수
 	var percentSize = "<%=percentSize%>";
-	var $budgetStrokeColor2 = '#dcdae3';
-	var $goalStrokeColor2 = '#51e5a8';
-	var $strokeColor = '#ebe9f1';
-	var $textHeadingColor = '#5e5873';
-	  
-	var chartColors = {
-	      		column: {
-		      		series1: '#826af9',
-		      		series2: '#d2b0ff',
-		      		bg: 'transparent'
-			    }
-	}
 	
 	document.addEventListener('DOMContentLoaded', function() {
+
 		getEachTableDataCount();	// 첫번째 줄 6개의 data count
+		getTimeline();
+		
+		// chart rendering 실행
+		// 함수위치 : ../../css/app-assets/js/scripts/charts/chart-apex_statistics.js
 		goalOverviewChart();		
+		getLineAreaChart();
 		barChart();					
-		//getChartCount();			// 두번째 줄 analysis bar chart의 data count 
 	});
 	
+	$("#analysisListYear").change(getAnalysisListGrid);
+	$("#analysisListMonth").change(getAnalysisListGrid);
 	
-	function goalOverviewChart() {
-		const $goalOverviewChart = document.querySelector('#goal-overview-radial-bar-chart');  
-		//------------ Goal Overview Chart ------------
-		//---------------------------------------------
-		goalOverviewChartOptions = {
-				chart: {
-					height: 245,
-					type: 'radialBar',
-					sparkline: {
-				        enabled: true
-				    },
-				    dropShadow: {		// 그림자 설정
-				        enabled: true,	
-				        blur: 3,
-				        left: 1,
-				        top: 1,
-				        opacity: 0.2
-				    }
-				},
-				colors: [$goalStrokeColor2],
-				plotOptions: {
-					radialBar: {
-				        offsetY: -10,
-				        startAngle: -150,
-				        endAngle: 150,
-				        hollow: {
-				          size: '77%'
-				        },
-				        track: {
-				          background: $strokeColor,
-				          strokeWidth: '50%'
-				        },
-				        dataLabels: {
-				        	name: {
-				        		show: false
-				        	},
-				        	value: {
-				        		color: $textHeadingColor,
-				        		//fontSize: '2.86rem',
-				        		fontSize: '20px',
-				        		fontWeight: '600'
-				        	}
-				        }
-					}
-			    },
-			    fill: {
-			    	type: 'gradient',
-			    	gradient: {
-				        shade: 'dark',
-				        type: 'horizontal',
-				        shadeIntensity: 0.5,
-				        //gradientToColors: [window.colors.solid.success],
-				        inverseColors: true,
-				        opacityFrom: 1,
-				        opacityTo: 1,
-				        stops: [0, 100]
-				    }
-			    },
-			    series: [percentSize],
-			    stroke: {
-			      lineCap: 'round'
-			    },
-			    grid: {
-			    	padding: {
-			    		bottom: 30
-			    	}
-			    }
-			};
-		const goalOverviewChart = new ApexCharts($goalOverviewChart, goalOverviewChartOptions);
-		goalOverviewChart.render();
-	}
 	
-	async function barChart() {
-		
-		// Column Chart
-		// --------------------------------------------------------------------
-		const columnChartEl = document.querySelector('#column-chart');
-		const columnChartConfig = {
-				chart: {
-			        height: 235,
-			        type: 'bar',
-			        stacked: true,
-			        parentHeightOffset: 0,
-			        toolbar: {
-			          show: false
-			        }
-			    },
-			    plotOptions: {
-			    	bar: {
-			    		columnWidth: '15%',
-			    		colors: {
-			    			backgroundBarColors: [
-			    				chartColors.column.bg,
-			    				chartColors.column.bg,
-			    				chartColors.column.bg,
-			    				chartColors.column.bg,
-			    				chartColors.column.bg
-				            ],
-				            backgroundBarRadius: 10
-			    		},
-			    		borderRadius: 5
-			        }
-			    },
-			    dataLabels: {
-			    	enabled: false
-			    },
-			    legend: {
-			    	show: true,
-			        position: 'top',
-			        horizontalAlign: 'start'
-			    },
-			    colors: [chartColors.column.series1, chartColors.column.series2],
-			    stroke: {
-			    	show: true,
-			        colors: ['transparent']
-			    },
-			    grid: {
-			    	xaxis: {
-				        lines: {
-				        	show: true
-				        }
-				    }
-			    },
-			    series: [
-			    	/*
-			    	{
-			    		name: 'Complete',
-			    		data: [90, 120, 100, 80, 125]
-			        },
-			        {
-			        	name: 'On Progress',
-			        	data: [85, 100, 40, 95, 90]
-			        }
-			        */
-			      ],
-			      xaxis: {
-			        categories: ['GWAS', 'GS', 'Genotype\nProcess', 'Genotype\nAnalysis', 'Phetnotype\nAnalysis']
-			      },
-			      fill: {
-			        opacity: 1
-			      },
-			    };
-		
-			const chartData = await getChartCount();
-			
-			columnChartConfig.series = chartData;
-		
-		    const columnChart = new ApexCharts(columnChartEl, columnChartConfig);
-		    columnChart.render();
-	}
 	
 	async function getEachTableDataCount() {
 		
@@ -606,54 +506,19 @@ body {
 		})
 	}
 	
-	function getChartCount() {
-		const variety_id = $( "#variety-select option:selected" ).val();
-		const year = $( "#year option:selected" ).val();
-		const month = $("#month option:selected").val();
+	
+	function getTimeline() {
 		
-		const inputData = {
-				'variety_id': variety_id,
-				'year': year,
-				'month': month
-		}
-		
-		const chart = document.querySelector('#column-chart');
-		
-		//console.log(year);
-		//console.log(month);
-		
-		const chartData = [];
-		
-		$.ajax({
-			url: 'statistics_getCompleteCount.jsp',
-			method: 'POST',
-			async: false,
-			dataType : "json",
-			data: inputData,
-			success: function(complete){
-				chartData.push({
-		    		name: 'Complete',
-		    		data: complete
-		        });
-			}
+		fetch('./statistics_getTimeline.jsp')
+		.then((response) => response.json())
+		.then((data) => {
+			//console.log(data)
+			
+			for(let i=0 ; i<data.length ; i++) {
+				$('#timeline').append('<li class="timeline-item"></li>');
+				$('#timeline .timeline-item').last().append(`<span class="timeline-point timeline-point-indicator"></span><div class="timeline-event"><div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1"><h6>\${data[i].menuname}</h6><span class="timeline-event-time mr-2">\${data[i].cre_dt} </span></div><p>\${data[i].comment}</p></div><hr>`)
+			}   
 		})
-		
-		
-		$.ajax({
-			url: 'statistics_getOnProgressCount.jsp',
-			method: 'POST',
-			async: false,
-			dataType : "json",
-			data: inputData,
-			success: function(incomplete){
-				chartData.push({
-		    		name: 'On Progress',
-		    		data: incomplete
-		        });
-			}
-		})
-		
-		return chartData;
 	}
 	
 	</script>
