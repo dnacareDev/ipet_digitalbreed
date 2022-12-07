@@ -10,7 +10,7 @@
 
 </body>
 <script type="text/javascript">
-	alert("개발중입니다.");
+	alert("We're coming soon!\nWe're working hard to give you the best experience!");
 	history.back();
 </script>
 </html>

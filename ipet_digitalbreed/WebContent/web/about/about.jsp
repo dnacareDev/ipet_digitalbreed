@@ -62,6 +62,31 @@ body {
   padding: 10px;
 }
 
+.nft-hero {
+	background-image: url("../../css/app-assets/images/logo/about_us_1.jpg");
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0 150px 0;
+}
+
+.nft-hero2 {
+	background-image: url("../../css/app-assets/images/logo/about_us_2.jpg");
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0 150px 0;
+}
+
+.nft-hero3 {
+	background-image: url("../../css/app-assets/images/logo/about_us_7.jpg");
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0 150px 0;
+}
+
+body {
+	font-family: 'SDSamliphopangche_Outline';
+}
+
 
 </style>
 <%
@@ -102,52 +127,95 @@ body {
                     </div>
                 </div>
             </div>
-            	<div class="content-body">
+           	<div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
-                    <div class="card center" style="width:70%;">
+                    <div class="card center nft-hero" style="width:100%; height:700px;">
                         <div class="card-content">
                             <div class="card-body text-center">
-	                        	<div style="font-size:30px;">About Us</div>
-                                <div class="row mt-3">
-                                    <div class="center">
-                                    	본 과제는 디지털 육종 활용 시스템의 데이터 처리 기반이 취약한 국내 종자 기업의 유전체 정보 활용을 적극 지원하여 데이터  
+	                        	<div class="row">
+	                        		<div class="col-7"></div>
+	                        		<div class="col-4" style="font-size:35px; font-weight:600;">About Us</div>
+	                        		<div class="col-1"></div>
+	                        	</div>
+                                <div class="row mt-2">
+                                    <div class="col-7"></div>
+                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; line-height:2" >
+                                    	본 과제는 디지털 육종 활용 시스템의 데이터 처리 기반이 취약한 국내 종자 기업의 유전체 정보 활용을 적극 지원하여 데이터  작물 육종을 위한 유전체/표현체 정보분석 및 육종 현장 활용 확산을 유도하여 궁극적으로 종자 기업의 육종 효율을 향상시키고종자 생산 기술에 글로벌 경쟁력을 확보 하기 위한 시스템 입니다. 
                                     </div>
-                                </div>	
-                                <div class="row mt-1">
-                                    <div class="center">
-                                    	작물 육종을 위한 유전체/표현체 정보분석 및 육종 현장 활용 확산을 유도하여 궁극적으로 종자 기업의 육종 효율을 향상시키고 
-                                    </div>
+                                    <div class="col-1"></div>
                                 </div>
                                 <div class="row mt-1">
-                                    <div class="center">
-                                    	종자 생산 기술에 글로벌 경쟁력을 확보 하기 위한 시스템 입니다.
+                                	<div class="col-6"></div>
+                                    <div class="col-4 text-left"style="line-height:2"> 
                                     </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="center">
-										* 본 연구는 농림축산식품부 농림식품기술기획평가원의 지원을 받아 아래의 기업과 함께 수행하고 있습니다. (과제번호 322076-03-1-CG)
-                                    </div>
-                                </div>	
-                                <div class="row mt-3">
-                                    <div class="center" style="font-size:30px;">
-                                    	Founders
-                                    </div>
+                                    <div class="col-1"></div>
                                 </div>	
                                 <div class="row mt-1">
-                                    <div class="center">
-										우리와 함께 해주셔서 매우 감사합니다. 아래는 DigitalBreeding System을 개발하는 동안 긴밀하게 협력한 주요 협력자 목록입니다.
+                                	<div class="col-6"></div>
+                                    <div class="col-4 text-right">
                                     </div>
+                                    <div class="col-1"></div>
                                 </div>	
-                                <div class="row mt-3 center">
-                                	<div class="col-4"><img alt="" src="../../css/app-assets/images/logo/logo1.jpg" style="width: 350px;"></div>
-                                    <div class="col-4"><img alt="" src="../../css/app-assets/images/logo/logo2.png" style="width: 350px;"></div>
-                                    <div class="col-4"><img alt="" src="../../css/app-assets/images/logo/logo3.png" style="width: 350px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card center nft-hero2" style="width:100%; height:700px;">
+                    	<div class="card-content">
+                            <div class="card-body text-center">
+	                        	<div class="row">
+	                        		<div class="col-1"></div>
+	                        		<div class="col-4" style="font-size:35px; font-weight:600;">Data Management</div>
+	                        		<div class="col-6"></div>
+	                        	</div>
+                                <div class="row mt-2">
+                                    <div class="col-1"></div>
+                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; line-height:2" >
+                                    	Digital Breeding system은  방대한 양의 데이터를 손쉽게 등록할 수 있으며 인터넷이 되는 곳 어디에서나 쉽게 데이터를 다시 받을 수 있습니다. 또한 데이터를 가공할 수 있는 모듈을 지원하여 손쉽게 데이터를 가공할 수 있으며 등록된 데이터는 분석모듈과 유기적인 연동을 통해 손쉽게 분석을 진행할 수 있습니다.
+                                    </div>
+                                    <div class="col-6"></div>
+                                </div>
+                                <div class="row mt-1">
+                                	<div class="col-1"></div>
+                                    <div class="col-4 text-left"style="line-height:2"> 
+                                    </div>
+                                    <div class="col-6"></div>
                                 </div>	
-                                <div class="row mt-3 center">
-                                	<div class="col-4"><img alt="" src="../../css/app-assets/images/logo/logo4.png" style="width: 350px;"></div>
-                                    <div class="col-4"><img alt="" src="../../css/app-assets/images/logo/logo5.png" style="width: 350px;"></div>
-                                    <div class="col-4"><img alt="" src="../../css/app-assets/images/logo/logo6.jpg" style="width: 350px;"></div>
+                                <div class="row mt-1">
+                                	<div class="col-1"></div>
+                                    <div class="col-4 text-right">
+                                    </div>
+                                    <div class="col-6"></div>
+                                </div>	
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="card center nft-hero3" style="width:100%; height:700px;">
+                    	<div class="card-content">
+                            <div class="card-body text-center">
+	                        	<div class="row">
+	                        		<div class="col-7"></div>
+	                        		<div class="col-4" style="font-size:35px; font-weight:600;">Visualization driven</div>
+	                        		<div class="col-1"></div>
+	                        	</div>
+                                <div class="row mt-2">
+                                    <div class="col-7"></div>
+                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; line-height:2" >
+                                    	Digital Breeding system은 다양한 시각화 모듈을 지원하여 데이터의 이상값과 패턴의 강조를 표시합니다.또한 R 기반의 다양한 통계 및 분석 모듈을 지원하며 웹 베이스의 디스플레이를 통하여 시각화된 그래프와 데이터 테이블 간의 상호 작용을 지원합니다
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row mt-1">
+                                	<div class="col-6"></div>
+                                    <div class="col-4 text-left"style="line-height:2"> 
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>	
+                                <div class="row mt-1">
+                                	<div class="col-6"></div>
+                                    <div class="col-4 text-right">
+                                    </div>
+                                    <div class="col-1"></div>
                                 </div>	
                             </div>
                         </div>

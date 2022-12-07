@@ -416,7 +416,7 @@
 		{
 			field: "traitname_key",
 			width: 250,
-			hide:false
+			hide:true
 		}
 	];
 	var gridOptionsTraitName = {

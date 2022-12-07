@@ -123,14 +123,13 @@
         <section class="section nft-hero" id="hero">
             <!--  <div class="bg-overlay"></div>-->
             <div class="container" >
-                <div class="row justify-content-center">
+                <div >
                     <div class="col-lg-8 col-sm-10">
-						<div class="text-center">
-                            <h3 class="display-4 fw-medium mb-4 lh-base text-white">Digital Breeding System</h3>
-                            <h3 class="mb-3 fw-bold lh-base text-white"><u>Genome Interactive</u></h3>
-                            <h3 class="mb-3 fw-bold lh-base text-white"><u>Automated Analysis</u></h3>
-                            <h3 class="mb-3 fw-bold lh-base text-white"><u>Database Construction</u></h3>
-
+						<div class="text-center" style="width:400px;background-color: #003F8F;opacity: 0.5;padding: 30px 30px 30px 30px;">
+                            <h2 class="mb-3 fw-bold lh-base text-white">Digital Breeding System</h2>
+                            <h4 class="mb-3 lh-base text-white"><u>Genome Interactive</u></h4>
+                            <h4 class="mb-3 lh-base text-white"><u>Automated Analysis</u></h4>
+                            <h4 class="mb-3 lh-base text-white"><u>Database Construction</u></h4>
                             <!--
                             <div class="hstack gap-2 justify-content-center">
                                 <a href="apps-nft-create.html" class="btn btn-primary">Create Own <i class="ri-arrow-right-line align-middle ms-1"></i></a>
@@ -272,8 +271,8 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-5">
                         <div class="text-center mb-5">
-                            <h2 class="mb-3 fw-bold lh-base">Trending All Categories</h2>
-                            <p class="text-muted">The process of creating an NFT may cost less than a dollar, but the process of selling it can cost up to a thousand dollars. For example, Allen Gannett, a software developer.</p>
+                            <h2 class="mb-3 fw-bold lh-base">Automated Analysis Pipeline</h2>
+                            <h5 class="mb-3 fw-bold lh-base"><p class="text-muted">웹 인터페이스를 통해 데이터 입력과 분석 조건을 선택하고 자동으로 분석을 진행하여 해당 분석 결과물을<br>가시화 된 형태로 제공합니다.</h5>
                         </div>
                     </div><!-- end col -->
                 </div><!-- end row -->
@@ -287,16 +286,28 @@
                                         <div class="card-body">
                                             <div class="row g-1 mb-3">
                                                 <div class="col-lg-6">
-                                                    <img src="../css/index_assets/images/nft/img-06.jpg" alt="" class="img-fluid rounded">
-                                                    <img src="https://dl.dropboxusercontent.com/s/z5c1lprcdrxpgo9/img-2.gif" alt="" class="img-fluid rounded mt-1">
+                                                    <img src="../css/index_assets/images/main/swiper/cluster-1.png" alt="" class="img-fluid rounded">
                                                 </div><!--end col-->
                                                 <div class="col-lg-6">
-                                                    <img src="https://dl.dropboxusercontent.com/s/1y965leasc7bsyt/img-5.gif" alt="" class="img-fluid rounded mb-1">
-                                                    <img src="../css/index_assets/images/nft/img-03.jpg" alt="" class="img-fluid rounded">
+                                                    <img src="../css/index_assets/images/main/swiper/cluster-2.png" alt="" class="img-fluid rounded">
                                                 </div><!--end col-->
                                             </div><!--end row-->
-                                            <a href="#!" class="float-end"> View All <i class="ri-arrow-right-line align-bottom"></i></a>
-                                            <h5 class="mb-0 fs-16"><a href="#!" class="link-dark">Artwork <span class="badge badge-soft-success">206</span></a></h5>
+                                            <h5 class="mb-0 fs-16">Cluster Analysis</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                     <div class="card">
+                                        <div class="card-body">
+                                            <div class="row g-1 mb-3">
+                                                <div class="col-lg-6">
+                                                    <img src="../css/index_assets/images/main/swiper/GWAS-1.png" alt="" class="img-fluid rounded">
+                                                </div><!--end col-->
+                                                <div class="col-lg-6">
+                                                    <img src="../css/index_assets/images/main/swiper/GWAS-2.png" alt="" class="img-fluid rounded">
+                                                </div><!--end col-->
+                                            </div><!--end row-->
+                                            <h5 class="mb-0 fs-16">GWAS Analysis</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -305,16 +316,28 @@
                                         <div class="card-body">
                                             <div class="row g-1 mb-3">
                                                 <div class="col-lg-6">
-                                                    <img src="../css/index_assets/images/nft/img-05.jpg" alt="" class="img-fluid rounded">
-                                                    <img src="https://dl.dropboxusercontent.com/s/su8eohrbpbh3m7n/img-1.gif" alt="" class="img-fluid rounded mt-1">
+                                                    <img src="../css/index_assets/images/main/swiper/phenotype-1.png" alt="" class="img-fluid rounded">
                                                 </div><!--end col-->
                                                 <div class="col-lg-6">
-                                                    <img src="https://dl.dropboxusercontent.com/s/btp4y39rjs3iopw/img-4.gif" alt="" class="img-fluid rounded mb-1">
-                                                    <img src="../css/index_assets/images/nft/img-04.jpg" alt="" class="img-fluid rounded">
+                                                    <img src="../css/index_assets/images/main/swiper/phenotype-2.png" alt="" class="img-fluid rounded">
                                                 </div><!--end col-->
                                             </div><!--end row-->
-                                            <a href="#!" class="float-end"> View All <i class="ri-arrow-right-line align-bottom"></i></a>
-                                            <h5 class="mb-0 fs-16"><a href="#!" class="link-dark">Crypto Card <span class="badge badge-soft-success">743</span></a></h5>
+                                            <h5 class="mb-0 fs-16">Phenotype Analysis</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="card">    
+                                        <div class="card-body">
+                                            <div class="row g-1 mb-3">
+                                                <div class="col-lg-6">
+                                                    <img src="../css/index_assets/images/main/swiper/PCA-1.png" alt="" class="img-fluid rounded">
+                                                </div><!--end col-->
+                                                <div class="col-lg-6">
+                                                    <img src="../css/index_assets/images/main/swiper/PCA-2.png" alt="" class="img-fluid rounded">
+                                                </div><!--end col-->
+                                            </div><!--end row-->
+                                            <h5 class="mb-0 fs-16">PCA Analysis</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -323,52 +346,13 @@
                                         <div class="card-body">
                                             <div class="row g-1 mb-3">
                                                 <div class="col-lg-6">
-                                                    <img src="../css/index_assets/images/nft/img-02.jpg" alt="" class="img-fluid rounded">
-                                                    <img src="https://dl.dropboxusercontent.com/s/uzn97d4hl9znuyt/img-3.gif" alt="" class="img-fluid rounded mt-1">
+                                                    <img src="../css/index_assets/images/main/swiper/Variant-1.png" alt="" class="img-fluid rounded">
                                                 </div><!--end col-->
                                                 <div class="col-lg-6">
-                                                    <img src="https://dl.dropboxusercontent.com/s/su8eohrbpbh3m7n/img-1.gif" alt="" class="img-fluid rounded mb-1">
-                                                    <img src="../css/index_assets/images/nft/img-01.jpg" alt="" class="img-fluid rounded">
+                                                    <img src="../css/index_assets/images/main/swiper/Variant-2.png" alt="" class="img-fluid rounded">
                                                 </div><!--end col-->
                                             </div><!--end row-->
-                                            <a href="#!" class="float-end"> View All <i class="ri-arrow-right-line align-bottom"></i></a>
-                                            <h5 class="mb-0 fs-16"><a href="#!" class="link-dark">Music <span class="badge badge-soft-success">679</span></a></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row g-1 mb-3">
-                                                <div class="col-lg-6">
-                                                    <img src="../css/index_assets/images/nft/img-03.jpg" alt="" class="img-fluid rounded">
-                                                    <img src="https://dl.dropboxusercontent.com/s/1y965leasc7bsyt/img-5.gif" alt="" class="img-fluid rounded mt-1">
-                                                </div><!--end col-->
-                                                <div class="col-lg-6">
-                                                    <img src="https://dl.dropboxusercontent.com/s/z5c1lprcdrxpgo9/img-2.gif" alt="" class="img-fluid rounded mb-1">
-                                                    <img src="../css/index_assets/images/nft/img-05.jpg" alt="" class="img-fluid rounded">
-                                                </div><!--end col-->
-                                            </div><!--end row-->
-                                            <a href="#!" class="float-end"> View All <i class="ri-arrow-right-line align-bottom"></i></a>
-                                            <h5 class="mb-0 fs-16"><a href="#!" class="link-dark">Games <span class="badge badge-soft-success">341</span></a></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row g-1 mb-3">
-                                                <div class="col-lg-6">
-                                                    <img src="../css/index_assets/images/nft/img-02.jpg" alt="" class="img-fluid rounded">
-                                                    <img src="https://dl.dropboxusercontent.com/s/uzn97d4hl9znuyt/img-3.gif" alt="" class="img-fluid rounded mt-1">
-                                                </div><!--end col-->
-                                                <div class="col-lg-6">
-                                                    <img src="https://dl.dropboxusercontent.com/s/su8eohrbpbh3m7n/img-1.gif" alt="" class="img-fluid rounded mb-1">
-                                                    <img src="../css/index_assets/images/nft/img-01.jpg" alt="" class="img-fluid rounded">
-                                                </div><!--end col-->
-                                            </div><!--end row-->
-                                            <a href="#!" class="float-end"> View All <i class="ri-arrow-right-line align-bottom"></i></a>
-                                            <h5 class="mb-0 fs-16"><a href="#!" class="link-dark">Photography <span class="badge badge-soft-success">1452</span></a></h5>
+                                            <h5 class="mb-0 fs-16">Variant Analysis</h5>
                                         </div>
                                     </div>
                                 </div>

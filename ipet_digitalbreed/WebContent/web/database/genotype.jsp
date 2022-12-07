@@ -60,6 +60,10 @@ body {
    height: 30px !important;
 }
 
+.innorix_basic div.irx_filetree {
+	border-right : none !important;
+}
+
 /********************* 헤더 수직 **************************/
 #pill2_frame .ag-header-cell-label .ag-header-cell-text {
     writing-mode: vertical-lr; /* vertical text */
