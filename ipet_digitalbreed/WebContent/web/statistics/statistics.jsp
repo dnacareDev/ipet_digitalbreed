@@ -156,7 +156,7 @@ body {
 	                </div>
                     <div class="col-12">
                     	<div class="row">
-	                    	<div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
+	                    	<div class="col-sm-6 col-lg-4 col-xl-2">
 		                    	<div class="card ">
 			                        <div class="card-content">
 			                            <div class="card-body" >
@@ -173,7 +173,7 @@ body {
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
+		                    <div class="col-sm-6 col-lg-4 col-xl-2">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
@@ -190,7 +190,7 @@ body {
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
+		                    <div class="col-sm-6 col-lg-4 col-xl-2">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
@@ -207,7 +207,7 @@ body {
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
+		                    <div class="col-sm-6 col-lg-4 col-xl-2">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
@@ -224,7 +224,7 @@ body {
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
+		                    <div class="col-sm-6 col-lg-4 col-xl-2">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">	
@@ -241,7 +241,7 @@ body {
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <div class="col-sm-6 col-lg-4 col-xl-2 mb-1">
+		                    <div class="col-sm-6 col-lg-4 col-xl-2">
 		                    	<div class="card">
 			                        <div class="card-content">
 			                            <div class="card-body">
@@ -457,7 +457,8 @@ body {
 	$("#analysisListYear").change(getAnalysisListGrid);
 	$("#analysisListMonth").change(getAnalysisListGrid);
 	
-	
+	$("#analysisYear").change(barChart);
+	$("#analysisMonth").change(barChart);
 	
 	async function getEachTableDataCount() {
 		

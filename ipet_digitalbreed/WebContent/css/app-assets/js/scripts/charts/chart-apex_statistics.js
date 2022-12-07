@@ -144,27 +144,34 @@
 				    }
 			    },
 			    series: [],
-			      xaxis: {
-			        categories: ['GWAS', 'GS', 'Genotype\nProcess', 'Genotype\nAnalysis', 'Phetnotype\nAnalysis']
-			      },
-			      fill: {
-			        opacity: 1
-			      },
-			    };
+		    	xaxis: {
+		    		categories: ['GWAS', 'GS', 'Genotype Process', 'Genotype Analysis', 'Phetnotype Analysis']
+		    	},
+		    	fill: {
+		    		opacity: 1
+		    	},
+			};
 		
-			const chartData = await getChartCount();
+			const chartData = await getBarChartData();
 			
 			columnChartConfig.series = chartData;
 		
 		    const columnChart = new ApexCharts(columnChartEl, columnChartConfig);
+		    
+		    try {
+		    	columnChart.destroy();
+		    } catch (error) {
+		    	//console.error(error);
+		    }
+		    
 		    columnChart.render();
 	}
 
 	
-	function getChartCount() {
+	function getBarChartData() {
 		const variety_id = $( "#variety-select option:selected" ).val();
-		const year = $( "#year option:selected" ).val();
-		const month = $("#month option:selected").val();
+		const year = $( "#analysisYear option:selected" ).val();
+		const month = $("#analysisMonth option:selected").val();
 		
 		const inputData = {
 				'variety_id': variety_id,

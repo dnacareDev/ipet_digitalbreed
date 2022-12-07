@@ -32,6 +32,7 @@
 		String PCA_sql = "select 'PCA' as category, filename, comment, jobid, cre_dt from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
 		String UPGMA_sql = "select 'UPGMA clustering' as category, filename, comment, jobid, cre_dt from upgma_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
 		
+		// year = "-1" -> Select all years
 		if(!year.equals("-1")) {
 			GWAS_sql += " and year(cre_dt) = '" +year+ "'";
 			filter_sql += " and year(cre_dt) = '" +year+ "'";
@@ -41,6 +42,7 @@
 			UPGMA_sql += " and year(cre_dt) = '" +year+ "'";
 		}
 		
+		// month = "-1" -> Select all month
 		if(!month.equals("-1")) {
 			GWAS_sql += " and month(cre_dt) = '" +month+ "'";
 			filter_sql += " and month(cre_dt) = '" +month+ "'";
@@ -52,66 +54,8 @@
 		
 		String sql = "(" +GWAS_sql+ ") UNION (" +filter_sql+ ") UNION (" +Genocore_sql+ ") UNION (" +mini_sql+ ") UNION (" +PCA_sql+ ") UNION (" +UPGMA_sql +")  order by cre_dt DESC;";
 		
-		/*
-		String sql = "(select 'GWAS' as category, genotype_filename as filename, comment, jobid, cre_dt from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1"; 
-		if(!year.equals("-1")) {
-			sql += " and year(cre_dt) = '" +year+ "'";
-		} 
-		if(!month.equals("-1")) {
-			sql += " and month(cre_dt) = '" +month+ "'";
-		}
-		sql += ")";
 		
-		
-		sql += " UNION (select 'genotype_filter_t' as category, filename, '-' as comment, jobid, cre_dt from genotype_filter_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
-		if(!year.equals("-1")) {
-			sql += " and year(cre_dt) = '" +year+ "'";
-		} 
-		if(!month.equals("-1")) {
-			sql += " and month(cre_dt) = '" +month+ "'";
-		}
-		sql += ")";
-		
-		sql += " UNION (select 'Core selection' as category, filename, comment, jobid, cre_dt from genocore_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
-		if(!year.equals("-1")) {
-			sql += " and year(cre_dt) = '" +year+ "'";
-		} 
-		if(!month.equals("-1")) {
-			sql += " and month(cre_dt) = '" +month+ "'";
-		}
-		sql += ")";
-		
-		sql += " UNION (select 'Minimal marker' as category, filename, comment, jobid, cre_dt from mini_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
-		if(!year.equals("-1")) {
-			sql += " and year(cre_dt) = '" +year+ "'";
-		}
-		if(!month.equals("-1")) {
-			sql += " and month(cre_dt) = '" +month+ "'";
-		}
-		sql += ")";
-		
-		sql += " UNION (select 'PCA' as category, filename, comment, jobid, cre_dt from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
-		if(!year.equals("-1")) {
-			sql += " and year(cre_dt) = '" +year+ "'";
-		}
-		if(!month.equals("-1")) {
-			sql += " and month(cre_dt) = '" +month+ "'";
-		}
-		sql += ")";
-		
-		sql += " UNION (select 'UPGMA clustering' as category, filename, comment, jobid, cre_dt from upgma_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
-		if(!year.equals("-1")) {
-			sql += " and year(cre_dt) = '" +year+ "'";
-		} 
-		if(!month.equals("-1")) {
-			sql += " and month(cre_dt) = '" +month+ "'";
-		}
-		sql += ")";
-		
-		sql += " order by cre_dt DESC;";
-		*/
-		
-		System.out.println(sql);
+		//System.out.println(sql);
 		
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
      	while (ipetdigitalconndb.rs.next()) { 
