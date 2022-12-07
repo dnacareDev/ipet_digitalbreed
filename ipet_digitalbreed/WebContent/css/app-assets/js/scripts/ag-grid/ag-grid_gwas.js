@@ -262,6 +262,7 @@
 			} 
 		}
 	};
+
 	
 	document.addEventListener('click', function(event) {
 		if(event.target.id.includes('gwas_')) {
@@ -402,9 +403,38 @@
 			serverSideInfiniteScroll: true,
 	}
 	
+	var columnDefsTraitName = [
+		{ 	
+			headerName:'특성', 
+			field: "traitname",
+			cellClass: "grid-cell-centered", 
+			width: 250, 
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true,
+			headerCheckboxSelection: true 
+		},
+		{
+			field: "traitname_key",
+			width: 250,
+			hide:false
+		}
+	];
+	var gridOptionsTraitName = {
+			defaultColDef: {
+				editable: false, 
+			    sortable: true,
+			},
+			columnDefs: columnDefsTraitName,
+			rowHeight: 35,
+			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
+			suppressMultiRangeSelection: true,
+			animateRows: true,
+			suppressHorizontalScroll: true,
+	}
+	
 	//var modelGrid = [];
 	function showGrid(value) {
-		
 		
 		const model_name = $('#model_name').val();
 		const resultpath = $('#resultpath').val();
@@ -459,17 +489,6 @@
 	/*** DEFINED TABLE VARIABLE ***/
 	//var gridTable = document.getElementById("myGrid");
 
-	/*** GET TABLE DATA FROM URL ***/
-/*
-  	agGrid
-		.simpleHttpRequest({ url: "/ipet_digitalbreed/web/gwas_gs/gwas_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-		.then(function(data) {
-		console.log("data : ", data);
-		
-		gridOptions.api.setRowData(data);
-		gridOptions.api.sizeColumnsToFit();
-	});
-*/	
   	function getParams() {
   		return; 
   	}
@@ -503,19 +522,35 @@
   	/*** INIT TABLE ***/
 	 // setup the grid after the page has finished loading
   	document.addEventListener('DOMContentLoaded', () => {
+
   		/*** DEFINED TABLE VARIABLE ***/
   		const gridTable = document.getElementById("myGrid");
   		const myGrid = new agGrid.Grid(gridTable, gridOptions);
   		
   		/*** GET TABLE DATA FROM URL ***/
   		fetch("/ipet_digitalbreed/web/gwas_gs/gwas_json.jsp?varietyid="+$( "#variety-select option:selected" ).val() )
-			.then((response) => {
-				response.json().then(data => {
-					console.log(data);
-					gridOptions.api.setRowData(data);
-					gridOptions.api.sizeColumnsToFit();
-				});
-			});
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log(data);
+			gridOptions.api.setRowData(data);
+			gridOptions.api.sizeColumnsToFit();
+  		})
+  		
+  		
+  		const varietyid = $( "#variety-select option:selected" ).val();
+
+  		/*** DEFINED TABLE VARIABLE ***/
+  		const gridTraitNameTable = document.getElementById("phenotypeSelectGrid");
+  		const TraitNameGrid = new agGrid.Grid(gridTraitNameTable, gridOptionsTraitName);
+  		
+  		/*** GET TABLE DATA FROM URL ***/
+  		fetch(`./gwas_traitname.jsp?varietyid=${varietyid}`)
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log("traitname : ", data);
+  			gridOptionsTraitName.api.setRowData(data);
+  			//gridOptionsTraitName.api.sizeColumnsToFit();
+  		})
   	});
 
 	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
@@ -524,6 +559,7 @@
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
+		gridOptionsTraitName.api.sizeColumnsToFit();
 		
 	    if ($(window).width() < 768) {
 	      //gridOptions.columnApi.setColumnPinned("email", null);

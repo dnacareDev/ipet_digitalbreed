@@ -62,7 +62,6 @@
 	System.out.println("===========================================");
 	
 	
-	
 	File folder_pheno_path = new File(gwas_pheno_path+jobid_gwas);
 
 	if (!folder_pheno_path.exists()) {
@@ -86,7 +85,7 @@
 	String traitname_sql=null;
 	try{		
 		traitname_sql = "select traitname from sampledata_traitname_t where varietyid='"+varietyid+"' order by seq asc;";	
-		System.out.println(traitname_sql);
+		System.out.println("traitname_sql : " + traitname_sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(traitname_sql);		    
 				
 		fw.write("Taxa"+",");
@@ -193,25 +192,6 @@
 	fw.flush();	
 	fw.close();
 	
-	/* 
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-	
-	String insertGwasinfo_sql = "insert into gwas_info_t(cropid, varietyid, status, genotype_filename, phenotype_name, model, uploadpath, resultpath,comment, jobid, creuser,cre_dt) ";
-	insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
-
-	
-	System.out.println("insert gwas_info_t sql : " + insertGwasinfo_sql);
-	
-	try{
-		ipetdigitalconndb.stmt.executeUpdate(insertGwasinfo_sql);
-	} catch(Exception e) {
-		System.out.println(e);
-	} finally { 
-		System.out.println("AAAAAAAAAAAAAAA");
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.conn.close();
-	}
-	*/
 	
 	File folder_outputdir = new File(outputdir+jobid_gwas);
 

@@ -7,6 +7,7 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+	/*
 	function refresh() {
 		gridOptions.api.refreshCells(); 
   		fetch("../../../web/statistics/statistics_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
@@ -18,6 +19,7 @@
   		})
 		vcfFileList();
 	}
+	
 
 	function getSelectedRowData() {
 
@@ -54,6 +56,8 @@
 		    }
 		});
 	}
+	*/
+	
 	
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
@@ -101,16 +105,6 @@
 	      field: "jobid",
 	      hide: true
 	    },  
-		{
-	      headerName: "uploadpath",
-	      field: "uploadpath",
-	      hide: true
-	    },  
-		{
-	      headerName: "resultpath",
-	      field: "resultpath",
-	      hide: true
-	    }        
 	];
 	
 	function inverseRowCount(params) {
@@ -139,10 +133,10 @@
 		serverSideInfiniteScroll: true,
 		
 		defaultCsvExportParams:{
-			columnKeys:["no","status","cre_dt"]
+			columnKeys:["category","filename","comment","cre_dt"]
 		},
 		defaultExcelExportParams:{
-			columnKeys:["no","status","cre_dt"]
+			columnKeys:["category","filename","comment","cre_dt"]
 		},
 		
 		onCellClicked: params => {
@@ -252,8 +246,8 @@
   		const year = $("#analysisListYear option:selected").val();
   		const month = $("#analysisListMonth option:selected").val();
   		
-  		console.log(year);
-  		console.log(month);
+  		//console.log(year);
+  		//console.log(month);
   		
   		/*** GET TABLE DATA FROM URL ***/
   		fetch(`/ipet_digitalbreed/web/statistics/statistics_json.jsp?varietyid=${varietyid}&year=${year}&month=${month}`)

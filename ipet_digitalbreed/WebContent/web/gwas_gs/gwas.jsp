@@ -49,6 +49,9 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/aggrid.css">
+    <!--  
+    <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap5_custom.css">
+    -->
     <!-- END: Page CSS-->
 
 </head>
@@ -259,9 +262,15 @@ body {
 						            </div>
 						            <div>
 							            <div id="isPhenotype" class="form-label-group" >
+						                    <!--  
 						                    <select class="select2 form-select max-length" id="PhenotypeSelect" style="width: 97%;" multiple>
 						                    </select>
+						                    -->
+						                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:296px;"></div><br>
 							                <br>
+							                <!--
+							                <div id="phenotypeResultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:120px;"></div><br>
+							                -->
 							                <br>
 	                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
 	                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
@@ -394,7 +403,7 @@ body {
 		flatpickr();   		
 
    		vcfFileList();
-   		phenotypeList();
+   		//phenotypeList();
    		
    		//$(".select2-container--default:gt(0)").width("444px");
    		//$(".select2-container--default:eq(1)").width("93%");
@@ -603,12 +612,13 @@ body {
    		
    		//select Phenotype Database
    		if(document.querySelector('input[name="radio_phenotype"]:checked').value == '0') {
-   			
+   			/*
    			// phenotype option
    			if($("#PhenotypeSelect :selected").length == 0) {
    	   			alert("Phenotype을 선택하세요.");
    	   			return;
    	   		}
+   			*/
    			
    			//modelGroup
    			if(document.querySelectorAll('input[name="modelGroup"]:checked').length == 0) {
@@ -622,7 +632,7 @@ body {
    	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
    	    	const filename_vcf = $('#VcfSelect :selected').data('filename');
    	    	
-   	    	
+   	    	/*
    	    	let traitname_arr = new Array();
    	    	let traitname_key_arr = new Array();
    	    	
@@ -630,6 +640,20 @@ body {
    	    		traitname_arr.push( $(this).data('traitname'));
    	    		traitname_key_arr.push( $(this).data('traitname_key'));
    	    	})
+   	    	*/
+   	    	
+   	    	
+   	    	
+   	    	const selectedData = gridOptionsTraitName.api.getSelectedRows();
+   	    	//console.log("selectedData : ", selectedData);
+   	    	let traitname_arr = new Array();
+   	    	let traitname_key_arr = new Array();
+			  
+			for (var i = 0; i < selectedData.length; i++) {
+				traitname_arr.push(selectedData[i].traitname);
+				traitname_key_arr.push(selectedData[i].traitname_key);
+			}
+   	    	
    	    	
    	    	//console.log(traitname_arr);
    	    	//console.log(traitname_key_arr);
