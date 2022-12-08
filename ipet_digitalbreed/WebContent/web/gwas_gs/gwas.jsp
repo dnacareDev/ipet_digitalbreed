@@ -71,6 +71,10 @@ body {
 	height: 30px !important;
 }
 
+.innorix_basic div.irx_filetree, .irx_container {
+	border : none !important;
+}
+
 .select2-search--inline {
     display: contents; /*this will make the container disappear, making the child the one who sets the width of the element*/
 }
@@ -87,8 +91,6 @@ body {
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
-	//RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
-	//String jobid_gwas = runAnalysisTools.getCurrentDateTime();
 %>
 
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">

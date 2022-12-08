@@ -32,7 +32,8 @@
 	  	 }
 	  	 
 	  	 if(imgcnt==0){	  		 
-	  		updateSql = "update sampledata_info_t set photo_status='0' where sampleno='"+sampleno+"' and samplename='"+samplename+"' and varietyid='"+variety+"';";	
+	  		//updateSql = "update sampledata_info_t set photo_status='0' where sampleno='"+sampleno+"' and samplename='"+samplename+"' and varietyid='"+variety+"';";	
+	  		updateSql = "update sampledata_info_t set photo_status='0' where no='"+sampleno+"' and samplename='"+samplename+"' and varietyid='"+variety+"';";
 		    ipetdigitalconndb.stmt.executeUpdate(updateSql);
 	  	 }
 	}catch(Exception e){

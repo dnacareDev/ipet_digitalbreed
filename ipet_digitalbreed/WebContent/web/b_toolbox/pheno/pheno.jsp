@@ -9,4 +9,8 @@
 <body>
 
 </body>
+<script type="text/javascript">
+	alert("We're coming soon!\nWe're working hard to give you the best experience!");
+	history.back();
+</script>
 </html>

@@ -70,6 +70,10 @@ body {
 	height: 30px !important;
 }
 
+.innorix_basic div.irx_filetree, .irx_container {
+	border : none !important;
+}
+
 </style>
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();

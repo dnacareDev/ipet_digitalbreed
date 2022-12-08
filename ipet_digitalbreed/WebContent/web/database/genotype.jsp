@@ -60,8 +60,8 @@ body {
    height: 30px !important;
 }
 
-.innorix_basic div.irx_filetree {
-	border-right : none !important;
+.innorix_basic div.irx_filetree, .irx_container {
+	border : none !important;
 }
 
 /********************* 헤더 수직 **************************/
