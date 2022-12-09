@@ -171,7 +171,7 @@
 												<div class='row'>
 													<div class='col-12'>
 														<ul class='nav nav-pills nav-active-bordered-pill'>
-															<li class='nav-item'><a class='nav-link' id='upgma_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Hierarchical Tree</a></li>
+															<li class='nav-item'><a class='nav-link active' id='upgma_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Hierarchical Tree</a></li>
 						   									<li class='nav-item'><a class='nav-link' id='upgma_2' data-toggle='pill' href='#pill2' aria-expanded='false'>Circular Tree</a></li>
 														</ul>
 														<div class='tab-content'>

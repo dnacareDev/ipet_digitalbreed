@@ -215,7 +215,7 @@
 	   		   								<div class='col-12'>
 	   		   									<ul class='nav nav-pills nav-active-bordered-pill'>
 	   		   										<li class='nav-item'>
-	   		   											<a class='nav-link' id='base-pill31' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info</a>
+	   		   											<a class='nav-link active' id='base-pill31' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info</a>
 	   		   										</li>
 	   		   										<li class='nav-item'>
 	   		   											<a class='nav-link' id='base-pill32' data-toggle='pill' href='#pill2' aria-expanded='false'>VCF viewer</a>

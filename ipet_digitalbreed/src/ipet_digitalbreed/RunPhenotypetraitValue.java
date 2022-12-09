@@ -112,7 +112,8 @@ public class RunPhenotypetraitValue {
 		                                value=cell.getStringCellValue()+"";
 		                                break;
 		                            case XSSFCell.CELL_TYPE_BLANK:
-		                                value=cell.getBooleanCellValue()+"";
+		                                //value=cell.getBooleanCellValue()+"";
+		                            	value="";
 		                                break;
 		                            case XSSFCell.CELL_TYPE_ERROR:
 		                                value=cell.getErrorCellValue()+"";

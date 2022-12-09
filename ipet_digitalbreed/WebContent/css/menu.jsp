@@ -60,7 +60,7 @@
                                     </li>
                                     <li class="<%if(menu_active.equals("upgma")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/upgma/upgma.jsp" data-toggle="dropdown" data-i18n="Switch"><i class="feather icon-circle"></i>UPGMA clustering</a>
                                     </li>
-                                    <li class="<%if(menu_active.equals("genocore")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/genocore/genocore.jsp" data-toggle="dropdown" data-i18n="Checkbox"><i class="feather icon-circle"></i>Core Selection</a>
+                                    <li class="<%if(menu_active.equals("genocore")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/genocore/genocore.jsp" data-toggle="dropdown" data-i18n="Checkbox"><i class="feather icon-circle"></i>Core selection</a>
                                     </li>
                                     <li class="<%if(menu_active.equals("mini")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/mini/mini.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Minimal marker</a>
                                     </li>

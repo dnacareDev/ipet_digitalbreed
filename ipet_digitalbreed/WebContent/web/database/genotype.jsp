@@ -283,7 +283,7 @@ body {
 	
         <script>
         
-        // Quality Filter에서 링크를 타고 왔을때 받는 parameter(jobid)를 .js파일에 넘겨주기 위한 전역변수. 전역변수 안 쓰려 했는데 어쩔수없다
+        // Quality Filter에서 링크를 타고 왔을때 받는 parameter(jobid)를 .js파일에 넘겨주기 위한 전역변수. 
         // "null"인 경우를 구분해야함
         var linkedJobid = "<%=linkedJobid%>";
         
@@ -306,7 +306,6 @@ body {
 
             // 업로드 완료 이벤트
             box.on('uploadComplete', function (p) {
-         	    
 
 				document.getElementById('uploadvcfform').reset();
 			    box.removeAllFiles();
@@ -314,22 +313,39 @@ body {
 				jQuery('#vcf_status').html('');
 				$('html').scrollTop(0);
 				refresh();
+				
+				//VCFViewer 작업
+				//서버의 csv파일을 json형태로 변경
+				makeJson(p.postData.jobid);
             });
         };
         
-        function FileUpload() {
+        async function FileUpload() {
         	if(document.getElementById("comment").value==''){
         		alert("Comment must be entered.");   
         		document.getElementById("comment").focus();
         	    return false;  
         	}
         	
+        	const jobid = await fetch('../getJobid.jsp')
+        				.then((response) => response.text())
+        				.then((data) => data);
+        	
+        	//console.log("await jobid : ", jobid);
+        	
 			var postObj = new Object();
 			postObj.comment = document.getElementById("comment").value;      
 			postObj.varietyid = $( "#variety-select option:selected" ).val();
+			postObj.jobid = jobid;
 			box.setPostData(postObj);
 			box.upload();
-        }            
+        }   
+        
+        function makeJson(jobid) {
+        	//console.log("jobid : ", jobid);
+        	
+        	fetch(`./genotype_csv_to_json.jsp?jobid=\${jobid}`);
+        }
             
 		$('#backdrop').on('hidden.bs.modal', function (e) {
 			document.getElementById('uploadvcfform').reset();

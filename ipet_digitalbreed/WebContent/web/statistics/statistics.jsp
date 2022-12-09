@@ -58,7 +58,8 @@
 <!-- BEGIN: Body-->
 <style>
 body {
-	font-family: 'SDSamliphopangche_Outline';
+	/*font-family: 'SDSamliphopangche_Outline';*/
+	font-family: 'Montserrat';
 }
 
 .timeline-point-indicator {
@@ -163,7 +164,7 @@ body {
 			                            	<div class="row">
 		                               			<div class="col-9 col-xl-8 text-left">
 			                               			<div id='genotype_data' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
-													<div style='font-family:Montserrat; font-size: 14px;'>Genotype data</div>
+													<div style='font-size: 14px;'>Genotype data</div>
 		                               			</div>
 		                               			<div class="col-3 text-center">
 					                            	<i class="bx bx-dna p-75" style="margin-top:5px; font-size:30px; color:#509fa7; background-color:#CFFAFF; border-radius:20%;"></i>
@@ -180,7 +181,7 @@ body {
 			                            	<div class="row">
 			                            		<div class="col-9 col-xl-8 text-left">
 			                               			<div id='phenotype_data' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
-													<div class='font-family:Montserrat; font-size: 14px;'>Phenotype data</div>
+													<div style='font-size: 14px;'>Phenotype data</div>
 			                            		</div>
 			                            		<div class="col-3 text-center">
 			                            			<i class="bx bx-leaf p-75" style="margin-top:5px; font-size:30px; color:#b67446; background-color:#ffcdaa; border-radius:20%;"></i>
@@ -197,7 +198,7 @@ body {
 			                            	<div class="row">
 			                            		<div class="col-9 col-xl-8 text-left">
 			                               			<div id='GWAS' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
-													<div class='font-family:Montserrat; font-size: 14px;'>GWAS</div>
+													<div class='font-size: 14px;'>GWAS</div>
 			                            		</div>
 			                            		<div class="col-3 text-center">
 			                            			<i class="bx bx-scatter-chart p-75" style="margin-top:5px; font-size:30px; color:#c94551; background-color:#ffabb3; border-radius:20%;"></i>
@@ -214,7 +215,7 @@ body {
 			                            	<div class="row">
 			                            		<div class="col-9 col-xl-8 text-left">
 			                               			<div id='GS' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
-													<div class='font-family:Montserrat; font-size: 14px;'>Genomic Selection</div>
+													<div style='font-size: 14px;'>Genomic Selection</div>
 			                            		</div>
 			                            		<div class="col-3 text-center">
 			                            			<i class="bx bx-search-alt p-75" style="margin-top:5px; font-size:30px; color:#7f5a83; background-color:#f7dffa; border-radius:20%;"></i>
@@ -231,7 +232,7 @@ body {
 			                            	<div class="row">
 			                            		<div class="col-9 col-xl-8 text-left">
 			                               			<div id='genotype_analysis' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
-													<div class='font-family:Montserrat; font-size: 14px;'>Genotype Analysis</div>
+													<div style='font-size: 14px;'>Genotype Analysis</div>
 			                            		</div>
 			                            		<div class="col-3 text-center">
 			                            			<i class="bx bx-line-chart p-75" style="margin-top:5px; font-size:30px; color:#4a6648; background-color:#afddac; border-radius:20%;"></i>
@@ -248,7 +249,7 @@ body {
 			                            	<div class="row">
 			                            		<div class="col-9 col-xl-8 text-left">
 			                               			<div id='phenotype_analysis' class='font-weight-bold' style='font-family:Montserrat; font-size: 25px;'></div>
-													<div class='font-family:Montserrat; font-size: 14px;'>Phenotype Analysis</div>
+													<div style='font-size: 14px;'>Phenotype Analysis</div>
 			                            		</div>
 			                            		<div class="col-3 text-center">
 			                            			<i class="bx bx-bar-chart-alt-2" style="margin-top:5px; padding:0.75rem; font-size:30px; color:#887ab6; background-color:#e6deff; border-radius:20%;"></i>
@@ -310,14 +311,14 @@ body {
 		                                		</div>
 		                                		<div class="col-2">
 		                                			<select id="analysisYear" class="select2 form-select">
-		                                				<option value="-1" selected>Select All Year</option>
+		                                				<option value="-1" selected>All Year</option>
 		                                				<option value="2022">2022</option>
 		                                				<option value="2023">2023</option>
 		                                			</select>
 		                                		</div>
 		                                		<div class="col-2">
 		                                			<select id="analysisMonth" class="select2 form-select">
-		                                				<option value="-1" selected>Select All Month</option>
+		                                				<option value="-1" selected>All Month</option>
 		                                				<option value="1">1</option>
 		                                				<option value="2">2</option>
 		                                				<option value="3">3</option>
@@ -346,14 +347,14 @@ body {
 		                                		</div>
 		                                		<div class="col-2">
 		                                			<select id="analysisListYear" class="select2 form-select">
-		                                				<option value="-1" selected>Select All Year</option>
+		                                				<option value="-1" selected>All Year</option>
 		                                				<option value="2022">2022</option>
 		                                				<option value="2023">2023</option>
 		                                			</select>
 		                                		</div>
 		                                		<div class="col-2">
 		                                			<select id="analysisListMonth" class="select2 form-select">
-		                                				<option value="-1" selected>Select All Month</option>
+		                                				<option value="-1" selected>All Month</option>
 		                                				<option value="1">1</option>
 		                                				<option value="2">2</option>
 		                                				<option value="3">3</option>
@@ -381,7 +382,7 @@ body {
                                 			<h1 class="m-1">Timeline</h1>
                                 		</div>
 		                            </div>
-                    				<ul id="timeline" class="timeline" style="padding-top:15px; height:800px;">
+                    				<ul id="timeline" class="timeline" style="padding-top:15px; height:847px;">
                                     </ul>
 								</div>
 		                    </div> 

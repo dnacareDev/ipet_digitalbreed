@@ -111,7 +111,6 @@
 	    	headerName: "상세내용",
 	    	field: "comment",
 	    	filter: 'agNumberColumnFilter',
-	    	cellClass: "grid-cell-centered",      
 	    	width: 400
 	    },
 	    {
@@ -407,15 +406,15 @@
 		{ 	
 			headerName:'특성', 
 			field: "traitname",
-			cellClass: "grid-cell-centered", 
-			width: 250, 
+			menuTabs: ["filterMenuTab"], 
+			width: 420, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true 
+			headerCheckboxSelection: true,
+			cellClass: "grid-cell-centered", 
 		},
 		{
 			field: "traitname_key",
-			width: 250,
 			hide:true
 		}
 	];
@@ -423,6 +422,7 @@
 			defaultColDef: {
 				editable: false, 
 			    sortable: true,
+			    filter: true,
 			},
 			columnDefs: columnDefsTraitName,
 			rowHeight: 35,

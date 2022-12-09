@@ -63,28 +63,12 @@ body {
 }
 
 .nft-hero {
-	background-image: url("../../css/app-assets/images/logo/about_us_1.jpg");
+	width:100%; 
+	height:700px;
+	color:#000000;
     background-size: cover;
     background-position: center;
     padding: 150px 0 150px 0;
-}
-
-.nft-hero2 {
-	background-image: url("../../css/app-assets/images/logo/about_us_2.jpg");
-    background-size: cover;
-    background-position: center;
-    padding: 150px 0 150px 0;
-}
-
-.nft-hero3 {
-	background-image: url("../../css/app-assets/images/logo/about_us_7.jpg");
-    background-size: cover;
-    background-position: center;
-    padding: 150px 0 150px 0;
-}
-
-body {
-	font-family: 'SDSamliphopangche_Outline';
 }
 
 
@@ -130,18 +114,21 @@ body {
            	<div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
-                    <div class="card center nft-hero" style="width:100%; height:700px;">
+                    <div class="card center nft-hero" style="background-image: url('../../css/app-assets/images/logo/about_us_8.jpg');">
                         <div class="card-content">
-                            <div class="card-body text-center">
+                            <div class="card-body">
 	                        	<div class="row">
 	                        		<div class="col-7"></div>
-	                        		<div class="col-4" style="font-size:35px; font-weight:600;">About Us</div>
+	                        		<div class="col-4" style="font-size:35px; font-weight:600; background-color:#FFFFFFCC;">About Us</div>
 	                        		<div class="col-1"></div>
 	                        	</div>
-                                <div class="row mt-2">
+                                <div class="row mt-0">
                                     <div class="col-7"></div>
-                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; line-height:2" >
-                                    	본 과제는 디지털 육종 활용 시스템의 데이터 처리 기반이 취약한 국내 종자 기업의 유전체 정보 활용을 적극 지원하여 데이터  작물 육종을 위한 유전체/표현체 정보분석 및 육종 현장 활용 확산을 유도하여 궁극적으로 종자 기업의 육종 효율을 향상시키고종자 생산 기술에 글로벌 경쟁력을 확보 하기 위한 시스템 입니다. 
+                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFFCC;" >
+                                    	<br>
+                                    	본 과제는 디지털 육종 활용 시스템의 데이터 처리 기반이 취약한 국내 종자 기업의 유전체 정보 활용을 적극 지원하여 데이터  작물 육종을 위한 유전체/표현체 정보분석 및 육종 현장 활용 확산을 유도하여 궁극적으로 종자 기업의 육종 효율을 향상시키고종자 생산 기술에 글로벌 경쟁력을 확보 하기 위한 시스템 입니다.
+                                    	<br>
+                                    	<br> 
                                     </div>
                                     <div class="col-1"></div>
                                 </div>
@@ -160,22 +147,25 @@ body {
                             </div>
                         </div>
                     </div>
-                    <div class="card center nft-hero2" style="width:100%; height:700px;">
+                    <div class="card center nft-hero" style="background-image: url('../../css/app-assets/images/logo/about_us_9.jpg');">
                     	<div class="card-content">
-                            <div class="card-body text-center">
+                            <div class="card-body">
 	                        	<div class="row">
 	                        		<div class="col-1"></div>
-	                        		<div class="col-4" style="font-size:35px; font-weight:600;">Data Management</div>
-	                        		<div class="col-6"></div>
+	                        		<div class="col-4" style="font-size:35px; font-weight:600; background-color:#FFFFFFCC;">Data Management</div>
+	                        		<div class="col-7"></div>
 	                        	</div>
-                                <div class="row mt-2">
+                                <div class="row mt-0">
                                     <div class="col-1"></div>
-                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; line-height:2" >
+                                    <div class="col-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFFCC;" >
+                                    	<br>
                                     	Digital Breeding system은  방대한 양의 데이터를 손쉽게 등록할 수 있으며 인터넷이 되는 곳 어디에서나 쉽게 데이터를 다시 받을 수 있습니다. 또한 데이터를 가공할 수 있는 모듈을 지원하여 손쉽게 데이터를 가공할 수 있으며 등록된 데이터는 분석모듈과 유기적인 연동을 통해 손쉽게 분석을 진행할 수 있습니다.
+                                    	<br>
+                                    	<br>
                                     </div>
-                                    <div class="col-6"></div>
+                                    <div class="col-7"></div>
                                 </div>
-                                <div class="row mt-1">
+                                <div class="row mt-0">
                                 	<div class="col-1"></div>
                                     <div class="col-4 text-left"style="line-height:2"> 
                                     </div>
@@ -190,18 +180,21 @@ body {
                             </div>
                         </div>
                     </div>  
-                    <div class="card center nft-hero3" style="width:100%; height:700px;">
+                    <div class="card center nft-hero" style="background-image: url('../../css/app-assets/images/logo/about_us_7.jpg');">
                     	<div class="card-content">
-                            <div class="card-body text-center">
+                            <div class="card-body">
 	                        	<div class="row">
 	                        		<div class="col-7"></div>
-	                        		<div class="col-4" style="font-size:35px; font-weight:600;">Visualization driven</div>
+	                        		<div class="col-4" style="font-size:35px; font-weight:600; background-color:#FFFFFFCC;">Visualization driven</div>
 	                        		<div class="col-1"></div>
 	                        	</div>
-                                <div class="row mt-2">
+                                <div class="row mt-0">
                                     <div class="col-7"></div>
-                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; line-height:2" >
+                                    <div class="col-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFFCC;" >
+                                    	<br>
                                     	Digital Breeding system은 다양한 시각화 모듈을 지원하여 데이터의 이상값과 패턴의 강조를 표시합니다.또한 R 기반의 다양한 통계 및 분석 모듈을 지원하며 웹 베이스의 디스플레이를 통하여 시각화된 그래프와 데이터 테이블 간의 상호 작용을 지원합니다
+                                    	<br>
+                                    	<br>
                                     </div>
                                     <div class="col-1"></div>
                                 </div>
@@ -219,7 +212,42 @@ body {
                                 </div>	
                             </div>
                         </div>
-                    </div>                    
+                    </div>
+                    <div class="card center nft-hero" style="background-image: url('../../css/app-assets/images/logo/about_us_2.jpg');">
+                    	<div class="card-content">
+                            <div class="card-body text-center">
+	                        	<div class="row">
+	                        		<div class="col-7"></div>
+	                        		<div class="col-4" style="font-size:35px; font-weight:600; background-color:#FFFFFFCC;">User Friendly</div>
+	                        		<div class="col-1"></div>
+	                        	</div>
+                                <div class="row mt-0">
+                                    <div class="col-7"></div>
+                                    <div class="col-4 text-left" style="font-size:17px; font-weight:300; /*line-height:2;*/ background-color:#FFFFFFCC;" >
+                                    	<br>
+                                    	NGS 기술이 점차 발전함에 따라 이전보다 유전체 데이터를 얻기가 쉬워졌지만 이를 일반 사용자가 활용하기 에는 어려우며 유전체 분석을 위해서는 많은 전문지식과 분석 환경이 필요합니다.
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>
+                                <div class="row mt-0">
+                                	<div class="col-7"></div>
+                                    <div class="col-4 text-left"style="font-size:17px; font-weight:300; /*line-height:2;*/ background-color:#FFFFFFCC;"> 
+										<br>
+										Digital Breeding System은 유전체 데이터를 일반 사용자들에게 익숙한 형태로 정보를 자동으로 추출 및 정리하여 제공하며 사용자가 다양한 분석을 손쉽게 진행할 수 있도록 셋팅된 다양한 분석모듈을 제공합니다.
+										<br>
+										<br>
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>	
+                                <div class="row mt-1">
+                                	<div class="col-6"></div>
+                                    <div class="col-4 text-right">
+                                    </div>
+                                    <div class="col-1"></div>
+                                </div>	
+                            </div>
+                        </div>
+                    </div>                          
                 </section>
                 <!-- // Basic example section end -->
 
@@ -259,62 +287,11 @@ body {
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-<!-- Modal start-->
-
-                          
+	<!-- Modal start-->
 	<!-- Modal end-->
 	
-        <script>
-        
-        var box = new Object();
-        window.onload = function() {
-            // 파일전송 컨트롤 생성
-            box = innorix.create({
-                el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-                height          : 130,
-                maxFileCount   : 1,  
-                allowExtension: ["vcf", "gvcf"],
-				addDuplicateFile : false,
-                agent: false, // true = Agent 설치, false = html5 모드 사용                    
-                uploadUrl: './fileuploader.jsp' // 업로드 URL
-            });
-
-			box.on("addFileError", function(p) {
-                alert("VCF 화일만 업로드 가능 합니다.")
-            }),
-
-            // 업로드 완료 이벤트
-            box.on('uploadComplete', function (p) {
-         	    
-
-				document.getElementById('uploadvcfform').reset();
-			    box.removeAllFiles();
-				$('#backdrop').modal('hide');
-				jQuery('#vcf_status').html('');
-				$('html').scrollTop(0);
-				refresh();
-            });
-        };
-        
-        function FileUpload() {
-        	if(document.getElementById("comment").value==''){
-        		alert("Comment must be entered.");   
-        		document.getElementById("comment").focus();
-        	    return false;  
-        	}
-        	
-			var postObj = new Object();
-			postObj.comment = document.getElementById("comment").value;      
-			postObj.varietyid = $( "#variety-select option:selected" ).val();
-			box.setPostData(postObj);
-			box.upload();
-        }            
-            
-		$('#backdrop').on('hidden.bs.modal', function (e) {
-			document.getElementById('uploadvcfform').reset();
-			box.removeAllFiles();
-		});            
-        </script>
+	<script>
+	</script>
 </body>
 <!-- END: Body-->
 

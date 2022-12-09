@@ -111,6 +111,16 @@
     .simpleHttpRequest({ url: "../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
       gridOptions.api.setRowData(data);
+      
+      
+      
+      // 사진 추가,삭제시에만 작동하도록 의도. 아이콘을 클릭했던 row의 위치로 이동함
+      const clickedRowIndex = gridOptions.api.getFocusedCell().rowIndex;
+      if(!isNaN(clickedRowIndex)) {
+    	  gridOptions.api.ensureIndexVisible(Number(clickedRowIndex), 'middle');
+      }
+      
+      
     });
     
     	$("#photo_one_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
@@ -141,14 +151,20 @@
 		var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
 
 		if(result){
+					$('#loadingSpinner').modal('show');
+					
 					$.ajax({
 						url:"../../web/database/phenotype_delete.jsp",
 						type:"POST",
 						data:{'params':deleteitems},
 						success: function(result) {
+							
+							$('#loadingSpinner').modal('hide');
+							
 							if (result) {
 								alert("정상적으로 삭제되었습니다.");
 								refresh();
+								
 							} else {
 								alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
 							}
@@ -570,6 +586,12 @@
 	   		 
   function getAllData() {
 
+	  if(!confirm("수정하시겠습니까?")) {
+		  return;
+	  } 
+
+	  $('#loadingSpinner').modal('show');
+	  
 		let saveList = [];		
 		saveList.push(gridOptions.api.getDataAsCsv(getParams()));
 			$.ajax({
@@ -577,6 +599,8 @@
 			    type:"POST",
 			    data:{'params':saveList, 'varietyid':$( "#variety-select option:selected" ).val()},
 			    success: function(result) {
+			    	
+			    	$('#loadingSpinner').modal('hide');
 			    
 			       if(result.trim()===""){
 			      	 alert("저장되었습니다.");

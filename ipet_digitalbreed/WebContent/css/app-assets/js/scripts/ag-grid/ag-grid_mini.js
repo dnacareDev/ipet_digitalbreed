@@ -172,9 +172,7 @@
 				   									<div class='row'>
 				   										<div class='col-12'>
 				   											<ul class='nav nav-pills nav-active-bordered-pill'>
-				   												<!--
-				   												<li class='nav-item'><a class='nav-link active' id='mini_1' data-toggle='pill' href='#pill1' aria-expanded='true'>PCA1 (2D)</a></li>
-				   												-->
+				   												<li class='nav-item'><a class='nav-link active' id='mini_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Marker Selection</a></li>
 				   											</ul>
 				   											<div class='tab-content'>
 				   												<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>

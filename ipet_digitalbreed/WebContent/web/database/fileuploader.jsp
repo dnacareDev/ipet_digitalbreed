@@ -44,13 +44,14 @@ if (request.getMethod().equals("POST"))
 	String mingq = uploader.getParameter("mingq");	
 	String missing = uploader.getParameter("missing");	*/
 	String varietyid = uploader.getParameter("varietyid");
+	String jobid = uploader.getParameter("jobid");
 	
 	String _run_retval = uploader.run();
 	
 
 	if (uploader.isUploadDone()) {	
-		String jobid = runanalysistools.getCurrentDateTime();		
-
+		//String jobid = runanalysistools.getCurrentDateTime();		
+		
 		File folder_savePath = new File(savePath+jobid);
 
 		if (!folder_savePath.exists()) {
@@ -88,21 +89,16 @@ if (request.getMethod().equals("POST"))
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
-		
+		/*
 		System.out.println("========genotype_sequence========");
 		runanalysistools.execute(genotype_sequence, "cmd");
 		System.out.println("========genotype_statistics========");
 		runanalysistools.execute(genotype_statistics, "cmd");
 		System.out.println("========vcf_statistcs========");
 		runanalysistools.execute(vcf_statistcs, "cmd");
+		*/ 
 		
 		/*
-		System.out.println("========CSV to Json start========");
-		CsvToJson csvToJson = new CsvToJson();
-		csvToJson.getJson(outputPath, jobid);
-		System.out.println("========CSV to Json end========");
-		*/
-		
 		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		
@@ -130,7 +126,7 @@ if (request.getMethod().equals("POST"))
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}
-		
+		*/
 	}
 }
 %>

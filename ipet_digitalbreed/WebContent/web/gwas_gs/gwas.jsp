@@ -263,17 +263,15 @@ body {
 										</div>
 						            </div>
 						            <div>
-							            <div id="isPhenotype" class="form-label-group" >
+							            <div id="isPhenotype" class="form-label-group mt-1" >
 						                    <!--  
 						                    <select class="select2 form-select max-length" id="PhenotypeSelect" style="width: 97%;" multiple>
 						                    </select>
 						                    -->
-						                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:296px;"></div><br>
-							                <br>
+						                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
 							                <!--
 							                <div id="phenotypeResultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:120px;"></div><br>
 							                -->
-							                <br>
 	                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
 	                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
 							            </div>
