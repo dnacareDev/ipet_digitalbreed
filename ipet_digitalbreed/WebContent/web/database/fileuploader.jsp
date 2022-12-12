@@ -94,7 +94,7 @@ if (request.getMethod().equals("POST"))
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
-		/*
+		
 		System.out.println("========genotype_sequence========");
 		runanalysistools.execute(genotype_sequence, "cmd");
 		System.out.println("========genotype_statistics========");
@@ -131,7 +131,7 @@ if (request.getMethod().equals("POST"))
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}
-		*/
+		
 	}
 }
 %>

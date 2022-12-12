@@ -81,9 +81,13 @@
 
 		
 		try{
+			/*
 		    File file = new File(org_savePath+jobid+"/"+_orig_filename+".recode.vcf");
 		    File newFile = new File(savePath+jobid+"/"+_orig_filename+".recode.vcf");
-		
+			*/
+			File file = new File(org_savePath+jobid+"/"+_orig_filename);
+		    File newFile = new File(savePath+jobid+"/"+_orig_filename);
+			
 		    FileInputStream input = new FileInputStream(file);
 		    FileOutputStream output = new FileOutputStream(newFile);
 		
@@ -99,12 +103,16 @@
 		}catch(Exception e){
 
 		}
-	    		
+	    /*	
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";		
 		//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
-				
+		*/	
+		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
+		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
+		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
+		
 		System.out.println("genotype_sequence :" + genotype_sequence);
 		System.out.println("genotype_statistics :" + genotype_statistics);
 		System.out.println("vcf_statistcs :" + vcf_statistcs);
@@ -131,8 +139,9 @@
 
 		
 		
-		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+".recode.vcf"+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
-
+		//String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+".recode.vcf"+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
+		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";
+		
 		System.out.println("insertVcfinfo_sql : " + insertVcfinfo_sql);
 		
 		try{

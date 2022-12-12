@@ -7,58 +7,6 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-	/*
-	function refresh() {
-		gridOptions.api.refreshCells(); 
-  		fetch("../../../web/statistics/statistics_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
-  		.then((response) => response.json())
-  		.then((data) => {
-  			console.log(data);
-			gridOptions.api.setRowData(data);
-			gridOptions.api.sizeColumnsToFit();
-  		})
-		vcfFileList();
-	}
-	
-
-	function getSelectedRowData() {
-
-		if(!gridOptions.api.getSelectedRows().length) {
-			alert("선택 된 항목이 없습니다.")
-			return;
-		}
-		
-		if( !confirm("삭제하시겠습니까?") ) {
-			return;
-		}
-		
-		let selectedData = gridOptions.api.getSelectedRows();
-		var deleteitems = new Array();
-		  
-		for (var i = 0; i < selectedData.length; i++) {
-		    deleteitems.push(selectedData[i].no);
-		}
-		
-		console.log("delete row : ", deleteitems);
-		
-		$.ajax(
-		{
-		    url:"../../../web/statistics/statistics_delete.jsp",
-		    type:"POST",
-		    data:{'params':deleteitems},
-		    success: function(result) {
-		        if (result) {
-					alert("정상적으로 삭제되었습니다.");
-					refresh();
-		        } else {
-		            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
-		        }
-		    }
-		});
-	}
-	*/
-	
-	
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
@@ -171,37 +119,6 @@
 		}
 	};
 	
-	/*
-	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
-	document.addEventListener('click', function(event) {
-		//console.log(event.target.id);
-		
-		const jobid = $("#jobid").val();
-		const resultpath = $("#resultpath").val();
-		
-		switch(event.target.id) {
-			case 'qf_2':
-				if(!$('#pill2_frame').attr('src')){
-					$("#iframeLoading").modal('show');
-					$('#pill2_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_variant.html");
-				}
-				break;
-			case 'qf_3':
-				if(!$('#pill3_frame').attr('src')){
-					$("#iframeLoading").modal('show');
-					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_depth.html");
-				}
-				break;
-			case 'qf_4':
-				if(!$('#pill4_frame').attr('src')){
-					$("#iframeLoading").modal('show');
-					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_miss.html");
-				}
-				break;
-		}
-	});
-	*/
-	
 	document.addEventListener('DOMContentLoaded', () => {
   		/*** DEFINED TABLE VARIABLE ***/
   		const gridTable = document.getElementById("myGrid");
@@ -223,22 +140,6 @@
   		const myGrid = new agGrid.Grid(gridTable, gridOptions);
   		
   		getAnalysisListGrid();
-  		/*
-  		const varietyid = $("#variety-select option:selected").val();
-  		const year = $("#analysisListYear option:selected").val();
-  		const month = $("#analysisListMonth option:selected").val();
-  		
-  		//console.log(year);
-  		//console.log(month);
-  		
-  		fetch(`/ipet_digitalbreed/web/statistics/statistics_json.jsp?varietyid=${varietyid}&year=${year}&month=${month}`)
-  		.then((response) => response.json())
-  		.then((data) => {
-  			console.log(data);
-			gridOptions.api.setRowData(data);
-			gridOptions.api.sizeColumnsToFit();
-  		})
-  		*/
 	})	
 	
 	function getAnalysisListGrid() {

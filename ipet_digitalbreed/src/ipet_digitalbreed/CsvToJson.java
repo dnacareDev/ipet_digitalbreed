@@ -25,6 +25,9 @@ public class CsvToJson {
 		// create an array called datasets
         //JsonArray datasets = new JsonArray();
 		
+		System.out.println("outputPath : " + outputPath);
+		System.out.println("jobid : " + jobid);
+		
 		File excelFile = new File(outputPath+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
 
 		System.out.println("file read and write start");
@@ -67,7 +70,15 @@ public class CsvToJson {
 			
 			//br.readLine();		// 첫줄 스킵
 			
+			int count = 0;
 			while (line != null) {
+				
+				count++;
+				if(count % 1000 == 0) {
+					System.out.println("1000 count : " + count);
+				}
+
+				
 				JsonObject obj = new JsonObject(); 
                 List<String> chunks = Arrays.asList(line.split(","));
                 //System.out.println(chunks.size());

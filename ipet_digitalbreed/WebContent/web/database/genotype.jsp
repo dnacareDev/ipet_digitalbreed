@@ -347,6 +347,7 @@ body {
         	console.log("jobid : ", jobid);
         	
         	fetch(`./genotype_csv_to_json.jsp?jobid=\${jobid}`);
+        	//.then(fetch(`./genotype_csv_conversion.jsp?jobid=\${jobid}`))
         }
             
 		$('#backdrop').on('hidden.bs.modal', function (e) {
