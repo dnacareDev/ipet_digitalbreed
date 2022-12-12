@@ -14,7 +14,7 @@
 	
 	
 	System.out.println("========CSV to Json start========");
-	//CsvToJson csvToJson = new CsvToJson();
-	//csvToJson.getJson(outputPath, jobid);
+	CsvToJson csvToJson = new CsvToJson();
+	csvToJson.getJson(outputPath, jobid);
 	System.out.println("========CSV to Json end========");
 %>

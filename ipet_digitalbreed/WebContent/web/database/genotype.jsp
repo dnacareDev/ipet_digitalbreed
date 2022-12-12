@@ -327,10 +327,12 @@ body {
         	    return false;  
         	}
         	
+        	
         	const jobid = await fetch('../getJobid.jsp')
         				.then((response) => response.text())
         				.then((data) => data);
         	
+        	//const jobid = "20221130134541";
         	//console.log("await jobid : ", jobid);
         	
 			var postObj = new Object();
@@ -342,7 +344,7 @@ body {
         }   
         
         function makeJson(jobid) {
-        	//console.log("jobid : ", jobid);
+        	console.log("jobid : ", jobid);
         	
         	fetch(`./genotype_csv_to_json.jsp?jobid=\${jobid}`);
         }

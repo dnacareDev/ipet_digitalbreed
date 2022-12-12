@@ -46,6 +46,11 @@ if (request.getMethod().equals("POST"))
 	String varietyid = uploader.getParameter("varietyid");
 	String jobid = uploader.getParameter("jobid");
 	
+	
+	System.out.println(jobid);
+	
+	
+	
 	String _run_retval = uploader.run();
 	
 
@@ -96,9 +101,9 @@ if (request.getMethod().equals("POST"))
 		runanalysistools.execute(genotype_statistics, "cmd");
 		System.out.println("========vcf_statistcs========");
 		runanalysistools.execute(vcf_statistcs, "cmd");
-		*/ 
 		
-		/*
+		
+		
 		FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		
