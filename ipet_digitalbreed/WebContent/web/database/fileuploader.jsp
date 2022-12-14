@@ -47,7 +47,7 @@ if (request.getMethod().equals("POST"))
 	String jobid = uploader.getParameter("jobid");
 	
 	
-	System.out.println(jobid);
+	//System.out.println(jobid);
 	
 	
 	
@@ -89,7 +89,7 @@ if (request.getMethod().equals("POST"))
         catch (IOException ex) {
             ex.printStackTrace();
         }
-
+/*
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
@@ -131,7 +131,7 @@ if (request.getMethod().equals("POST"))
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}
-		
+		*/
 	}
 }
 %>

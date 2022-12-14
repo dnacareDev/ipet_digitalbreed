@@ -261,7 +261,7 @@ body {
 						             </div>		
 						             -->				             
 						             <div class="col-md-12 col-12">
-										<div id="fileControl" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div><br>
+										<div id="fileControl" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div><br>
 						             </div>	
 						             <div class="col-12">
 						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
@@ -314,9 +314,12 @@ body {
 				$('html').scrollTop(0);
 				refresh();
 				
+				
+				
 				//VCFViewer 작업
 				//서버의 csv파일을 json형태로 변경
-				makeJson(p.postData.jobid);
+				makeJson(p.postData.jobid)
+				
             });
         };
         
@@ -327,12 +330,14 @@ body {
         	    return false;  
         	}
         	
-        	
+        	/*
         	const jobid = await fetch('../getJobid.jsp')
         				.then((response) => response.text())
         				.then((data) => data);
+        	*/
         	
-        	//const jobid = "20221130134541";
+        	const jobid = "20221130134541";
+        	//const jobid = "20221212151125";
         	//console.log("await jobid : ", jobid);
         	
 			var postObj = new Object();
@@ -344,11 +349,9 @@ body {
         }   
         
         function makeJson(jobid) {
-        	console.log("jobid : ", jobid);
-        	
-        	fetch(`./genotype_csv_to_json.jsp?jobid=\${jobid}`);
-        	//.then(fetch(`./genotype_csv_conversion.jsp?jobid=\${jobid}`))
+        	fetch(`./genotype_after_upload_process.jsp?jobid=\${jobid}`)
         }
+        
             
 		$('#backdrop').on('hidden.bs.modal', function (e) {
 			document.getElementById('uploadvcfform').reset();

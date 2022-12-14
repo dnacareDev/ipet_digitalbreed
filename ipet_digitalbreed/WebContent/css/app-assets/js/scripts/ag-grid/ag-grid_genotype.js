@@ -290,6 +290,14 @@
 		},
 		columnDefs: columnDefs2,
 	    rowHeight: 35,
+	    
+	    rowModelType: "infinite",
+	    cacheBlockSize: 100,
+	    cacheOverflowSize: 2,
+	    maxConcurrentDatasourceRequests: 1,
+	    infiniteInitialRowCount: 1000,
+	    maxBlocksInCache: 10,
+	    
 	    headerHeight: 100,
 	    animateRows: true,
 	    suppressFieldDotNotation: true,
@@ -297,10 +305,14 @@
 	    tooltipHideDelay: 20000,
 	}
 	
+	function sleep(ms) {
+		return new Promise((r) => setTimeout(r, ms));
+	}
+	
 	async function print_pill2_frame(jobid) {
 		
 		// 첫번째 컬럼 filter 대분류(이런식으로 설정하지 않으면 모든 row가 필터에 걸림)
-		const filter_arr = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix.csv`)
+		const filter_arr = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix_viewer.csv`)
 							.then((response) => response.text())
 							.then((data) => {
 								const first_row = data.split("\n")
@@ -326,10 +338,126 @@
 							
 		//console.log(filter_arr);
 		
+		
+		
+		let arr = [];
+		let header = ["chr_pos"];
+		
+		for(let i=1 ; i<=10 ; i++) {
+			let arr2 = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix_${i}.json`)
+							.then((response) => response.json())
+							.then((data) => {
+								
+								if(i==1) {
+									// header 정의
+									//let header = ["position"];
+									
+									for(key in data[0]) {
+										if(key == "Reference") {
+											continue;
+										}
+										if(key !== "chr_pos") {
+											header.push(key);
+										} 
+									}
+								}
+								
+								sleep(1000);
+								
+								console.log(data)
+								return data;
+							})
+			arr = arr.concat(arr2);
+		}
+		
+		console.log("arr spread operator push : ", arr);
+		
+		let columnDefs2 = [];
+		let pill2_frame_width = 0;
+		
+		const gridTable2 = document.getElementById("pill2_frame");
+		const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
+		
+		//Position 컬럼의 filter 정렬 함수
+		function filterProcess(a, b) {
+			const valA = parseInt(a.replace(/[^0-9]/g,""));
+            const valB = parseInt(b.replace(/[^0-9]/g,""));
+            if (valA === valB) return 0;
+            return valA > valB ? 1 : -1;
+		}
+		
+		for(let i=0 ; i<header.length ; i++) {
+			//if(header[i] == 'position') {
+			if(header[i] == 'chr_pos') {
+				columnDefs2.push({
+					headerName: "Position",
+					field: header[i],
+					filter: true,
+					filterParams: { 
+						values: filter_arr, 
+						comparator: filterProcess // 안하면 filter1, filter10, filter2처럼 정렬됨
+					},
+					width: 180, 
+					menuTabs: ["filterMenuTab"], 
+					pinned: 'left',
+					lockPinned: true,
+				});
+				pill2_frame_width += 180
+			} else {
+				columnDefs2.push({field: header[i], width: 50, menuTabs: [], tooltipField: header[i], tooltipComponent: CustomTooltip, cellStyle: cellStyle});
+				pill2_frame_width += 50
+			}
+		}
+		
+		//console.log("pill2_frame_width : ", pill2_frame_width);
+		
+		//grid 길이가 짧으면 div영역도 축소
+		if(pill2_frame_width < 1780) {
+			$("#pill2_frame").css('width', pill2_frame_width + 20);
+			//$("#pill2_frame").css('width', 6 * 50 + 80);
+		}
+		
+		const datasource = {
+				rowCount: undefined,
+				getRows: (params) => {
+					console.log('asking for ' + params.startRow + ' to ' + params.endRow);
+					
+					setTimeout(function() {
+						const rowsThisPage = arr.slice(params.startRow, params.endRow);
+						
+						let lastRow = -1;
+						
+						if(arr.length <= params.endRow) {
+							lastRow = arr.length;
+						}
+						
+						params.successCallback(rowsThisPage, lastRow);
+					}, 500);
+				}
+		}
+		console.log(arr.length);
+		//gridOptions2.api.setInfiniteRowCount(arr.length);
+		gridOptions2.api.setColumnDefs(columnDefs2);
+		gridOptions2.api.setDatasource(datasource);
+		
+		//console.log(columnDefs2);
+		//gridOptions2.api.setColumnDefs(columnDefs2);
+		//gridOptions2.api.setRowData(arr);
+		
+		//gridOptions2.rowModelType = 'infinite';
+		//gridOptions2.datasource = arr;
+		
+		//gridOptions2.api.setDatasource(arr);
+						
+		
+		
+		
+		
+		/*
 		fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix.json`)
 		.then((response) => response.json())
 		.then((data) => {
-			console.log("json data : ", data)
+			//console.log("json data : ", data)
 			
 			// header 정의
 			//let header = ["position"];
@@ -382,10 +510,12 @@
 				}
 			}
 			
+			console.log("pill2_frame_width : ", pill2_frame_width);
+			
 			//grid 길이가 짧으면 div영역도 축소
 			if(pill2_frame_width < 1780) {
-				//$("#pill2_frame").css('width', pill2_frame_width + 20);
-				$("#pill2_frame").css('width', 6 * 50 + 80);
+				$("#pill2_frame").css('width', pill2_frame_width + 20);
+				//$("#pill2_frame").css('width', 6 * 50 + 80);
 			}
 			
 			//console.log(columnDefs2);
@@ -397,6 +527,7 @@
 			Array.prototype.slice.call(document.querySelectorAll('#pill2_frame .ag-header-cell-label .ag-header-cell-text'))
 			.filter((el) => el.textContent === 'Position')[0].style.writingMode = 'horizontal-tb'; 
 		});
+		*/
 		
 	}
  

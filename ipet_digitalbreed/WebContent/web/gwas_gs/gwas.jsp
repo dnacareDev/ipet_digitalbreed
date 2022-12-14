@@ -278,7 +278,7 @@ body {
 							        </div>
 							        <div>
 										<div id="isNewFile" class="form-label-group" style="display:none">
-								            <div id="PhenotypeCsvFile" class="col-md-12 col-12"  style="border: 1px solid #48BAE4;"></div>
+								            <div id="PhenotypeCsvFile" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div>
 											<br>
 						                	<!--  
 						                	<div style="float: left; margin-top:5px;">
