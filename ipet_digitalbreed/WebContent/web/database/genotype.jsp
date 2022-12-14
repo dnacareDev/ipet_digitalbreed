@@ -330,13 +330,13 @@ body {
         	    return false;  
         	}
         	
-        	/*
+        	
         	const jobid = await fetch('../getJobid.jsp')
         				.then((response) => response.text())
         				.then((data) => data);
-        	*/
         	
-        	const jobid = "20221130134541";
+        	
+        	//const jobid = "20221130134541";
         	//const jobid = "20221212151125";
         	//console.log("await jobid : ", jobid);
         	
