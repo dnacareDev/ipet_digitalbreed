@@ -262,7 +262,7 @@
 		   $('#pill1_frame').attr('height',"130px");
 		   $('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/database/genotype_vcfinfo.jsp?jobid="+params.data.jobid);
 		   $('#pill2_frame').empty();
-		   print_pill2_frame(params.data.jobid);
+		   print_pill2_frame(params.data.jobid, params.data.variablecnt);
 		   $('#pill2_frame').data('jobid',params.data.jobid);
 		   $('#pill3_frame').attr('height',"500px");
 		   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
@@ -309,10 +309,20 @@
 		return new Promise((r) => setTimeout(r, ms));
 	}
 	
-	async function print_pill2_frame(jobid) {
+	async function print_pill2_frame(jobid, row_count) {
 		
+		const header = await fetch(`./genotype_vcfviewer_command.jsp?command=header&jobid=${jobid}`)
+								.then((response) => response.text())
+								.then((data) => {
+									//const row = data.split(",");
+
+									//console.log(filter);
+									return data.split(",");
+								})
+		console.log("header : ", header);
+	
 		// 첫번째 컬럼 filter 대분류(이런식으로 설정하지 않으면 모든 row가 필터에 걸림)
-		const filter_arr = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix_viewer.csv`)
+		const filter_arr = await fetch(`./genotype_vcfviewer_command.jsp?command=filter&jobid=${jobid}`)
 							.then((response) => response.text())
 							.then((data) => {
 								const first_row = data.split("\n")
@@ -335,42 +345,35 @@
 								//console.log(filter);
 								return filter;
 							})
-							
-		//console.log(filter_arr);
 		
-		
-		
-		let arr = [];
-		let header = ["chr_pos"];
-		
-		for(let i=1 ; i<=10 ; i++) {
-			let arr2 = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix_${i}.json`)
-							.then((response) => response.json())
+								
+		/*
+		const filter_arr = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix_viewer.csv`)
+							.then((response) => response.text())
 							.then((data) => {
+								const first_row = data.split("\n")
+								console.log(first_row);
 								
-								if(i==1) {
-									// header 정의
-									//let header = ["position"];
+								let chr_pos = first_row[0].split(",");
+								chr_pos.shift();
+								//console.log(chr_pos);
+								
+								let filter = [];
+								for(let i=0 ; i< chr_pos.length ; i++) {
+									const element = chr_pos[i].substring(0, chr_pos[i].lastIndexOf("_"));
 									
-									for(key in data[0]) {
-										if(key == "Reference") {
-											continue;
-										}
-										if(key !== "chr_pos") {
-											header.push(key);
-										} 
+									if(!filter.includes(element)){
+										filter.push(element);
 									}
+									//filter.push(chr_pos[i].split("_")[0]);
 								}
-								
-								sleep(1000);
-								
-								console.log(data)
-								return data;
+
+								//console.log(filter);
+								return filter;
 							})
-			arr = arr.concat(arr2);
-		}
+		*/
 		
-		console.log("arr spread operator push : ", arr);
+		console.log("filter : ", filter_arr);
 		
 		let columnDefs2 = [];
 		let pill2_frame_width = 0;
@@ -420,25 +423,63 @@
 		const datasource = {
 				rowCount: undefined,
 				getRows: (params) => {
+					//console.log(params);
 					console.log('asking for ' + params.startRow + ' to ' + params.endRow);
 					
-					setTimeout(function() {
-						const rowsThisPage = arr.slice(params.startRow, params.endRow);
+					setTimeout(async function() {
+						//const rowsThisPage = arr.slice(params.startRow, params.endRow);
+						//if(arr.length <= params.endRow) {
+						//	lastRow = arr.length;
+						//}
+						//params.successCallback(rowsThisPage, lastRow);
+						//params.successCallback(0, 2000);
+
+						const rowsThisPage = await fetch(`./genotype_vcfviewer_command.jsp?command=rowThisPage&jobid=${jobid}&startRow=${params.startRow}`)
+											.then((response) => response.json())
+											.then((data) => data);
+						
+						console.log(rowsThisPage);
+						//row_count = 2228
 						
 						let lastRow = -1;
 						
-						if(arr.length <= params.endRow) {
-							lastRow = arr.length;
+						if(row_count <= params.endRow) {
+							lastRow = Number(row_count);
 						}
 						
-						params.successCallback(rowsThisPage, lastRow);
-					}, 500);
+						
+						//all_rows = front_arr.concat(rowsThisPage, back_arr);
+						
+						let all_rows = rowsThisPage.concat(new Array(Number(row_count) - (params.startRow + rowsThisPage.length - 1)));
+						
+						console.log(all_rows);
+						
+						
+						console.log("lastRow : ", lastRow);
+						/*
+						let concat_arr = [];
+						for(let i=0 ; i<2128 ; i++) {
+							concat_arr = concat_arr.concat(new Array(1));
+						}
+						console.log(concat_arr);
+						
+						all_rows = rowsThisPage.concat(concat_arr);
+						*/
+						params.successCallback(all_rows, lastRow);
+						
+						
+					}, 100);
 				}
 		}
-		console.log(arr.length);
+		
 		//gridOptions2.api.setInfiniteRowCount(arr.length);
+		gridOptions2.infiniteInitialRowCount = Number(row_count);
 		gridOptions2.api.setColumnDefs(columnDefs2);
 		gridOptions2.api.setDatasource(datasource);
+		
+		//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
+		Array.prototype.slice.call(document.querySelectorAll('#pill2_frame .ag-header-cell-label .ag-header-cell-text'))
+		.filter((el) => el.textContent === 'Position')[0].style.writingMode = 'horizontal-tb'; 
 		
 		//console.log(columnDefs2);
 		//gridOptions2.api.setColumnDefs(columnDefs2);

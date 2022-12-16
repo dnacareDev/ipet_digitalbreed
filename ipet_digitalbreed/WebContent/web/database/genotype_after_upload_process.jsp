@@ -17,17 +17,8 @@
 	// CSV => JSON파일 생성
 	System.out.println("========CSV to Json start========");
 	CsvToJson csvToJson = new CsvToJson();
-	csvToJson.getJson(outputPath, jobid);
-	System.out.println("========CSV to Json end========");
-	
-	// json file size check
-	Path path = Paths.get(outputPath+jobid+"/"+jobid+"_genotype_matrix.json");
-	long bytes = Files.size(path);
-	
-	System.out.println("json size(byte) : " +  bytes);
-	System.out.println("json size(MB) : " +  bytes / (1024 * 1024));
-	
-	//runanalysistools.execute(csv_transpose, "cmd");
+	csvToJson.getJson(outputPath, jobid, permissionUid);
+	System.out.println("========CSV to Json end========"); 
 	
 	
 	// CSV => 행렬변환된 CSV파일 생성
