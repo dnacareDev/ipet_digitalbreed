@@ -31,6 +31,8 @@
 				
 				out.clear();
 				out.print(line);
+				
+				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -49,6 +51,8 @@
 				
 				out.clear();
 				out.print(line);
+				
+				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

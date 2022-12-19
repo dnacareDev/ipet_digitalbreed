@@ -217,7 +217,7 @@ body {
 						        </div>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetPCA();">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -312,12 +312,14 @@ body {
     }
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-   		// 모달창 닫으면 초기화
+   		resetPCA();
+    });    
+   	
+    function resetPCA() {
     	document.getElementById('uploadPcaForm').reset();
     	vcfFileList();
     	box.removeAllFiles();
-    });    
-   	
+    }
    	
     var box = new Object();
     window.onload = function() {
@@ -374,7 +376,7 @@ body {
     	
     	
     	if(Number(jobid_vcf) == -1) {
-    		alert("선택된 VCF 파일이 없습니다.");
+    		alert("VCF 파일을 선택하세요");
     		return;
     	}
     	
@@ -433,7 +435,7 @@ body {
     	}
     }
     
-       
+
 
        
 </script>

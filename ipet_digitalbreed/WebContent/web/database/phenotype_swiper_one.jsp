@@ -17,8 +17,6 @@
 	
 	String sql = "select filename from sampledata_img_t where sampleno='"+sampleno+"' order by no desc";		
 	
-	System.out.println(sql);
-	
 	String img_p = "../../uploads/database/phenotype_img/"+varietyid+"_"+samplename+"/";
 	
 %>

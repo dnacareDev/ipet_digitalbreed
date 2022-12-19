@@ -78,11 +78,12 @@
   /*** COLUMN DEFINE ***/
   
   var columnDefs = [
-      {
+    {
       headerName: "순번",
       field: "displayno",
-      width: 140,	
-      filter: 'agMultiColumnFilter',
+      width: 110,	
+      //filter: 'agMultiColumnFilter',
+      suppressMenu: true,
       cellClass: "grid-cell-centered",      
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
@@ -93,21 +94,6 @@
       field: "selectfiles",
       hide: true,	
     },
-    /**{
-      headerName: "VCF 파일 다운로드",
-      field: "fileid",
-      editable: false,
-      sortable: true,
-      filter: 'agMultiColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 175,
-      resizable: true,
-      cellRenderer: function(params){
-      return "<a href='http://example.com/edit/" 
-        + params.value 
-        + "'>link "+params.value+"</a>";
-    }
-    },**/
     {
       headerName: "VCF 파일명",
       field: "filename",
@@ -137,13 +123,6 @@
       hide: true
     },
     {
-      headerName: "등록일자",
-      field: "cre_dt",
-      filter: 'agDateColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 150
-    },
-    {
       headerName: "참조유전체",
       field: "refgenome",
       filter: true,
@@ -163,6 +142,13 @@
       filter: 'agNumberColumnFilter',
       cellClass: "grid-cell-centered",      
       width: 120
+    },
+    {
+        headerName: "등록일자",
+        field: "cre_dt",
+        filter: 'agDateColumnFilter',
+        cellClass: "grid-cell-centered",      
+        width: 150
     },
 	{
       headerName: "jobid",
@@ -187,6 +173,7 @@
 		editable: false, 
 	    sortable: true,
 		resizable: true,
+		menuTabs: ['filterMenuTab']
 		//floatingFilter: true,
 	},
     columnDefs: columnDefs,
@@ -346,32 +333,6 @@
 								return filter;
 							})
 		
-								
-		/*
-		const filter_arr = await fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix_viewer.csv`)
-							.then((response) => response.text())
-							.then((data) => {
-								const first_row = data.split("\n")
-								console.log(first_row);
-								
-								let chr_pos = first_row[0].split(",");
-								chr_pos.shift();
-								//console.log(chr_pos);
-								
-								let filter = [];
-								for(let i=0 ; i< chr_pos.length ; i++) {
-									const element = chr_pos[i].substring(0, chr_pos[i].lastIndexOf("_"));
-									
-									if(!filter.includes(element)){
-										filter.push(element);
-									}
-									//filter.push(chr_pos[i].split("_")[0]);
-								}
-
-								//console.log(filter);
-								return filter;
-							})
-		*/
 		
 		console.log("filter : ", filter_arr);
 		
@@ -438,7 +399,7 @@
 											.then((response) => response.json())
 											.then((data) => data);
 						
-						console.log(rowsThisPage);
+						//console.log(rowsThisPage);
 						//row_count = 2228
 						
 						let lastRow = -1;
@@ -452,19 +413,10 @@
 						
 						let all_rows = rowsThisPage.concat(new Array(Number(row_count) - (params.startRow + rowsThisPage.length - 1)));
 						
-						console.log(all_rows);
+						//console.log(all_rows);
 						
 						
-						console.log("lastRow : ", lastRow);
-						/*
-						let concat_arr = [];
-						for(let i=0 ; i<2128 ; i++) {
-							concat_arr = concat_arr.concat(new Array(1));
-						}
-						console.log(concat_arr);
-						
-						all_rows = rowsThisPage.concat(concat_arr);
-						*/
+						//console.log("lastRow : ", lastRow);
 						params.successCallback(all_rows, lastRow);
 						
 						
@@ -489,87 +441,6 @@
 		//gridOptions2.datasource = arr;
 		
 		//gridOptions2.api.setDatasource(arr);
-						
-		
-		
-		
-		
-		/*
-		fetch(`/ipet_digitalbreed/result/database/genotype_statistics/${jobid}/${jobid}_genotype_matrix.json`)
-		.then((response) => response.json())
-		.then((data) => {
-			//console.log("json data : ", data)
-			
-			// header 정의
-			//let header = ["position"];
-			let header = ["chr_pos"];
-			for(key in data[0]) {
-				if(key == "Reference") {
-					continue;
-				}
-				if(key !== "chr_pos") {
-					header.push(key);
-				} 
-			}
-			//console.log(header);
-			
-			
-			let columnDefs2 = [];
-			let pill2_frame_width = 0;
-			
-			const gridTable2 = document.getElementById("pill2_frame");
-			const vcfViewerGrid = new agGrid.Grid(gridTable2, gridOptions2);
-			
-			//Position 컬럼의 filter 정렬 함수
-			function filterProcess(a, b) {
-				const valA = parseInt(a.replace(/[^0-9]/g,""));
-                const valB = parseInt(b.replace(/[^0-9]/g,""));
-                if (valA === valB) return 0;
-                return valA > valB ? 1 : -1;
-			}
-			
-			for(let i=0 ; i<header.length ; i++) {
-				//if(header[i] == 'position') {
-				if(header[i] == 'chr_pos') {
-					columnDefs2.push({
-						headerName: "Position",
-						field: header[i],
-						filter: true,
-						filterParams: { 
-							values: filter_arr, 
-							comparator: filterProcess // 안하면 filter1, filter10, filter2처럼 정렬됨
-						},
-						width: 180, 
-						menuTabs: ["filterMenuTab"], 
-						pinned: 'left',
-						lockPinned: true,
-					});
-					pill2_frame_width += 180
-				} else {
-					columnDefs2.push({field: header[i], width: 50, menuTabs: [], tooltipField: header[i], tooltipComponent: CustomTooltip, cellStyle: cellStyle});
-					pill2_frame_width += 50
-				}
-			}
-			
-			console.log("pill2_frame_width : ", pill2_frame_width);
-			
-			//grid 길이가 짧으면 div영역도 축소
-			if(pill2_frame_width < 1780) {
-				$("#pill2_frame").css('width', pill2_frame_width + 20);
-				//$("#pill2_frame").css('width', 6 * 50 + 80);
-			}
-			
-			//console.log(columnDefs2);
-			gridOptions2.api.setColumnDefs(columnDefs2);
-			gridOptions2.api.setRowData(data);
-			
-			//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
-			//document.querySelector('#pill2_frame .ag-header-cell-label .ag-header-cell-text').style.writingMode = 'horizontal-tb'
-			Array.prototype.slice.call(document.querySelectorAll('#pill2_frame .ag-header-cell-label .ag-header-cell-text'))
-			.filter((el) => el.textContent === 'Position')[0].style.writingMode = 'horizontal-tb'; 
-		});
-		*/
-		
 	}
  
 	function tooltipRenderder(params) {
@@ -661,12 +532,7 @@
 								$(`[row-index=${rowNode.rowIndex}] [col-id='displayno']`).trigger("click");
 							}
 						});	
-						
-
-					} else {
-						//console.log("null");
-					}
-					
+					} 
 				});
 			});
 	});

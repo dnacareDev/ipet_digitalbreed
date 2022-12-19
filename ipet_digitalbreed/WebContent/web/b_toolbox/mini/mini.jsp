@@ -217,7 +217,7 @@
 					            </div>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="excute();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="vcfFileList();">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -361,7 +361,7 @@
    		*/
    		
    		if(Number(jobid) == -1) {
-    		alert("선택된 VCF 파일이 없습니다.");
+    		alert("VCF 파일을 선택하세요");
     		return;
     	}
    		

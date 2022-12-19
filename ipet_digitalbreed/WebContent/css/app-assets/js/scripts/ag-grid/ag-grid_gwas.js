@@ -61,8 +61,8 @@
 			headerName: "순번",
 			//field: "no",
 			valueGetter: inverseRowCount,
-			width: 160,
-			filter: 'agMultiColumnFilter',
+			width: 110,
+			suppressMenu: true,
 			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
@@ -71,8 +71,8 @@
 	    {
 		    headerName: "분석상태",
 		    field: "status",
-		    width: 150,
-		    filter: true,
+		    width: 100,
+		    suppressMenu: true,
 		    cellClass: "grid-cell-centered",      
 		    cellRenderer: function(params) {
 		    	//console.log("params : ", params.value);
@@ -91,14 +91,14 @@
 			field: "genotype_filename",
 			filter: true,
 			cellClass: "grid-cell-centered",      
-			width: 400,
+			width: 600,
 	    },
 	    {
 			headerName: "Phenotype",
 			field: "phenotype_name",
 			filter: true,
 			cellClass: "grid-cell-centered",      
-			width: 300,
+			width: 350,
 	    },
 	    {
 			headerName: "Model",
@@ -111,13 +111,13 @@
 	    	headerName: "상세내용",
 	    	field: "comment",
 	    	filter: 'agNumberColumnFilter',
-	    	width: 400
+	    	width: 300
 	    },
 	    {
 	    	headerName: "분석일",
 	    	field: "cre_dt",
-	    	filter: 'agNumberColumnFilter',
-	    	width: 350,
+	    	filter: 'agDateColumnFilter',
+	    	width: 200,
 	    	cellClass: "grid-cell-centered", 
 	    	//cellEditor: DatePicker,
 	    	//cellEditorPopup: true
@@ -146,6 +146,7 @@
 			editable: false, 
 		    sortable: true,
 			resizable: true,
+			menuTabs: ['filterMenuTab'],
 			//floatingFilter: true,
 		},
 		columnDefs: columnDefs,

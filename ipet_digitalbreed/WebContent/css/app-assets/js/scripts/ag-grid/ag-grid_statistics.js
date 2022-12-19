@@ -88,33 +88,10 @@
 		},
 		
 		onCellClicked: params => {
-			//console.log("params : ", params);
+			console.log("params : ", params);
 			
-			if(params.colDef.headerName != "번호" &&params.colDef.headerName != "저장"){
-				
-				document.getElementById('vcf_status').style.display = "block";
-				
-				switch (Number(params.data.status)) {
-					case 0:
-						alert("분석 중입니다.");
-						break;
-					case 1:
-						$("#iframeLoading").modal('show');
-						
-						$('#pill1_frame').attr('height',"130px");
-						$('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/b_toolbox/qf/qf_vcfinfo.jsp?jobid="+params.data.jobid);
-				   		
-				   		// input에 jobid값 저장
-				   		$("#jobid").val(params.data.jobid);
-				   		$("#resultpath").val(params.data.resultpath);
-				   		
-						gridOptions.api.sizeColumnsToFit();
-						break;
-					case 2:
-						//$("#analysis_fail").modal('show');
-						alert("분석에 실패했습니다.");
-						break;
-				}
+			if(params.colDef.headerName != "결과보기"){
+				console.log("move to");
 			}
 		}
 	};

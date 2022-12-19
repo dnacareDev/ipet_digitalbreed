@@ -331,7 +331,7 @@ body {
                                 </fieldset>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetGWAS();">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -569,37 +569,60 @@ body {
 			data : {"varietyid" : variety_id},
 			dataType : "json",
 			success : function(result){
-	   	    	//console.log("phenotype traitname : ", result);
-	   	    	//$("#PhenotypeSelect").append(`<option disabled hidden selected>(Required)Select Phenotype</option>`);
+				gridOptionsTraitName.api.setRowData(result);
+				/*
 	   	    	for(let i=0 ; i<result.length ; i++) {
 	   	    		$("#PhenotypeSelect").append(`<option data-traitname_key=\${i} data-traitname=\${result[i]} > \${result[i]} </option>`);
 	   	    	}
+				*/
 			}
 		});
    	}
    	
-	//radio 선택에 따라 파일창 노출여부 결정
+	//radio 선택에 따라 파일창 노출여부 결정  | true: New Phenotype , false: Phenotype Database
 	function radioSelect(flag) {
 		//console.log(flag);
 		if(flag) {
 			$("#isNewFile").css('display','block');
 			$("#exampleButton").css('display','block');
 			$("#isPhenotype").css('display','none');
+			
+			// New Phenotype 선택시 특성 체크박스 해제
+			gridOptionsTraitName.api.deselectAll();
 		} else {
 			$("#isNewFile").css('display','none');
 			$("#exampleButton").css('display','none');
 			$("#isPhenotype").css('display','block');
+			
+			// Phenotype Database 선택시 innorix 파일목록 해제
+			box.removeAllFiles();
 		}
 	}
    	
+   	
    	function flatpickr() {
-   		let dateSelector = document.querySelectorAll(".flatpickr-range");
+   		//let dateSelector = document.querySelectorAll(".flatpickr-range");
+   		dateSelector = document.querySelectorAll(".flatpickr-range");
+   		
+   		
    		
    		dateSelector.flatpickr({
    			mode: "range",
    			dateFormat: "Y-m-d",
    			conjunction: " ~ "
    		});
+   	}
+   	
+   	function resetFlatpickr() {
+   		
+   		let dateSelector = document.querySelectorAll(".flatpickr-day");
+   		
+   		//범위선택시 추가된 class를 삭제하여 css 제거 - 서버에는 input text값이 올라가므로 css만 신경쓰면 된다.
+   		console.log(document.querySelectorAll('.flatpickr-day').forEach(el => {
+   			//console.log(el);
+   			//console.log(el.classList.contains('inRange'));
+   			el.classList.remove('selected', 'startRange', 'endRange', 'inRange');
+   		}));
    	}
    	
    	function execute() {
@@ -620,9 +643,16 @@ body {
    	   		}
    			*/
    			
+   			// phenotype options AG-Grid
+   			if(!gridOptionsTraitName.api.getSelectedRows().length) {
+   				alert("Phenotype을 한 개 이상 선택해 주세요");
+   				return;
+   			}
+   			
+   			
    			//modelGroup
    			if(document.querySelectorAll('input[name="modelGroup"]:checked').length == 0) {
-   				alert("Model을 최소 1개 선택하세요.")
+   				alert("Model을  한 개 이상 선택해 주세요")
    				return;
    			}
    			
@@ -792,12 +822,18 @@ body {
     
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-
+   		resetGWAS();
+    });
+   	
+   	function resetGWAS() {
+   		document.getElementById('uploadGwasForm').reset();
+   		
    		// 모달창 닫으면 초기화
     	// document.getElementById('uploadGwasForm').reset();
-    	vcfFileList();
+   		vcfFileList();
     	phenotypeList();
-    });
+    	resetFlatpickr();
+   	}
        
 </script>
 

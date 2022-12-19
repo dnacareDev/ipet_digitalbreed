@@ -14,12 +14,6 @@
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";	
 
 	
-	// CSV => JSON파일 생성
-	System.out.println("========CSV to Json start========");
-	CsvToJson csvToJson = new CsvToJson();
-	csvToJson.getJson(outputPath, jobid, permissionUid);
-	System.out.println("========CSV to Json end========"); 
-	
 	
 	// CSV => 행렬변환된 CSV파일 생성
 	String csv_transpose = "Rscript " +script_path+ "genotype_sequence_bakground.R " +outputPath+" "+ jobid;
@@ -28,4 +22,14 @@
 	System.out.println("csv_transpose : " + csv_transpose);
 	runanalysistools.execute(csv_transpose, "cmd");
 	System.out.println("========CSV transpose end========");
+		
+	
+	// CSV => JSON 생성 & DB저장
+	System.out.println("========CSV to Json start========");
+	CsvToJson csvToJson = new CsvToJson();
+	csvToJson.getJson(outputPath, jobid, permissionUid);
+	System.out.println("========CSV to Json end========"); 
+	
+	
+	
 %>

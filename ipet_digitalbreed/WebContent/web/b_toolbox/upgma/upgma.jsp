@@ -210,7 +210,7 @@ body {
 						        </div>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetUPGMA()">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -384,7 +384,7 @@ body {
     	*/
     	
     	if(Number(jobid_vcf) == -1) {
-    		alert("선택된 VCF 파일이 없습니다.");
+    		alert("VCF 파일을 선택하세요");
     		return;
     	}
     	
@@ -457,11 +457,14 @@ body {
     }
 	            
     $('#backdrop').on('hidden.bs.modal', function (e) {
-    	document.getElementById('uploadUpgmaForm').reset();
-    	vcfFileList();
+    	resetUPGMA();
     });    
             
-            
+    function resetUPGMA() {
+    	document.getElementById('uploadUpgmaForm').reset();
+ 		vcfFileList();
+    	box.removeAllFiles();
+    }    
             
             
         </script>

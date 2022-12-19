@@ -56,28 +56,21 @@
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
-	      headerName: "번호",
+	      headerName: "순번",
 	      //field: "no",
 	      valueGetter: inverseRowCount,
-	      width: 130,
-	      filter: 'agMultiColumnFilter',
+	      width: 100,
+	      suppressMenu: true,
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
 	      headerCheckboxSelectionFilteredOnly: true,
 	      headerCheckboxSelection: true
 	    },
 	    {
-	      headerName: "VCF 파일명",
-	      field: "file_name",
-	      filter: true,
-	      cellClass: "grid-cell-centered",      
-	      width: 400,
-	    },
-	    {
 	    	headerName: "분석상태",
 	    	field: "status",
-	    	filter: true,
-	    	width: 200,
+	    	suppressMenu: true,
+	    	width: 80,
 	    	cellClass: "grid-cell-centered",      
 	    	cellRenderer: function(params) {
 	    		//console.log("params : ", params.value);
@@ -92,19 +85,24 @@
 	    	}
 	    },
 	    {
+	      headerName: "VCF 파일명",
+	      field: "file_name",
+	      filter: true,
+	      cellClass: "grid-cell-centered",      
+	      width: 700,
+	    },
+	    {
 	      headerName: "상세내용",
 	      field: "comment",
 	      filter: true,
-	      width: 650
+	      width: 350
 	    },
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
 	      filter: "agDateColumnFilter",
 	      cellClass: "grid-cell-centered", 
-	      //cellStyle: {'background-color' : '#F0F0F0'},
-	      //width: 314
-	      width: 296
+	      width: 150
 	    },
 		{
 	      field: "jobid",
@@ -130,6 +128,7 @@
 			editable: false, 
 		    sortable: true,
 			resizable: true,
+			menuTabs: ['filterMenuTab'],
 			//floatingFilter: true,
 		},
 		columnDefs: columnDefs,

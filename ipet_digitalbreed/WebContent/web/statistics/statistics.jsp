@@ -466,6 +466,8 @@ body {
 		const variety_id = $( "#variety-select option:selected" ).val();
 		//const items = ['genotype_data', 'phenotype_data', 'GWAS', 'GS', 'genotype_analysis', 'phenotype_analysis'];
 		
+		console.log(variety_id);
+		
 		const genotype_data = document.getElementById('genotype_data');
 		const phenotype_data = document.getElementById('phenotype_data');
 		const GWAS = document.getElementById('GWAS');
@@ -521,6 +523,17 @@ body {
 				$('#timeline .timeline-item').last().append(`<span class="timeline-point timeline-point-indicator"></span><div class="timeline-event"><div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1"><h6>\${data[i].menuname}</h6><span class="timeline-event-time mr-2">\${data[i].cre_dt} </span></div><p>\${data[i].comment}</p></div><hr>`)
 			}   
 		})
+	}
+	
+	function refresh() {
+		getEachTableDataCount();	// 첫번째 줄 6개의 data count
+		
+		// chart rendering 실행
+		// 함수위치 : ../../css/app-assets/js/scripts/charts/chart-apex_statistics.js
+		getLineAreaChart();
+		barChart();		
+		
+		getAnalysisListGrid();
 	}
 	
 	</script>

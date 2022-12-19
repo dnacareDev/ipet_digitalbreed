@@ -15,9 +15,9 @@
 	String two_sampleno = request.getParameter("two_sampleno");
 	String varietyid = request.getParameter("varietyid");
 	
-	String rootFolder = request.getSession().getServletContext().getRealPath("/");	
-	String savePath = rootFolder+"uploads/database/phenotype_img/phenotype_spyderplot/";		
-	String outputPath = rootFolder+"result/database/phenotype_img/phenotype_spyderplot/";	
+	String rootFolder = request.getSession().getServletContext().getRealPath("/");
+	String savePath = rootFolder+"uploads/database/phenotype_img/phenotype_spyderplot/";
+	String outputPath = rootFolder+"result/database/phenotype_img/phenotype_spyderplot/";
 	
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";	
 	
@@ -58,6 +58,7 @@
 	
 	try{		
 			sql = "select traitname from sampledata_traitname_t where varietyid='"+varietyid+"' order by seq asc;";	
+			System.out.println(sql);
 			ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		    
 					
 			fw.write("Taxa"+"\t");
@@ -79,8 +80,10 @@
 	try{		
 		sql = "select samplename from sampledata_info_t where no='"+one_sampleno+"';";	
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);	
+	    System.out.println(sql);
 	    
 	  	 while (ipetdigitalconndb.rs.next()) { 		
+	  		 System.out.println(ipetdigitalconndb.rs.getString("samplename"));
 	  		fw.write(ipetdigitalconndb.rs.getString("samplename")+"\t");			
 	  	 }	  		  	
 	}catch(Exception e){

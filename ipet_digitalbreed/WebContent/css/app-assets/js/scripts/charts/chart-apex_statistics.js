@@ -264,7 +264,15 @@
 		  lineAreaOptions.series = data;
 		  
 		  
+		  
 		  var lineAreaChart = new ApexCharts(document.querySelector("#line-area-chart"), lineAreaOptions);
+
+		  try {
+			  lineAreaChart.destroy();
+		  } catch (error) {
+			  //console.error(error);
+		  }
+		  
 		  lineAreaChart.render();
 		
 	}

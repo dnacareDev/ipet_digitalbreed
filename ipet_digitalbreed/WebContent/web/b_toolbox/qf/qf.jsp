@@ -194,7 +194,7 @@ body {
 								<div class='row'>
 									<div class='col-12'>
 										<ul class='nav nav-pills nav-active-bordered-pill'>
-											<li class='nav-item'><a class='nav-link active' id='qf_1' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info </a></li>
+											<li class='nav-item'><a class='nav-link active' id='qf_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Filtering Info </a></li>
 											<li class='nav-item'><a class='nav-link' id='qf_2' data-toggle='pill' href='#pill2' aria-expanded='false'>Variant </a></li>
 											<li class='nav-item'><a class='nav-link' id='qf_3' data-toggle='pill' href='#pill3' aria-expanded='false'>DP </a></li>
 											<li class='nav-item'><a class='nav-link' id='qf_4' data-toggle='pill' href='#pill4' aria-expanded='false'>Missing </a></li>
@@ -235,7 +235,7 @@ body {
         <div class="modal-dialog  modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">Quality Filter</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Quality Filter New analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -312,7 +312,7 @@ body {
 						            	<div class="row">
 											<div class="col-4" style="margin-top:2%">MinDP</div>
 											<div class="col-8">
-												<input type="text" class="form-control" id="minDP" autocomplete="off" />
+												<input type="number" class="form-control" id="minDP" value="10" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
 											</div>
 										</div>
 						            </div>
@@ -320,7 +320,7 @@ body {
 						            	<div class="row">
 											<div class="col-4" style="margin-top:2%">MinGQ</div>
 											<div class="col-8">
-												<input type="text" class="form-control" id="minGQ" autocomplete="off" />
+												<input type="number" class="form-control" id="minGQ" value="90" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
 											</div>
 										</div>
 						            </div>
@@ -328,11 +328,11 @@ body {
 						            	<div class="row">
 											<div class="col-4" style="margin-top:5px;">Thin</div>
 											<div class="form-check col-3">
-							            		<input type="checkbox" class="form-check-input" id="useThin" style="margin-top:9px; margin-left:-11px;" onclick="if(this.checked){document.getElementById('thin').style.display = 'block'}else{document.getElementById('thin').style.display ='none'; document.getElementById('thin').value='';}" checked/>
+							            		<input type="checkbox" class="form-check-input" id="useThin" style="margin-top:9px; margin-left:-11px;" onclick="if(this.checked){document.getElementById('thin').style.display = 'block'}else{document.getElementById('thin').style.display ='none'; document.getElementById('thin').value='';}" />
 		                                        <label for="useThin"  style="margin-top:9px; margin-left:12px;">사용</label>
 							            	</div>
 											<div class="col-5">
-												<input class="form-control" type="text" id="thin" placeholder="(unit : bp)" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+												<input class="form-control" type="text" id="thin" placeholder="(unit : bp)" style="display:none;" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 											</div>
 										</div>
 						            </div>
@@ -353,7 +353,7 @@ body {
 						        </fieldset>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="Execute();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="javascript:resetQF();">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -496,12 +496,15 @@ body {
 	}
 	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-
-   		// 모달창 닫으면 초기화
-    	//document.getElementById('uploadPcaForm').reset();
-    	vcfFileList();
-    	box.removeAllFiles();
+   		resetQF();
     });    
+   	
+	function resetQF() {
+		document.getElementById('uploadForm').reset();
+		
+		document.getElementById("thin").style.display = "none";
+		vcfFileList();
+	}
    	
     async function Execute() {
     	
@@ -525,22 +528,22 @@ body {
     	let thin = document.getElementById('thin').value;
     	
     	if(jobid_vcf == -1) {
-    		alert("vcf파일을 선택하세요");
+    		alert("VCF 파일을 선택하세요");
     		return;
     	}
     	
     	if(!snp_checked && !indel_checked) {
-    		alert("Variant Type을 적어도 하나 선택하세요.");
+    		alert("Variant Type을 한 개 이상 선택해 주세요");
     		return;
     	}
     	
     	if(!minDP) {
-    		alert("MinDP를 입력하세요.");
+    		alert("MinDP를 입력하세요");
     		return;
     	}
     	
     	if(!minGQ) {
-    		alert("MinGQ를 입력하세요.");
+    		alert("MinGQ를 입력하세요");
     		return;
     	}
     	
@@ -612,7 +615,7 @@ body {
     	
     }
     
-       
+
 
        
 </script>

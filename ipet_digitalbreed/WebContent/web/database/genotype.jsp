@@ -160,7 +160,9 @@ body {
                                     </div>
                                 </div>								                              
                               	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:320px;" ></div><br>
+                              	<!--  
                                 <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;" onclick="addRow()"><i class="feather icon-corner-up-left"></i> Tool Box</button>
+                                -->
                                 <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal"  data-backdrop="false"  data-target="#backdrop"><i class="feather icon-upload"></i> Upload</button>
 								<button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>  	
                             </div>
@@ -265,7 +267,7 @@ body {
 						             </div>	
 						             <div class="col-12">
 						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
-						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;">Reset</button>
+						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="box.removeAllFiles();">Reset</button>
 						             </div>						             
 						         </div>
 						     </div>
@@ -301,7 +303,7 @@ body {
             });
 
 			box.on("addFileError", function(p) {
-                alert("VCF 화일만 업로드 가능 합니다.")
+                alert("하나의 VCF 파일만 업로드 할 수 있습니다")
             }),
 
             // 업로드 완료 이벤트
@@ -330,7 +332,7 @@ body {
         	    return false;  
         	}
         	
-        	/*
+        	/* 
         	const jobid = await fetch('../getJobid.jsp')
         				.then((response) => response.text())
         				.then((data) => data);

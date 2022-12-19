@@ -61,33 +61,19 @@
 			headerName: "순번",
 			//field: "no",
 			valueGetter: inverseRowCount,
-			width: 130,
-			filter: 'agMultiColumnFilter',
+			width: 90,
+			suppressMenu: true,
 			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
 			headerCheckboxSelection: true
 	    },
 	    {
-	    	headerName: "VCF 파일명",
-	    	field: "filename",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
-	    	width: 400,
-	    },
-	    {
-	    	headerName: "처리내용",
-	    	field: "manufacture",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
-	    	width: 400,
-	    },
-	    {
 	    	headerName: "분석상태",
 	    	field: "status",
-	    	filter: true,
+	    	suppressMenu: true,
 	    	cellClass: "grid-cell-centered",      
-	    	width: 200,
+	    	width: 80,
 	    	cellRenderer: function(params) {
 	    	  //console.log("params : ", params.value);
 	    	  switch(Number(params.value)) {
@@ -101,11 +87,25 @@
 		    }
 	    },
 	    {
+	    	headerName: "VCF 파일명",
+	    	field: "filename",
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 700,
+	    },
+	    {
+	    	headerName: "처리내용",
+	    	field: "manufacture",
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 300,
+	    },
+	    {
 	      headerName: "저장",
 	      field: "save_cmd",
-	      filter: 'agNumberColumnFilter',
+	      suppressMenu: true,
 	      cellClass: "grid-cell-centered",
-	      width: 250,
+	      width: 150,
 	      cellRenderer: function(params) {
 	    	  switch(params.value) {
 	    	  	case "0":
@@ -119,8 +119,8 @@
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
-	      filter: 'agNumberColumnFilter',
-	      width: 296,
+	      filter: 'agDateColumnFilter',
+	      width: 150,
 	      cellClass: "grid-cell-centered", 
 	    },
 		{
@@ -150,6 +150,7 @@
 			editable: false, 
 		    sortable: true,
 			resizable: true,
+			menuTabs: ['filterMenuTab'],
 			//floatingFilter: true,
 		},
 		columnDefs: columnDefs,
@@ -178,6 +179,7 @@
 			if(params.colDef.headerName != "번호" &&params.colDef.headerName != "저장"){
 				
 				document.getElementById('vcf_status').style.display = "block";
+				document.getElementById('qf_1').click();
 				
 				switch (Number(params.data.status)) {
 					case 0:

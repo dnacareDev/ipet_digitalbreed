@@ -115,26 +115,19 @@
 			headerName: "순번",
 			//field: "no",
 			valueGetter: inverseRowCount,
-			width: 130,
-			filter: 'agMultiColumnFilter',
+			width: 100,
+			suppressMenu: true,
 			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
 			headerCheckboxSelection: true
 	    },
 	    {
-	    	headerName: "VCF 파일명",
-	    	field: "file_name",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
-	    	width: 400,
-	    },
-	    {
 	    	headerName: "분석상태",
 	    	field: "status",
-	    	filter: true,
+	    	suppressMenu: true,
 	    	cellClass: "grid-cell-centered",      
-	    	width: 200,
+	    	width: 80,
 	    	cellRenderer: function(params) {
 	    	  //console.log("params : ", params.value);
 	    	  switch(Number(params.value)) {
@@ -148,16 +141,23 @@
 		    }
 	    },
 	    {
+	    	headerName: "VCF 파일명",
+	    	field: "file_name",
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 700,
+	    },
+	    {
 	      headerName: "상세내용",
 	      field: "comment",
 	      filter: 'agNumberColumnFilter',
-	      width: 650
+	      width: 350
 	    },
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
-	      filter: 'agNumberColumnFilter',
-	      width: 296,
+	      filter: 'agDateColumnFilter',
+	      width: 150,
 	      cellClass: "grid-cell-centered", 
 	      //cellEditor: DatePicker,
 	      //cellEditorPopup: true
@@ -186,6 +186,7 @@
 			editable: false, 
 		    sortable: true,
 			resizable: true,
+			menuTabs: ['filterMenuTab'],
 			//floatingFilter: true,
 		},
 		columnDefs: columnDefs,

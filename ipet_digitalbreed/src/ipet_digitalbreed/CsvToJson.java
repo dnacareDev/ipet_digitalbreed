@@ -27,14 +27,6 @@ public class CsvToJson {
 			
 			String line = br.readLine();		// 첫줄
 			
-			/*
-			List<String> columns = new LinkedList<>();
-			columns.add("chr_pos");
-			columns.add("Reference");
-			for(int i=2 ; i<Arrays.asList(line.split(",")).size() ; i++) {
-				columns.add("c"+i);
-			}
-			*/
 			List<String> columns = null;
 			columns = Arrays.asList(line.split(","));
 			
@@ -47,6 +39,9 @@ public class CsvToJson {
 			int count = 0;
 			line = br.readLine();		// 첫줄 스킵용
 			while (line != null) {
+				
+				count++;
+
 				JsonObject obj = new JsonObject(); 
                 List<String> chunks = Arrays.asList(line.split(","));
                 //System.out.println(chunks.size());
@@ -55,18 +50,15 @@ public class CsvToJson {
                     obj.addProperty(columns.get(i), chunks.get(i));
                 }
                 //System.out.println(obj);
+                
+                
                 // 파일 내용 insert
-                //String insertFileContentSql = "insert into vcfviewer_t (jobid, row_index, contents, creuser) values ('" +jobid+ "'," +count+ ",'" +obj.toString()+ "','" +permissionUid+ "')";
-                //ipetdigitalconndb.stmt.executeUpdate(insertFileContentSql);
-
-                //insertSqlValuesPart += jobid+ "'," +count+ ",'" +obj.toString()+ "','" +permissionUid+ "')";
                 insertSqlValuesPart.append(jobid+ "'," +count+ ",'" +obj.toString()+ "','" +permissionUid+ "')");
                 
-                count++;
-                //System.out.println(count);
                 line = br.readLine();
-                if(line == null || count % 5000 == 0) {
-                	System.out.println("5000 inserts executed & count passed - " + count);
+                if(line == null || count % 1000 == 0) {
+                	System.out.println("1000 inserts executed & count passed - " + count);
+                	System.out.println(insertSqlColumnPart+insertSqlValuesPart);
                 	//System.out.println( (insertSqlColumnPart+insertSqlValuesPart).length() );
                 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
                 	ipetdigitalconndb.stmt.executeUpdate(insertSqlColumnPart+insertSqlValuesPart);
@@ -76,11 +68,14 @@ public class CsvToJson {
                 	//insertSqlValuesPart += ",('";
                 	insertSqlValuesPart.append(",('");
                 }
+                
+                
 			}
 			
 			br.close();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
+			System.out.println(e);
 			e.printStackTrace();
 		} finally {
 			ipetdigitalconndb.stmt.close();
