@@ -258,7 +258,9 @@ body {
 
     <!-- BEGIN: Page Vendor JS-->
     <script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
+    <!--  
   	<script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-enterprise.min.js">
+  	-->
     
 	<script src="../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
 	<script src="../../css/app-assets/vendors/js/extensions/swiper.min.js"></script>

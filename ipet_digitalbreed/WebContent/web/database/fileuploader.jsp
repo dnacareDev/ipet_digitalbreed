@@ -89,7 +89,7 @@ if (request.getMethod().equals("POST"))
         catch (IOException ex) {
             ex.printStackTrace();
         }
-/*
+
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
@@ -118,6 +118,18 @@ if (request.getMethod().equals("POST"))
 		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
+		String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Genotype', 'New analysis', now());";
+		//System.out.println(log_sql);
+		
+		try{
+			ipetdigitalconndb.stmt.executeUpdate(log_sql);
+		}catch(Exception e){
+			System.out.println(e);
+			ipetdigitalconndb.stmt.close();
+			ipetdigitalconndb.conn.close();
+		}
+		
+		
 		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+refseq+"','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
 		
 		try{
@@ -131,7 +143,8 @@ if (request.getMethod().equals("POST"))
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
     	}
-		*/
+		
+		
 	}
 }
 %>

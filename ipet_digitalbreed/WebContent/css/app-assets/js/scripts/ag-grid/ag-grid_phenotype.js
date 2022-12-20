@@ -30,24 +30,23 @@
 	      field: "displayno",
 	      editable: false,
 	      sortable: true,
-	      width: 140,	
-	      filter: 'agMultiColumnFilter',
+	      resizable: true,	
+	      width: 120,	
+	      suppressMenu: true,
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
 	      headerCheckboxSelectionFilteredOnly: true,
 	      headerCheckboxSelection: true,
-	      resizable: true	
 	    },
         {
             headerName: "사진",
             field: "photo_status",
             editable: false,
             sortable: true,
-            filter: true,
             resizable: true,
-            resizable: true,
+            suppressMenu: true,
             cellClass: "grid-cell-centered",      
-            width: 120,	
+            width: 70,	
             cellRenderer: deltaIndicator,
             cellStyle: {'cursor': 'pointer'}
 		},
@@ -57,8 +56,7 @@
             editable: false,
             sortable: true,
             resizable: true,
-            resizable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
             cellClass: "grid-cell-centered",      
             width: 150
 		},
@@ -69,8 +67,7 @@
             cellEditor: DatePicker,
             sortable: true,
             resizable: true,
-            resizable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
             cellEditorPopup: true,
             cellClass: "grid-cell-centered",                  
             width: 150
@@ -79,7 +76,6 @@
             headerName: "개체명",
             field: "samplename",
             editable: true,
-            resizable: true,
             resizable: true,
             sortable: true,
             filter: true,
@@ -100,7 +96,7 @@
 				grid_array = result;	
 				for (var i=0; i<grid_array.length; i++) {
 					for (key in grid_array[i]) {		
-						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], resizable: true, width: "120",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], resizable: true, width: 120,  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 						gridOptions.api.setColumnDefs(columnDefs);										
 					}
 				}		
@@ -273,8 +269,8 @@
 	      field: "displayno",
 	      editable: false,
 	      sortable: true,
-	      width: 140,	
-	      filter: 'agMultiColumnFilter',
+	      width: 120,	
+	      suppressMenu: true,
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
 	      headerCheckboxSelectionFilteredOnly: true,
@@ -286,9 +282,9 @@
             field: "photo_status",
             editable: false,
             sortable: true,
-            filter: true,
             cellClass: "grid-cell-centered",      
-            width: 120,	
+            width: 70,	
+            suppressMenu: true,
             resizable: true,
             cellRenderer: deltaIndicator,
             cellStyle: {'cursor': 'pointer'}
@@ -298,7 +294,7 @@
             field: "cre_dt",
             editable: false,
             sortable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
             resizable: true,
             cellClass: "grid-cell-centered",      
             width: 150
@@ -310,7 +306,7 @@
             cellEditor: DatePicker,
             sortable: true,
             resizable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
             cellEditorPopup: true,
             cellClass: "grid-cell-centered",                  
             width: 150
@@ -451,15 +447,18 @@
 	
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
-	    flex: 1,
+	    //flex: 1,
 	    //rowDragManaged: true,
+		defaultColDef: {
+			menuTabs: ['filterMenuTab']
+		},
 	    columnDefs: columnDefs,
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
   	    rowHeight: 35,
 	  	rowSelection: 'multiple',	  	
-	    floatingFilter: true,
-	    filter: 'agMultiColumnFilter',
+	    //floatingFilter: true,
+	    //filter: 'agMultiColumnFilter',
 	    //pagination: true,
 	    //paginationPageSize: 20,
 	    allowContextMenuWithControlKey: true,
@@ -467,7 +466,7 @@
 	    pivotPanelShow: "always",
 	    colResizeDefault: "shift",
 	    animateRows: true,
-	    resizable: true,
+	    //resizable: true,
 	    serverSideInfiniteScroll: true,	    
 	    onGridReady: (params) => {
 	      addDropZonesone(params);
@@ -563,7 +562,7 @@
 
   function addCol(fieldp, headerNamep) {
 	var columnDefs = gridOptions.columnDefs;
-	columnDefs.push({ field:fieldp, headerName: headerNamep, width: "120",  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+	columnDefs.push({ field:fieldp, headerName: headerNamep, width: 120,  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 	gridOptions.api.setColumnDefs(columnDefs);
   }
 

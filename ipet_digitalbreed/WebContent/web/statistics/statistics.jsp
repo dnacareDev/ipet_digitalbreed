@@ -500,9 +500,9 @@ body {
 						tableMap.get(key).innerText = result;
 					} else {
 						if(key == 'GS') {
-							tableMap.get(key).innerText = 14;
+							tableMap.get(key).innerText = 0;
 						} else if(key == 'phenotype_analysis') {
-							tableMap.get(key).innerText = 9;
+							tableMap.get(key).innerText = 0;
 						}
 					}
 				}
@@ -534,6 +534,53 @@ body {
 		barChart();		
 		
 		getAnalysisListGrid();
+	}
+	
+	function moveTo(jobid, category) {
+		console.log(jobid);
+		console.log(category);
+		
+		let form = document.createElement('form'); // 폼객체 생성
+		let form_jobid = document.createElement('input'); // 값이 들어있는 녀석의 형식
+		form_jobid.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+		form_jobid.setAttribute('name', 'linkedJobid'); // 객체이름
+		form_jobid.setAttribute('value', jobid); //객체값
+		form.appendChild(form_jobid);
+		form.setAttribute('method', 'post'); //get,post 가능
+
+		switch(category) {
+			case 'GWAS':
+				form.setAttribute('action', "../gwas_gs/gwas.jsp"); 
+				break;
+			case 'quality':
+				form.setAttribute('action', "../b_toolbox/qf/qf.jsp");
+				break;
+			case 'PCA':
+				form.setAttribute('action', "../b_toolbox/pca/pca.jsp");
+				break;
+			case 'UPGMA clustering':
+				form.setAttribute('action', "../b_toolbox/upgma/upgma.jsp");
+				break;
+			case 'Core selection':
+				form.setAttribute('action', "../b_toolbox/genocore/genocore.jsp");
+				break;
+			case 'Minimal marker':
+				form.setAttribute('action', "../b_toolbox/mini/mini.jsp");
+				break;
+		}
+		
+		/*
+		form_category = document.createElement('input');
+		form_jobid.setAttribute('type', 'text'); // 값이 들어있는 녀석의 type
+		form_jobid.setAttribute('name', 'category'); // 객체이름
+		form_jobid.setAttribute('value', category); //객체값
+		form.appendChild(form_jobid);
+		*/
+		//form.setAttribute('action', "../b_toolbox/qf/qf.jsp"); //보내는 url
+		form.target = "new";
+		document.body.appendChild(form);
+		console.log(form);
+		form.submit();
 	}
 	
 	</script>

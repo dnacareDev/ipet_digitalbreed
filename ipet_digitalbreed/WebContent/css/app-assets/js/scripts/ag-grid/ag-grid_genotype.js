@@ -44,6 +44,8 @@
 	  let selectedData = gridOptions.api.getSelectedRows();
 	  var deleteitems = new Array();
 	
+	  const varietyid = $( "#variety-select option:selected" ).val();
+	  
 	  if(selectedData.length==0){
 	    		alert("선택 된 항목이 없습니다.");	
 	    		return;	    		
@@ -62,7 +64,7 @@
 	  $.ajax({
 		    url:"../../web/database/genotype_delete.jsp",
 		    type:"POST",
-		    data:{'params':deleteitems},
+		    data:{'params':deleteitems, 'varietyid':varietyid},
 		    success: function(result) {
 		        if (result) {
 					alert("정상적으로 삭제되었습니다.");
@@ -181,8 +183,8 @@
     enableRangeSelection: true,
 	suppressMultiRangeSelection: true,
     rowSelection: "multiple",
-    //pagination: true,
-    //paginationPageSize: 20,
+    pagination: true,
+    paginationPageSize: 20,
     pivotPanelShow: "always",
     colResizeDefault: "shift",
     animateRows: true,
@@ -365,10 +367,31 @@
 					menuTabs: ["filterMenuTab"], 
 					pinned: 'left',
 					lockPinned: true,
+					cellRenderer: (params) => {
+				        if (params.value !== undefined) {
+				          return params.value;
+				        } else {
+				          return '<img src="https://www.ag-grid.com/example-assets/loading.gif" style="height:40%;">';
+				        }
+				    },
 				});
 				pill2_frame_width += 180
 			} else {
-				columnDefs2.push({field: header[i], width: 50, menuTabs: [], tooltipField: header[i], tooltipComponent: CustomTooltip, cellStyle: cellStyle});
+				columnDefs2.push({
+					field: header[i], 
+					width: 50, 
+					menuTabs: [], 
+					tooltipField: header[i], 
+					tooltipComponent: CustomTooltip, 
+					cellStyle: cellStyle,
+					cellRenderer: (params) => {
+				        if (params.value !== undefined) {
+				          return params.value;
+				        } else {
+				          return '<img src="https://www.ag-grid.com/example-assets/loading.gif" style="height:40%;">';
+				        }
+				    },
+				});
 				pill2_frame_width += 50
 			}
 		}
@@ -524,6 +547,9 @@
 						gridOptions.api.forEachNode((rowNode, index) => {
 							if(linkedJobid == rowNode.data.jobid) {
 								//console.log(rowNode.rowIndex);
+								
+								gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
+								
 								gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
 								rowNode.setSelected(true);
 								

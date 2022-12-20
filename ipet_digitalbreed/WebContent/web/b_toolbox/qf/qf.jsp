@@ -93,6 +93,8 @@ body {
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
+	
+	String linkedJobid = request.getParameter("linkedJobid");
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
@@ -418,6 +420,9 @@ body {
 
 <script type="text/javascript">
 
+	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
+	var linkedJobid = "<%=linkedJobid%>";
+
    	$(document).ready(function(){
    		vcfFileList();
    		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
@@ -484,7 +489,7 @@ body {
 		let form = document.createElement('form'); // 폼객체 생성
 		let objs;
 		objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
-		objs.setAttribute('type', 'text'); // 값이 들어있는 녀석의 type
+		objs.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
 		objs.setAttribute('name', 'linkedJobid'); // 객체이름
 		objs.setAttribute('value', jobid); //객체값
 		form.appendChild(objs);

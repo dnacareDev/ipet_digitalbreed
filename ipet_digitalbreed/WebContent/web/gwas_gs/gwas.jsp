@@ -91,6 +91,7 @@ body {
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
+	String linkedJobid = request.getParameter("linkedJobid");
 %>
 
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
@@ -397,6 +398,9 @@ body {
     <!-- END: Page JS-->
 
 <script type="text/javascript">    
+
+	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
+	var linkedJobid = "<%=linkedJobid%>";
 
 	$(document).ready(function(){
    		
@@ -712,7 +716,6 @@ body {
    	    		success: function(data) {
    	    			
    	    			//$("#backdrop").modal("hide");
-   	    			
    	    			
    	    			//console.log("없는 표현형 : ", data);
    	    			

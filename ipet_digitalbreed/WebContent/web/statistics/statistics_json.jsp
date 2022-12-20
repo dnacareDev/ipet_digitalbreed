@@ -26,7 +26,7 @@
 		//String sql = "";
 		
 		String GWAS_sql = "select 'GWAS' as category, genotype_filename as filename, comment, jobid, cre_dt from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
-		String filter_sql = "select 'genotype_filter_t' as category, filename, '-' as comment, jobid, cre_dt from genotype_filter_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
+		String filter_sql = "select manufacture as category, filename, '-' as comment, jobid, cre_dt from genotype_filter_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
 		String Genocore_sql = "select 'Core selection' as category, filename, comment, jobid, cre_dt from genocore_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
 		String mini_sql = "select 'Minimal marker' as category, filename, comment, jobid, cre_dt from mini_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
 		String PCA_sql = "select 'PCA' as category, filename, comment, jobid, cre_dt from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";
@@ -54,7 +54,7 @@
 		
 		String sql = "(" +GWAS_sql+ ") UNION (" +filter_sql+ ") UNION (" +Genocore_sql+ ") UNION (" +mini_sql+ ") UNION (" +PCA_sql+ ") UNION (" +UPGMA_sql +")  order by cre_dt DESC;";
 		
-		
+		//System.out.println(filter_sql);
 		//System.out.println(sql);
 		
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);

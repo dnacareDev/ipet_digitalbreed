@@ -294,6 +294,23 @@
 				console.log(data);
 				gridOptions.api.setRowData(data);
 				gridOptions.api.sizeColumnsToFit();
+				
+				if(linkedJobid !== "null") {
+					gridOptions.api.forEachNode((rowNode, index) => {
+						if(linkedJobid == rowNode.data.jobid) {
+							console.log(rowNode.rowIndex);
+							
+							gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
+							
+							gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
+							rowNode.setSelected(true);
+							
+							//gridOptions.api.setFocusedCell(Number(rowNode.rowIndex), 'no');
+							//console.log($("[row-id='0'] [col-id='displayno']"));
+							$(`[row-index=${rowNode.rowIndex}] [col-id='0']`).trigger("click");
+						}
+					});	
+				}
 			});
 		});
   		

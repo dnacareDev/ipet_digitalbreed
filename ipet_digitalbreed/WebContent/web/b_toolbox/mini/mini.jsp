@@ -90,6 +90,8 @@
 	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
+	
+	String linkedJobid = request.getParameter("linkedJobid");
 %>
 <%--
 	GenotypeListJson genotypeListJson = new GenotypeListJson();
@@ -299,7 +301,11 @@
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-<script type="text/javascript">                  
+<script type="text/javascript">       
+
+	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
+	var linkedJobid = "<%=linkedJobid%>";
+
    	$(document).ready(function(){
    		vcfFileList();
    	});

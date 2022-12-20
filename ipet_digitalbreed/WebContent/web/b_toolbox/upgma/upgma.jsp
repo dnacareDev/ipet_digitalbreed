@@ -77,11 +77,9 @@ body {
 	
 	RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
 	String jobid_upgma = runAnalysisTools.getCurrentDateTime();
+	
+	String linkedJobid = request.getParameter("linkedJobid");
 %>
-<%--
-	GenotypeListJson genotypeListJson = new GenotypeListJson();
-	String vcf_sql = "select no, uploadpath, filename,resultpath, comment, refgenome, cropid, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from vcfdata_info_t where creuser='"+permissionUid+"' and varietyid='" + varietyid + "' order by no desc;";
---%>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
     
     <jsp:include page="../../../css/topmenu.jsp" flush="true"/>
@@ -298,7 +296,11 @@ body {
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
 
-<script type="text/javascript">                  
+<script type="text/javascript">   
+
+	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
+	var linkedJobid = "<%=linkedJobid%>";
+
     $(document).ready(function(){
     	vcfFileList();
     	$(".select2.select2-container.select2-container--default").eq(1).width("444px");

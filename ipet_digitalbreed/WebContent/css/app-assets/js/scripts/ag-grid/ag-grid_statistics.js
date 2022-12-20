@@ -16,8 +16,25 @@
 			filter: 'agMultiColumnFilter',
 			cellClass: "grid-cell-centered",    
 			cellRenderer: function(params) {
+				//const linkedJobid = params.data.jobid;
+
+				switch(params.data.category) {
+					case('quality'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "quality")'>결과보기</span>`;
+					case('GWAS'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "GWAS")'>결과보기</span>`;
+					case('PCA'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "PCA")'>결과보기</span>`;
+					case('UPGMA clustering'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "UPGMA clustering")'>결과보기</span>`;
+					case('Core selection'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "Core selection")'>결과보기</span>`;
+					case('Minimal marker'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "Minimal marker")'>결과보기</span>`;
+				}
+				
 				//console.log(params);
-				return "<a href='#'>결과보기</a>";
+				//return "<a href='#'>결과보기</a>";
 			}
 	    },
 	    {

@@ -332,13 +332,13 @@ body {
         	    return false;  
         	}
         	
-        	/* 
+        	
         	const jobid = await fetch('../getJobid.jsp')
         				.then((response) => response.text())
         				.then((data) => data);
-        	*/
         	
-        	const jobid = "20221214133523"			// csv 1.4GB
+        	
+        	//const jobid = "20221214133523"			// csv 1.4GB
         	//const jobid = "20221214112940";			// csv 500MB
         	//const jobid = "20221130123347";		// csv 250MB
         	//const jobid = "20221130134541";		// csv 1.8MB
