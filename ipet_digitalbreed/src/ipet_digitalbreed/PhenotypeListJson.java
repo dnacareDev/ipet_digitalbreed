@@ -19,7 +19,8 @@ public class PhenotypeListJson {
 
 				//String sql="SELECT * FROM (SELECT @ROWNUM:=@ROWNUM+1 AS ROWNUM,  a.no, a.cropid, a.varietyid, a.sampleid, a.samplename, a.photo_status, DATE_FORMAT(a.cre_dt, '%Y-%m-%d') AS cre_dt, DATE_FORMAT(a.act_dt, '%Y-%m-%d') AS act_dt FROM (SELECT @ROWNUM := 0) R, sampledata_info_t a  where creuser='"+permissionUid+"' and varietyid='"+varietyid+"') SUB ORDER BY ROWNUM DESC;";
 				
-				String sql="SELECT * FROM (SELECT @ROWNUM:=@ROWNUM+1 AS ROWNUM,  a.no, a.cropid, a.varietyid, a.sampleid, a.samplename, a.photo_status, DATE_FORMAT(a.cre_dt, '%Y-%m-%d') AS cre_dt, DATE_FORMAT(a.act_dt, '%Y-%m-%d') AS act_dt FROM (SELECT @ROWNUM := 0) R, sampledata_info_t a  where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by sampleid asc) SUB ORDER BY ROWNUM DESC;";
+				//String sql="SELECT * FROM (SELECT @ROWNUM:=@ROWNUM+1 AS ROWNUM,  a.no, a.cropid, a.varietyid, a.sampleid, a.samplename, a.photo_status, DATE_FORMAT(a.cre_dt, '%Y-%m-%d') AS cre_dt, DATE_FORMAT(a.act_dt, '%Y-%m-%d') AS act_dt FROM (SELECT @ROWNUM := 0) R, sampledata_info_t a  where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by sampleid asc) SUB ORDER BY ROWNUM DESC;";
+				String sql="SELECT * FROM (SELECT @ROWNUM:=@ROWNUM+1 AS ROWNUM,  a.no, a.cropid, a.varietyid, a.sampleid, a.samplename, a.photo_status, DATE_FORMAT(a.cre_dt, '%Y-%m-%d') AS cre_dt, DATE_FORMAT(a.act_dt, '%Y-%m-%d') AS act_dt FROM (SELECT @ROWNUM := 0) R, sampledata_info_t a  where varietyid='"+varietyid+"' order by sampleid asc) SUB ORDER BY ROWNUM DESC;";
 					
 				String sql_trait=null;					
 								

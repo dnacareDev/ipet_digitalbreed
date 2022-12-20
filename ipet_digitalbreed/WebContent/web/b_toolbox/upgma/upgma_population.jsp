@@ -12,6 +12,7 @@
 	String jobid_upgma = request.getParameter("jobid_upgma");
 	String filename = request.getParameter("filename");
 	String population_name = request.getParameter("population_name");
+	String varietyid = request.getParameter("varietyid");
 	
 	
 	String permissionUid = session.getAttribute("permissionUid")+"";	
@@ -57,5 +58,17 @@
 	System.out.println("UPGMA parameter(with population) : " + UPGMA);
 	
 	runanalysistools.execute(UPGMA, "cmd");
+	
+	
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','UPGMA', 'New analysis', now());";
+	//System.out.println(log_sql);
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(log_sql);
+	}catch(Exception e){
+		System.out.println(e);
+	}finally { 
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
+	}
 	
 %>

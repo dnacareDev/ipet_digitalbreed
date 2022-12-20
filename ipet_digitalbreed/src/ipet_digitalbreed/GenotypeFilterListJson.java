@@ -15,7 +15,8 @@ public class GenotypeFilterListJson {
 			try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-				String sql="SELECT no, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt FROM genotype_filter_t  where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ORDER BY no DESC;";			
+				//String sql="SELECT no, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt FROM genotype_filter_t  where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ORDER BY no DESC;";
+				String sql="SELECT no, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt FROM genotype_filter_t  where varietyid='"+varietyid+"' ORDER BY no DESC;";
 				
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 

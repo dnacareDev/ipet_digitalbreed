@@ -407,22 +407,9 @@ body {
 	        box.upload();
 	        
 		    // with_population 영역
-	    	fetch('./upgma_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_upgma=' +jobid_upgma+ '&population_name=' +population_name+ '&filename=' +filename) 
-	        	.then((response) => response.text())
-	    		.then((data) => console.log("upgma_population.jsp"))
-	    	
-	        
-	        /*
-			// with_population 영역
-	    	fetch('./upgma_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_upgma=' +jobid_upgma+ '&population_name=' +population_name+ '&filename=' +filename) 
-	        .then(function(response) {
-	    		response.text()
-	    		.then(function(data) {
-	    			//console.log(data);
-	    			console.log("pca_population.jsp");
-	    		})
-	    	})
-	    	*/
+	    	fetch('./upgma_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_upgma=' +jobid_upgma+ '&population_name=' +population_name+ '&filename=' +filename+ '&varietyid=' +varietyid) 
+	        .then((response) => response.text())
+	    	.then((data) => console.log("upgma_population.jsp"))
 	    	
     		setTimeout( function () {
 	   			refresh();

@@ -15,8 +15,9 @@ public class GenocoreListJson {
 			try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-				String sql="select no, uploadpath, filename, resultpath, comment, status, cropid, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from genocore_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
-
+				//String sql="select no, uploadpath, filename, resultpath, comment, status, cropid, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from genocore_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
+				String sql="select no, uploadpath, filename, resultpath, comment, status, cropid, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from genocore_info_t where varietyid='"+varietyid+"' order by no desc;";
+				
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 
 					JSONObject jsonObject = new JSONObject();

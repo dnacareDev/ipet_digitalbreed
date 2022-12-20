@@ -33,6 +33,18 @@
 	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
+	
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Quality Filter', 'New analysis', now());";
+	//System.out.println(log_sql);
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(log_sql);
+	}catch(Exception e){
+		System.out.println(e);
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
+	}
+	
+	
 	String sql = "insert into genotype_filter_t (cropid, varietyid, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, creuser, cre_dt) ";
 	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', 'quality', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_qf+"','" +permissionUid+ "',now());";
 

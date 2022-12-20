@@ -480,16 +480,6 @@ body {
    	 	   	    	    			traitname_key_arr.push( $(this).data('traitname_key'));
    	    	   	    	    	}
    	    	   	    	    	
-   	    	   	    	    	
-   	    	   	    	    	/*
-   	    	   	    	    	$("#PhenotypeSelect :selected").each(function(index) {
-   	    	   	    	    		traitname_arr.push( $(this).data('traitname'));
-   	    	   	    	    		traitname_key_arr.push( $(this).data('traitname_key'));
-   	    	   	    	    	})
-   	    	   	    	    	*/
-   	    	   	    	    	
-   	    	   	    	    	//console.log(traitname_arr);
-   	    	   	    	    	//console.log(traitname_key_arr);
    	    	    	    		
    	    	   	    	    	let formData = new FormData($("#uploadGwasForm")[0]);
    	    	   	   	    	

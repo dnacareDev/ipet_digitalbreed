@@ -16,8 +16,13 @@
 	String[] deleteitems = request.getParameterValues("params[]");
 
 	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Genotype', 'New analysis', now());";
-	//System.out.println(log_sql);
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Genotype', 'Delete " +deleteitems.length;
+	if(deleteitems.length > 1) {
+		log_sql += " rows', now());";
+	} else {
+		log_sql += " row', now());";
+	}
+	System.out.println(log_sql);
 	
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(log_sql);

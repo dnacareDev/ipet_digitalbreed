@@ -400,12 +400,28 @@ body {
 	        
 	        
 			// with_population 영역
-	    	fetch('./pca_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_pca=' +jobid_pca+ '&population_name=' +population_name+ '&filename=' +filename) 
+	    	fetch('./pca_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_pca=' +jobid_pca+ '&population_name=' +population_name+ '&filename=' +filename+ '&varietyid=' +varietyid); 
 	    	
-    		setTimeout( function () {
-	   			refresh();
-	   			$("#backdrop").modal("hide");
-	   		}, 1000);
+	        
+	    	
+	        /*
+	    	$.ajax({
+	    		url: "./pca_population.jsp",
+	    		method: "POST",
+	    		data: {
+	    			"jobid_vcf": jobid_vcf,
+	    			"jobid_pca": jobid_pca,
+	    			"population_name": population_name,
+	    			"filename": filename,
+	    			"varietyid": varietyid
+	    		}
+	    	})
+	    	*/
+	    	
+	    	setTimeout( function () {
+		   		refresh();
+		   		$("#backdrop").modal("hide");
+		   	}, 1000);
 	        
     	} else {
     		

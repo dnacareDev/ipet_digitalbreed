@@ -367,13 +367,13 @@
 					menuTabs: ["filterMenuTab"], 
 					pinned: 'left',
 					lockPinned: true,
-					cellRenderer: (params) => {
+					/*cellRenderer: (params) => {
 				        if (params.value !== undefined) {
 				          return params.value;
 				        } else {
 				          return '<img src="https://www.ag-grid.com/example-assets/loading.gif" style="height:40%;">';
 				        }
-				    },
+				    },*/
 				});
 				pill2_frame_width += 180
 			} else {
@@ -384,13 +384,13 @@
 					tooltipField: header[i], 
 					tooltipComponent: CustomTooltip, 
 					cellStyle: cellStyle,
-					cellRenderer: (params) => {
+					/*cellRenderer: (params) => {
 				        if (params.value !== undefined) {
 				          return params.value;
 				        } else {
 				          return '<img src="https://www.ag-grid.com/example-assets/loading.gif" style="height:40%;">';
 				        }
-				    },
+				    },*/
 				});
 				pill2_frame_width += 50
 			}

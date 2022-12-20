@@ -86,6 +86,8 @@
 		
 		let selectedData = gridOptions.api.getSelectedRows();
 		var deleteitems = new Array();
+		
+		const varietyid = $( "#variety-select option:selected" ).val();
 		  
 		for (var i = 0; i < selectedData.length; i++) {
 		    deleteitems.push(selectedData[i].no);
@@ -97,7 +99,8 @@
 		{
 		    url:"../../../web/b_toolbox/pca/pca_delete.jsp",
 		    type:"POST",
-		    data:{'params':deleteitems},
+		    //data:{'params':deleteitems},
+		    data:{'params':deleteitems, 'varietyid':varietyid},
 		    success: function(result) {
 		        if (result) {
 					alert("정상적으로 삭제되었습니다.");

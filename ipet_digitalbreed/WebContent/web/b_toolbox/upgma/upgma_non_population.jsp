@@ -63,6 +63,16 @@
 	
 	// insert 구문을 먼저(status=0)
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	
+	
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','UPGMA', 'New analysis', now());";
+	System.out.println(log_sql);
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(log_sql);
+	}catch(Exception e){
+		System.out.println(e);
+	}
+	
 
 	String insertUpgmaInfo_sql="insert into upgma_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_upgma+"','"+permissionUid+"',now());";	
 	System.out.println("insertUpgmaInfo_sql : " + insertUpgmaInfo_sql);

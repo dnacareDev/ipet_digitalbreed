@@ -15,8 +15,8 @@
 	
 	try{
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-		String sql = "select no, logid, menuname, comment, date_format(cre_dt, '%Y-%m-%d') cre_dt from log_t where logid='" +permissionUid+ "' limit 12;";
-		//System.out.println(sql);
+		String sql = "select no, logid, menuname, comment, date_format(cre_dt, '%Y-%m-%d') cre_dt from log_t where logid='" +permissionUid+ "' order by cre_dt DESC, no DESC limit 11;";
+		System.out.println(sql);
 		
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
      	while (ipetdigitalconndb.rs.next()) { 

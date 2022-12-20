@@ -17,7 +17,8 @@ public class PhenotypeListJson_xls {
 			try{
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();				
 
-				String sql="select no, cropid, varietyid, sampleid, samplename, photo_status, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from sampledata_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
+				//String sql="select no, cropid, varietyid, sampleid, samplename, photo_status, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from sampledata_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
+				String sql="select no, cropid, varietyid, sampleid, samplename, photo_status, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from sampledata_info_t where varietyid='"+varietyid+"' order by no desc;";
 				String sql_trait=null;						
 								
 				ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
