@@ -20,7 +20,8 @@
 	
 	switch(tableName) {
 		case "genotype_data":
-			sql = "select count(*) as count from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			//sql = "select count(*) as count from vcfdata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			sql = "select count(*) as count from vcfdata_info_t where varietyid = '" +varietyid+ "';";
 			//System.out.println(sql);
 			try{
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
@@ -37,7 +38,8 @@
 			}
 			break;
 		case "phenotype_data":
-			sql = "select count(*) as count from sampledata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			//sql = "select count(*) as count from sampledata_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			sql = "select count(*) as count from sampledata_info_t where varietyid = '" +varietyid+ "';";
 			try{
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
@@ -53,7 +55,8 @@
 			}
 			break;
 		case "GWAS":
-			sql = "select count(*) as count from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			//sql = "select count(*) as count from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+			sql = "select count(*) as count from gwas_info_t where varietyid = '" +varietyid+ "';";
 			try{
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
@@ -89,25 +92,29 @@
 			// sql 4번 써서 결과값을 더함. 한번에 처리할 쿼리문이 있다면 그걸 쓰는게 좋을듯 
 			
 			try{
-				sql = "select count(*) as count from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				//sql = "select count(*) as count from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				sql = "select count(*) as count from pca_info_t where varietyid = '" +varietyid+ "';";
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
              		count += ipetdigitalconndb.rs.getInt("count");
              	}
 				
-				sql = "select count(*) as count from upgma_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				//sql = "select count(*) as count from upgma_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				sql = "select count(*) as count from upgma_info_t where varietyid = '" +varietyid+ "';";
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
              		count += ipetdigitalconndb.rs.getInt("count");
              	}
 				
-				sql = "select count(*) as count from genocore_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				//sql = "select count(*) as count from genocore_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				sql = "select count(*) as count from genocore_info_t where varietyid = '" +varietyid+ "';";
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
              		count += ipetdigitalconndb.rs.getInt("count");
              	}
 				
-				sql = "select count(*) as count from mini_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				//sql = "select count(*) as count from mini_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
+				sql = "select count(*) as count from mini_info_t where varietyid = '" +varietyid+ "';";
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 	
              		count += ipetdigitalconndb.rs.getInt("count");

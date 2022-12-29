@@ -18,7 +18,8 @@
 	for(int i=1 ; i<=12 ; i++) {
 		try{
 			ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-			String sql = "select count(*) as count from sampledata_info_t where creuser='" +permissionUid+ "' and varietyid='" +variety_id+ "' and year(cre_dt) = '" +currentYear+ "' and month(cre_dt) = '" +i+ "';";
+			//String sql = "select count(*) as count from sampledata_info_t where creuser='" +permissionUid+ "' and varietyid='" +variety_id+ "' and year(cre_dt) = '" +currentYear+ "' and month(cre_dt) = '" +i+ "';";
+			String sql = "select count(*) as count from sampledata_info_t where varietyid='" +variety_id+ "' and year(cre_dt) = '" +currentYear+ "' and month(cre_dt) = '" +i+ "';";
 			//System.out.println(sql);
 			
 			ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);

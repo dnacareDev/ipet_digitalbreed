@@ -280,7 +280,7 @@ body {
 	                 -->
 	            </div>
 	        </div>
-                          
+	        
 	<!-- Modal end-->
 	
         <script>
@@ -308,6 +308,9 @@ body {
 
             // 업로드 완료 이벤트
             box.on('uploadComplete', function (p) {
+            	
+            	console.log("p : ", p);
+            	//console.log("filename : ", p.files[0].file.name);
 
 				document.getElementById('uploadvcfform').reset();
 			    box.removeAllFiles();
@@ -318,9 +321,8 @@ body {
 				
 				
 				
-				//VCFViewer 작업
-				//서버의 csv파일을 json형태로 변경
-				makeJson(p.postData.jobid)
+				//파일 업로드 이후의 작업들을 모두 여기에 몰아넣음
+				afterUpload(p.postData.jobid, p.files[0].file.name, p.postData.comment, p.postData.varietyid);
 				
             });
         };
@@ -353,8 +355,8 @@ body {
 			box.upload();
         }   
         
-        function makeJson(jobid) {
-        	fetch(`./genotype_after_upload_process.jsp?jobid=\${jobid}`)
+        function afterUpload(jobid, filename, comment, varietyid) {
+        	fetch(`./genotype_after_upload_process.jsp?jobid=\${jobid}&filename=\${filename}&comment=\${comment}&varietyid=\${varietyid}`)
         }
         
             

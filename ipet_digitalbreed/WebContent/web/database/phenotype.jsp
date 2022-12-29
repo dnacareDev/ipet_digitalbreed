@@ -66,9 +66,7 @@ body {
 
 	<jsp:include page="../../css/topmenu.jsp" flush="true"/>
 
-	<jsp:include page="../../css/menu.jsp" flush="true">
-		<jsp:param name="menu_active" value="phenotype"/>
-	</jsp:include>
+	<jsp:include page="../../css/menu.jsp?menu_active=phenotype" flush="true"/>
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -208,9 +206,9 @@ body {
 						                        
 						                        <div class="card-content">
 						                            <div style="height: 321px;" class="card-body"><font size="3px"><b>Spyder Plot</b></font>
-						                                    <div class="swiper-wrapper" >
+						                                    <div >
 															   <div id="spyderplot_div" ></div>
-						                                       <iframe id="spyderplot" frameBorder="0" src="" style="display:block; width:100vw; height: 321"></iframe>
+						                                       <center><iframe id="spyderplot" frameBorder="0" src="" style="display:block; width:100%; height: 260px"></iframe>
 						                                    </div>
 						                            </div>
 						                        </div>
@@ -228,15 +226,6 @@ body {
         </div>        
     </div>
     <!-- END: Content-->
-    
-    <!-- Modal Start -->
-    <div class="modal" id="loadingSpinner" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
-		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
-   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
-			<div><strong>uploading Excel Files...</strong></div>
-	  	</div>
-	</div>
-	<!-- Modal End -->
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -258,9 +247,7 @@ body {
 
     <!-- BEGIN: Page Vendor JS-->
     <script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
-    <!--  
   	<script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-enterprise.min.js">
-  	-->
     
 	<script src="../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
 	<script src="../../css/app-assets/vendors/js/extensions/swiper.min.js"></script>
@@ -318,11 +305,11 @@ body {
 	    }
     
 	    function ajaxFileTransmit() {     
+		 
 	     	if (!confirm("업로드 엑셀 화일의 데이타가 입력 됩니다. 계속 진행하시겠습니까?")) {
 	            //alert("취소 되었습니다.");
 	        } 
 	     	else {	       	    
-	     		$('#loadingSpinner').modal('show');
 		    	var formData = new FormData();
 		        formData.append("variety", $("#variety-select option:selected").val());
 	      		formData.append("ajaxFile", $("input[name=ajaxFile]")[0].files[0]);
@@ -334,7 +321,6 @@ body {
 		       	    contentType: false,
 		       	    type: 'POST',	 
 					success:function(data) {	
-						$('#loadingSpinner').modal('hide');
 						alert("업데이트가 정상적으로 처리 되었습니다.");  
 						refresh();
 				}       

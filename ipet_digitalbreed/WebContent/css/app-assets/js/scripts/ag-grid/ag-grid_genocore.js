@@ -62,7 +62,8 @@
 	      headerName: "순번",
 	      //field: "no",
 	      valueGetter: inverseRowCount,
-	      width: 100,
+	      maxWidth: 100,
+	      minWidth: 100,
 	      suppressMenu: true,
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -73,7 +74,8 @@
 	    	headerName: "분석상태",
 	    	field: "status",
 	    	suppressMenu: true,
-	    	width: 80,
+	    	maxWidth: 90,
+	    	minWidth: 90,
 	    	cellClass: "grid-cell-centered",      
 	    	cellRenderer: function(params) {
 	    		//console.log("params : ", params.value);
@@ -93,19 +95,44 @@
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
 	      width: 700,
+	      minWidth: 150,
 	    },
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
 	      filter: true,
-	      width: 350
+	      width: 350,
+	      minWidth: 90,
+	      minWidth: 110,
 	    },
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
 	      filter: "agDateColumnFilter",
+	      filterParams: {
+	        	comparator: function(filterLocalDateAtMidnight, cellValue) {
+	        		if (cellValue == null) {
+	        			return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	      },
 	      cellClass: "grid-cell-centered", 
-	      width: 150
+	      width: 150,
+	      minWidth: 110
 	    },
 		{
 	      field: "jobid",
@@ -142,7 +169,6 @@
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
@@ -496,24 +522,9 @@
 			});
   	});
   		
-  	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
-
-  	if ($(window).width() < 768) {
-  		//gridOptions.columnApi.setColumnPinned("email", null);
-  	} else {
-  		// gridOptions.columnApi.setColumnPinned("email", "left");
-  	}
-  	
   	$(window).on("resize", function() {
   		gridOptions.api.sizeColumnsToFit();
 	  	gridOptions2.api.sizeColumnsToFit();
-  		/*
-  		if ($(window).width() < 768) {
-  			//gridOptions.columnApi.setColumnPinned("email", null);
-  		} else {
-  			// gridOptions.columnApi.setColumnPinned("email", "left");
-  		}
-  		*/
   	});
   	
   	

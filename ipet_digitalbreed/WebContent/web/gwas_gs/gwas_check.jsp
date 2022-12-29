@@ -119,7 +119,8 @@
 		
 		//String sql = "select no, cropid, varietyid, sampleid, samplename, photo_status, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from sampledata_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
 		//String sql = "select sampleid, samplename from sampledata_info_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ";
-		String sql = "select i.samplename, group_concat( v.value SEPARATOR  ',' ) as val from sampledata_info_t i inner join sampledata_traitval_t v on i.sampleid = v.sampleid where i.creuser = '" +permissionUid+ "' and i.varietyid='"+varietyid+"' ";
+		//String sql = "select i.samplename, group_concat( v.value SEPARATOR  ',' ) as val from sampledata_info_t i inner join sampledata_traitval_t v on i.sampleid = v.sampleid where i.creuser = '" +permissionUid+ "' and i.varietyid='"+varietyid+"' ";
+		String sql = "select i.samplename, group_concat( v.value SEPARATOR  ',' ) as val from sampledata_info_t i inner join sampledata_traitval_t v on i.sampleid = v.sampleid where i.varietyid='"+varietyid+"' ";
 		
 		if(cre_date_arr.length == 2) {
 			sql += "and date(DATE_FORMAT(i.cre_dt, '%Y-%m-%d')) between '" +cre_date_arr[0]+ "' and '" +cre_date_arr[1]+ "' ";

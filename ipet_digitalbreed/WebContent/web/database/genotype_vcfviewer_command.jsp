@@ -41,7 +41,7 @@
 		case "filter":
 			
 			try {
-				File file = new File(outputPath+jobid+"/"+jobid+"_genotype_matrix.csv");
+				File file = new File(outputPath+jobid+"/"+jobid+"_genotype_viewer_head.csv");
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				
 				String line = br.readLine();
@@ -60,14 +60,16 @@
 			break;
 			
 		case "rowThisPage":
-			String startRow = request.getParameter("startRow");
+				
+			int startRow = Integer.parseInt(request.getParameter("startRow"));
 			System.out.println("startRow : " + startRow);
-			
+			int endRow = startRow+100;
+
 			try {
 				JSONArray jsonArray = new JSONArray();
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-				
-				String sql = "select contents from vcfviewer_t where jobid = '" +jobid+ "' and row_index >= " +startRow+ " limit 100;";
+
+				String sql = "select contents from vcfviewer_t where jobid = '" +jobid+ "' and row_index >= " +startRow+ " and row_index < "+endRow;
 				System.out.println("sql : " + sql);
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 

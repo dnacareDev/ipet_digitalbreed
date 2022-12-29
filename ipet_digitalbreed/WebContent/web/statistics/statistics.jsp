@@ -105,7 +105,7 @@ body {
 	        <div class="header-navbar-shadow"></div>
 	        <div class="content-wrapper">
 	            <div class="content-header row">
-	                <div class="content-header-left col-md-9 col-12 mb-2">
+	                <div class="content-header-left col-11 mb-2">
 	                    <div class="row breadcrumbs-top">
 	                        <div class="col-12">
 	                            <h2 class="content-header-title float-left mb-0">&nbsp;Statistics</h2>
@@ -120,41 +120,35 @@ body {
 	                        </div>
 	                    </div>
 	                </div>
+	                <div class="col-1">
+                       	<div class="ag-grid-btns d-flex justify-content-between flex-wrab">
+                           	<div class="dropdown sort-dropdown">                                                
+                               	<select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
+                                	<%
+                                   		try {
+                                       		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+                                        	int selected_cnt=0;
+                                        	String selected_flag=null; 
+
+                                        	ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
+                                        	while (ipetdigitalconndb.rs.next()) { 	
+                                        		if(selected_cnt==0) {selected_flag = "selected";};   
+                                        		out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
+                                        		selected_cnt++;
+                                        		selected_flag="";
+                                        	}
+                                        } catch (Exception e){
+                                        	System.out.println(e);
+                                        }
+                                   %>       
+                                   </select>                                          
+                           	</div>           
+                       	</div>
+					</div>
 	            </div>
             	<div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
-	               <div class="col-12">
-	                    <div class="card">
-	                        <div class="card-content">
-	                            <div class="card-body">
-	                            	<div class="ag-grid-btns d-flex justify-content-between flex-wrab">
-	                                	<div class="dropdown sort-dropdown">                                                
-	                                    	<select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
-	                                        <%
-	                                        	try{
-	                                            	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-	                                             	int selected_cnt=0;
-	                                             	String selected_flag=null; 
-	
-	                                             	ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
-	                                             	while (ipetdigitalconndb.rs.next()) { 	
-	                                             		if(selected_cnt==0) {selected_flag = "selected";};   
-	                                             		out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
-	                                             		selected_cnt++;
-	                                             		selected_flag="";
-	                                             	}
-	                                             } catch (Exception e){
-	                                             	System.out.println(e);
-	                                             }
-	                                        %>       
-	                                        </select>                                          
-	                                	</div>           
-	                            	</div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
                     <div class="col-12">
                     	<div class="row">
 	                    	<div class="col-sm-6 col-lg-4 col-xl-2">
@@ -297,7 +291,7 @@ body {
                     </div>
                     <div class="col-12">
 	                   	<div class="row">
-		                    <div class="col-8">
+		                    <div class="col-12 col-xl-8">
                     			<div class="card">
 									<div class="card-content">
 	                            		<div class="card-body">
@@ -306,17 +300,17 @@ body {
 	                            			<div id="line-area-chart"></div>
 	                            			-->
 	                            			<div class="row mt-1">
-		                                		<div class="col-8">
+		                                		<div class="col-12 col-xl-8">
 		                                			<h1 class="mb-1">Analysis</h1>
 		                                		</div>
-		                                		<div class="col-2">
+		                                		<div class="col-6 col-xl-2">
 		                                			<select id="analysisYear" class="select2 form-select">
 		                                				<option value="-1" selected>All Year</option>
 		                                				<option value="2022">2022</option>
 		                                				<option value="2023">2023</option>
 		                                			</select>
 		                                		</div>
-		                                		<div class="col-2">
+		                                		<div class="col-6 col-xl-2">
 		                                			<select id="analysisMonth" class="select2 form-select">
 		                                				<option value="-1" selected>All Month</option>
 		                                				<option value="1">1</option>
@@ -342,17 +336,17 @@ body {
 									<div class="card-content">
 	                            		<div class="card-body">
 	                            			<div class="row mt-1">
-		                            			<div class="col-8">
+		                            			<div class="col-12 col-xl-8">
 				                                	<h1 class="mb-2">Analysis List</h1>
 		                                		</div>
-		                                		<div class="col-2">
+		                                		<div class="col-6 col-xl-2">
 		                                			<select id="analysisListYear" class="select2 form-select">
 		                                				<option value="-1" selected>All Year</option>
 		                                				<option value="2022">2022</option>
 		                                				<option value="2023">2023</option>
 		                                			</select>
 		                                		</div>
-		                                		<div class="col-2">
+		                                		<div class="col-6 col-xl-2">
 		                                			<select id="analysisListMonth" class="select2 form-select">
 		                                				<option value="-1" selected>All Month</option>
 		                                				<option value="1">1</option>
@@ -375,14 +369,14 @@ body {
 		                            </div>
 								</div> 
 		                    </div>                   
-		                    <div class="col-4">
+		                    <div class="col-12 col-xl-4">
                     			<div class="card">
                     				<div class="row">
                                 		<div class="col-8">
-                                			<h1 class="m-1">Timeline</h1>
+                                			<h1 style="margin-top:40px; margin-left:1.3rem;">Timeline</h1>
                                 		</div>
 		                            </div>
-                    				<ul id="timeline" class="timeline" style="padding-top:15px; height:847px;">
+                    				<ul id="timeline" class="timeline" style="padding-top:15px; min-height:847px;">
                                     </ul>
 								</div>
 		                    </div> 
@@ -513,7 +507,9 @@ body {
 	
 	function getTimeline() {
 		
-		fetch('./statistics_getTimeline.jsp')
+		const varietyid = $( "#variety-select option:selected" ).val();
+		
+		fetch('./statistics_getTimeline.jsp?varietyid='+varietyid)
 		.then((response) => response.json())
 		.then((data) => {
 			//console.log(data)

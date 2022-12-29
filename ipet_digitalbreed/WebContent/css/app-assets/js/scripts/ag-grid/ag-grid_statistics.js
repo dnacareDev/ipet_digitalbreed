@@ -13,7 +13,7 @@
 			headerName: "결과보기",
 			//field: "no",
 			width: 130,
-			filter: 'agMultiColumnFilter',
+			suppressMenu: true,
 			cellClass: "grid-cell-centered",    
 			cellRenderer: function(params) {
 				//const linkedJobid = params.data.jobid;
@@ -47,23 +47,44 @@
 	    {
 	    	headerName: "파일명",
 	    	field: "filename",
-	    	filter: true,
+	    	filter: 'agTextColumnFilter',
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
 	    },
 	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
-	    	filter: true,
+	    	filter: 'agTextColumnFilter',
 	    	cellClass: "grid-cell-centered",      
 	    	width: 300,
 	    },
 	    {
-	      headerName: "분석일",
-	      field: "cre_dt",
-	      filter: 'agNumberColumnFilter',
-	      width: 296,
-	      cellClass: "grid-cell-centered", 
+	    	headerName: "분석일",
+	    	field: "cre_dt",
+	    	filter: 'agDateColumnFilter',
+	    	filterParams: {
+	        	comparator: function(filterLocalDateAtMidnight, cellValue) {
+	        		if (cellValue == null) {
+	        			return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	        },
+	        width: 296,
+	        cellClass: "grid-cell-centered", 
 	    },
 		{
 	      headerName: "jobid",
@@ -82,7 +103,7 @@
 			editable: false, 
 		    sortable: true,
 			resizable: true,
-			//floatingFilter: true,
+			menuTabs: ['filterMenuTab']
 		},
 		columnDefs: columnDefs,
 		rowHeight: 35,
@@ -148,7 +169,7 @@
   		fetch(`/ipet_digitalbreed/web/statistics/statistics_json.jsp?varietyid=${varietyid}&year=${year}&month=${month}`)
   		.then((response) => response.json())
   		.then((data) => {
-  			console.log(data);
+  			//console.log(data);
 			gridOptions.api.setRowData(data);
 			gridOptions.api.sizeColumnsToFit();
   		})

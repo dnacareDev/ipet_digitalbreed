@@ -18,14 +18,20 @@
 	List<Integer> list = new LinkedList<>();
 	
 	
-	String GWAS_sql = "select count(*) as count from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
-	String filter_sql = "select count(*) as count from genotype_filter_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	//String GWAS_sql = "select count(*) as count from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	//String filter_sql = "select count(*) as count from genotype_filter_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	String GWAS_sql = "select count(*) as count from gwas_info_t where varietyid = '" +varietyid+ "' and status=0";
+	String filter_sql = "select count(*) as count from genotype_filter_t where varietyid = '" +varietyid+ "' and status=0";
 	
 	//Genotype Analysis
-	String Genocore_sql = "select count(*) from genocore_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
-	String mini_sql = "select count(*) from mini_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
-	String PCA_sql = "select count(*) from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
-	String UPGMA_sql = "select count(*) from upgma_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	//String Genocore_sql = "select count(*) from genocore_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	//String mini_sql = "select count(*) from mini_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	//String PCA_sql = "select count(*) from pca_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	//String UPGMA_sql = "select count(*) from upgma_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=0";
+	String Genocore_sql = "select count(*) from genocore_info_t where varietyid = '" +varietyid+ "' and status=0";
+	String mini_sql = "select count(*) from mini_info_t where varietyid = '" +varietyid+ "' and status=0";
+	String PCA_sql = "select count(*) from pca_info_t where varietyid = '" +varietyid+ "' and status=0";
+	String UPGMA_sql = "select count(*) from upgma_info_t where varietyid = '" +varietyid+ "' and status=0";
 	
 	
 	// year = "-1" -> Select all years
@@ -64,7 +70,7 @@
 	}
 	
 	//GS count(미개발. 하드코딩)
-	list.add(3);
+	list.add(0);
 	/*
 	try{
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -129,7 +135,9 @@
 		ipetdigitalconndb.conn.close();
 	}
 	*/
-	list.add(2);
+	list.add(0);
+	
+	//System.out.println(list);
 	
 	out.clear();
 	out.print(list);

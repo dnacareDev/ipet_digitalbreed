@@ -60,9 +60,9 @@
 	var columnDefs = [
 		{
 			headerName: "순번",
-			//field: "no",
 			valueGetter: inverseRowCount,
-			width: 100,
+			maxWidth: 100,
+			minWidth: 100,
 			suppressMenu: true,
 			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
@@ -74,7 +74,8 @@
 	    	field: "status",
 	    	suppressMenu: true,
 	    	cellClass: "grid-cell-centered",      
-	    	width: 80,
+	    	maxWidth: 90,
+	    	minWidth: 90,
 	    	cellRenderer: function(params) {
 		    	//console.log("params : ", params.value);
 		    	switch(Number(params.value)) {
@@ -93,19 +94,43 @@
 	      filter: true,
 	      cellClass: "grid-cell-centered",      
 	      width: 700,
+	      minWidth: 150,
 	    },
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
 	      filter: 'agNumberColumnFilter',
-	      width: 350
+	      width: 350,
+	      minWidth: 110,
 	    },
 	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
 	      filter: 'agDateColumnFilter',
+	      filterParams: {
+	        	comparator: function(filterLocalDateAtMidnight, cellValue) {
+	        		if (cellValue == null) {
+	        			return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	        },
 	      cellClass: "grid-cell-centered", 
-	      width: 150
+	      width: 150,
+	      minWidth: 110,
 	    },
 		{
 	      headerName: "jobid",
@@ -145,7 +170,6 @@
 		colResizeDefault: "shift",
 		animateRows: true,
 		serverSideInfiniteScroll: true,
-		suppressHorizontalScroll: true,
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
 		},
@@ -180,7 +204,7 @@
 														</ul>
 														<div class='tab-content'>
 															<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-																<iframe src = '' loading="lazy" height='1000px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>
+																<iframe src = '' loading="lazy" height='1000px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid}); gridOptions.api.sizeColumnsToFit();'></iframe>
 															</div>
 															<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
 																<iframe src = '' loading="lazy" height='1000px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill2_frame' id='pill2_frame' onload='hideSpinner(this, ${params.data.jobid})'></iframe>

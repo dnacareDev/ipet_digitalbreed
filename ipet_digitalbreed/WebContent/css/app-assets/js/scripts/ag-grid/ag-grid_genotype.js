@@ -41,142 +41,164 @@
 	}
 
 	function getSelectedRowData() {
-	  let selectedData = gridOptions.api.getSelectedRows();
-	  var deleteitems = new Array();
+		let selectedData = gridOptions.api.getSelectedRows();
+		var deleteitems = new Array();
 	
-	  const varietyid = $( "#variety-select option:selected" ).val();
+		const varietyid = $( "#variety-select option:selected" ).val();
 	  
-	  if(selectedData.length==0){
-	    		alert("선택 된 항목이 없습니다.");	
-	    		return;	    		
-	  }
-
-	  for (var i = 0; i < selectedData.length; i++) {
-		    deleteitems.push(selectedData[i].selectfiles);
-	  }    
-	  
-	  //location.href="../../web/database/genotype_delete.jsp?deleteitems="+deleteitems;
-	  
-	  var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
-	  
- 	  if(result){
-	  
-	  $.ajax({
-		    url:"../../web/database/genotype_delete.jsp",
-		    type:"POST",
-		    data:{'params':deleteitems, 'varietyid':varietyid},
-		    success: function(result) {
-		        if (result) {
-					alert("정상적으로 삭제되었습니다.");
-					refresh();
-		        } else {
-		            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
-		        }
-		    }
-		  });
+		if(selectedData.length==0){
+			alert("선택 된 항목이 없습니다.");	
+	    	return;	    		
 		}
-  	  }
+
+		for (var i = 0; i < selectedData.length; i++) {
+		    deleteitems.push(selectedData[i].selectfiles);
+		}    
+	  
+		//location.href="../../web/database/genotype_delete.jsp?deleteitems="+deleteitems;
+	  
+		var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
+	  
+		if(result){
+	  
+			$.ajax({
+				url:"../../web/database/genotype_delete.jsp",
+				type:"POST",
+			    data:{'params':deleteitems, 'varietyid':varietyid},
+			    success: function(result) {
+			        if (result) {
+						alert("정상적으로 삭제되었습니다.");
+						refresh();
+			        } else {
+			            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
+			        }
+			    }
+			});
+		}
+	}
 	
-  /*** COLUMN DEFINE ***/
+	/*** COLUMN DEFINE ***/
   
-  var columnDefs = [
-    {
-      headerName: "순번",
-      field: "displayno",
-      width: 110,	
-      //filter: 'agMultiColumnFilter',
-      suppressMenu: true,
-      cellClass: "grid-cell-centered",      
-      checkboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      headerCheckboxSelection: true,
+	var columnDefs = [
+	{
+		headerName: "순번",
+		field: "displayno",
+		maxWidth: 100,
+		minWidth: 100,	
+		suppressMenu: true,
+		checkboxSelection: true,
+		headerCheckboxSelectionFilteredOnly: true,
+		headerCheckboxSelection: true,
     },
     {
-      headerName: "실제순번",
-      field: "selectfiles",
-      hide: true,	
+    	headerName: "실제순번",
+    	field: "selectfiles",
+    	hide: true,	
     },
     {
-      headerName: "VCF 파일명",
-      field: "filename",
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 500,
-	  cellRenderer: function(params){
-      return params.value+"<a href='../public/filedownloader.jsp?resultpath="+params.data.uploadpath+params.data.jobid+"/&filename="
-        + params.value 
-        + "'>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
-    }
+    	headerName: "VCF 파일명",
+    	field: "filename",
+    	filter: "agTextColumnFilter",
+    	width: 500,
+    	minWidth:150,
+    	cellRenderer: function(params){
+    		return params.value+"<a href='/ipet_digitalbreed/"+params.data.uploadpath+params.data.jobid + "/" + params.value + "' download>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
+    	}
     },
     {
-      headerName: "상세내용",
-      field: "comment",
-      filter: true,
-      cellClass: "ag-header-cell-label",
-      width: 470,
-      cellStyle: {'cursor': 'pointer'}
+    	headerName: "상세내용",
+    	field: "comment",
+    	filter: "agTextColumnFilter",
+    	cellClass: "ag-header-cell-label",
+    	width: 470,
+    	minWidth:110,
+    	cellStyle: {'cursor': 'pointer'}
     },
     {
-      headerName: "작물",
-      field: "cropid",
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 180,
-      hide: true
+    	headerName: "작물",
+    	field: "cropid",
+    	width: 180,
+    	hide: true
     },
     {
-      headerName: "참조유전체",
-      field: "refgenome",
-      filter: true,
-      cellClass: "grid-cell-centered",      
-      width: 275,
+    	headerName: "참조유전체",
+    	field: "refgenome",
+    	filter: "agTextColumnFilter",
+    	width: 275,
+    	minWidth: 120,
     },
     {
-      headerName: "샘플수",
-      field: "samplecnt",
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
+    	headerName: "샘플수",
+    	field: "samplecnt",
+    	valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    	filter: 'agNumberColumnFilter',
+    	width: 120,
+    	minWidth: 100,
     },
     {
-      headerName: "변이수",
-      field: "variablecnt",
-      filter: 'agNumberColumnFilter',
-      cellClass: "grid-cell-centered",      
-      width: 120
+    	headerName: "변이수",
+    	field: "variablecnt",
+    	valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    	filter: 'agNumberColumnFilter',
+    	width: 120,
+    	minWidth: 100,
     },
     {
         headerName: "등록일자",
         field: "cre_dt",
         filter: 'agDateColumnFilter',
-        cellClass: "grid-cell-centered",      
-        width: 150
+        filterParams: {
+        	comparator: comparator
+        },
+        width: 150,
+        minWidth: 110,
     },
 	{
-      headerName: "jobid",
-      field: "jobid",
-      hide: true
+    	headerName: "jobid",
+    	field: "jobid",
+    	hide: true
     },  
 	{
-      headerName: "uploadpath",
-      field: "uploadpath",
-      hide: true
+    	headerName: "uploadpath",
+    	field: "uploadpath",
+    	hide: true
     },  
 	{
-      headerName: "resultpath",
-      field: "resultpath",
-      hide: true
+    	headerName: "resultpath",
+    	field: "resultpath",
+    	hide: true
     }        
-  ];
+    ];
 
+  	function comparator(filterLocalDateAtMidnight, cellValue) {
+  		if (cellValue == null) {
+  			return 0;
+  		}
+	
+	    var dateParts = cellValue.split('-');
+	    var year = Number(dateParts[0]);
+	    var month = Number(dateParts[1]) - 1;
+	    var day = Number(dateParts[2]);
+	    var cellDate = new Date(year, month, day);
+    
+	    if (cellDate < filterLocalDateAtMidnight) {
+	        return -1;
+	    } else if (cellDate > filterLocalDateAtMidnight) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+	}
+  
+  
   /*** GRID OPTIONS ***/
   var gridOptions = {
 	defaultColDef: {
 		editable: false, 
 	    sortable: true,
 		resizable: true,
-		menuTabs: ['filterMenuTab']
-		//floatingFilter: true,
+		menuTabs: ['filterMenuTab'],
+  		cellClass: "grid-cell-centered",      
 	},
     columnDefs: columnDefs,
     rowHeight: 35,
@@ -188,7 +210,7 @@
     pivotPanelShow: "always",
     colResizeDefault: "shift",
     animateRows: true,
-    suppressHorizontalScroll: true,
+    //suppressHorizontalScroll: true,
     serverSideInfiniteScroll: true,
 	onCellClicked: onCellClicked,
   };
@@ -221,19 +243,19 @@
 	   		   									</ul>
 	   		   									<div class='tab-content'>
 	   		   										<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill1_frame' id='pill1_frame'></iframe>
+	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='gridOptions.api.sizeColumnsToFit();'></iframe>
 	   		   										</div>
 	   		   										<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
 	   		   											<div id='pill2_frame' class="ag-theme-alpine" style='height:501px; margin-top:25px;'></div>
 	   		   										</div>
 	   		   										<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill3_frame' id='pill3_frame'></iframe>
+	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame'></iframe>
 	   		   										</div>
 	   		   										<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill4_frame' id='pill4_frame'></iframe>
+	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill4_frame'></iframe>
 	   		   										</div>
 	   		   										<div class='tab-pane' id='pill5' aria-labelledby='base-pill5'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' name='pill5_frame' id='pill5_frame'></iframe>
+	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill5_frame'></iframe>
 	   		   										</div>
 	   		   									</div>
 	   		   								</div>
@@ -259,6 +281,9 @@
 		   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
 		   $('#pill5_frame').attr('height',"500px");
 		   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
+		   
+		   
+		   
 		}
 	}    
   	
@@ -411,12 +436,6 @@
 					console.log('asking for ' + params.startRow + ' to ' + params.endRow);
 					
 					setTimeout(async function() {
-						//const rowsThisPage = arr.slice(params.startRow, params.endRow);
-						//if(arr.length <= params.endRow) {
-						//	lastRow = arr.length;
-						//}
-						//params.successCallback(rowsThisPage, lastRow);
-						//params.successCallback(0, 2000);
 
 						const rowsThisPage = await fetch(`./genotype_vcfviewer_command.jsp?command=rowThisPage&jobid=${jobid}&startRow=${params.startRow}`)
 											.then((response) => response.json())
@@ -447,7 +466,6 @@
 				}
 		}
 		
-		//gridOptions2.api.setInfiniteRowCount(arr.length);
 		gridOptions2.infiniteInitialRowCount = Number(row_count);
 		gridOptions2.api.setColumnDefs(columnDefs2);
 		gridOptions2.api.setDatasource(datasource);
@@ -456,14 +474,6 @@
 		Array.prototype.slice.call(document.querySelectorAll('#pill2_frame .ag-header-cell-label .ag-header-cell-text'))
 		.filter((el) => el.textContent === 'Position')[0].style.writingMode = 'horizontal-tb'; 
 		
-		//console.log(columnDefs2);
-		//gridOptions2.api.setColumnDefs(columnDefs2);
-		//gridOptions2.api.setRowData(arr);
-		
-		//gridOptions2.rowModelType = 'infinite';
-		//gridOptions2.datasource = arr;
-		
-		//gridOptions2.api.setDatasource(arr);
 	}
  
 	function tooltipRenderder(params) {
@@ -563,17 +573,6 @@
 			});
 	});
 
-  /*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
-
-  if ($(window).width() < 768) {
-    //gridOptions.columnApi.setColumnPinned("email", null);
-  } else {
-   // gridOptions.columnApi.setColumnPinned("email", "left");
-  }
-  $(window).on("resize", function() {
-    if ($(window).width() < 768) {
-      //gridOptions.columnApi.setColumnPinned("email", null);
-    } else {
-     // gridOptions.columnApi.setColumnPinned("email", "left");
-    }
-  });
+  	$(window).on("resize", function() {
+		gridOptions.api.sizeColumnsToFit();
+	});

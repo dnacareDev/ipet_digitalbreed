@@ -38,6 +38,23 @@
 		RunPhenotypetraitValue runphenotypetraitvalue = new RunPhenotypetraitValue();
 		
 		runphenotypetraitvalue.UpdateTraitValue(savePath+originFile, variety, permissionUid);		
+		
+		
+		
+		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+		
+		String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+variety+"'),'"+variety+"','Phenotype', 'New excel list uploaded', now());";
+		//System.out.println(log_sql);
+		
+		try{
+			ipetdigitalconndb.stmt.executeUpdate(log_sql);
+		}catch(Exception e){
+			System.out.println(e);
+		}finally { 
+    		ipetdigitalconndb.stmt.close();
+    		ipetdigitalconndb.conn.close();
+    	}
 
 	} catch (Exception e){
 		System.out.println(e);

@@ -118,20 +118,20 @@ body {
                         <div class="card-content">
                             <div class="card-body">
 	                        	<div class="row mt-5">
-	                        		<div class="col-7"></div>
-	                        		<div class="col-3 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFFCC; top:-40px;">About Us</div>
-	                        		<div class="col-1"></div>
+	                        		<div class="col-1 col-md-4 col-lg-5 col-xl-7"></div>
+	                        		<div class="col-10 col-md-6 col-lg-5 col-xl-3 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFFCC; top:-40px; min-width:365px;">About Us</div>
+	                        		<div class="col-1 col-md-2 col-lg-2 col-xl-1"></div>
 	                        	</div>
                                 <div class="row mt-0">
-                                    <div class="col-7"></div>
-                                    <div class="col-3 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFFCC; top:-40px;" >
+                                    <div class="col-1 col-md-4 col-lg-5 col-xl-7"></div>
+                                    <div class="col-10 col-md-6 col-lg-5 col-xl-3 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFFCC; top:-40px; min-width:365px;" >
                                     	<br>
                                     	본 과제는 디지털 육종 활용 시스템의 데이터 처리 기반이 취약한 국내 종자 기업의 유전체 정보 활용을 적극 지원하여 데이터  작물 육종을 위한 유전체/표현체 정보분석 및 육종 현장 활용 확산을 유도하여 궁극적으로 종자 기업의 육종 효율을 향상시키고종자 생산 기술에 글로벌 경쟁력을 확보 하기 위한 시스템 입니다.
                                     	<br>
                                     	<br>
                                     	<br> 
                                     </div>
-                                    <div class="col-1"></div>
+                                    <div class="col-1 col-md-2 col-lg-2 col-xl-1"></div>
                                 </div>
                             </div>
                         </div>
@@ -140,23 +140,23 @@ body {
                     	<div class="card-content">
                             <div class="card-body">
 	                        	<div class="row">
-	                        		<div class="col-1"></div>
-	                        		<div class="col-3 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFF99; top:-50px;">Data Management</div>
-	                        		<div class="col-7"></div>
+	                        		<div class="col-1 col-md-1 col-lg-1 col-xl-1"></div>
+	                        		<div class="col-10 col-md-8 col-lg-5 col-xl-3 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFF99; top:-100px; min-width:365px;">Data Management</div>
+	                        		<div class="col-1 col-md-3 col-lg-6 col-xl-7"></div>
 	                        	</div>
                                 <div class="row">
-                                    <div class="col-1"></div>
-                                    <div class="col-3 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFF99; top:-50px;" >
+                                    <div class="col-1 col-md-1 col-lg-1 col-xl-1"></div>
+                                    <div class="col-10 col-md-8 col-lg-5 col-xl-3 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFF99; top:-100px; min-width:365px;" >
                                     	<br>
                                     	유전자 분석 기술 및 영상 기술이 발달함에 따라 수집 되는 데이터는 점차 다양해 지고, 수년 동안 데이터가 점진적으로 쌓이게 되면서 이제는 수집된 방대한 양의 데이터를 어떻게 보다 더 효율적이고 손쉽게 관리 할 수 있는지 중요해 졌습니다.
                                     	<br>
                                     	<br>
-                                    	Digital Breeding System은 개체별로 다양한 데이터를 수집 및 관리 할 수 있게 구성되어 있으면 등록된 데이터와 분석 모듈이 서로 긴밀하게 연결되어 있어 시스템에서 분석을 진행 할 수 있으며 해당 분석 결과 또한 유기적으로 확인할 수 있습니다.
+                                    	Digital Breeding System은 개체별 다양한 데이터를 수집 및 관리할 수 있으며 등록된 데이터와 분석 모듈이 서로 긴밀하게 연결되어 있어 분석 결과 또한 유기적으로 확인할 수 있습니다.
                                     	<br>
                                     	<br>
                                     	<br>
                                     </div>
-                                    <div class="col-7"></div>
+                                    <div class="col-1 col-md-3 col-lg-6 col-xl-7"></div>
                                 </div>
                             </div>
                         </div>
@@ -165,13 +165,13 @@ body {
                     	<div class="card-content">
                             <div class="card-body">
 	                        	<div class="row mt-2">
-	                        		<div class="col-7"></div>
-	                        		<div class="col-3 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFFCC; top:-50px;">Visualization</div>
-	                        		<div class="col-1"></div>
+	                        		<div class="col-1 col-md-5 col-lg-6 col-xl-7"></div>
+	                        		<div class="col-10 col-md-6 col-lg-5 col-xl-4 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFFCC; top:-50px; min-width:365px;">Visualization</div>
+	                        		<div class="col-1 col-md-1 col-lg-1 col-xl-1"></div>
 	                        	</div>
                                 <div class="row mt-0">
-                                    <div class="col-7"></div>
-                                    <div class="col-3 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFFCC; top:-50px;" >
+                                    <div class="col-1 col-md-5 col-lg-6 col-xl-7"></div>
+                                    <div class="col-10 col-md-6 col-lg-5 col-xl-4 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2*/ background-color:#FFFFFFCC; top:-50px; min-width:365px;" >
                                     	<br>
                                     	수집된 대용량의 데이터에 대한 통계 처리와 분석 결과를 효율적으로 표현하는 방법은 그래프나 이미지를 통한 정보의 시각화 입니다. 
 										<br>
@@ -181,7 +181,7 @@ body {
                                     	<br>
                                     	<br>
                                     </div>
-                                    <div class="col-1"></div>
+                                    <div class="col-1 col-md-1 col-lg-1 col-xl-1"></div>
                                 </div>
                             </div>
                         </div>
@@ -190,34 +190,34 @@ body {
                     	<div class="card-content">
                             <div class="card-body">
 	                        	<div class="row mt-5">
-	                        		<div class="col-2"></div>
-	                        		<div class="col-3 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFF99; top:-70px;">User Friendly</div>
-	                        		<div class="col-7"></div>
+	                        		<div class="col-1 col-sm-2 col-md-2 col-lg-2 col-xl-2"></div>
+	                        		<div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3 pt-3 pl-4 pr-4" style="font-size:30px; font-weight:600; background-color:#FFFFFF99; top:-140px; min-width:365px;">User Friendly</div>
+	                        		<div class="col-1 col-sm-2 col-md-4 col-lg-6 col-xl-7"></div>
 	                        	</div>
                                 <div class="row mt-0">
-                                    <div class="col-2"></div>
-                                    <div class="col-3 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2;*/ background-color:#FFFFFF99; top:-70px;" >
+                                    <div class="col-1 col-sm-2 col-md-2 col-lg-2 col-xl-2"></div>
+                                    <div class="col-10 col-sm-8 col-md-4 col-lg-4 col-xl-3 pl-4 pr-4" style="font-size:17px; font-weight:300; /*line-height:2;*/ background-color:#FFFFFF99; top:-140px; min-width:365px;" >
                                     	<br>
                                     	NGS 기술이 점차 발전함에 따라 이전보다 유전체 데이터를 얻기가 쉬워졌지만 이를 일반 사용자가 활용하기 에는 어려우며 유전체 분석을 위해서는 많은 전문지식과 분석 환경이 필요합니다.
                                     </div>
-                                    <div class="col-7"></div>
+                                    <div class="col-1 col-sm-2 col-md-6 col-lg-6 col-xl-7"></div>
                                 </div>
                                 <div class="row mt-0">
-                                	<div class="col-2"></div>
-                                    <div class="col-3 pl-4 pr-4"style="font-size:17px; font-weight:300; /*line-height:2;*/ background-color:#FFFFFF99; top:-70px;"> 
+                                	<div class="col-1 col-sm-2 col-md-2 col-lg-2 col-xl-2"></div>
+                                    <div class="col-10 col-sm-8 col-md-4 col-lg-4 col-xl-3 pl-4 pr-4"style="font-size:17px; font-weight:300; /*line-height:2;*/ background-color:#FFFFFF99; top:-140px; min-width:365px;"> 
 										<br>
 										Digital Breeding System은 유전체 데이터를 일반 사용자들에게 익숙한 형태로 정보를 자동으로 추출 및 정리하여 제공하며 사용자가 다양한 분석을 손쉽게 진행할 수 있도록 셋팅된 다양한 분석모듈을 제공합니다.
 										<br>
 										<br>
 										<br>
                                     </div>
-                                    <div class="col-7"></div>
+                                    <div class="col-1 col-sm-2 col-md-6 col-lg-6 col-xl-7"></div>
                                 </div>	
                                 <div class="row mt-1">
-                                	<div class="col-6"></div>
-                                    <div class="col-4 text-right">
+                                	<div class="col-xl-6"></div>
+                                    <div class="col-xl-4 text-right">
                                     </div>
-                                    <div class="col-1"></div>
+                                    <div class="col-xl-1"></div>
                                 </div>	
                             </div>
                         </div>

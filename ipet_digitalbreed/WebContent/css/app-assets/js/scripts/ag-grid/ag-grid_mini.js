@@ -64,7 +64,8 @@
 	      headerName: "순번",
 	      //field: "no",
 	      valueGetter: inverseRowCount,
-	      width: 100,
+	      maxWidth: 100,
+	      minWidth: 100,
 	      suppressMenu: true,
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
@@ -75,8 +76,9 @@
 	    	headerName: "분석상태",
 	    	field: "status",
 	    	suppressMenu: true,
-	    	cellClass: "grid-cell-centered",      
-	    	width: 80,
+	    	cellClass: "grid-cell-centered",    
+	    	maxWidth: 90,
+	    	minWidth: 90,
 	    	cellRenderer: function(params) {
 	    		//console.log("params : ", params.value);
 	    		switch(Number(params.value)) {
@@ -95,6 +97,7 @@
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 700,
+	    	minWidth: 150,
 	    },
 	    {
 	    	headerName: "상세내용",
@@ -102,13 +105,36 @@
 	    	filter: 'agNumberColumnFilter',
 	    	//cellClass: "grid-cell-centered",      
 	    	width: 350,
+	    	minWidth: 110,
 	    },
 	    {
 	    	headerName: "분석일",
 	    	field: "cre_dt",
-	    	filter: 'agNumberColumnFilter',
+	    	filter: 'agDateColumnFilter',
+	    	filterParams: {
+	        	comparator: function(filterLocalDateAtMidnight, cellValue) {
+	        		if (cellValue == null) {
+	        			return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	        },
 	    	cellClass: "grid-cell-centered", 
-	    	width: 150
+	    	width: 150,
+	    	minWidth: 110,
 	    },
 		{
 	      field: "jobid",
@@ -150,7 +176,6 @@
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]

@@ -66,9 +66,10 @@
              
             response.setHeader ("Content-Length", ""+file.length() );
  
-       
+       		System.out.println("f" + file.length());
             os = response.getOutputStream();
             byte b[] = new byte[(int)file.length()];
+            
             int leng = 0;
              
             while( (leng = in.read(b)) > 0 ){
@@ -77,7 +78,7 @@
  
         }else{
             response.setContentType("text/html;charset=UTF-8");
-            out.println("<script language='javascript'>alert('File not found1.');history.back();</script>"); 
+            out.println("<script language='javascript'>alert('File not found!');history.back();</script>"); 
         }
          
         in.close();

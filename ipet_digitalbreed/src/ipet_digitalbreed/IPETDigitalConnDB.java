@@ -5,8 +5,8 @@ import java.sql.*;
 public class IPETDigitalConnDB {
 
 	//String url="jdbc:mysql://112.169.69.112:6613/digitalbreed?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=euckr&zeroDateTimeBehavior=convertToNull";
-	String url="jdbc:mysql://182.227.106.53:6613/digitalbreed?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=euckr&zeroDateTimeBehavior=convertToNull";
-	//String url="jdbc:mysql://localhost:6613/digitalbreed?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=euckr&zeroDateTimeBehavior=convertToNull";
+	//String url="jdbc:mysql://182.227.106.53:6613/digitalbreed?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=euckr&zeroDateTimeBehavior=convertToNull";
+	String url="jdbc:mysql://112.167.51.15:6613/digitalbreed?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=euckr&zeroDateTimeBehavior=convertToNull";
 
 	String user = "bms";
 	String pass = "bms!@#$";

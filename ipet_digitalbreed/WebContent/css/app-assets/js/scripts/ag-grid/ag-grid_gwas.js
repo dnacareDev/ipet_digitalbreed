@@ -63,9 +63,9 @@
 			headerName: "순번",
 			//field: "no",
 			valueGetter: inverseRowCount,
-			width: 110,
+			maxWidth: 100,
+			minWidth: 100,
 			suppressMenu: true,
-			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
 			headerCheckboxSelection: true
@@ -73,9 +73,9 @@
 	    {
 		    headerName: "분석상태",
 		    field: "status",
-		    width: 100,
+		    maxWidth: 90,
+		    minWidth: 90,	
 		    suppressMenu: true,
-		    cellClass: "grid-cell-centered",      
 		    cellRenderer: function(params) {
 		    	//console.log("params : ", params.value);
 		    	switch(Number(params.value)) {
@@ -92,37 +92,40 @@
 			headerName: "Genotype",
 			field: "genotype_filename",
 			filter: true,
-			cellClass: "grid-cell-centered",      
 			width: 600,
+			minWidth: 120,
 	    },
 	    {
 			headerName: "Phenotype",
 			field: "phenotype_name",
 			filter: true,
-			cellClass: "grid-cell-centered",      
 			width: 350,
+			minWidth: 120,
 	    },
 	    {
 			headerName: "Model",
 			field: "model",
 			filter: true,
-			cellClass: "grid-cell-centered",      
 			width: 300,
+			minWidth: 100,
 	    },
 	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
 	    	filter: 'agNumberColumnFilter',
-	    	width: 300
+	    	cellClass: "",
+	    	width: 300,
+	    	minWidth: 110,
 	    },
 	    {
 	    	headerName: "분석일",
 	    	field: "cre_dt",
 	    	filter: 'agDateColumnFilter',
+	    	filterParams: {
+	        	comparator: comparator
+	        },
 	    	width: 200,
-	    	cellClass: "grid-cell-centered", 
-	    	//cellEditor: DatePicker,
-	    	//cellEditorPopup: true
+	    	minWidth: 100,
 	    },
 		{
 	    	field: "jobid",
@@ -141,6 +144,26 @@
 	function inverseRowCount(params) {
 		return params.api.getDisplayedRowCount() - params.node.rowIndex;
 	}
+	
+	function comparator(filterLocalDateAtMidnight, cellValue) {
+  		if (cellValue == null) {
+  			return 0;
+  		}
+	
+	    var dateParts = cellValue.split('-');
+	    var year = Number(dateParts[0]);
+	    var month = Number(dateParts[1]) - 1;
+	    var day = Number(dateParts[2]);
+	    var cellDate = new Date(year, month, day);
+    
+	    if (cellDate < filterLocalDateAtMidnight) {
+	        return -1;
+	    } else if (cellDate > filterLocalDateAtMidnight) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+	}
 
 	/*** GRID OPTIONS ***/
 	var gridOptions = {
@@ -149,7 +172,7 @@
 		    sortable: true,
 			resizable: true,
 			menuTabs: ['filterMenuTab'],
-			//floatingFilter: true,
+			cellClass: "grid-cell-centered",
 		},
 		columnDefs: columnDefs,
 		rowHeight: 35,
@@ -161,7 +184,7 @@
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		suppressHorizontalScroll: true,
+		//ssuppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
 		
 		defaultCsvExportParams:{
@@ -255,6 +278,7 @@
 							document.getElementById('QQ_model').options.add(new Option(model_arr[j], model_arr[j]))
 						}
 						
+						gridOptions.api.sizeColumnsToFit();
 						break;
 					case 2:
 						alert("분석에 실패했습니다.");

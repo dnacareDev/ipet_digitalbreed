@@ -30,23 +30,24 @@
 	      field: "displayno",
 	      editable: false,
 	      sortable: true,
-	      resizable: true,	
-	      width: 120,	
-	      suppressMenu: true,
+	      width: 140,	
+	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
 	      headerCheckboxSelectionFilteredOnly: true,
 	      headerCheckboxSelection: true,
+	      resizable: true	
 	    },
         {
             headerName: "사진",
             field: "photo_status",
             editable: false,
             sortable: true,
+            filter: true,
             resizable: true,
-            suppressMenu: true,
+            resizable: true,
             cellClass: "grid-cell-centered",      
-            width: 70,	
+            width: 120,	
             cellRenderer: deltaIndicator,
             cellStyle: {'cursor': 'pointer'}
 		},
@@ -56,7 +57,8 @@
             editable: false,
             sortable: true,
             resizable: true,
-            filter: 'agDateColumnFilter',
+            resizable: true,
+            filter: true,
             cellClass: "grid-cell-centered",      
             width: 150
 		},
@@ -67,7 +69,8 @@
             cellEditor: DatePicker,
             sortable: true,
             resizable: true,
-            filter: 'agDateColumnFilter',
+            resizable: true,
+            filter: true,
             cellEditorPopup: true,
             cellClass: "grid-cell-centered",                  
             width: 150
@@ -76,6 +79,7 @@
             headerName: "개체명",
             field: "samplename",
             editable: true,
+            resizable: true,
             resizable: true,
             sortable: true,
             filter: true,
@@ -96,7 +100,7 @@
 				grid_array = result;	
 				for (var i=0; i<grid_array.length; i++) {
 					for (key in grid_array[i]) {		
-						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], resizable: true, width: 120,  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+						columnDefs.push({ field:i+"_key", headerName: grid_array[i][key], resizable: true, width: "120",  editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 						gridOptions.api.setColumnDefs(columnDefs);										
 					}
 				}		
@@ -107,16 +111,6 @@
     .simpleHttpRequest({ url: "../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
       gridOptions.api.setRowData(data);
-      
-      
-      
-      // 사진 추가,삭제시에만 작동하도록 의도. 아이콘을 클릭했던 row의 위치로 이동함
-      const clickedRowIndex = gridOptions.api.getFocusedCell().rowIndex;
-      if(!isNaN(clickedRowIndex)) {
-    	  gridOptions.api.ensureIndexVisible(Number(clickedRowIndex), 'middle');
-      }
-      
-      
     });
     
     	$("#photo_one_desc").html("<br><br><center><font color='black' size='4'><i class='feather icon-share'> Drag and Drop Sample Here.</i></font>");
@@ -147,20 +141,14 @@
 		var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
 
 		if(result){
-					$('#loadingSpinner').modal('show');
-					
 					$.ajax({
 						url:"../../web/database/phenotype_delete.jsp",
 						type:"POST",
 						data:{'params':deleteitems},
 						success: function(result) {
-							
-							$('#loadingSpinner').modal('hide');
-							
 							if (result) {
 								alert("정상적으로 삭제되었습니다.");
 								refresh();
-								
 							} else {
 								alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
 							}
@@ -269,8 +257,8 @@
 	      field: "displayno",
 	      editable: false,
 	      sortable: true,
-	      width: 120,	
-	      suppressMenu: true,
+	      width: 140,	
+	      filter: 'agMultiColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      checkboxSelection: true,
 	      headerCheckboxSelectionFilteredOnly: true,
@@ -282,9 +270,9 @@
             field: "photo_status",
             editable: false,
             sortable: true,
+            filter: true,
             cellClass: "grid-cell-centered",      
-            width: 70,	
-            suppressMenu: true,
+            width: 120,	
             resizable: true,
             cellRenderer: deltaIndicator,
             cellStyle: {'cursor': 'pointer'}
@@ -294,7 +282,7 @@
             field: "cre_dt",
             editable: false,
             sortable: true,
-            filter: 'agDateColumnFilter',
+            filter: true,
             resizable: true,
             cellClass: "grid-cell-centered",      
             width: 150
@@ -306,7 +294,7 @@
             cellEditor: DatePicker,
             sortable: true,
             resizable: true,
-            filter: 'agDateColumnFilter',
+            filter: true,
             cellEditorPopup: true,
             cellClass: "grid-cell-centered",                  
             width: 150
@@ -406,10 +394,12 @@
 				type:"POST",
 				data:{'one_sampleno': one_sampleno, 'two_sampleno': two_sampleno, 'varietyid':$( "#variety-select option:selected" ).val()},
 				beforeSend: function() {
+					$("#spyderplot").hide();
 				    $("#spyderplot_div").append("<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>");
 				},
 				complete: function() {
-					$('#spyderplot_div').empty();				   
+					$('#spyderplot_div').empty();	
+					$("#spyderplot").show();
 				},
 				success: function(jobid) {	
 					$("#spyderplot").attr('src', "../../result/database/phenotype_img/phenotype_spyderplot/"+jobid.trim()+"/"+jobid.trim()+"_spyder.html");								
@@ -434,10 +424,12 @@
 				type:"POST",
 				data:{'one_sampleno': one_sampleno, 'two_sampleno': two_sampleno, 'varietyid':$( "#variety-select option:selected" ).val()},
 				beforeSend: function() {
+					$("#spyderplot").hide();
 				    $("#spyderplot_div").append("<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>");
 				},
 				complete: function() {
 					$('#spyderplot_div').empty();				   
+					$("#spyderplot").show();
 				},
 				success: function(jobid) {	
 					$("#spyderplot").attr('src', "../../result/database/phenotype_img/phenotype_spyderplot/"+jobid.trim()+"/"+jobid.trim()+"_spyder.html");								
@@ -447,18 +439,15 @@
 	
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
-	    //flex: 1,
+	    flex: 1,
 	    //rowDragManaged: true,
-		defaultColDef: {
-			menuTabs: ['filterMenuTab']
-		},
 	    columnDefs: columnDefs,
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
   	    rowHeight: 35,
 	  	rowSelection: 'multiple',	  	
-	    //floatingFilter: true,
-	    //filter: 'agMultiColumnFilter',
+	    floatingFilter: true,
+	    filter: 'agMultiColumnFilter',
 	    //pagination: true,
 	    //paginationPageSize: 20,
 	    allowContextMenuWithControlKey: true,
@@ -466,7 +455,7 @@
 	    pivotPanelShow: "always",
 	    colResizeDefault: "shift",
 	    animateRows: true,
-	    //resizable: true,
+	    resizable: true,
 	    serverSideInfiniteScroll: true,	    
 	    onGridReady: (params) => {
 	      addDropZonesone(params);
@@ -562,7 +551,7 @@
 
   function addCol(fieldp, headerNamep) {
 	var columnDefs = gridOptions.columnDefs;
-	columnDefs.push({ field:fieldp, headerName: headerNamep, width: 120,  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+	columnDefs.push({ field:fieldp, headerName: headerNamep, width: "120",  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 	gridOptions.api.setColumnDefs(columnDefs);
   }
 
@@ -585,12 +574,6 @@
 	   		 
   function getAllData() {
 
-	  if(!confirm("수정하시겠습니까?")) {
-		  return;
-	  } 
-
-	  $('#loadingSpinner').modal('show');
-	  
 		let saveList = [];		
 		saveList.push(gridOptions.api.getDataAsCsv(getParams()));
 			$.ajax({
@@ -598,8 +581,6 @@
 			    type:"POST",
 			    data:{'params':saveList, 'varietyid':$( "#variety-select option:selected" ).val()},
 			    success: function(result) {
-			    	
-			    	$('#loadingSpinner').modal('hide');
 			    
 			       if(result.trim()===""){
 			      	 alert("저장되었습니다.");

@@ -64,7 +64,8 @@
 			headerName: "순번",
 			//field: "no",
 			valueGetter: inverseRowCount,
-			width: 90,
+			maxWidth: 100,
+			minWidth: 100,
 			suppressMenu: true,
 			cellClass: "grid-cell-centered",      
 			checkboxSelection: true,
@@ -76,7 +77,8 @@
 	    	field: "status",
 	    	suppressMenu: true,
 	    	cellClass: "grid-cell-centered",      
-	    	width: 80,
+	    	maxWidth: 90,
+	    	minWidth: 90,
 	    	cellRenderer: function(params) {
 	    	  //console.log("params : ", params.value);
 	    	  switch(Number(params.value)) {
@@ -95,6 +97,7 @@
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 700,
+	    	minWidth: 150,
 	    },
 	    {
 	    	headerName: "처리내용",
@@ -102,6 +105,7 @@
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
 	    	width: 300,
+	    	minWidth: 110,
 	    },
 	    {
 	      headerName: "저장",
@@ -109,6 +113,7 @@
 	      suppressMenu: true,
 	      cellClass: "grid-cell-centered",
 	      width: 150,
+	      minWidth: 80,
 	      cellRenderer: function(params) {
 	    	  switch(params.value) {
 	    	  	case "0":
@@ -120,11 +125,33 @@
 	      }
 	    },
 	    {
-	      headerName: "분석일",
-	      field: "cre_dt",
-	      filter: 'agDateColumnFilter',
-	      width: 150,
-	      cellClass: "grid-cell-centered", 
+	    	headerName: "분석일",
+	    	field: "cre_dt",
+	    	filter: 'agDateColumnFilter',
+	    	filterParams: {
+	        	comparator: function(filterLocalDateAtMidnight, cellValue) {
+	        		if (cellValue == null) {
+	        			return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	      	},
+	      	width: 150,
+	      	minWidth: 110,
+	      	cellClass: "grid-cell-centered", 
 	    },
 		{
 	      headerName: "jobid",
@@ -166,7 +193,6 @@
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
 		
 		defaultCsvExportParams:{
@@ -181,8 +207,6 @@
 			
 			if(params.colDef.headerName != "번호" &&params.colDef.headerName != "저장"){
 				
-				document.getElementById('vcf_status').style.display = "block";
-				document.getElementById('qf_1').click();
 				
 				switch (Number(params.data.status)) {
 					case 0:
@@ -191,8 +215,18 @@
 					case 1:
 						$("#iframeLoading").modal('show');
 						
+						document.getElementById('vcf_status').style.display = "block";
+						document.getElementById('qf_1').click();
+						
 						$('#pill1_frame').attr('height',"130px");
 						$('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/b_toolbox/qf/qf_vcfinfo.jsp?jobid="+params.data.jobid);
+						
+						// 클릭시 초기화
+						$('#pill2_frame').attr('src', '');
+						$('#pill3_frame').attr('src', '');
+						$('#pill4_frame').attr('src', '');
+						$('#pill5_frame').attr('src', '');
+						
 				   		
 				   		// input에 jobid값 저장
 				   		$("#jobid").val(params.data.jobid);
@@ -216,6 +250,8 @@
 		
 		const jobid = $("#jobid").val();
 		const resultpath = $("#resultpath").val();
+		
+		//console.log(jobid);
 		
 		switch(event.target.id) {
 			case 'qf_2':
