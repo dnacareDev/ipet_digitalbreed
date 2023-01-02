@@ -96,6 +96,25 @@
     	hide: true,	
     },
     {
+    	headerName: "분석상태",
+    	field: "status",
+    	suppressMenu: true,
+    	maxWidth: 90,
+    	minWidth: 90,
+    	cellClass: "grid-cell-centered",      
+    	cellRenderer: function(params) {
+    		//console.log("params : ", params.value);
+    		switch(Number(params.value)) {
+				case 0: 
+					return "<span title='분석 중'><i class='feather icon-loader'></i></span>";
+				case 1:
+					return "<span title='분석 완료'><i class='feather icon-check-circle'></i></span>";
+				case 2:
+					return "<span title='분석 실패'><i class='feather icon-x-circle'></i></span>";
+    		}
+    	}
+    },
+    {
     	headerName: "VCF 파일명",
     	field: "filename",
     	filter: "agTextColumnFilter",
@@ -392,13 +411,6 @@
 					menuTabs: ["filterMenuTab"], 
 					pinned: 'left',
 					lockPinned: true,
-					/*cellRenderer: (params) => {
-				        if (params.value !== undefined) {
-				          return params.value;
-				        } else {
-				          return '<img src="https://www.ag-grid.com/example-assets/loading.gif" style="height:40%;">';
-				        }
-				    },*/
 				});
 				pill2_frame_width += 180
 			} else {
@@ -409,13 +421,6 @@
 					tooltipField: header[i], 
 					tooltipComponent: CustomTooltip, 
 					cellStyle: cellStyle,
-					/*cellRenderer: (params) => {
-				        if (params.value !== undefined) {
-				          return params.value;
-				        } else {
-				          return '<img src="https://www.ag-grid.com/example-assets/loading.gif" style="height:40%;">';
-				        }
-				    },*/
 				});
 				pill2_frame_width += 50
 			}

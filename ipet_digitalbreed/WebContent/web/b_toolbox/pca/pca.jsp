@@ -325,8 +325,8 @@ body {
     var box = new Object();
     window.onload = function() {
     	
-    	const jobid_pca = $("#jobid_pca").val();
-    	console.log("innorix jobid_pca : ", jobid_pca);
+    	//const jobid_pca = $("#jobid_pca").val();
+    	//console.log("innorix jobid_pca : ", jobid_pca);
     	
     	// 파일전송 컨트롤 생성
 	    box = innorix.create({
@@ -338,8 +338,8 @@ body {
 	        allowType : ["xlsx"],
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        //uploadUrl: './pca_population.jsp'
-	        uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
+	        uploadUrl: './pca_population.jsp'
+	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
 	    });
     	
     	
@@ -370,7 +370,7 @@ body {
    						.then((response) => response.text())
    	
    		console.log("jobid_pca : ", jobid_pca);
-    	$("#jobid_pca").val(jobid_pca);
+    	//$("#jobid_pca").val(jobid_pca);
     	const filename = $('#VcfSelect').find(':selected').data('filename');
     	// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
     	// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
@@ -394,8 +394,10 @@ body {
 	    	postObj.comment = comment;	       
 	        postObj.varietyid = varietyid;
 	        postObj.jobid_vcf = jobid_vcf;
+	        postObj.jobid_pca = jobid_pca;
 	        postObj.filename = filename;
 	        box.setPostData(postObj);
+	        box.option.uploadUrl = './pca_fileuploader.jsp?jobid_pca='+jobid_pca;
 	        box.upload();
 	        
 	        

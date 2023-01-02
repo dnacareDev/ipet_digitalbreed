@@ -132,14 +132,12 @@ if (request.getMethod().equals("POST"))
 		
 		
 		//String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+refseq+"','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";
-		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','-','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','-','-','','','','','"+jobid+"','"+permissionUid+"',now());";
-		
+		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,status,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"',0,'-','"+db_savePath+"','"+_new_filename+"','"+db_outputPath+"','"+comment+"','-','-','','','','','"+jobid+"','"+permissionUid+"',now());";
+		System.out.println(insertVcfinfo_sql);
 		try{
-				ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
+			ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
 		}catch(Exception e){
     		System.out.println(e);
-    		ipetdigitalconndb.stmt.close();
-    		ipetdigitalconndb.conn.close();
     	}finally { 
 			System.out.println("vcf file upload Success");
     		ipetdigitalconndb.stmt.close();

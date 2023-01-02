@@ -23,7 +23,6 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/tether.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/extensions/shepherd-theme-default.css">
-    <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css">
 	<link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/forms/validation/form-validation.css">
@@ -63,16 +62,20 @@ body {
 	font-family: 'SDSamliphopangche_Outline';
 }
 
-.select2-container--default .select2-results__option[aria-disabled=true] {
-    display: none;
-}
-
 .irx-file-inner-wrapper {
 	height: 30px !important;
 }
 
 .innorix_basic div.irx_filetree, .irx_container {
 	border : none !important;
+}
+
+.select2 {
+	min-width: 160px;
+}
+
+.select2-container--default .select2-results__option[aria-disabled=true] {
+    display: none;
 }
 
 .select2-search--inline {
@@ -82,6 +85,7 @@ body {
 .select2-search__field:placeholder-shown {
     width: 100% !important; /*makes the placeholder to be 100% of the width while there are no options selected*/
 }
+
 
 </style>
 <%
@@ -265,10 +269,6 @@ body {
 						            </div>
 						            <div>
 							            <div id="isPhenotype" class="form-label-group mt-1" >
-						                    <!--  
-						                    <select class="select2 form-select max-length" id="PhenotypeSelect" style="width: 97%;" multiple>
-						                    </select>
-						                    -->
 						                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
 							                <!--
 							                <div id="phenotypeResultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:120px;"></div><br>

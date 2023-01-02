@@ -44,7 +44,11 @@
 	String db_pupolationPath = "uploads/Breeder_toolbox_analyses/pca/";
 	
 	
+	
 	File folder_populationPath = new File(populationPath+jobid_pca);
+	
+	//System.out.println(folder_populationPath);
+	//System.out.println(folder_populationPath.exists());
 	
 	if (!folder_populationPath.exists()) {
 		try {

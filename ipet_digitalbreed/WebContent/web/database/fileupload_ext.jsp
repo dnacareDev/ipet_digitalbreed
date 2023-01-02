@@ -103,12 +103,7 @@
 		}catch(Exception e){
 
 		}
-	    /*	
-		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";
-		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";		
-		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename+".recode.vcf";		
-		//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
-		*/	
+
 		String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 		String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 		String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
@@ -117,6 +112,14 @@
 		System.out.println("genotype_statistics :" + genotype_statistics);
 		System.out.println("vcf_statistcs :" + vcf_statistcs);
 		
+		
+		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,status,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"',0,'-','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','-','-','','','','','"+jobid+"','"+permissionUid+"',now());";
+		System.out.println(insertVcfinfo_sql);
+		try{
+			ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
+		}catch(Exception e){
+    		System.out.println(e);
+    	}
 		
 		
 		System.out.println("========genotype_sequence========");
@@ -150,10 +153,8 @@
 			ipetdigitalconndb.conn.close();
 		}
 		
-		
+		/*
 		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
-		//String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";
-		
 		System.out.println("insertVcfinfo_sql : " + insertVcfinfo_sql);
 		
 		try{
@@ -166,7 +167,22 @@
 			System.out.println("vcf file upload Success");
     		ipetdigitalconndb.stmt.close();
     		ipetdigitalconndb.conn.close();
-    	}	
+    	}
+		*/
+		
+		String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
+		System.out.println(updateVcfinfo_sql);
+		
+		try{
+				ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
+		}catch(Exception e){
+	   		System.out.println(e);
+	   		ipetdigitalconndb.stmt.close();
+	   		ipetdigitalconndb.conn.close();
+	   	}finally { 
+	   		ipetdigitalconndb.stmt.close();
+	   		ipetdigitalconndb.conn.close();
+	   	}
 		
 		// CSV => JSON파일 생성
 		System.out.println("========CSV to Json start========");

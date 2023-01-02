@@ -36,6 +36,8 @@
 	
 	String vcf_statistcs_data = bufferedReader.readLine();
     String[] vcf_statistcs_data_strArr = vcf_statistcs_data.split(",");
+    
+    bufferedReader.close();
 
 	String refseq = vcf_statistcs_data_strArr[0];
 	String samplecnt = vcf_statistcs_data_strArr[1];
@@ -44,7 +46,7 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	String updateVcfinfo_sql="update vcfdata_info_t set samplecnt=111, variablecnt=222 where a.creuser='"+permissionUid+"' and cropid= varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
+	String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
 	System.out.println(updateVcfinfo_sql);
 	
 	try{
@@ -54,7 +56,6 @@
    		ipetdigitalconndb.stmt.close();
    		ipetdigitalconndb.conn.close();
    	}finally { 
-		System.out.println("vcf file upload Success");
    		ipetdigitalconndb.stmt.close();
    		ipetdigitalconndb.conn.close();
    	}
@@ -75,5 +76,6 @@
 	System.out.println("csv_transpose : " + csv_transpose);
 	runanalysistools.execute(csv_transpose, "cmd");
 	System.out.println("========CSV transpose end========");
+	System.out.println("vcf file background process complete");
 	
 %>

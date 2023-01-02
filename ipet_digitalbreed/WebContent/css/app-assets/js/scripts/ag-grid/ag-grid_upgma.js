@@ -217,7 +217,18 @@
 											</div>
 										</div>
 										`;	  
-				   
+					
+					
+					
+					/*
+				    fetch(params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_hierarchical_tree.html", {method: "HEAD"})
+				    .then((response) => {
+				    	console.log(response.ok)
+				    })
+				    */
+				    
+				    
+					
 					$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_hierarchical_tree.html");
 					//$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_circular_tree.html");
 					
@@ -235,7 +246,7 @@
 			}
 		}
 	};
-
+	
 	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
 	document.addEventListener('click', function(event) {
 		console.log(event.target.id);

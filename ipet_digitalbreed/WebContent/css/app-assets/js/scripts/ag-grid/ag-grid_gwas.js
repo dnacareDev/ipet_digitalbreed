@@ -61,7 +61,6 @@
 	var columnDefs = [
 		{
 			headerName: "순번",
-			//field: "no",
 			valueGetter: inverseRowCount,
 			maxWidth: 100,
 			minWidth: 100,
@@ -184,7 +183,7 @@
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		//ssuppressHorizontalScroll: true,
+		//suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
 		
 		defaultCsvExportParams:{
@@ -325,33 +324,37 @@
 				$("#isQQ").parent().css('display','none');
 				$("#QQ_model").parent().css('display','none');
 			}
-			
 		} 
 	})
 	
+	/*
+	// form-select2_gwas.js 로 넘어가서 현재 아무기능도 없는것으로 보임
 	document.querySelector('#param_phenotype').addEventListener('change', function(event) {
 		//console.log("param_phenotype changed");
 		const value = event.target.value;
 		if(value == '-1') {
 			return;
 		}
-
-		const model_name = $('#model_name').val();
+		
+		//const model_name = $('#model_name').val();
 		if( !(model_name == 'Multi' || model_name == 'QQ') ) {
 			showPlot(value);
 			showGrid(value);
 		}
 	});
+	*/
+	
 	
 	// form-select2_gwas의 'select2:select' 
 	// => document.getElementById('isQQ').dispatchEvent(new Event('change'));를 거쳐서 온다. 
 	document.querySelector('#isQQ').addEventListener('change', function(event) {
 		
-		const value = event.target.value;
+		const model_name = $('#model_name').val();
+		const value = event.target.value.trim();
 		const isQQ = document.getElementById('isQQ').value;
-		const param_phenotype = document.getElementById('param_phenotype').value;
+		const param_phenotype = document.getElementById('param_phenotype').value.trim();
 		
-		if(isQQ == '-1') {
+		if(isQQ == '-1' || param_phenotype == '-1') {
 			return;
 		}
 		
@@ -359,6 +362,45 @@
 		const jobid = document.getElementById('jobid_param').value;
 		
 		//console.log("isQQ : ", isQQ);
+		
+		
+		if( $("#status404") ) {
+			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
+		}
+		
+		
+		if( !ifFileExists(model_name, param_phenotype, jobid) ) {
+			console.log("not exist");
+			
+			$(`iframe#${model_name}`).attr('src', '');		// empty plot
+			
+			const htmlElement = `
+								<div id="status404">
+									<div class="row mt-5">
+										<div class="col-12 d-flex justify-content-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+												<line x1="12" y1="9" x2="12" y2="13"></line>
+												<line x1="12" y1="17" x2="12.01" y2="17"></line>
+											</svg>
+										</div>
+									</div>
+									<div class="row mt-1 mb-5">
+										<div class="col-12 d-flex justify-content-center" style="font-size:20px; font-weight: 600px;">
+											표현형과의 유사성을 찾을 수 없습니다.
+										</div>
+									</div>
+								</div>
+								`;
+			
+			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+			$("#Multi").height(0);
+			return;
+			
+		} else {
+			$("#Multi").height("500px");					// iframe 높이 정상
+		}
+		
 		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");
@@ -375,23 +417,66 @@
 	});
 	
 	document.querySelector('#QQ_model').addEventListener('change', function(event) {
+		
 		const value = event.target.value;
-		const param_phenotype = document.getElementById('param_phenotype').value;
-		const model_name = document.getElementById('QQ_model').value;
+		const param_phenotype = document.getElementById('param_phenotype').value.trim();
+		const model_name = $('#model_name').val();
+		const QQ_model_name = document.getElementById('QQ_model').value;
 
-		if(model_name == '-1') {
+		if(model_name == '-1' || param_phenotype == '-1') {
 			return;
 		}
 		
 		const resultpath = document.getElementById('resultpath').value;
 		const jobid = document.getElementById('jobid_param').value;
 		
+		
+		if( $("#status404") ) {
+			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
+		}
+		
+		if( !ifFileExists(model_name, param_phenotype, jobid) ) {
+			console.log("not exist");
+			
+			$(`iframe#${model_name}`).attr('src', '');		// empty plot
+			
+			const htmlElement = `
+								<div id="status404">
+									<div class="row mt-5">
+										<div class="col-12 d-flex justify-content-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+												<line x1="12" y1="9" x2="12" y2="13"></line>
+												<line x1="12" y1="17" x2="12.01" y2="17"></line>
+											</svg>
+										</div>
+									</div>
+									<div class="row mt-1 mb-5">
+										<div class="col-12 d-flex justify-content-center" style="font-size:20px; font-weight: 600px;">
+											표현형과의 유사성을 찾을 수 없습니다.
+										</div>
+									</div>
+								</div>
+								`;
+			
+			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+			$("#Multi").height(0);
+			return;
+			
+		} else {
+			$("#QQ").height("500px");					// iframe 높이 정상
+		}
+		
+		
+		
+		
+		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");
 			$("#QQ_model").val("-1").trigger('change');
 		} else {
 			$("#iframeLoading").modal('show');
-			$('iframe#QQ').attr('src', `${resultpath}${jobid}/QQ_${model_name}_${param_phenotype}.html`);
+			$('iframe#QQ').attr('src', `${resultpath}${jobid}/QQ_${QQ_model_name}_${param_phenotype}.html`);
 		}
 	})
 	
@@ -406,9 +491,49 @@
 		
 		//console.log(`iframe#${model_name}`);
 		//console.log(resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
+
+		
+		
 		$("#iframeLoading").modal('show');
 		$(`iframe#${model_name}`).attr('src', resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
 		
+	}
+	
+	function ifFileExists(model_name, value, jobid_param) {
+		
+		console.log(value);
+		
+		let flag;
+		
+		let data =  {
+				"model_name": model_name,
+				"jobid_param": jobid_param,
+				"value": value,
+		}
+		
+		if(model_name == "Multi") {											// multiple model의 경우 isQQ 속성 추가
+			data['isQQ'] = document.getElementById('isQQ').value
+		} else if(model_name == "QQ") {										// QQ plot의 경우 QQ_model 속성 추가
+			data['QQ_model'] = document.getElementById('QQ_model').value
+		} 
+		
+		console.log(data);
+		
+		$.ajax({
+			url: "./gwas_ifFileExists.jsp",
+			method: "GET",
+			data: data,
+			async: false,
+			success : function(result) {
+				if(result === "exists") {
+					flag = true;
+				} else if (result === "not exist") {
+					flag = false;
+				}
+			}
+		})
+		
+		return flag;
 	}
 
 	var columnDefs2 = [
@@ -496,7 +621,6 @@
 		        //console.log("rowObj : ", rowObj);
 		        //console.log(csv_to_grid);
 		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
-		        //modelGrid[model_name] = new agGrid.Grid(csv_to_grid, gridOptions2);
 		        gridOptions2.api.setRowData(rowObj);
 		        gridOptions2.api.sizeColumnsToFit();
 		        //console.log(document.querySelector(`#grid_${model_name}`));

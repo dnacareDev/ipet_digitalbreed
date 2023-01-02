@@ -348,7 +348,7 @@ body {
         	//console.log("await jobid : ", jobid);
         	
 			var postObj = new Object();
-			postObj.comment = document.getElementById("comment").value;      
+			postObj.comment = document.getElementById("comment").value;
 			postObj.varietyid = $( "#variety-select option:selected" ).val();
 			postObj.jobid = jobid;
 			box.setPostData(postObj);

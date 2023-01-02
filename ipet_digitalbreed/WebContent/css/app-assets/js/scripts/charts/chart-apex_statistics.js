@@ -99,7 +99,7 @@
 		const columnChartEl = document.querySelector('#column-chart');
 		const columnChartConfig = {
 				chart: {
-			        height: 345,
+			        height: 365,
 			        type: 'bar',
 			        stacked: true,
 			        parentHeightOffset: 0,

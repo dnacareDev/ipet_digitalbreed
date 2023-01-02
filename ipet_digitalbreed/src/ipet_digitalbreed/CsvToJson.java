@@ -57,7 +57,7 @@ public class CsvToJson {
                 if(line == null || count % 1000 == 0) {
                 	System.out.println("1000 inserts executed & count passed - " + count);
                 	//System.out.println(insertSqlColumnPart+insertSqlValuesPart);
-                	System.out.println("String length - " + (insertSqlColumnPart+insertSqlValuesPart).length() );
+                	//System.out.println("String length - " + (insertSqlColumnPart+insertSqlValuesPart).length() );
                 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
                 	ipetdigitalconndb.stmt.executeUpdate(insertSqlColumnPart+insertSqlValuesPart);
                 	//insertSqlValuesPart = "";

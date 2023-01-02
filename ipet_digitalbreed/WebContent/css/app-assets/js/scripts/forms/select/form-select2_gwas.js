@@ -19,7 +19,7 @@
 	});
 	
 	$("#VcfSelect").select2({
-		width: '95%',
+		width: '93%',
 		placeholder: ' Select VCF File'
 	})
 	
@@ -67,35 +67,69 @@
 
 	
 	$("#param_phenotype").on('select2:select', function(e) {
-		//console.log(e.params.data.id);
-		
 		const model_name = $('#model_name').val();
-		const value = e.params.data.id;
+		const value = e.params.data.id.trim();
+		const resultpath = $('#resultpath').val();
+		const jobid_param = $('#jobid_param').val();
 		
-		if( !(model_name == 'Multi' || model_name == 'QQ') ) {
-			showPlot(value);
-			showGrid(value);
-		} 
-	})
-	
-	/*
-	// select2에 해당하는 changeEvent만 이쪽에 작성
-	document.addEventListener('click', function(event) {
-		if(event.target.id.includes('gwas_')) {
-			$("#param_phenotype").val('-1').trigger('change');
-			$("#QQ_model").val('-1');
+		if( (model_name == 'Multi' || model_name == 'QQ') ) {				// Multiple Model | QQ Plot일때는 작동하지 않음
+			return;
 		}
-	});
-	*/
+		
+		if( $("#status404") ) {
+			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
+		}
+		
+		if( !ifFileExists(model_name, value, jobid_param) ) {
+			$(`iframe#${model_name}`).attr('src', '');		// empty plot
+			try {
+				gridOptions2.api.destroy();					// empty grid
+			} catch (error) {
+				console.error(error);
+			}
+			
+			const htmlElement = `
+								<div id="status404">
+									<div class="row mt-5">
+										<div class="col-xl-6"></div>
+										<div class="col-12 col-xl-6 d-flex justify-content-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+												<line x1="12" y1="9" x2="12" y2="13"></line>
+												<line x1="12" y1="17" x2="12.01" y2="17"></line>
+											</svg>
+										</div>
+									</div>
+									<div class="row mt-1 mb-5">
+										<div class="col-xl-6"></div>
+										<div class="col-12 col-xl-6 d-flex justify-content-center" style="font-size:20px; font-weight: 600px;">
+											표현형과의 유사성을 찾을 수 없습니다.
+										</div>
+									</div>
+								</div>
+								`;
+			
+			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+			$(`#${model_name}`).height(0);
+			return;
+		} else {
+			$(`#${model_name}`).height("500px");					// iframe 높이 정상
+		}
+		
+		//if( !(model_name == 'Multi' || model_name == 'QQ') ) {
+		showPlot(value);
+		showGrid(value);
+		//} 
+	})
 	
 	$("#isQQ").on('select2:select', function(e) {
 		const value = event.target.value;
 		const isQQ = document.getElementById('isQQ').value;
-		const param_phenotype = document.getElementById('param_phenotype').value;
+		const param_phenotype = document.getElementById('param_phenotype').value.trim();
 		
-		console.log(value);
-		console.log(isQQ);
-		console.log(param_phenotype);
+		//console.log(value);
+		//console.log(isQQ);
+		//console.log(param_phenotype);
 		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");
@@ -113,10 +147,10 @@
 	
 	$("#QQ_model").on('select2:select', function(e) {
 		const model_name = document.getElementById('QQ_model').value;
-		const param_phenotype = document.getElementById('param_phenotype').value;
+		const param_phenotype = document.getElementById('param_phenotype').value.trim();
 		
-		console.log("model_name : ", model_name);
-		console.log("param_phenotype : ", param_phenotype);
+		//console.log("model_name : ", model_name);
+		//console.log("param_phenotype : ", param_phenotype);
 		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");
