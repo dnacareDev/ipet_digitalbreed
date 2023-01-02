@@ -7,12 +7,37 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+	class CustomTooltip {
+		init(params) {
+			const eGui = (this.eGui = document.createElement('div'));
+			const color = params.color || 'white';
+			const data = params.api.getDisplayedRowAtIndex(params.rowIndex).data;
+	
+			console.log(params);
+			
+			eGui.classList.add('custom-tooltip');
+			//@ts-ignore
+			eGui.style['background-color'] = color;
+			eGui.style['border'] = "1px solid #AAE6E6";
+			eGui.innerHTML = `
+	            <p style="margin:10px;">
+	                <span class"name">aaa </span>
+	            </p>
+	        `;
+		}
+		
+		getGui() {
+		    return this.eGui;
+		}
+	}
+
+
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
 		{
 			headerName: "결과보기",
 			//field: "no",
-			width: 130,
+			minWidth: 100,
 			suppressMenu: true,
 			cellClass: "grid-cell-centered",    
 			cellRenderer: function(params) {
@@ -40,27 +65,34 @@
 	    {
 	    	headerName: "항목",
 	    	field: "category",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
+	    	minWidth: 120,
+	    	filter: true,
+	    	tooltipField: "category",
+			tooltipComponent: CustomTooltip, 
+	    	cellClass: "grid-cell-centered",      
 	    },
 	    {
 	    	headerName: "파일명",
 	    	field: "filename",
+	    	width: 200,
+	    	minWidth: 120,
 	    	filter: 'agTextColumnFilter',
 	    	cellClass: "grid-cell-centered",      
-	    	width: 200,
 	    },
 	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
+	    	width: 300,
+	    	minWidth: 140,
 	    	filter: 'agTextColumnFilter',
 	    	cellClass: "grid-cell-centered",      
-	    	width: 300,
 	    },
 	    {
 	    	headerName: "분석일",
 	    	field: "cre_dt",
+	    	width: 296,
+	    	minWidth: 120,
 	    	filter: 'agDateColumnFilter',
 	    	filterParams: {
 	        	comparator: function(filterLocalDateAtMidnight, cellValue) {
@@ -83,7 +115,6 @@
 	                }
 	        	}
 	        },
-	        width: 296,
 	        cellClass: "grid-cell-centered", 
 	    },
 		{
@@ -115,7 +146,7 @@
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		suppressHorizontalScroll: true,
+		//suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,
 		
 		defaultCsvExportParams:{
@@ -124,14 +155,6 @@
 		defaultExcelExportParams:{
 			columnKeys:["category","filename","comment","cre_dt"]
 		},
-		
-		onCellClicked: params => {
-			console.log("params : ", params);
-			
-			if(params.colDef.headerName != "결과보기"){
-				console.log("move to");
-			}
-		}
 	};
 	
 	document.addEventListener('DOMContentLoaded', () => {

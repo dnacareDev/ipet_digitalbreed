@@ -342,8 +342,8 @@ body {
 	        allowType : ["xlsx"],
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        //uploadUrl: './pca_population.jsp'
-	        uploadUrl: './upgma_fileuploader.jsp?jobid_upgma=<%=jobid_upgma%>',
+	        uploadUrl: './upgma_fileuploader.jsp',
+	        <%-- uploadUrl: './upgma_fileuploader.jsp?jobid_upgma=<%=jobid_upgma%>', --%>
 	    });
     	
     	
@@ -366,12 +366,16 @@ body {
 	    //console.log("box? : ", box);
     };
     
-	function FileUpload() {
+	async function FileUpload() {
     	
     	const comment = $('#comment').val();
     	const varietyid = $( "#variety-select option:selected" ).val();
     	const jobid_vcf = $('#VcfSelect').find(':selected').data('jobid');
-    	const jobid_upgma = "<%=jobid_upgma%>";
+    	<%-- const jobid_upgma = "<%=jobid_upgma%>"; --%>
+    	
+    	const jobid_upgma = await fetch("../../getJobid.jsp")
+   						.then((response) => response.text())
+    	
     	const filename = $('#VcfSelect').find(':selected').data('filename');
     	// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
     	// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
@@ -404,6 +408,7 @@ body {
 	        postObj.jobid_vcf = jobid_vcf;
 	        postObj.filename = filename;
 	        box.setPostData(postObj);
+	        box.option.uploadUrl = './upgma_fileuploader.jsp?jobid_upgma='+jobid_upgma;
 	        box.upload();
 	        
 		    // with_population 영역
@@ -428,7 +433,8 @@ body {
  						"comment" : comment, 
  						"varietyid" : varietyid, 
  						"jobid_vcf" : jobid_vcf, 
- 						"jobid_upgma" : "<%=jobid_upgma%>",
+ 						<%-- "jobid_upgma" : "<%=jobid_upgma%>", --%>
+ 						"jobid_upgma" : jobid_upgma,
  						"filename" : filename },
  					success: function(result) {
 						console.log("upgma_non_population.jsp");

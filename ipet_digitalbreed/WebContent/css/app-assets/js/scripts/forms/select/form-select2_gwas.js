@@ -103,28 +103,7 @@
 					console.error(error);
 				}
 				
-				const htmlElement = `
-									<div id="status404">
-										<div class="row mt-5">
-											<div class="col-xl-6"></div>
-											<div class="col-12 col-xl-6 d-flex justify-content-center">
-												<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-													<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-													<line x1="12" y1="9" x2="12" y2="13"></line>
-													<line x1="12" y1="17" x2="12.01" y2="17"></line>
-												</svg>
-											</div>
-										</div>
-										<div class="row mt-1 mb-5">
-											<div class="col-xl-6"></div>
-											<div class="col-12 col-xl-6 d-flex justify-content-center" style="font-size:20px; color:black;">
-												표현형과의 유사성을 찾을 수 없습니다.
-											</div>
-										</div>
-									</div>
-									`;
-				
-				$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+				HTMLNotExist(model_name);
 				$(`#${model_name}`).height(0);
 	    	}
 	    })

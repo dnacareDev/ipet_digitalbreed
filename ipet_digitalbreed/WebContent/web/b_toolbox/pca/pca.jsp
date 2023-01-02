@@ -82,9 +82,6 @@ body {
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
-	//RunAnalysisTools runAnalysisTools = new RunAnalysisTools();
-	//String jobid_pca = runAnalysisTools.getCurrentDateTime();
-	
 	String linkedJobid = request.getParameter("linkedJobid");
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">

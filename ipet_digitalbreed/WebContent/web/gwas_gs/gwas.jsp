@@ -516,15 +516,6 @@ body {
 	    		}
 	    	})
 			
-			/*
-	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {
-	   			//backdrop.style.display = "none";
-	   			refresh();
-	   			$("#backdrop").modal("hide");
-	   			}
-	   		, 1000);
-			*/
         });
 	    
 	    //console.log("box? : ", box);
@@ -655,18 +646,6 @@ body {
    	   		const variety_id = $( "#variety-select option:selected" ).val();
    	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
    	    	const filename_vcf = $('#VcfSelect :selected').data('filename');
-   	    	
-   	    	/*
-   	    	let traitname_arr = new Array();
-   	    	let traitname_key_arr = new Array();
-   	    	
-   	    	$("#PhenotypeSelect :selected").each(function(index) {
-   	    		traitname_arr.push( $(this).data('traitname'));
-   	    		traitname_key_arr.push( $(this).data('traitname_key'));
-   	    	})
-   	    	*/
-   	    	
-   	    	
    	    	
    	    	const selectedData = gridOptionsTraitName.api.getSelectedRows();
    	    	//console.log("selectedData : ", selectedData);

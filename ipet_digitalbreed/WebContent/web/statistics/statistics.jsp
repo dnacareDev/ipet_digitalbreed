@@ -71,7 +71,13 @@ body {
     background-color: #7367f0;
 }
 
+.select2 {
+	float: right;
+}
 
+.dropdown .select2 {
+	max-width: 170px;
+}
 
 </style>
 <%
@@ -105,7 +111,7 @@ body {
 	        <div class="header-navbar-shadow"></div>
 	        <div class="content-wrapper">
 	            <div class="content-header row">
-	                <div class="content-header-left col-11 mb-2">
+	                <div class="content-header-left col-7 col-sm-8 col-md-9 col-xl-10 mb-2">
 	                    <div class="row breadcrumbs-top">
 	                        <div class="col-12">
 	                            <h2 class="content-header-title float-left mb-0">&nbsp;Statistics</h2>
@@ -120,8 +126,8 @@ body {
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-1">
-                       	<div class="ag-grid-btns d-flex justify-content-between flex-wrab">
+	                <div class="col-5 col-sm-4 col-md-3 col-xl-2">
+                       	<div class="col-12">
                            	<div class="dropdown sort-dropdown">                                                
                                	<select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
                                 	<%
@@ -300,17 +306,17 @@ body {
 	                            			<div id="line-area-chart"></div>
 	                            			-->
 	                            			<div class="row mt-1">
-		                                		<div class="col-12 col-xl-8">
+		                                		<div class="col-12 col-md-6 col-lg-8">
 		                                			<h1 class="mb-1">Analysis</h1>
 		                                		</div>
-		                                		<div class="col-6 col-xl-2">
+		                                		<div class="col-6 col-md-3 col-lg-2">
 		                                			<select id="analysisYear" class="select2 form-select">
 		                                				<option value="-1" selected>All Year</option>
 		                                				<option value="2022">2022</option>
 		                                				<option value="2023">2023</option>
 		                                			</select>
 		                                		</div>
-		                                		<div class="col-6 col-xl-2">
+		                                		<div class="col-6 col-md-3 col-lg-2">
 		                                			<select id="analysisMonth" class="select2 form-select">
 		                                				<option value="-1" selected>All Month</option>
 		                                				<option value="1">1</option>
@@ -336,17 +342,17 @@ body {
 									<div class="card-content">
 	                            		<div class="card-body">
 	                            			<div class="row mt-1">
-		                            			<div class="col-12 col-xl-8">
+		                            			<div class="col-12 col-md-6 col-lg-8">
 				                                	<h1 class="mb-2">Analysis List</h1>
 		                                		</div>
-		                                		<div class="col-6 col-xl-2">
+		                                		<div class="col-6 col-md-3 col-lg-2">
 		                                			<select id="analysisListYear" class="select2 form-select">
 		                                				<option value="-1" selected>All Year</option>
 		                                				<option value="2022">2022</option>
 		                                				<option value="2023">2023</option>
 		                                			</select>
 		                                		</div>
-		                                		<div class="col-6 col-xl-2">
+		                                		<div class="col-6 col-md-3 col-lg-2">
 		                                			<select id="analysisListMonth" class="select2 form-select">
 		                                				<option value="-1" selected>All Month</option>
 		                                				<option value="1">1</option>
@@ -364,7 +370,7 @@ body {
 		                                			</select>
 		                                		</div>
 	                                		</div>
-		                               		<div id="myGrid" class="ag-theme-alpine mt-2" style="margin: 0px auto; width: 98%; height:310px;"></div>
+		                               		<div id="myGrid" class="ag-theme-alpine mt-2" style="margin: 0px 0px 2px 0px; width: 100%; height: 310px;"></div>
 		                               	</div>
 		                            </div>
 								</div> 
@@ -405,7 +411,7 @@ body {
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
+    <script src="../../css/app-assets/js/scripts/forms/select/form-select2_statistics.js"></script>
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
