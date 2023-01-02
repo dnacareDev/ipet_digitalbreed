@@ -314,6 +314,10 @@
 				document.getElementById('grid_'+model_name).innerHTML = "";
 			}
 			
+			if( $("#status404") ) {
+				$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
+			}
+			
 			if (event.target.id == "gwas_Multi") {
 				$("#isQQ").parent().css('display','');
 				$("#QQ_model").parent().css('display','none');
@@ -368,53 +372,38 @@
 			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
 		}
 		
+		$(`iframe#${model_name}`).attr('src', '');		// empty plot
 		
-		if( !ifFileExists(model_name, param_phenotype, jobid) ) {
-			console.log("not exist");
-			
-			$(`iframe#${model_name}`).attr('src', '');		// empty plot
-			
-			const htmlElement = `
-								<div id="status404">
-									<div class="row mt-5">
-										<div class="col-12 d-flex justify-content-center">
-											<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-												<line x1="12" y1="9" x2="12" y2="13"></line>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
-											</svg>
-										</div>
-									</div>
-									<div class="row mt-1 mb-5">
-										<div class="col-12 d-flex justify-content-center" style="font-size:20px; font-weight: 600px;">
-											표현형과의 유사성을 찾을 수 없습니다.
-										</div>
-									</div>
-								</div>
-								`;
-			
-			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
-			$("#Multi").height(0);
-			return;
-			
+		
+		let url;
+		if(isQQ == "QQ") {
+			url = `${resultpath}${jobid}/multi_QQ_${param_phenotype}.html`
 		} else {
-			$("#Multi").height("500px");					// iframe 높이 정상
+			url = `${resultpath}${jobid}/multi_${param_phenotype}.html`
 		}
+		
+		fetch(url, {method: "HEAD"})
+		.then((response) => response.ok)
+		.then((ok) => {
+			if(!ok) {
+				HTMLNotExist(model_name);
+				$("#Multi").height(0);
+				return;
+			} else {
+				$("#Multi").height("500px");					// iframe 높이 정상
+				$("#iframeLoading").modal('show');
+				$('iframe#Multi').attr('src', url);
+			}
+		});
 		
 		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");
 			$("#isQQ").val("-1").trigger('change');
-		} else {
-			if(isQQ == "QQ") {
-				$("#iframeLoading").modal('show');
-				$('iframe#Multi').attr('src', `${resultpath}${jobid}/multi_QQ_${param_phenotype}.html`);
-			} else {
-				$("#iframeLoading").modal('show');
-				$('iframe#Multi').attr('src', `${resultpath}${jobid}/multi_${param_phenotype}.html`);
-			}
 		}
+		
 	});
+	
 	
 	document.querySelector('#QQ_model').addEventListener('change', function(event) {
 		
@@ -435,50 +424,56 @@
 			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
 		}
 		
-		if( !ifFileExists(model_name, param_phenotype, jobid) ) {
-			console.log("not exist");
-			
-			$(`iframe#${model_name}`).attr('src', '');		// empty plot
-			
-			const htmlElement = `
-								<div id="status404">
-									<div class="row mt-5">
-										<div class="col-12 d-flex justify-content-center">
-											<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-												<line x1="12" y1="9" x2="12" y2="13"></line>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
-											</svg>
-										</div>
-									</div>
-									<div class="row mt-1 mb-5">
-										<div class="col-12 d-flex justify-content-center" style="font-size:20px; font-weight: 600px;">
-											표현형과의 유사성을 찾을 수 없습니다.
-										</div>
-									</div>
-								</div>
-								`;
-			
-			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
-			$("#Multi").height(0);
-			return;
-			
-		} else {
-			$("#QQ").height("500px");					// iframe 높이 정상
-		}
 		
+		const url = `${resultpath}${jobid}/QQ_${QQ_model_name}_${param_phenotype}.html`;
 		
-		
-		
+		fetch(url, {method: "HEAD"})
+		.then((response) => response.ok)
+		.then((ok) => {
+			if(!ok) {
+				HTMLNotExist(model_name);
+				$("#QQ").height(0);
+				return;
+			} else {
+				$("#QQ").height("500px");					// iframe 높이 정상
+				$("#iframeLoading").modal('show');
+				$('iframe#QQ').attr('src', url);
+			}
+		});
 		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");
 			$("#QQ_model").val("-1").trigger('change');
-		} else {
-			$("#iframeLoading").modal('show');
-			$('iframe#QQ').attr('src', `${resultpath}${jobid}/QQ_${QQ_model_name}_${param_phenotype}.html`);
 		}
 	})
+	
+	
+	function HTMLNotExist(model_name) {
+		$(`iframe#${model_name}`).attr('src', '');		// empty plot
+		
+		const htmlElement = `
+							<div id="status404">
+								<div class="row mt-5">
+									<div class="col-12 d-flex justify-content-center">
+										<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+											<line x1="12" y1="9" x2="12" y2="13"></line>
+											<line x1="12" y1="17" x2="12.01" y2="17"></line>
+										</svg>
+									</div>
+								</div>
+								<div class="row mt-1 mb-5">
+									<div class="col-12 d-flex justify-content-center" style="font-size:20px; color:black;">
+										표현형과의 유사성을 찾을 수 없습니다.
+									</div>
+								</div>
+							</div>
+							`;
+		
+		$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+	}
+	
+
 	
 	
 	

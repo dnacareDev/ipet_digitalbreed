@@ -80,46 +80,54 @@
 			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
 		}
 		
-		if( !ifFileExists(model_name, value, jobid_param) ) {
-			$(`iframe#${model_name}`).attr('src', '');		// empty plot
-			try {
-				gridOptions2.api.destroy();					// empty grid
-			} catch (error) {
-				console.error(error);
-			}
-			
-			const htmlElement = `
-								<div id="status404">
-									<div class="row mt-5">
-										<div class="col-xl-6"></div>
-										<div class="col-12 col-xl-6 d-flex justify-content-center">
-											<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-												<line x1="12" y1="9" x2="12" y2="13"></line>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
-											</svg>
-										</div>
-									</div>
-									<div class="row mt-1 mb-5">
-										<div class="col-xl-6"></div>
-										<div class="col-12 col-xl-6 d-flex justify-content-center" style="font-size:20px; font-weight: 600px;">
-											표현형과의 유사성을 찾을 수 없습니다.
-										</div>
-									</div>
-								</div>
-								`;
-			
-			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
-			$(`#${model_name}`).height(0);
-			return;
-		} else {
-			$(`#${model_name}`).height("500px");					// iframe 높이 정상
-		}
+
 		
-		//if( !(model_name == 'Multi' || model_name == 'QQ') ) {
-		showPlot(value);
-		showGrid(value);
-		//} 
+		
+		fetch(resultpath+jobid_param+"/"+`${model_name}_${value}.html`, {method: "HEAD"})
+	    .then((response) => {
+	    	if(response.ok) {
+	    		//console.log("ok")
+	    		
+	    		$(`#${model_name}`).height("500px");					// iframe 높이 정상
+	    		
+	    		showPlot(value);
+	    		showGrid(value);
+	    		
+	    	} else {
+	    		//console.log("error")
+	    		
+	    		$(`iframe#${model_name}`).attr('src', '');		// empty plot
+				try {
+					gridOptions2.api.destroy();					// empty grid
+				} catch (error) {
+					console.error(error);
+				}
+				
+				const htmlElement = `
+									<div id="status404">
+										<div class="row mt-5">
+											<div class="col-xl-6"></div>
+											<div class="col-12 col-xl-6 d-flex justify-content-center">
+												<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+													<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+													<line x1="12" y1="9" x2="12" y2="13"></line>
+													<line x1="12" y1="17" x2="12.01" y2="17"></line>
+												</svg>
+											</div>
+										</div>
+										<div class="row mt-1 mb-5">
+											<div class="col-xl-6"></div>
+											<div class="col-12 col-xl-6 d-flex justify-content-center" style="font-size:20px; color:black;">
+												표현형과의 유사성을 찾을 수 없습니다.
+											</div>
+										</div>
+									</div>
+									`;
+				
+				$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+				$(`#${model_name}`).height(0);
+	    	}
+	    })
 	})
 	
 	$("#isQQ").on('select2:select', function(e) {
@@ -132,12 +140,10 @@
 		//console.log(param_phenotype);
 		
 		if(param_phenotype == "-1") {
-			alert("특성을 선택해주세요");
-			//$("#QQ_model").val("-1").trigger('change');
+			alert("특성을 선택해1주세요");
 			document.getElementById('isQQ').value = '-1';
 			document.getElementById('isQQ').dispatchEvent(new Event('change'));
 		} else {
-			//$("#QQ_model").val("-1").trigger('change');
 			document.getElementById('isQQ').value = isQQ;
 			document.getElementById('isQQ').dispatchEvent(new Event('change'));
 		}
@@ -154,13 +160,9 @@
 		
 		if(param_phenotype == "-1") {
 			alert("특성을 선택해주세요");
-			//$("#QQ_model").val("-1").trigger('change');
 			document.getElementById('QQ_model').value = '-1';
 			document.getElementById('QQ_model').dispatchEvent(new Event('change'));
 		} else {
-			//$("#iframeLoading").modal('show');
-			//$('iframe#QQ').attr('src', params.data.resultpath+params.data.jobid+"/"+`QQ_${model_name}_${param_phenotype}.html`);
-			//$("#QQ_model").val("-1").trigger('change');
 			document.getElementById('QQ_model').value = model_name;
 			document.getElementById('QQ_model').dispatchEvent(new Event('change'));
 		}
