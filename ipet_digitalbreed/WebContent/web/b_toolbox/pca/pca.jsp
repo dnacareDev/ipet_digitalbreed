@@ -248,7 +248,7 @@ body {
     <script src="../../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
+    <script src="../../../css/app-assets/js/scripts/forms/select/form-select2_B_toolbox.js"></script>
     <!--  
     <script src="../../../css/app-assets/vendors/js/jquery-ui/jquery-ui.min.js"></script>
     -->

@@ -17,7 +17,8 @@
     dropdownAutoWidth: true,
     width: '100%'
   });
-
+	
+	
     // Select With Icon
     $(".select2-icons").select2({
         dropdownAutoWidth: true,

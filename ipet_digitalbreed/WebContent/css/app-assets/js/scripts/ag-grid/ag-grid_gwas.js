@@ -451,26 +451,51 @@
 	function HTMLNotExist(model_name) {
 		$(`iframe#${model_name}`).attr('src', '');		// empty plot
 		
-		const htmlElement = `
-							<div id="status404">
-								<div class="row mt-5">
-									<div class="col-12 d-flex justify-content-center">
-										<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-											<line x1="12" y1="9" x2="12" y2="13"></line>
-											<line x1="12" y1="17" x2="12.01" y2="17"></line>
-										</svg>
+		if( (model_name == 'Multi' || model_name == 'QQ') ) {
+			const htmlElement = `
+								<div id="status404">
+									<div class="row mt-5">
+										<div class="col-12 d-flex justify-content-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+												<line x1="12" y1="9" x2="12" y2="13"></line>
+												<line x1="12" y1="17" x2="12.01" y2="17"></line>
+											</svg>
+										</div>
+									</div>
+									<div class="row mt-1 mb-5">
+										<div class="col-12 d-flex justify-content-center" style="font-size:20px; color:black;">
+											표현형과의 유사성을 찾을 수 없습니다.
+										</div>
 									</div>
 								</div>
-								<div class="row mt-1 mb-5">
-									<div class="col-12 d-flex justify-content-center" style="font-size:20px; color:black;">
-										표현형과의 유사성을 찾을 수 없습니다.
+								`;
+			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+			
+		} else {
+			// Multiple Model, QQ Plot이 아닐 경우
+			const htmlElement = `
+								<div id="status404">
+									<div class="row mt-5">
+										<div class="col-xl-6"></div>
+										<div class="col-12 col-xl-6 d-flex justify-content-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+												<line x1="12" y1="9" x2="12" y2="13"></line>
+												<line x1="12" y1="17" x2="12.01" y2="17"></line>
+											</svg>
+										</div>
+									</div>
+									<div class="row mt-1 mb-5">
+										<div class="col-xl-6"></div>
+										<div class="col-12 col-xl-6 d-flex justify-content-center" style="font-size:20px; color:black;">
+											표현형과의 유사성을 찾을 수 없습니다.
+										</div>
 									</div>
 								</div>
-							</div>
-							`;
-		
-		$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+								`;
+			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
+		}
 	}
 	
 
@@ -492,43 +517,6 @@
 		$("#iframeLoading").modal('show');
 		$(`iframe#${model_name}`).attr('src', resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
 		
-	}
-	
-	function ifFileExists(model_name, value, jobid_param) {
-		
-		console.log(value);
-		
-		let flag;
-		
-		let data =  {
-				"model_name": model_name,
-				"jobid_param": jobid_param,
-				"value": value,
-		}
-		
-		if(model_name == "Multi") {											// multiple model의 경우 isQQ 속성 추가
-			data['isQQ'] = document.getElementById('isQQ').value
-		} else if(model_name == "QQ") {										// QQ plot의 경우 QQ_model 속성 추가
-			data['QQ_model'] = document.getElementById('QQ_model').value
-		} 
-		
-		console.log(data);
-		
-		$.ajax({
-			url: "./gwas_ifFileExists.jsp",
-			method: "GET",
-			data: data,
-			async: false,
-			success : function(result) {
-				if(result === "exists") {
-					flag = true;
-				} else if (result === "not exist") {
-					flag = false;
-				}
-			}
-		})
-		
-		return flag;
 	}
 
 	var columnDefs2 = [
