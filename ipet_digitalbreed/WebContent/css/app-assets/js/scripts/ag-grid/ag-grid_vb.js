@@ -7,55 +7,6 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-	function refresh() {
-		gridOptions.api.refreshCells(); 
-		agGrid
-			.simpleHttpRequest({ url: "./vb_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-		    .then(function(data) {
-		    	console.log("data : ", data);
-		    	gridOptions.api.setRowData(data);
-		    });
-		vcfFileList();
-	}
-
-	function getSelectedRowData() {
-		
-		if(!gridOptions.api.getSelectedRows().length) {
-			alert("선택 된 항목이 없습니다.")
-			return;
-		}
-		
-		if( !confirm("삭제하시겠습니까?") ) {
-			return;
-		}
-		
-		let selectedData = gridOptions.api.getSelectedRows();
-		var deleteitems = new Array();
-		
-		const varietyid = $( "#variety-select option:selected" ).val();
-		  
-		for (var i = 0; i < selectedData.length; i++) {
-		    deleteitems.push(selectedData[i].no);
-		}
-		
-		console.log("delete row : ", deleteitems);
-		
-		$.ajax(
-		{
-		    url:"./vb_delete.jsp",
-		    type:"POST",
-		  //data:{'params':deleteitems},
-		    data:{'params':deleteitems, 'varietyid':varietyid},
-		    success: function(result) {
-		        if (result) {
-					alert("정상적으로 삭제되었습니다.");
-					refresh();
-		        } else {
-		            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
-		        }
-		    }
-		});
-	}
 	
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [
@@ -159,15 +110,11 @@
 		rowHeight: 35,
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
-		//rowSelection: "multiple",
-		//floatingFilter: true,
-		//filter: 'agMultiColumnFilter',
 		pagination: true,
 		paginationPageSize: 20,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
 		animateRows: true,
-		serverSideInfiniteScroll: true,
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
 		},
@@ -179,9 +126,30 @@
 			//console.log("params : ", params);
 			
 			const jobid = params.data.jobid;
-			
 			console.log("jobid : ", jobid)
+			/*
+			window.open("", "target");
 			
+			const form = document.form;
+			form.action = "./vb_feature.jsp";
+			form.target = "target";
+			from.submit();
+			*/
+			
+			window.open("", "target");
+			
+			let form = document.createElement('form'); // 폼객체 생성
+			let objs;
+			objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs.setAttribute('name', 'jobid'); // 객체이름
+			objs.setAttribute('value', jobid); //객체값
+			form.appendChild(objs);
+			form.setAttribute('method', 'post'); //get,post 가능
+			form.setAttribute('action', "./vb_feature.jsp"); //보내는 url
+			form.target = "target";
+			document.body.appendChild(form);
+			form.submit();
 		}
 	};
 	

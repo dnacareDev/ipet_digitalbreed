@@ -8,7 +8,6 @@
 
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String varietyid = request.getParameter("varietyid");
-	System.out.println(varietyid);
 
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 
@@ -20,7 +19,7 @@
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
 		String sql="select no, refgenome, filename, comment, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from vcfdata_info_t where status=1 and refgenome is not null and creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "';";
-		System.out.println(sql);
+		//System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
 			
