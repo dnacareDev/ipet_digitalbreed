@@ -189,11 +189,57 @@ body {
     <!-- END: Footer-->
 
 
+	<!-- Modal start-->
+	    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+	            <div class="modal-content">
+	                <div class="modal-header bg-warning white">
+	                    <h4 class="modal-title" id="myModalLabel4">VCF File Upload</h4>
+	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">&times;</span>
+	                    </button>
+	                </div>
+	                <div class="modal-body">
+						<form class="form" id="uploadvcfform">
+						    <div class="form-body">
+						        <div class="row">
+						            <br><div class="col-md-12 col-12">
+						                <br><div class="form-label-group">
+						                    <input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
+						                    <label for="first-name-column">Comment</label>
+						                </div>
+						            </div>
+						            <div class="col-md-12 col-12">
+						            	<select id='refGenomeSelect' class='select2 form-select float-left'>
+						            		<option></option>
+										</select>
+						            </div>
+						            <div class="col-md-12 col-12 mt-2">
+										<div id="fileControl" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div><br>
+						            </div>	
+						            <div class="col-12">
+						                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
+						                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="box.removeAllFiles();">Reset</button>
+						            </div>						             
+						        </div>
+						    </div>
+						</form>
+	                </div>
+	                <!-- 
+		                <div class="modal-footer">
+		                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+		                </div>
+	                 -->
+	            </div>
+	        </div>
+	     </div>   
+	<!-- Modal end-->
+
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
+    <script src="../../css/app-assets/js/scripts/forms/select/form-select2_genotype.js"></script>
     <script src="../../css/app-assets/js/scripts/sheetjs/xlsx.full.min.js"></script>    
     <!-- BEGIN Vendor JS-->
 
@@ -214,80 +260,18 @@ body {
 	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
     <!-- END: Page JS-->
-
-<!-- Modal start-->
-
-	    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
-	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-	            <div class="modal-content">
-	                <div class="modal-header bg-warning white">
-	                    <h4 class="modal-title" id="myModalLabel4">VCF File Upload</h4>
-	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	                        <span aria-hidden="true">&times;</span>
-	                    </button>
-	                </div>
-	                <div class="modal-body">
-						<form class="form" id="uploadvcfform">
-						     <div class="form-body">
-						         <div class="row">
-						             <br><div class="col-md-12 col-12">
-						                 <br><div class="form-label-group">
-						                     <input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" required data-validation-required-message="This name field is required">						                     
-						                     <label for="first-name-column">Comment</label>
-						                 </div>
-						             </div>
-						             <!-- 
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="maf" class="form-control" placeholder="Maf" name="maf">
-						                     <label for="city-column">Maf</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="mindp" class="form-control" name="mindp" placeholder="minDP">
-						                     <label for="country-floating">minDP</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="text" id="mingq" class="form-control" name="mingq" placeholder=minGQ>
-						                     <label for="company-column">minGQ</label>
-						                 </div>
-						             </div>
-						             <div class="col-md-6 col-12">
-						                 <div class="form-label-group">
-						                     <input type="email" id="missing" class="form-control" name="missing" placeholder="Missing">
-						                     <label for="email-id-column">Missing</label>
-						                 </div>
-						             </div>		
-						             -->				             
-						             <div class="col-md-12 col-12">
-										<div id="fileControl" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div><br>
-						             </div>	
-						             <div class="col-12">
-						                 <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
-						                 <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="box.removeAllFiles();">Reset</button>
-						             </div>						             
-						         </div>
-						     </div>
-						</form>
-	                </div>
-	                <!-- 
-		                <div class="modal-footer">
-		                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
-		                </div>
-	                 -->
-	            </div>
-	        </div>
-	        
-	<!-- Modal end-->
 	
         <script>
         
         // Quality Filter에서 링크를 타고 왔을때 받는 parameter(jobid)를 .js파일에 넘겨주기 위한 전역변수. 
         // "null"인 경우를 구분해야함
         var linkedJobid = "<%=linkedJobid%>";
+        
+        
+        $(document).ready(function() {
+        	getRefGenome();
+        })
+        
         
         var box = new Object();
         window.onload = function() {
@@ -347,10 +331,21 @@ body {
         	//const jobid = "20221212151125";		// csv 150MB
         	//console.log("await jobid : ", jobid);
         	
+        	const selectEl = document.getElementById("refGenomeSelect");
+        	const refGenome = selectEl.options[selectEl.selectedIndex].dataset.refgenome;
+        	
+        	
 			var postObj = new Object();
 			postObj.comment = document.getElementById("comment").value;
 			postObj.varietyid = $( "#variety-select option:selected" ).val();
 			postObj.jobid = jobid;
+			
+			if(refGenome === undefined || refGenome === "") {
+				postObj.refGenome = "-";
+			} else {
+				postObj.refGenome = refGenome;
+			}
+			
 			box.setPostData(postObj);
 			box.upload();
         }   
@@ -359,6 +354,24 @@ body {
         	fetch(`./genotype_after_upload_process.jsp?jobid=\${jobid}&filename=\${filename}&comment=\${comment}&varietyid=\${varietyid}`)
         }
         
+        function getRefGenome() {
+        	
+        	const varietyid = document.getElementById("variety-select").value;
+        	
+        	fetch(`./genotype_getRefGenome.jsp?varietyid=\${varietyid}`)
+        	.then((response) => response.json())
+        	.then((data) => {
+        		const selectEl = document.getElementById("refGenomeSelect");
+        		const objOption = document.createElement("option");
+        		
+        		for(let i=0 ; i<data.length ; i++) {
+	        		objOption.text = data[i]['refgenome'];
+	        		objOption.dataset.refgenome = data[i]['refgenome'];
+	        		selectEl.options.add(objOption);
+        		}
+        		
+        	})
+        }
             
 		$('#backdrop').on('hidden.bs.modal', function (e) {
 			document.getElementById('uploadvcfform').reset();

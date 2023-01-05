@@ -169,7 +169,7 @@
         filterParams: {
         	comparator: comparator
         },
-        width: 150,
+        width: 120,
         minWidth: 110,
     },
 	{

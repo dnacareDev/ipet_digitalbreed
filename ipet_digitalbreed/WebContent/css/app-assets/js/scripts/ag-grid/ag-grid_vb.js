@@ -126,17 +126,11 @@
 			//console.log("params : ", params);
 			
 			const jobid = params.data.jobid;
-			console.log("jobid : ", jobid)
-			/*
-			window.open("", "target");
+
+			// 클릭할때마다 target값을 바꿔서 항상 새창이 열리게 한다  
+			const random_number = Math.random().toString(36).substring(2,12);
 			
-			const form = document.form;
-			form.action = "./vb_feature.jsp";
-			form.target = "target";
-			from.submit();
-			*/
-			
-			window.open("", "target");
+			window.open("", random_number);
 			
 			let form = document.createElement('form'); // 폼객체 생성
 			let objs;
@@ -147,7 +141,7 @@
 			form.appendChild(objs);
 			form.setAttribute('method', 'post'); //get,post 가능
 			form.setAttribute('action', "./vb_feature.jsp"); //보내는 url
-			form.target = "target";
+			form.target = random_number;
 			document.body.appendChild(form);
 			form.submit();
 		}

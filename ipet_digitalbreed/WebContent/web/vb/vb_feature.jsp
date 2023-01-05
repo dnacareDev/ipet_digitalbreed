@@ -82,6 +82,9 @@
 	  color: #000000;	  
 	}
 	
+	#VariantBrowserCanvas {
+		width: 100%;
+	}
 
 </style>
 <%
@@ -95,18 +98,19 @@
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
-
+	<%-- 
     <jsp:include page="../../css/topmenu.jsp" flush="true"/>
-
+	
 	<jsp:include page="../../css/menu.jsp" flush="true">
 		<jsp:param name="menu_active" value="vb"/>
 	</jsp:include>
+	--%>
 
     <!-- BEGIN: Content-->
-    <div class="app-content content">
+    <div class="app-content content" style="padding-top: 0px;">
         <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
+            <!--  
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -124,6 +128,7 @@
                     </div>
                 </div>
             </div>
+            -->
             <div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
@@ -169,12 +174,12 @@
                                 <div class="row">
 	                                <div class="col-xl-8">
 	                                	<div class="row">
-	                                		draw
-	                                		<div style="margin: 0px auto; width: 98%; height:320px;"></div>
+	                                		<div id="canvasArea" class="col-12" style="padding:0px 1%;">
+		                                		<canvas id="VariantBrowserCanvas" height="450px"></canvas>
+	                                		</div>
 	                                	</div>
 	                                	<div class="row">
-	                                		Grid
-				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px auto; width: 98%; height:420px;"></div><br>
 	                                	</div>
 	                                </div>
 	                                <div class="col-xl-4">
@@ -219,11 +224,11 @@
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1">
-															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:445px; width:100%;"></div>
+															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
 														</div>
 	  												</div>
 	  												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-	  													<div style="width:50%; padding-left:13px;"> 
+	  													<div style="width:50%;"> 
 															<select id='GWAS_select' class='select2 form-select float-left'>
 																<option data-chr="-1" disabled hidden selected>Select result</option>
 															</select>
@@ -234,11 +239,11 @@
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1">
-	  														<div id='GWAS_Grid' class="ag-theme-alpine" style="height:445px; width:100%; margin-left:15px;"></div>
+	  														<div id='GWAS_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
 	  													</div>
 	  												</div>
 	  												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
-	  													<div style="width:50%; padding-left:13px;"> 
+	  													<div style="width:50%;"> 
 															<select id='Marker_select' class='select2 form-select float-left'>
 																<option data-chr="-1" disabled hidden selected>Select result</option>
 															</select>
@@ -249,11 +254,11 @@
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1">
-	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:445px; width:100%; margin-left:15px;"></div>
+	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
 	  													</div>
 	  												</div>
 	  												<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
-	  													<div style="width:50%; padding-left:13px;"> 
+	  													<div style="width:50%;"> 
 															<select id='SelectionList_select' class='select2 form-select float-left'>
 																<option data-chr="-1" disabled hidden selected>Select result</option>
 															</select>
@@ -261,22 +266,82 @@
 														<div class="row mt-1" style="float:right;">
 									            			<div class="col-12">
 											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:16px;" onclick="filter_SnpEff();">Flanking sequence</button>
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:16px;" onclick="filter_SnpEff();">Primer Design</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:16px;" onclick="alert('전송되었습니다.');">Primer Design</button>
 											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:29px;" onclick="filter_SnpEff();">표지</button>
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1">
-	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:445px; width:100%; margin-left:15px;'></div>
+	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:245px; width:100%;'></div>
 	  													</div>
 	  												</div>
 	  											</div>
 		                                	</div>
 		                                </div>
 		                                <div class="row mt-2">
-		                                	UPGMA
-		                                	<!--  
-		                                	<div id="ResultGrid2" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-		                                	-->
+		                                	<div class="col-12">
+			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
+		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill5' aria-expanded='true'>UPGMA</a></li>
+					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill6' aria-expanded='false'>STRUCTURE</a></li>
+					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill7' aria-expanded='false'>Haplotype</a></li>
+												</ul>
+												<div class='tab-content'>
+	  												<div role='tabpanel' class='tab-pane active' id='pill5' aria-expanded='true' aria-labelledby='base-pill1'>
+	  													<div class="row">
+		  													<div style="width:50%; padding-left:14px;"> 
+																<select id='UPGMA_select' class='select2 form-select float-left'>
+																	<option data-chr="-1" disabled hidden selected>Select Result</option>
+																</select>
+															</div>
+														</div>
+									            		<div class="row mt-1">
+									            			<div class="col-6 pr-0">
+									            				<select id='Standard_select' class='select2 form-select float-left'>
+																	<option data-chr="-1" disabled hidden selected>Standard</option>
+																</select>
+									            			</div>
+									            			<div class="col-6">
+											            		<button type="button" class="btn btn-light mb-1 float-right" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
+											            	</div>
+									            		</div>
+									            		<div class="row col-12 mt-1">
+															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"></div>
+														</div>
+	  												</div>
+	  												<div class='tab-pane' id='pill6' aria-labelledby='base-pill2'>
+	  													<div style="width:50%;"> 
+															<select id='STRUCTURE_select' class='select2 form-select float-left'>
+																<option data-chr="-1" disabled hidden selected>Select result</option>
+															</select>
+														</div>
+														<div class="row mt-1" style="float:right;">
+									            			<div class="col-12">
+											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
+											            	</div>
+									            		</div>
+									            		<div class="row col-12 mt-1">
+	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"></div>
+	  													</div>
+	  												</div>
+	  												<div class='tab-pane' id='pill7' aria-labelledby='base-pill3'>
+	  													<div class="row" style="width:50%; padding-left:14px;"> 
+															<button type="button" class="btn btn-light" style="margin-right:29px;" onclick="filter_SnpEff();">Haplotype Analysis</button>
+														</div>
+														<div class="row mt-1" >
+									            			<div class="col-6 pr-0">
+									            				<select id='Haplotype_select' class='select2 form-select float-left'>
+																<option data-chr="-1" disabled hidden selected>Select result</option>
+															</select>
+									            			</div>
+									            			<div class="col-6">
+											            		<button type="button" class="btn btn-light mb-1 float-right" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
+											            	</div>
+									            		</div>
+									            		<div class="row col-12 mt-1">
+	  														<div id='Haplotype_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"></div>
+	  													</div>
+	  												</div>
+	  											</div>
+		                                	</div>
 		                                </div>
                                 	</div>
                                 </div>
@@ -343,8 +408,21 @@
 	var jobid = "<%=jobid%>";
 
    	$(document).ready(function(){
-   		//vcfFileList();
+   		fillBackground();
    	});
+   	
+   	function fillBackground() {
+   		const canvas = document.getElementById("VariantBrowserCanvas");
+   		const canvasArea = document.getElementById("canvasArea");
+   		
+   		canvas.width = canvasArea.clientWidth
+   		
+   		if(canvas.getContext) {
+   			const ctx = canvas.getContext("2d");
+   			ctx.fillStyle="#999999";
+   			ctx.fillRect(0,0,canvas.width, canvas.height);
+   		}
+   	}
    	
 </script>
 
