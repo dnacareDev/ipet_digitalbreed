@@ -18,27 +18,11 @@
     width: '100%'
   });
 	
-	/*
-	$("#SnpEff_select").select2({
+	$("#Chr_select").select2({
 		width: '100%',
 		placeholder: ' Select Chromosome'
 	})
 	
-	$("#GWAS_select").select2({
-		width: '100%',
-		placeholder: ' Select result'
-	})
-	
-	$("#Marker_select").select2({
-		width: '100%',
-		placeholder: ' Select result'
-	})
-	
-	$("#SelectionList_select").select2({
-		width: '100%',
-		placeholder: ' Select result'
-	})
-	*/
 	
 
 })(window, document, jQuery);

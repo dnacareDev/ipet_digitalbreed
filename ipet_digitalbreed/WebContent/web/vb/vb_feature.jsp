@@ -78,12 +78,20 @@
 	}
 	
 	th:hover, td:hover {
-	  background-color: #aad5f8;
-	  color: #000000;	  
+	  	background-color: #aad5f8;
+	  	color: #000000;	  
 	}
 	
 	#VariantBrowserCanvas {
 		width: 100%;
+	}
+	
+	.form-control::placeholder {
+	  	color : #212529;
+	  	font-size : 1rem;
+	  	font-family: 'SDSamliphopangche_Outline';
+	  	-webkit-transition : all 0.2s ease;
+	    transition : all 0.2s ease;
 	}
 
 </style>
@@ -136,46 +144,25 @@
                         <div class="card-content">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12">
-                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
-                                            <%-- 
-                                            <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
-                                                <select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
-                                                    <%
-	                                                	try {
-	                                                		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-	                                                		int selected_cnt=0;
-	                                                		String selected_flag=null;
-	
-	                                                		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
-	                                                		while (ipetdigitalconndb.rs.next()) { 	
-	                                                			if(selected_cnt==0) {selected_flag = "selected";};   
-	                                                			out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
-	                                                			selected_cnt++;
-	                                                			selected_flag="";
-	                                                		}
-	                                                	} catch(Exception e){
-	                                                		System.out.println(e);
-	                                                	} finally { 
-	                                                		ipetdigitalconndb.stmt.close();
-	                                                		ipetdigitalconndb.rs.close();
-	                                                		ipetdigitalconndb.conn.close();
-	                                                	}
-                                                    %>       
-                                                     </select>                                          
-                                            </div>
-                                            <div class="ag-btns d-flex flex-wrap">                                            
-                                                <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
-                                            </div>
-                                            --%>           
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
 	                                <div class="col-xl-8">
 	                                	<div class="row">
-	                                		<div id="canvasArea" class="col-12" style="padding:0px 1%;">
-		                                		<canvas id="VariantBrowserCanvas" height="450px"></canvas>
+	                                		<div style="width:20%; min-width:200px; padding-left:13px;"> 
+												<select id='Chr_select' class='select2 form-select float-left'>
+													<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
+												</select>
+											</div>
+											<div style="width:20%; min-width:200px; padding-left:14px;"> 
+												<input type="text" id="comment" class="form-control" placeholder="Select Position" oninput="inputNumberRange(this);">
+											</div>
+	                                	</div>
+	                                	<div class="row mt-1">
+	                                		<div id="chromosomeCanvasArea" class="col-12" style="padding:0px 1%;">
+		                                		<canvas id="chromosomeCanvas" height="200px"></canvas>
+	                                		</div>
+	                                	</div>
+	                                	<div class="row mt-1">
+	                                		<div id="geneModelCanvasArea" class="col-12" style="padding:0px 1%;">
+		                                		<canvas id="geneModelCanvas" height="200px"></canvas>
 	                                		</div>
 	                                	</div>
 	                                	<div class="row">
@@ -337,7 +324,7 @@
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1">
-	  														<div id='Haplotype_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"></div>
+	  														<div id='Haplotype_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"><%-- --%></div>
 	  													</div>
 	  												</div>
 	  											</div>
@@ -408,20 +395,164 @@
 	var jobid = "<%=jobid%>";
 
    	$(document).ready(function(){
-   		fillBackground();
+   		drawChromosome();
+   		drawGeneModel();
    	});
    	
-   	function fillBackground() {
-   		const canvas = document.getElementById("VariantBrowserCanvas");
-   		const canvasArea = document.getElementById("canvasArea");
+   	window.onresize = function() {
+   		drawChromosome();
+   		drawGeneModel();
+   	}
+   	
+   	function drawChromosome() {
+   		const canvas = document.getElementById("chromosomeCanvas");
+   		const canvasArea = document.getElementById("chromosomeCanvasArea");
    		
-   		canvas.width = canvasArea.clientWidth
+   		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
+   		
+   		const startX = canvas.width * 0.2;
+   		const startY = canvas.height * 0.45;
+   		
+   		const width = canvas.width  - (startX * 2);
+   		const height = canvas.height - (startY * 2);
    		
    		if(canvas.getContext) {
-   			const ctx = canvas.getContext("2d");
-   			ctx.fillStyle="#999999";
-   			ctx.fillRect(0,0,canvas.width, canvas.height);
+   			const context = canvas.getContext("2d");
+   			context.strokeStyle="#333333";
+   			context.strokeRect(startX, startY, width, height);
+   			
+   			context.beginPath();
+   			context.moveTo(startX + width * 0.1 , startY);
+   			context.lineTo(startX + width * 0.1 , startY + height);
+   			context.strokeStyle = '#808000';
+   			context.lineWidth = 5;
+   			context.stroke();
+   			
+   			context.beginPath();
+   			context.moveTo(startX + width * 0.8 , startY);
+   			context.lineTo(startX + width * 0.8 , startY + height);
+   			context.strokeStyle = '#808000';
+   			context.lineWidth = 5;
+   			context.stroke();
+   			
    		}
+   		
+   		canvas.addEventListener('mousemove', clickChromosomeCanvas);
+   		
+   		
+   		/*
+   		canvas.addEventListener('click', function (e) {
+   			//console.log(e);
+   			
+   			const offsetX = e.offsetX;
+   			const offsetY = e.offsetY;
+   			
+   			// 염색체 사각형 영역 내에서의 이벤트
+   			if( (startX <= offsetX && offsetX <= startX + width) && (startY <= offsetY && offsetY <= startY + height) ) {
+	   			console.log(startX, startY);
+	   			console.log(width, height);
+   				console.log(offsetX, offsetY);
+   			}
+   		})
+   		*/
+   		
+   	}
+   	
+   	function clickChromosomeCanvas(e) {
+   		//console.log(e);
+   		const canvas = document.getElementById("chromosomeCanvas");
+   		const startX = canvas.width * 0.2;
+   		const startY = canvas.height * 0.45;
+   		const width = canvas.width  - (startX * 2);
+   		const height = canvas.height - (startY * 2);
+			
+		const offsetX = e.offsetX;
+		const offsetY = e.offsetY;
+		
+		// 염색체 사각형 영역 내에서의 이벤트
+		if( (startX <= offsetX && offsetX <= startX + width) && (startY <= offsetY && offsetY <= startY + height) && canvas.getContext ) {
+  			//console.log(startX, startY);
+  			//console.log(width, height);
+			//console.log(offsetX, offsetY);
+			
+			const context = canvas.getContext("2d");
+			
+			context.clearRect(0,0,canvas.width,canvas.height)
+			
+			context.strokeStyle="#333333";
+			context.lineWidth = 1;
+   			context.strokeRect(startX, startY, width, height);
+   			
+   			context.beginPath();
+   			context.moveTo(startX + width * 0.1 , startY);
+   			context.lineTo(startX + width * 0.1 , startY + height);
+   			context.strokeStyle = '#808000';
+   			context.lineWidth = 5;
+   			context.stroke();
+   			
+   			context.beginPath();
+   			context.moveTo(startX + width * 0.8 , startY);
+   			context.lineTo(startX + width * 0.8 , startY + height);
+   			context.strokeStyle = '#808000';
+   			context.lineWidth = 5;
+   			context.stroke();
+   			
+   			
+   			context.beginPath();
+   			context.moveTo(offsetX , startY);
+   			context.lineTo(offsetX , startY + height);
+   			context.strokeStyle = '#DC0F00';
+   			context.lineWidth = 2;
+   			context.stroke();
+   			
+   			context.strokeStyle="#333333";
+			context.lineWidth = 1;
+   			context.strokeRect(offsetX - 30 , startY - 50 , 60 , 30);
+   			
+   			//context.fillStyle="#000000";
+   			context.font = '16px sans-serif';
+   			context.fillText(offsetX, offsetX - 13 , 60); 
+   			
+		}
+   	}
+   	
+   	function drawGeneModel() {
+   		const canvas = document.getElementById("geneModelCanvas");
+   		const canvasArea = document.getElementById("geneModelCanvasArea");
+   		
+   		//canvas.width = canvasArea.clientWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
+   		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
+   		
+   		const startX = canvas.width * 0.2;
+   		const startY = canvas.height * 0.45;
+   		
+   		const width = canvas.width  - (startX * 2);
+   		const height = canvas.height - (startY * 2);
+   		
+   		if(canvas.getContext) {
+   			const context = canvas.getContext("2d");
+   			context.fillStyle="#999999";
+   			context.strokeRect(startX, startY, width, height);
+   			
+   			context.beginPath();
+   			context.moveTo(startX + width * 0.1 , startY);
+   			context.lineTo(startX + width * 0.1 , startY + height);
+   			context.strokeStyle = '#808000';
+   			context.lineWidth = 5;
+   			context.stroke();
+   			
+   			context.moveTo(startX + width * 0.8 , startY);
+   			context.lineTo(startX + width * 0.8 , startY + height);
+   			context.strokeStyle = '#808000';
+   			context.lineWidth = 5;
+   			context.stroke();
+   		}
+   	}
+   	
+   	function inputNumberRange(HTML_element) {
+   		//console.log(HTML_element);
+   		HTML_element.value = HTML_element.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+   		// if(params.value > 1000(chr length)) return 'chr length'
    	}
    	
 </script>

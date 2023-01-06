@@ -11,6 +11,7 @@
 	String _orig_filename = request.getParameter("filename");
 	String comment = request.getParameter("comment");
 	String varietyid = request.getParameter("varietyid");
+	String refgenome = request.getParameter("refgenome");
 	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String savePath = rootFolder+"uploads/database/db_input/";
@@ -39,14 +40,15 @@
     
     bufferedReader.close();
 
-	String refseq = vcf_statistcs_data_strArr[0];
+	//String refseq = vcf_statistcs_data_strArr[0];
 	String samplecnt = vcf_statistcs_data_strArr[1];
 	String variablecnt = vcf_statistcs_data_strArr[2];
 	
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
+	//String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
+	String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refgenome+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
 	System.out.println(updateVcfinfo_sql);
 	
 	try{

@@ -286,7 +286,7 @@
 	
 	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
 	$(window).on("resize", function() {
-		gridOptions.api.sizeColumnsToFit();
+		//gridOptions.api.sizeColumnsToFit();
 	});
   
   

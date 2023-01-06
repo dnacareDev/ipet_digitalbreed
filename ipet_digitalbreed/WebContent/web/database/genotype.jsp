@@ -305,8 +305,15 @@ body {
 				
 				
 				
+				const jobid = p.postData.jobid;
+				const filename = p.files[0].file.name;
+				const comment = p.postData.comment;
+				const varietyid = p.postData.varietyid;
+				const refgenome = p.postData.refgenome;
+				
+				
 				//파일 업로드 이후의 작업들을 모두 여기에 몰아넣음
-				afterUpload(p.postData.jobid, p.files[0].file.name, p.postData.comment, p.postData.varietyid);
+				afterUpload(jobid, filename, comment, varietyid, refgenome);
 				
             });
         };
@@ -332,7 +339,7 @@ body {
         	//console.log("await jobid : ", jobid);
         	
         	const selectEl = document.getElementById("refGenomeSelect");
-        	const refGenome = selectEl.options[selectEl.selectedIndex].dataset.refgenome;
+        	const refgenome = selectEl.options[selectEl.selectedIndex].dataset.refgenome;
         	
         	
 			var postObj = new Object();
@@ -340,18 +347,33 @@ body {
 			postObj.varietyid = $( "#variety-select option:selected" ).val();
 			postObj.jobid = jobid;
 			
-			if(refGenome === undefined || refGenome === "") {
-				postObj.refGenome = "-";
+			if(refgenome === undefined || refgenome === "") {
+				postObj.refgenome = "-";
 			} else {
-				postObj.refGenome = refGenome;
+				postObj.refgenome = refgenome;
 			}
 			
 			box.setPostData(postObj);
 			box.upload();
         }   
         
-        function afterUpload(jobid, filename, comment, varietyid) {
-        	fetch(`./genotype_after_upload_process.jsp?jobid=\${jobid}&filename=\${filename}&comment=\${comment}&varietyid=\${varietyid}`)
+        function afterUpload(jobid, filename, comment, varietyid, refgenome) {
+        	
+        	const data = {
+        			"jobid": jobid,
+        			"filename": filename,
+        			"comment": comment,
+        			"varietyid": varietyid,
+        			"refgenome": refgenome
+        	}
+        	
+        	$.ajax({
+        		url: "./genotype_after_upload_process.jsp",
+        		method: "POST",
+        		data: data
+        	})
+        	
+        	//fetch(`./genotype_after_upload_process.jsp?jobid=\${jobid}&filename=\${filename}&comment=\${comment}&varietyid=\${varietyid}`)
         }
         
         function getRefGenome() {
