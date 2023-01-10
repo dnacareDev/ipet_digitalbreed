@@ -102,7 +102,7 @@
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
-	String jobid = request.getParameter("jobid");
+	String linkedJobid = request.getParameter("jobid");
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
@@ -392,29 +392,69 @@
 <script type="text/javascript">       
 
 	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
-	var jobid = "<%=jobid%>";
+	var linkedJobid = "<%=linkedJobid%>";
 
-   	$(document).ready(function(){
-   		drawChromosome();
-   		drawGeneModel();
-   	});
-   	
-   	window.onresize = function() {
-   		drawChromosome();
-   		drawGeneModel();
-   	}
-   	
-   	function drawChromosome() {
-   		const canvas = document.getElementById("chromosomeCanvas");
+	document.addEventListener('DOMContentLoaded', function() {
+		//위쪽 캔버스
+		const canvas = document.getElementById("chromosomeCanvas");
    		const canvasArea = document.getElementById("chromosomeCanvasArea");
    		
-   		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
+		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
    		
    		const startX = canvas.width * 0.2;
    		const startY = canvas.height * 0.45;
-   		
    		const width = canvas.width  - (startX * 2);
    		const height = canvas.height - (startY * 2);
+		
+		drawChromosome(canvas, startX, startY, width, height);
+
+		//1번 염색체 길이정보 획득
+		readChrLength(1);
+		
+		
+		
+		
+   		drawGeneModel();
+   		
+	})
+	
+	window.addEventListener('resize', function(e) {
+		//위쪽 캔버스
+		const canvas = document.getElementById("chromosomeCanvas");
+   		const canvasArea = document.getElementById("chromosomeCanvasArea");
+   		
+		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
+   		
+   		const startX = canvas.width * 0.2;
+   		const startY = canvas.height * 0.45;
+   		const width = canvas.width  - (startX * 2);
+   		const height = canvas.height - (startY * 2);
+		
+		drawChromosome(canvas, startX, startY, width, height);
+		drawChrPosition(canvas, startX, startY, width, height);
+		
+		
+		
+   		drawGeneModel();
+	})
+	
+	
+	var relativePositionX = null;
+   	// resize시 mousemove event로 그렸던 빨간줄이 사라지지 않고 유지
+	function drawChrPosition(canvas, startX, startY, width, height) {
+		// 염색체 사각형 영역 내에서의 이벤트
+			const context = canvas.getContext("2d");
+			
+			context.beginPath();
+   			context.moveTo(startX + relativePositionX * width , startY);
+   			context.lineTo(startX + relativePositionX * width , startY + height);
+   			context.strokeStyle = '#DC0F00';
+   			context.lineWidth = 2;
+   			context.stroke();
+   		
+	}
+   	
+   	function drawChromosome(canvas, startX, startY, width, height) {
    		
    		if(canvas.getContext) {
    			const context = canvas.getContext("2d");
@@ -437,28 +477,11 @@
    			
    		}
    		
-   		canvas.addEventListener('mousemove', clickChromosomeCanvas);
-   		
-   		
-   		/*
-   		canvas.addEventListener('click', function (e) {
-   			//console.log(e);
-   			
-   			const offsetX = e.offsetX;
-   			const offsetY = e.offsetY;
-   			
-   			// 염색체 사각형 영역 내에서의 이벤트
-   			if( (startX <= offsetX && offsetX <= startX + width) && (startY <= offsetY && offsetY <= startY + height) ) {
-	   			console.log(startX, startY);
-	   			console.log(width, height);
-   				console.log(offsetX, offsetY);
-   			}
-   		})
-   		*/
+   		canvas.addEventListener('mousemove', searchPosition);
    		
    	}
    	
-   	function clickChromosomeCanvas(e) {
+   	function searchPosition(e) {
    		//console.log(e);
    		const canvas = document.getElementById("chromosomeCanvas");
    		const startX = canvas.width * 0.2;
@@ -474,6 +497,10 @@
   			//console.log(startX, startY);
   			//console.log(width, height);
 			//console.log(offsetX, offsetY);
+			
+			// 영역 안에 들어왔을때 빨간선의 포지션 (ratio) 저장
+			relativePositionX = Math.floor(offsetX - startX) / width;
+			
 			
 			const context = canvas.getContext("2d");
 			
@@ -511,7 +538,7 @@
    			
    			//context.fillStyle="#000000";
    			context.font = '16px sans-serif';
-   			context.fillText(offsetX, offsetX - 13 , 60); 
+   			context.fillText( Math.floor(offsetX - startX), offsetX - 13 , 60); 
    			
 		}
    	}
@@ -535,18 +562,26 @@
    			context.strokeRect(startX, startY, width, height);
    			
    			context.beginPath();
-   			context.moveTo(startX + width * 0.1 , startY);
-   			context.lineTo(startX + width * 0.1 , startY + height);
-   			context.strokeStyle = '#808000';
-   			context.lineWidth = 5;
-   			context.stroke();
-   			
-   			context.moveTo(startX + width * 0.8 , startY);
-   			context.lineTo(startX + width * 0.8 , startY + height);
+   			context.moveTo(startX + width * 0.3 , startY);
+   			context.lineTo(startX + width * 0.3 , startY + height);
    			context.strokeStyle = '#808000';
    			context.lineWidth = 5;
    			context.stroke();
    		}
+   	}
+   	
+   	function readChrLength(chr_num) {
+   		//console.log(chr_num);
+   		
+   		fetch(`./vb_readChrLength.jsp?chr_num=\${chr_num}`)
+   		.then((response) => response.json())
+   		.then((data) => {
+   			//문자열 value값을 숫자화
+   			for (key in data) {
+   				data[key] = Number(data[key]);
+   			}
+   			console.log(data);
+   		})
    	}
    	
    	function inputNumberRange(HTML_element) {

@@ -35,8 +35,21 @@
                             </li>
                         </ul>
                     </li>
-                      <li class="<%if(menu_active.equals("vb")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/vb/vb.jsp" data-i18n="Chat"><i class="feather icon-sliders"></i>Variants browser</a></li>
-                      <li class="<%if(menu_active.equals("pd")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/pd/pd.jsp" data-i18n="Chat"><i class="feather icon-link"></i>Primer design</a></li>
+                    <li class="<%if(menu_active.equals("vb")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/vb/vb.jsp" data-i18n="Chat"><i class="feather icon-sliders"></i>Variants browser</a></li>
+                    
+                    <%-- 	
+                    <li class="<%if(menu_active.equals("pd")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/pd/pd.jsp" data-i18n="Chat"><i class="feather icon-link"></i>Primer design</a></li>
+                    --%>
+                    
+                    <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-package"></i><span data-i18n="Apps">Primer design</span></a>
+                    	<ul class="dropdown-menu">
+                            <li class="<%if(menu_active.equals("pd1")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/pd/pd_1.jsp" data-toggle="dropdown" data-i18n="Email"><i class="feather icon-bar-chart-2"></i>design-1</a>
+                            </li>
+                            <li class="<%if(menu_active.equals("pd2")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/pd/pd_2.jsp" data-toggle="dropdown" data-i18n="Chat"><i class="feather icon-share-2"></i>design-2</a>
+                            </li>
+                        </ul>
+                    </li>  
+                      
                       
                     <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-settings"></i><span data-i18n="Forms &amp; Tables">Breeder's toolbox</span></a>
                         <ul class="dropdown-menu">
