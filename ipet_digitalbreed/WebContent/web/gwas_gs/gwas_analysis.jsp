@@ -23,7 +23,7 @@
 	String[] modelArr = request.getParameterValues("modelGroup");
 	String phenotype = request.getParameter("phenotype");
 	String radio_phenotype = request.getParameter("radio_phenotype");
-	System.out.println("radio_phenotype :  "+ radio_phenotype);
+	String refgenome = request.getParameter("refgenome");
 	
 	String[] cre_date_arr = cre_date.split(" to ");
 	String[] inv_date_arr = inv_date.split(" to ");
@@ -43,6 +43,8 @@
 	//System.out.println("inv_date : " + inv_date);
 	System.out.println("inv_date_arr : " + Arrays.toString(inv_date_arr));
 	System.out.println("modelArr : " + Arrays.toString(modelArr));
+	System.out.println("radio_phenotype :  "+ radio_phenotype);
+	System.out.println("refgenome : " + refgenome);
 	System.out.println("=========================================");
 	*/
 	
@@ -83,13 +85,18 @@
 	
 	
 	
-	String insertGwasinfo_sql = "insert into gwas_info_t(cropid, varietyid, status, genotype_filename, phenotype_name, model, uploadpath, resultpath,comment, jobid, creuser,cre_dt) ";
+	//String insertGwasinfo_sql = "insert into gwas_info_t(cropid, varietyid, status, genotype_filename, phenotype_name, model, uploadpath, resultpath,comment, jobid, creuser,cre_dt) ";
+	String insertGwasinfo_sql = "insert into gwas_info_t(cropid, varietyid, status, genotype_filename, refgenome, phenotype_name, model, uploadpath, resultpath,comment, jobid, creuser,cre_dt) ";
 	
 	if(Integer.parseInt(radio_phenotype) == 0) {
-		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+		//insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+refgenome+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
 	} else {
-		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+phenotype+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+		//insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+phenotype+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+refgenome+"', '"+phenotype+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
 	}
+	
+	System.out.println(jobid_gwas);
 
 	System.out.println("insert gwas_info_t sql : " + insertGwasinfo_sql);
 	
