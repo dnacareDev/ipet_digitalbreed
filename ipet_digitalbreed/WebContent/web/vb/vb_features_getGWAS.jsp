@@ -12,11 +12,11 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-	//JSONArray jsonArray = new JSONArray();
 	JsonArray jsonArray = new JsonArray();
 
 	try{
 
+		/*
 		String sql="select no, refgenome, filename, comment, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from vcfdata_info_t where status=1 and refgenome != '-' and creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by no DESC;";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
@@ -34,6 +34,7 @@
 			
 			jsonArray.add(jsonObject);
 		}
+		*/
 	}catch(Exception e){
 		System.out.println(e);
 	}finally { 
@@ -43,6 +44,6 @@
 	}
 
 	//System.out.println(jsonArray);
-	out.clear();
-	out.print(jsonArray);
+	//out.clear();
+	//out.print(jsonArray);
 %>

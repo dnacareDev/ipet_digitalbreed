@@ -44,8 +44,9 @@
 			
 			JsonArray jsonArr = new JsonArray();
 			
-			sql = "select * from gwas_info_t where status=1 and refgenome='"+refgenome+ "' and cropid='" +cropid+ "' and varietyid='" +varietyid+   "';";
-			System.out.println(sql);
+			// phenotype, model의 comma 텍스트를 그대로 사용시 dataset에 적용하려 할때 제대로 받지 못한다. -> 구분자를 |로 변경
+			sql = "select genotype_filename, replace(phenotype_name, ',', '|') as phenotype_name, replace(model, ', ', '|') as model, comment, jobid from gwas_info_t where status=1 and refgenome='"+refgenome+ "' and cropid='" +cropid+ "' and varietyid='" +varietyid+   "';";
+			//System.out.println(sql);
 			try{
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 

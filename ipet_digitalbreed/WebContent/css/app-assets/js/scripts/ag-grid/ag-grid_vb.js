@@ -151,7 +151,7 @@
 			objs.setAttribute('value', jobid); //객체값
 			form.appendChild(objs);
 			form.setAttribute('method', 'post'); //get,post 가능
-			form.setAttribute('action', "./vb_feature.jsp"); //보내는 url
+			form.setAttribute('action', "./vb_features.jsp"); //보내는 url
 			form.target = random_number;
 			document.body.appendChild(form);
 			form.submit();

@@ -217,7 +217,7 @@
 	  												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
 	  													<div class="row mt-1">
 		  													<div class="col-6">
-																<select id='GWAS_select' class='select2 form-select float-left' onchange='GWAS_select_change(this.options[this.selectedIndex].dataset.jobid);'>
+																<select id='GWAS_select' class='select2 form-select float-left' onchange='GWAS_select_change(this.options[this.selectedIndex]);'>
 																	<option data-chr="-1" disabled hidden selected>Select result</option>
 																</select>
 															</div>
@@ -230,17 +230,13 @@
 														<div class="row mt-1">
 															<div class="col-12">
 																<ul id='GWAS_button_list' class='nav nav-pills nav-active-bordered-pill'>
-																	<!-- 
-																		GWAS_button_list >> a 태그의 data-phenotype에 select_phenotype값을 저장한다. 
-																		버튼 클릭시 해당 값을 기준으로 그리드 출력, 값이 없으면 출력X 
-																	-->
+																	<!--  
 																	<li class='nav-item'><a class='nav-link active' id='GWAS_1' data-toggle='pill' href='#GWAS_pill1' aria-expanded='true'>GLM(test)</a></li>
-																	<li class='nav-item'><a class='nav-link' id='GWAS_2' data-toggle='pill' href='#GWAS_pill2' aria-expanded='true'>MLM(test)</a></li>
-																	<li class='nav-item'><a class='nav-link' id='GWAS_3' data-toggle='pill' href='#GWAS_pill3' aria-expanded='true'>FarmCPU(test)</a></li>
+																	-->
 																</ul>
 																<div class="row mt-1">
 																	<div class="col-4">
-																		<select id='GWAS_select_phenotype' class='select2 form-select float-left' onchange='GWAS_select_change(this.options[this.selectedIndex].dataset.jobid);'>
+																		<select id='GWAS_select_phenotype' class='select2 form-select float-left' onchange='GWAS_phenotype_change(this)'>
 																			<option data-chr="-1" disabled hidden selected>Select Phenotype</option>
 																		</select>
 																	</div>
@@ -616,13 +612,79 @@
    			console.log(data);
    			for(let i=0 ; i<data.length ; i++) {
   				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-  				$("#GWAS_select").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} > \${data[i].filename} (\${data[i].comment}) </option>`);
+  				$("#GWAS_select").append(`<option data-jobid=\${data[i].jobid} data-phenotype=\${data[i].phenotype_name} data-model=\${data[i].model} data-filename=\${data[i].filename} > \${data[i].filename} (\${data[i].comment}) </option>`);
   			}
    		});
    	}
    	
-   	function GWAS_select_change(jobid) {
-   		console.log(jobid);
+   	// GWAS탭의 드롭박스 change시 발생 이벤트
+   	function GWAS_select_change(HTML_element) {
+   		//console.log(HTML_element);
+   		
+   		//const jobid = HTML_element.dataset.jobid;
+   		
+   		
+   		// model list 나열
+   		const model = HTML_element.dataset.model.split("|");
+   		$("#GWAS_button_list").empty();
+   		for(let i=0 ; i<model.length ; i++) {
+			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${i+1}" data-toggle="pill" href="#GWAS_pill\${i+1}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} onclick="setPhenotype(this.dataset.phenotype);" >\${model[i]}</a></li>`);
+			
+			if(i==0) {
+				document.getElementById('GWAS_1').classList.add('active');
+			}
+		}
+   		
+   		// phenotype list 드롭박스에 나열
+   		const phenotype = HTML_element.dataset.phenotype.split("|");
+   		$("#GWAS_select_phenotype").empty();
+   		$("#GWAS_select_phenotype").append('<option data-phenotype="-1" disabled hidden selected>Select Phenotype</option>')
+   		for(let i=0 ; i<phenotype.length ; i++) {
+			$("#GWAS_select_phenotype").append(`<option data-phenotype=\${phenotype[i]} > \${phenotype[i]} </option>`);
+		}
+   		
+   		//#GWAS_select
+   	}
+   	
+   	function setPhenotype(phenotype) {
+   		console.log(phenotype);
+   		//phenotype값에 맞는 option을 selected값으로 적용하고 ("#~~~").trigger('change') 발생
+   	}
+   	
+   	function GWAS_phenotype_change (HTML_element) {
+		console.log(HTML_element);
+		
+		const phenotype = HTML_element.options[HTML_element.selectedIndex].dataset.phenotype;
+		
+		console.log(phenotype);
+		
+		
+   		show_GWAS_Grid();
+   	}
+   	
+   	function show_GWAS_Grid () {
+   		console.log("click");
+   		
+   		const GWAS_params = {};
+   		
+   		const GWAS_select = document.getElementById('GWAS_select_phenotype');
+   		const phenotype = GWAS_select.options[GWAS_select.selectedIndex].dataset.phenotype;
+   		if(phenotype == "-1")	return;
+   		
+   		GWAS_params['phenotype'] = phenotype;
+   		
+   		const models = document.getElementById('GWAS_button_list').childNodes;
+   		for(let i=0 ; i<models.length ; i++) {
+   			//console.log(models[i].firstChild)
+   			if(models[i].firstChild.classList.contains('active')) {
+   				GWAS_params['model'] = models[i].firstChild.dataset.model;
+   				break;
+   			}
+   		}
+   		
+   		GWAS_params['jobid'] = linkedJobid;
+   		
+   		console.log(GWAS_params);
    	}
    	
    	function inputNumberRange(HTML_element) {
