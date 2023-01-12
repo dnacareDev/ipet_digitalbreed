@@ -21,8 +21,6 @@
 	JSONArray jsonArray = new JSONArray();
 	
 	try{
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-		
 		//String sql = "";
 		
 		//String GWAS_sql = "select 'GWAS' as category, genotype_filename as filename, comment, jobid, cre_dt from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1";

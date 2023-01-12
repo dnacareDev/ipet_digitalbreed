@@ -7,6 +7,17 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+	function refresh() {
+		gridOptions.api.refreshCells(); 
+		
+		fetch("./vb_json.jsp?varietyid="+$( "#variety-select option:selected" ).val())
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log(data);
+			gridOptions.api.setRowData(data);
+			gridOptions.api.sizeColumnsToFit();
+  		});
+	}
 	
 	/*** COLUMN DEFINE ***/
 	var columnDefs = [

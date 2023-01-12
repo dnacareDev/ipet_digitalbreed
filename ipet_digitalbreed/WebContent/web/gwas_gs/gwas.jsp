@@ -70,10 +70,6 @@ body {
 	border : none !important;
 }
 
-.select2 {
-	min-width: 160px;
-}
-
 .select2-container--default .select2-results__option[aria-disabled=true] {
     display: none;
 }

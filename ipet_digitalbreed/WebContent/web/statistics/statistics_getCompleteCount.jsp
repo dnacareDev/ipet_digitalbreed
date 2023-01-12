@@ -56,7 +56,6 @@
 	
 	
 	try{
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
 		//System.out.println("GWAS_sql : " + GWAS_sql);
 		
@@ -73,7 +72,6 @@
 	list.add(0);
 	/*
 	try{
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		sql = "select count(*) as count from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "' and status=1;";
 		
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
@@ -87,7 +85,6 @@
 	*/
 	
 	try{
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
 		//System.out.println("filter_sql : " + filter_sql);
 		
@@ -103,7 +100,6 @@
 	
 	/*** genotype analysis -> 4개 count 합산 ***/
 	try{
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
 		String sql = "select ( (" +Genocore_sql+ ") + (" +mini_sql+ ") + (" +PCA_sql+ ") + (" +UPGMA_sql +") ) as count from dual";
 		//System.out.println("sum 4 countSql : " +sql);
@@ -121,7 +117,6 @@
 	//phenotype analaysis (현재 없음)
 	/*
 	try{
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		sql = "select count(*) as count from gwas_info_t where creuser='" +permissionUid+ "' and varietyid = '" +varietyid+ "';";
 		
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
@@ -136,6 +131,10 @@
 		ipetdigitalconndb.conn.close();
 	}
 	*/
+	
+	ipetdigitalconndb.stmt.close();
+	ipetdigitalconndb.conn.close();
+	
 	list.add(0);
 	
 	out.clear();

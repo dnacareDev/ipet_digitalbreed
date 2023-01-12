@@ -145,6 +145,9 @@ body {
                                         	}
                                         } catch (Exception e){
                                         	System.out.println(e);
+                                        } finally {
+                                        	ipetdigitalconndb.stmt.close();
+                            				ipetdigitalconndb.conn.close();
                                         }
                                    %>       
                                    </select>                                          

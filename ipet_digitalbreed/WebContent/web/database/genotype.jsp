@@ -212,6 +212,7 @@ body {
 						            <div class="col-md-12 col-12">
 						            	<select id='refGenomeSelect' class='select2 form-select float-left'>
 						            		<option></option>
+						            		<option>Non-reference</option>
 										</select>
 						            </div>
 						            <div class="col-md-12 col-12 mt-2">

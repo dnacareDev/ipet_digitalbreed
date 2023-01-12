@@ -215,16 +215,38 @@
 														</div>
 	  												</div>
 	  												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-	  													<div style="width:50%;"> 
-															<select id='GWAS_select' class='select2 form-select float-left'>
-																<option data-chr="-1" disabled hidden selected>Select result</option>
-															</select>
+	  													<div class="row mt-1">
+		  													<div class="col-6">
+																<select id='GWAS_select' class='select2 form-select float-left' onchange='GWAS_select_change(this.options[this.selectedIndex].dataset.jobid);'>
+																	<option data-chr="-1" disabled hidden selected>Select result</option>
+																</select>
+															</div>
 														</div>
-														<div class="row mt-1" style="float:right;">
+									            		<div class="row mt-1">
 									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">표지</button>
+											            		<button type="button" class="btn btn-light float-right" style="margin-right:29px;" onclick="filter_SnpEff();">표지</button>
 											            	</div>
 									            		</div>
+														<div class="row mt-1">
+															<div class="col-12">
+																<ul id='GWAS_button_list' class='nav nav-pills nav-active-bordered-pill'>
+																	<!-- 
+																		GWAS_button_list >> a 태그의 data-phenotype에 select_phenotype값을 저장한다. 
+																		버튼 클릭시 해당 값을 기준으로 그리드 출력, 값이 없으면 출력X 
+																	-->
+																	<li class='nav-item'><a class='nav-link active' id='GWAS_1' data-toggle='pill' href='#GWAS_pill1' aria-expanded='true'>GLM(test)</a></li>
+																	<li class='nav-item'><a class='nav-link' id='GWAS_2' data-toggle='pill' href='#GWAS_pill2' aria-expanded='true'>MLM(test)</a></li>
+																	<li class='nav-item'><a class='nav-link' id='GWAS_3' data-toggle='pill' href='#GWAS_pill3' aria-expanded='true'>FarmCPU(test)</a></li>
+																</ul>
+																<div class="row mt-1">
+																	<div class="col-4">
+																		<select id='GWAS_select_phenotype' class='select2 form-select float-left' onchange='GWAS_select_change(this.options[this.selectedIndex].dataset.jobid);'>
+																			<option data-chr="-1" disabled hidden selected>Select Phenotype</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
 									            		<div class="row col-12 mt-1">
 	  														<div id='GWAS_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
 	  													</div>
@@ -416,6 +438,9 @@
 		
    		drawGeneModel();
    		
+   		
+   		getGwasList();
+   		
 	})
 	
 	window.addEventListener('resize', function(e) {
@@ -582,6 +607,22 @@
    			}
    			console.log(data);
    		})
+   	}
+   	
+   	function getGwasList() {
+   		fetch(`./vb_getLists.jsp?command=GWAS&jobid=\${linkedJobid}`)
+   		.then((response) => response.json())
+   		.then((data) => {
+   			console.log(data);
+   			for(let i=0 ; i<data.length ; i++) {
+  				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+  				$("#GWAS_select").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} > \${data[i].filename} (\${data[i].comment}) </option>`);
+  			}
+   		});
+   	}
+   	
+   	function GWAS_select_change(jobid) {
+   		console.log(jobid);
    	}
    	
    	function inputNumberRange(HTML_element) {

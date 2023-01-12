@@ -15,7 +15,6 @@
 	JSONArray jsonArray = new JSONArray();
 	
 	try{
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		//String sql = "select no, logid, menuname, comment, date_format(cre_dt, '%Y-%m-%d') cre_dt from log_t where logid='" +permissionUid+ "' order by cre_dt DESC, no DESC limit 11;";
 		String sql = "select menuname, comment, date_format(cre_dt, '%Y-%m-%d') cre_dt from log_t where cropid = (select cropid from variety_t where varietyid='" +varietyid+ "') and varietyid='" +varietyid+ "' order by cre_dt DESC, no DESC limit 11;";
 		//System.out.println("sql : " + sql);
