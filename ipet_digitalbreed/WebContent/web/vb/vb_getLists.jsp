@@ -45,7 +45,7 @@
 			JsonArray jsonArr = new JsonArray();
 			
 			// phenotype, model의 comma 텍스트를 그대로 사용시 dataset에 적용하려 할때 제대로 받지 못한다. -> 구분자를 |로 변경
-			sql = "select genotype_filename, replace(phenotype_name, ',', '|') as phenotype_name, replace(model, ', ', '|') as model, comment, jobid from gwas_info_t where status=1 and refgenome='"+refgenome+ "' and cropid='" +cropid+ "' and varietyid='" +varietyid+   "';";
+			sql = "select genotype_filename, replace(phenotype_name, ',', '|') as phenotype_name, replace(model, ', ', '|') as model, comment, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from gwas_info_t where status=1 and refgenome='"+refgenome+ "' and cropid='" +cropid+ "' and varietyid='" +varietyid+   "';";
 			//System.out.println(sql);
 			try{
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
@@ -56,6 +56,7 @@
 					jsonObj.addProperty("model", ipetdigitalconndb.rs.getString("model"));
 					jsonObj.addProperty("comment", ipetdigitalconndb.rs.getString("comment"));
 					jsonObj.addProperty("jobid", ipetdigitalconndb.rs.getString("jobid"));
+					jsonObj.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt"));
 					jsonArr.add(jsonObj);
 				}
 				

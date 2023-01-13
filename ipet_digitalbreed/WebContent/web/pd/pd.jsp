@@ -96,7 +96,7 @@
     <jsp:include page="../../css/topmenu.jsp" flush="true"/>
 
 	<jsp:include page="../../css/menu.jsp" flush="true">
-		<jsp:param name="menu_active" value="pd1"/>
+		<jsp:param name="menu_active" value="pd"/>
 	</jsp:include>
 
     <!-- BEGIN: Content-->
@@ -108,12 +108,12 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">&nbsp;Primer design1</h2>
+                            <h2 class="content-header-title float-left mb-0">&nbsp;Primer design</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="../index.jsp">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item active">Primer design1
+                                    <li class="breadcrumb-item active">Primer design
                                     </li>
                                 </ol>
                             </div>
@@ -163,6 +163,8 @@
                                 </div>
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+                            <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
+                            <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
                 </section>
@@ -173,7 +175,60 @@
     
     
 	<!-- Modal start-->
-
+    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning white">
+                    <h4 class="modal-title" id="myModalLabel5">PCA New Analysis</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+					<form class="form" id="uploadPcaForm">
+					    <div class="form-body">
+					        <div class="row">
+					            <div class="col-md-12 col-12 ml-1">
+					                <br>
+					             	<div class="form-label-group">
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+					             		<label for="first-name-column">Comment</label>
+					                </div>
+					            </div>
+					            <div class="col-md-12 col-12 ml-1">
+					            	<div class="form-label-group" >
+					                    <select class="select2 form-select" id="VcfSelect" style="width: 444px;">
+					                    </select>
+					                </div>
+					            </div>
+					            <div class="col-md-12 col-12">
+									<div class="form-label-group">
+							            <h6 style="margin-left:13px; font-weight:bold;">Population &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button></h6>
+							            <div class="col-md-12 col-12">
+											<div id="fileControl" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div>
+											<br>
+							            </div>
+						            </div>
+						        </div>
+					            <div class="col-12">
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetPCA();">Reset</button>
+					            </div>
+					        </div>
+					    </div>
+					</form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
+			<div><strong>Loading PD Result...</strong></div>
+	  	</div>
+	</div>
+	
 	<!-- Modal end-->
                         
     <!-- END: Content-->
@@ -211,7 +266,7 @@
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_pd_1.js"></script>
+    <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_pd.js"></script>
     <!--  
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>
     -->   

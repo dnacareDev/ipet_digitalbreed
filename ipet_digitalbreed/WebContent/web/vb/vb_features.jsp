@@ -258,9 +258,11 @@
 																</div>
 															</div>
 														</div>
+														<!--  
 									            		<div class="row col-12 mt-1">
 	  														<div id='GWAS_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
 	  													</div>
+	  													-->
 	  												</div>
 	  												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
 	  													<div style="width:50%;"> 
@@ -627,7 +629,7 @@
    			console.log(data);
    			for(let i=0 ; i<data.length ; i++) {
   				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-  				$("#GWAS_select").append(`<option data-jobid=\${data[i].jobid} data-phenotype=\${data[i].phenotype_name} data-model=\${data[i].model} data-filename=\${data[i].filename} > \${data[i].filename} (\${data[i].comment}) </option>`);
+  				$("#GWAS_select").append(`<option data-jobid=\${data[i].jobid} data-phenotype=\${data[i].phenotype_name} data-model=\${data[i].model} data-filename=\${data[i].filename} > \${data[i].comment} (\${data[i].cre_dt}) </option>`);
   			}
    		});
    	}
@@ -638,7 +640,7 @@
    	function GWAS_select_change(HTML_element) {
    		//console.log(HTML_element);
    		
-   		//const jobid = HTML_element.dataset.jobid;
+   		const jobid = HTML_element.dataset.jobid;
    		
    		
    		// model list 나열
@@ -655,7 +657,7 @@
 			}
 			
 			const element = document.getElementById(`GWAS_pill_\${model[i]}`);
-			element.innerHTML = `<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" onchange="show_GWAS_Grid(this)"></select>`
+			element.innerHTML = `<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="show_GWAS_Grid(this)"></select>`
 			
 			
 			const phenotype = HTML_element.dataset.phenotype.split("|");
@@ -671,6 +673,7 @@
 			GWAS_gridOptions_model[`\${model[i]}`] = Object.assign({},GWAS_gridOptions);
 			
 			const GWAS_Grid = new agGrid.Grid(GWAS_gridTable, GWAS_gridOptions_model[`\${model[i]}`]);
+			GWAS_gridOptions_model[`\${model[i]}`].api.sizeColumnsToFit();
 			
 		}
    		
@@ -685,32 +688,13 @@
    		*/
    	}
    	
-   	function setPhenotype(phenotype) {
-   		//console.log(phenotype);
-   		//phenotype값에 맞는 option을 selected값으로 적용하고 ("#~~~").trigger('change') 발생
-   	}
-   	
-   	/*
-   	function GWAS_phenotype_change (HTML_element) {
-		console.log(HTML_element);
-		
-		const phenotype = HTML_element.options[HTML_element.selectedIndex].dataset.phenotype;
-		
-		console.log(phenotype);
-		
-		
-   		show_GWAS_Grid();
-   	}
-   	*/
    	
    	function show_GWAS_Grid (HTML_element) {
 		console.log(HTML_element);
 		
 		const model = HTML_element.dataset.model;
 		const phenotype = HTML_element.options[HTML_element.selectedIndex].dataset.phenotype;
-		
-		const GWAS_select = document.getElementById('GWAS_select');
-   		const jobid = GWAS_select.options[GWAS_select.selectedIndex].dataset.jobid;
+   		const jobid = HTML_element.dataset.jobid;
 		
 		console.log(model);
 		console.log(phenotype);

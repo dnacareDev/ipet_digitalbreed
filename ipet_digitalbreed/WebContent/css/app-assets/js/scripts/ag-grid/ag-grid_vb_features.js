@@ -86,13 +86,51 @@
 	};
 	
 	var GWAS_columnDefs = [
-		{ checkboxSelection: true, headerCheckboxSelectionFilteredOnly: true, headerCheckboxSelection: true, width: 50, },
-		{ field: "selection", maxWidth: 100, minWidth: 100, suppressMenu: true, },
-	    { field: "Chr", filter: true, width: 60, minWidth: 60, },
-	    { field: "Pos", filter: 'agNumberColumnFilter', width: 70, minWidth: 70, },
-	    { field: "P-value", filter: "agTextColumnFilter",width: 80, minWidth: 80, },
-	    { field: "MAF", filter: 'agNumberColumnFilter', width: 120, minWidth: 120, },
-	    { field: "Effect", filter: 'agNumberColumnFilter', width: 120, minWidth: 100, },
+		{ 
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true, 
+			headerCheckboxSelection: true, 
+			width: 120, 
+		},
+		{ 
+			field: "selection", 
+			width: 120, 
+			minWidth: 100, 
+			suppressMenu: true, 
+		},
+	    { 
+			field: "Chr", 
+			filter: true, 
+			width: 240, 
+			minWidth: 160, 
+		},
+	    { 
+			field: "Pos",
+			filter: 'agNumberColumnFilter', 
+			width: 160, 
+			minWidth: 100, 
+		},
+	    { 
+			field: "P-value", 
+			filter: "agTextColumnFilter",
+			width: 360, 
+			minWidth: 180, 
+			//cellRenderer: (params) => Math.round(params.value * 10000000) / 10000000
+		},
+	    { 
+			field: "MAF", 
+			filter: 'agNumberColumnFilter', 
+			width: 360, 
+			minWidth: 180, 
+			//cellRenderer: (params) => Math.round(params.value * 10000000) / 10000000
+		},
+	    { 
+			field: "Effect", 
+			filter: 'agNumberColumnFilter', 
+			width: 360, 
+			minWidth: 200, 
+			//cellRenderer: (params) => Math.round(params.value * 10000000) / 10000000
+		},
 	];
 	var GWAS_gridOptions = {
 		defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
