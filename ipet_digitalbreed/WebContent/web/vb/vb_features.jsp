@@ -214,6 +214,7 @@
 															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
 														</div>
 	  												</div>
+	  												<!-- GWAS pill -->
 	  												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
 	  													<div class="row mt-1">
 		  													<div class="col-6">
@@ -234,12 +235,26 @@
 																	<li class='nav-item'><a class='nav-link active' id='GWAS_1' data-toggle='pill' href='#GWAS_pill1' aria-expanded='true'>GLM(test)</a></li>
 																	-->
 																</ul>
+																<!--  
 																<div class="row mt-1">
 																	<div class="col-4">
 																		<select id='GWAS_select_phenotype' class='select2 form-select float-left' onchange='GWAS_phenotype_change(this)'>
 																			<option data-chr="-1" disabled hidden selected>Select Phenotype</option>
 																		</select>
 																	</div>
+																</div>
+																-->
+																<div class="row mt-1">
+																	<div id="GWAS_content_list" class='tab-content col-12'>
+		  																<!--  
+		  																<div role='tabpanel' class='tab-pane active' id='GWAS_pill_1' aria-expanded='true' aria-labelledby='base-pill1'>
+		  																	"aaaaaa"
+		  																</div>
+		  																<div class='tab-pane' id='GWAS_pill_2' aria-expanded='true' aria-labelledby='base-pill1'>
+		  																	"bbbbb"
+		  																</div>
+		  																-->
+		  															</div>
 																</div>
 															</div>
 														</div>
@@ -379,12 +394,12 @@
 
     <!-- BEGIN: Vendor JS-->
     <script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
+    <!--  
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
+    -->
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
     <script src="../../css/app-assets/js/scripts/forms/select/form-select2_vb_features.js"></script>
-    <!--  
     <script src="../../css/app-assets/js/scripts/sheetjs/xlsx.full.min.js"></script>
-    -->    
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
@@ -617,6 +632,8 @@
    		});
    	}
    	
+   	const GWAS_gridOptions_model = {};
+   	
    	// GWAS탭의 드롭박스 change시 발생 이벤트
    	function GWAS_select_change(HTML_element) {
    		//console.log(HTML_element);
@@ -627,30 +644,53 @@
    		// model list 나열
    		const model = HTML_element.dataset.model.split("|");
    		$("#GWAS_button_list").empty();
+   		$("#GWAS_content_list").empty();
    		for(let i=0 ; i<model.length ; i++) {
-			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${i+1}" data-toggle="pill" href="#GWAS_pill\${i+1}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} onclick="setPhenotype(this.dataset.phenotype);" >\${model[i]}</a></li>`);
+			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${model[i]}" data-toggle="pill" href="#GWAS_pill_\${model[i]}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} onclick="setPhenotype(this.dataset.phenotype);" >\${model[i]}</a></li>`);
+			$("#GWAS_content_list").append(`<div role='tabpanel' class='tab-pane' id='GWAS_pill_\${model[i]}' aria-expanded='true' aria-labelledby='base-pill1'>\${model[i]}</div>`)
 			
 			if(i==0) {
-				document.getElementById('GWAS_1').classList.add('active');
+				document.getElementById(`GWAS_\${model[i]}`).classList.add('active');
+				document.getElementById(`GWAS_pill_\${model[i]}`).classList.add('active');
 			}
+			
+			const element = document.getElementById(`GWAS_pill_\${model[i]}`);
+			element.innerHTML = `<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" onchange="show_GWAS_Grid(this)"></select>`
+			
+			
+			const phenotype = HTML_element.dataset.phenotype.split("|");
+			$(`#GWAS_select_\${model[i]}`).append('<option data-phenotype="-1" disabled hidden selected>Select Phenotype</option>')
+			for(let j=0 ; j<phenotype.length ; j++) {
+				$(`#GWAS_select_\${model[i]}`).append(`<option data-phenotype=\${phenotype[j]} > \${phenotype[j]} </option>`);
+			}
+			jQuery(`#GWAS_select_\${model[i]}`).select2({width: '35%'});
+			
+			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:245px;' ></div></div>`); 
+			
+			const GWAS_gridTable = document.getElementById(`GWAS_Grid_\${model[i]}`);
+			GWAS_gridOptions_model[`\${model[i]}`] = Object.assign({},GWAS_gridOptions);
+			
+			const GWAS_Grid = new agGrid.Grid(GWAS_gridTable, GWAS_gridOptions_model[`\${model[i]}`]);
+			
 		}
    		
    		// phenotype list 드롭박스에 나열
+   		/*
    		const phenotype = HTML_element.dataset.phenotype.split("|");
    		$("#GWAS_select_phenotype").empty();
    		$("#GWAS_select_phenotype").append('<option data-phenotype="-1" disabled hidden selected>Select Phenotype</option>')
    		for(let i=0 ; i<phenotype.length ; i++) {
 			$("#GWAS_select_phenotype").append(`<option data-phenotype=\${phenotype[i]} > \${phenotype[i]} </option>`);
 		}
-   		
-   		//#GWAS_select
+   		*/
    	}
    	
    	function setPhenotype(phenotype) {
-   		console.log(phenotype);
+   		//console.log(phenotype);
    		//phenotype값에 맞는 option을 selected값으로 적용하고 ("#~~~").trigger('change') 발생
    	}
    	
+   	/*
    	function GWAS_phenotype_change (HTML_element) {
 		console.log(HTML_element);
 		
@@ -661,30 +701,87 @@
 		
    		show_GWAS_Grid();
    	}
+   	*/
    	
-   	function show_GWAS_Grid () {
-   		console.log("click");
+   	function show_GWAS_Grid (HTML_element) {
+		console.log(HTML_element);
+		
+		const model = HTML_element.dataset.model;
+		const phenotype = HTML_element.options[HTML_element.selectedIndex].dataset.phenotype;
+		
+		const GWAS_select = document.getElementById('GWAS_select');
+   		const jobid = GWAS_select.options[GWAS_select.selectedIndex].dataset.jobid;
+		
+		console.log(model);
+		console.log(phenotype);
+		console.log(jobid);
+		
+		
+		const resultpath = '/ipet_digitalbreed/result/gwas/';
+		
+		fetch(resultpath+jobid+ "/GAPIT.Association.GWAS_Results." +model+ "." +phenotype+ ".csv")
+		.then((response) => response.blob())
+		.then((file) => {
+			var reader = new FileReader();
+		    reader.onload = function(){
+		        const fileData = reader.result;
+		        const wb = XLSX.read(fileData, {type : 'binary'});
+		        
+		        const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+		        
+		        const gridOptions = GWAS_gridOptions_model[model]
+		        gridOptions.api.setRowData(rowObj);
+		        
+		    };
+		    reader.readAsBinaryString(file);
+		});
+
+   		/*
+   		const GWAS_select = document.getElementById('GWAS_select');
+   		const jobid = GWAS_select.options[GWAS_select.selectedIndex].dataset.jobid;
    		
-   		const GWAS_params = {};
-   		
-   		const GWAS_select = document.getElementById('GWAS_select_phenotype');
-   		const phenotype = GWAS_select.options[GWAS_select.selectedIndex].dataset.phenotype;
+   		const GWAS_select_phenotype = document.getElementById('GWAS_select_phenotype');
+   		const phenotype = GWAS_select_phenotype.options[GWAS_select_phenotype.selectedIndex].dataset.phenotype;
    		if(phenotype == "-1")	return;
    		
-   		GWAS_params['phenotype'] = phenotype;
    		
    		const models = document.getElementById('GWAS_button_list').childNodes;
+   		let model = "";
    		for(let i=0 ; i<models.length ; i++) {
    			//console.log(models[i].firstChild)
    			if(models[i].firstChild.classList.contains('active')) {
-   				GWAS_params['model'] = models[i].firstChild.dataset.model;
+   				model = models[i].firstChild.dataset.model;
    				break;
    			}
    		}
    		
-   		GWAS_params['jobid'] = linkedJobid;
    		
-   		console.log(GWAS_params);
+   		console.log(jobid, phenotype, model);
+   		
+   		const resultpath = '/ipet_digitalbreed/result/gwas/';
+   		
+   		fetch(resultpath+jobid+ "/GAPIT.Association.GWAS_Results." +model+ "." +phenotype+ ".csv")
+		.then((response) => response.blob())
+		.then((file) => {
+			var reader = new FileReader();
+		    reader.onload = function(){
+		        const fileData = reader.result;
+		        const wb = XLSX.read(fileData, {type : 'binary'});
+		        
+		        const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+		        
+		        GWAS_gridOptions.api.setRowData(rowObj);
+		        
+		        //console.log("rowObj : ", rowObj);
+		        //console.log(csv_to_grid);
+		        //const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
+		        //gridOptions2.api.setRowData(rowObj);
+		        //gridOptions2.api.sizeColumnsToFit();
+		        //console.log(document.querySelector(`#grid_${model_name}`));
+		    };
+		    reader.readAsBinaryString(file);
+		});
+   		*/
    	}
    	
    	function inputNumberRange(HTML_element) {

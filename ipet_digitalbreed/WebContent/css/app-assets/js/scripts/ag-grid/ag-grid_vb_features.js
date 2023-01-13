@@ -214,12 +214,13 @@
   		const SnpEff_rowData = [ { "selection": "star", "Chr": 1, "Pos": 40326, "Impact": "HIGH", } ];
   		SnpEff_gridOptions.api.setRowData(SnpEff_rowData)
   		
+  		/*
   		const GWAS_gridTable = document.getElementById("GWAS_Grid");
   		const GWAS_Grid = new agGrid.Grid(GWAS_gridTable, GWAS_gridOptions);
   		const GWAS_rowData = [ { "selection": "star", "Chr": 1, "Pos": 40326, "P-value": 0.305428246, "MAF": 0.140350877, "Effect": 0.88349949 } ];
   		GWAS_gridOptions.api.setRowData(GWAS_rowData)
   		//GWAS_gridOptions.api.setRowData(new Array());
-  		
+  		*/
   		
   		
   		

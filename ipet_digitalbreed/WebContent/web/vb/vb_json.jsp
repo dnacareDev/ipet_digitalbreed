@@ -12,7 +12,6 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-	//JSONArray jsonArray = new JSONArray();
 	JsonArray jsonArray = new JsonArray();
 
 	try{
