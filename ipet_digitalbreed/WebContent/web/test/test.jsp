@@ -4,11 +4,25 @@
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*,java.nio.file.*"%> 
 <%
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
+	String path = "result/database/genotype_statistics/20230112165329/browser_data/";
+
 	
-	File excelFile = new File(rootFolder+"result/database/genotype_statistics/20230105184938/20230105184938_genotype_matrix_viewer.csv");
 	
-	System.out.println("test method");
+	File excelFile = new File(rootFolder+path+"20230112165329_genotype_matrix_file.txt");
 	
+	System.out.println("read txt file");
+	
+	try {
+		BufferedReader br = new BufferedReader(new FileReader(excelFile), 524288);
+		br.readLine();
+		
+		
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	
+	
+	/*
 	try {
 		
 		BufferedReader br = new BufferedReader(new FileReader(excelFile), 524288);
@@ -38,4 +52,5 @@
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
+	*/
 %>

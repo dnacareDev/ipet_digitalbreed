@@ -388,8 +388,8 @@ body {
         		const objOption = document.createElement("option");
         		
         		for(let i=0 ; i<data.length ; i++) {
-	        		objOption.text = data[i]['refgenome'];
-	        		objOption.dataset.refgenome = data[i]['refgenome'];
+	        		objOption.text = data[i]['reference'];
+	        		objOption.dataset.refgenome = data[i]['reference'];
 	        		selectEl.options.add(objOption);
         		}
         		

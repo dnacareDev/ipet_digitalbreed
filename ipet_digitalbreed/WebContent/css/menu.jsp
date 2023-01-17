@@ -83,6 +83,7 @@
                     </li>
 					<li class="<%if(menu_active.equals("statistics")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/statistics/statistics.jsp" data-i18n="Chat"><i class="feather icon-bar-chart"></i>Statistics</a></li>
 					<li class="<%if(menu_active.equals("about")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/about/about.jsp" data-i18n="Chat"><i class="feather icon-heart"></i>About</a></li>
+					<li class="<%if(menu_active.equals("refDB")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/refgenome/refgenome.jsp" data-i18n="Chat"><i class="feather icon-archive"></i>Reference Genome</a></li>
                 </ul>
             </div>
         </div>
