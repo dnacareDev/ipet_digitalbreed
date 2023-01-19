@@ -13,7 +13,7 @@ public class CsvToJson {
 	public void getJson(String outputPath, String jobid, String permissionUid) throws SQLException {
 		
 		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-		
+		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 		File excelFile = new File(outputPath+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
 		
@@ -58,7 +58,6 @@ public class CsvToJson {
                 	System.out.println("1000 inserts executed & count passed - " + count);
                 	//System.out.println(insertSqlColumnPart+insertSqlValuesPart);
                 	//System.out.println("String length - " + (insertSqlColumnPart+insertSqlValuesPart).length() );
-                	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
                 	ipetdigitalconndb.stmt.executeUpdate(insertSqlColumnPart+insertSqlValuesPart);
                 	//insertSqlValuesPart = "";
                 	insertSqlValuesPart.setLength(0);

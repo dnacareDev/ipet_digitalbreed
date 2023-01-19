@@ -65,23 +65,6 @@
 	    display: none;
 	}
 
-	table {
-		width: 95%;
-		margin-top: 24px;
-		margin-left: 12px;
-	}
-	
-	th, td {
-		border: 1px solid #DDDDDD;
-		color: black;
-		text-align: center;
-	}
-	
-	th:hover, td:hover {
-	  	background-color: #aad5f8;
-	  	color: #000000;	  
-	}
-	
 	#VariantBrowserCanvas {
 		width: 100%;
 	}
