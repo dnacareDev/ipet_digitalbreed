@@ -273,7 +273,8 @@
   		
   		// 염색체, position 하드코딩
   		const chr = 1;
-  		const position = 3374674;
+  		//const position = 3374674;
+  		const position = 1297413;
   		
   		fetch(`./vb_features_getBrowserData.jsp?chr=${chr}&position=${position}&jobid=${linkedJobid}`)
     	.then((response) => response.json())

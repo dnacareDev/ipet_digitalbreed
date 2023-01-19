@@ -14,7 +14,7 @@
 	//System.out.println(position);
 	//System.out.println(jobid);
 
-	if(!jobid.equals(jobid)) {
+	if( !(jobid.equals("20230112165422") || jobid.equals("20230111165341")) ) {
 		System.out.println("현재 jobid = 20230112165422 만 적용 (양배추 품종 - Final.merge.PKH.recode.vcf)");
 		return;
 	}
