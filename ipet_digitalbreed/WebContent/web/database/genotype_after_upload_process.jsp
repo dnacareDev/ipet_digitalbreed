@@ -71,6 +71,7 @@
 	System.out.println("========CSV to Json end========"); 
 	
 
+	/*
 	// CSV => 행렬변환된 CSV파일 생성
 	String csv_transpose = "Rscript " +script_path+ "genotype_sequence_bakground.R " +outputPath+" "+ jobid;
 	
@@ -78,8 +79,8 @@
 	System.out.println("csv_transpose : " + csv_transpose);
 	runanalysistools.execute(csv_transpose, "cmd");
 	System.out.println("========CSV transpose end========");
+	*/
 	System.out.println("vcf file background process complete");
-	
 	
 	
 	

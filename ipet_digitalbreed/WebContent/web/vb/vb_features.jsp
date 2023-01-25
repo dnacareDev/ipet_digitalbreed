@@ -76,6 +76,17 @@
 	  	-webkit-transition : all 0.2s ease;
 	    transition : all 0.2s ease;
 	}
+	
+	/************************ AG-Grid 헤더 수직 & borderline **************************/
+	#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text {
+	    writing-mode: vertical-lr; /* vertical text */
+	}
+	
+	#VariantBrowserGrid .ag-header-cell, #VariantBrowserGrid .ag-header-group-cell, #VariantBrowserGrid .ag-cell {
+	    border-right: 1px solid #dde2eb !important;
+	}
+	/************************ AG-Grid 헤더 수직  & borderline **************************/
+	
 
 </style>
 <%

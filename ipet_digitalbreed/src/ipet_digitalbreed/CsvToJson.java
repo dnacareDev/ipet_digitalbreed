@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,13 +26,14 @@ public class CsvToJson {
 			
 			String line = br.readLine();		// 첫줄
 			
-			List<String> columns = null;
-			columns = Arrays.asList(line.split(","));
+			List<String> columns = Arrays.asList(line.split(","));;
+			
 			
 			System.out.println("column size : " + columns.size());
 			
 			
-			String insertSqlColumnPart = "insert into vcfviewer_t (jobid, row_index, contents, creuser) values ('";
+			//String insertSqlColumnPart = "insert into vcfviewer_t (jobid, row_index, contents, creuser) values ('";
+			String insertSqlColumnPart = "insert into vcfviewer_t (chr, position, jobid, row_index, contents, creuser) values ('";
 			StringBuilder insertSqlValuesPart = new StringBuilder();
 			
 			int count = 0;
@@ -44,8 +46,23 @@ public class CsvToJson {
                 List<String> chunks = Arrays.asList(line.split(","));
                 //System.out.println(chunks.size());
                 
+                /*
                 for(int i = 0; i < columns.size(); i++) {
                     obj.addProperty(columns.get(i), chunks.get(i));
+                }
+                */
+                for(int i = -2; i < columns.size(); i++) {
+                	if(i==-2) {
+                		String chr = chunks.get(0).substring(0, chunks.get(0).lastIndexOf("_"));
+                		//obj.addProperty("chr", chr);
+                		insertSqlValuesPart.append(chr + "', ");
+                	} else if(i==-1) {
+                		String position = chunks.get(0).substring(chunks.get(0).lastIndexOf("_")+1, chunks.get(0).length());
+                		//obj.addProperty("position", position);
+                		insertSqlValuesPart.append(position + ", '");
+                	} else {
+                		obj.addProperty(columns.get(i), chunks.get(i));
+                	}
                 }
                 //System.out.println(obj);
                 

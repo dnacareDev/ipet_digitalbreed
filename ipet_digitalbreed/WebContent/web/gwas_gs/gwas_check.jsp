@@ -9,20 +9,18 @@
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	String permissionUid = request.getParameter("permissionUid");
+	String permissionUid = session.getAttribute("permissionUid")+"";	
 	String varietyid = request.getParameter("variety_id");
-	//String jobid_gwas = request.getParameter("jobid_gwas");
-	String jobid_gwas = runanalysistools.getCurrentDateTime();
+	//String jobid_gwas = runanalysistools.getCurrentDateTime();
+	String jobid_gwas = request.getParameter("jobid_gwas");
 	String comment = request.getParameter("comment");
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String filename_vcf = request.getParameter("filename_vcf");
-	//String traitname = request.getParameter("traitname");
-	String[] traitname_arr = request.getParameterValues("traitname_arr");
-	String traitname_key = request.getParameter("traitname_key_arr"); 
-	String[] traitname_key_arr = traitname_key.replaceAll("\\[|\\]", "").split(",");
+	String[] traitname_arr = request.getParameterValues("traitname_arr[]");
+	String[] traitname_key_arr = request.getParameterValues("traitname_key_arr[]");
 	String cre_date = request.getParameter("cre_date");
 	String inv_date = request.getParameter("inv_date");
-	String[] modelArr = request.getParameterValues("modelGroup");
+	String[] modelArr = request.getParameterValues("modelArr[]");
 	
 	String[] cre_date_arr = cre_date.split(" to ");
 	String[] inv_date_arr = inv_date.split(" to ");
@@ -45,7 +43,6 @@
 	System.out.println("modelArr : " + Arrays.toString(modelArr));
 	System.out.println("=========================================");
 
-	
 	String vcf_path = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/uploads/database/db_input/" + jobid_vcf + "/";
 	String gwas_pheno_path = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/uploads/gwas/";
 	String outputdir = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/result/gwas/";
@@ -65,11 +62,10 @@
 	File folder_pheno_path = new File(gwas_pheno_path+jobid_gwas);
 
 	if (!folder_pheno_path.exists()) {
-	try{
-		folder_pheno_path.mkdir(); 
-        } 
-        catch(Exception e){
-	    e.getStackTrace();
+		try {
+			folder_pheno_path.mkdir(); 
+	    } catch(Exception e){
+		    e.getStackTrace();
 		}        
 	}
 	
@@ -145,14 +141,11 @@
 	  		fulltraitval.add(ipetdigitalconndb.rs.getString("val"));
 		}
 	}catch(Exception e){
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.rs.close();
-		//ipetdigitalconndb.conn.close();
 		System.out.println(e);
 	}finally { 
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.rs.close();
-		//ipetdigitalconndb.conn.close();
+		ipetdigitalconndb.conn.close();
 	}
 	
 	
@@ -205,6 +198,9 @@
 		}        
 	}
 	
+	
+	
+	
 	String Gwas = "Rscript " +script_path+ "gwas_samplecheck_final.R " +vcf_path+ " " +gwas_pheno_path+ " " +outputdir+ " " +jobid_gwas+ " " +filename_vcf+ " " +jobid_gwas+"_phenotype.csv";
 	System.out.println("===========================================");
 	System.out.println("Gwas parameter : " + Gwas);
@@ -229,5 +225,7 @@
 		e.printStackTrace();
 	}
 	
-	out.print(jobid_gwas);
+	// 맨 마지막에 jobid_gwas값을 붙여서 연속성 유지.
+	// 현재는 javascript에서 jobid_gwas값을 따로 얻으므로 필요없음
+	// out.print(jobid_gwas);
 %>

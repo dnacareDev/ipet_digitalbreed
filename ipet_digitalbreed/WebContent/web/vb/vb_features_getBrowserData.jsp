@@ -14,11 +14,14 @@
 	//System.out.println(position);
 	//System.out.println(jobid);
 
-	if( !(jobid.equals("20230112165422") || jobid.equals("20230111165341")) ) {
+	if( !(jobid.equals("20230112165422") || jobid.equals("20230111165341") || jobid.equals("20230120164301") ) ) {
 		System.out.println("현재 jobid = 20230112165422 만 적용 (양배추 품종 - Final.merge.PKH.recode.vcf)");
 		return;
 	}
 	
+	if(jobid.equals("20230120164301")) {
+		chr = "SLG1";
+	}
 	
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -28,9 +31,25 @@
 	
 	List<String> columnList = new ArrayList<>();
 	
+	
+	
+	int row_index = 1;
+	try {
+		String sql = "select abs(position-"+position+") as gap, row_index from vcfviewer_t where position>=" + (position-100000) + " and position<=" +(position+100000)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "' order by gap limit 1;";
+		System.out.println(sql);
+		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+		ipetdigitalconndb.rs.next();
+		row_index = ipetdigitalconndb.rs.getInt("row_index");
+		System.out.println(row_index);
+	} catch (SQLException e) {
+		System.out.println("error - vb_features_getBrowserData - " + e);
+		e.printStackTrace();
+	}
+	
+	
 	try {
 		
-		String sql = "select * from vcfviewer_t where position >= " + (position-50000) + " and position <= " +(position+50000)+ " and chr=" +chr+ " and jobid ='" +jobid+ "';";
+		String sql = "select * from vcfviewer_t where row_index<="+(row_index+8)+" and row_index>="+(row_index-8)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
 		System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		

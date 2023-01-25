@@ -290,38 +290,38 @@ body {
 									<div class="form-label-group">
 							            <div class="demo-inline-spacing">
 	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="modelGroup" value="GLM" />
-	                                            <label class="form-check-label" for="inlineCheckbox1">GLM (General Linear Model)</label>
+	                                            <input class="form-check-input" type="checkbox" id="GLM" name="modelGroup" value="GLM" />
+	                                            <label class="form-check-label" for="GLM">GLM (General Linear Model)</label>
 	                                        </div>
 	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="modelGroup" value="MLM" />
-	                                            <label class="form-check-label" for="inlineCheckbox2">MLM(Mixed Linear Model)</label>
+	                                            <input class="form-check-input" type="checkbox" id="MLM" name="modelGroup" value="MLM" />
+	                                            <label class="form-check-label" for="MLM">MLM(Mixed Linear Model)</label>
 	                                        </div>
 	                                    </div>
 	                                    <div class="demo-inline-spacing">
 	                                    	<div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="modelGroup" value="CMLM" />
-	                                            <label class="form-check-label" for="inlineCheckbox3">CMLM(Compression MLM)</label>
+	                                            <input class="form-check-input" type="checkbox" id="CMLM" name="modelGroup" value="CMLM" />
+	                                            <label class="form-check-label" for="CMLM">CMLM(Compression MLM)</label>
 	                                        </div>
 	                                    	<div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="modelGroup" value="FarmCPU"  style="margin-left:9px;" />
-	                                            <label class="form-check-label" for="inlineCheckbox4">FarmCPU</label>
+	                                            <input class="form-check-input" type="checkbox" id="FarmCPU" name="modelGroup" value="FarmCPU"  style="margin-left:9px;" />
+	                                            <label class="form-check-label" for="FarmCPU">FarmCPU</label>
 	                                        </div>
 	                                    </div>
 	                                    <div class="demo-inline-spacing">
 	                                    	<div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox5" name="modelGroup" value="SUPER" />
-	                                            <label class="form-check-label" for="inlineCheckbox5">SUPER</label>
+	                                            <input class="form-check-input" type="checkbox" id="SUPER" name="modelGroup" value="SUPER" />
+	                                            <label class="form-check-label" for="SUPER">SUPER</label>
 	                                        </div>
 	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox6" name="modelGroup" value="BLINK" style="margin-left:121px;" />
-	                                            <label class="form-check-label" for="inlineCheckbox6">BLINK</label>
+	                                            <input class="form-check-input" type="checkbox" id="BLINK" name="modelGroup" value="BLINK" style="margin-left:121px;" />
+	                                            <label class="form-check-label" for="BLINK">BLINK</label>
 	                                        </div>
 	                                    </div>
 	                                    <div class="demo-inline-spacing">
 	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox7" name="modelGroup" value="MLMM" />
-	                                            <label class="form-check-label" for="inlineCheckbox7">MLMM</label>
+	                                            <input class="form-check-input" type="checkbox" id="MLMM" name="modelGroup" value="MLMM" />
+	                                            <label class="form-check-label" for="MLMM">MLMM</label>
 	                                        </div>
 	                                    </div>
 						            </div>
@@ -669,13 +669,23 @@ body {
    		}));
    	}
    	
-   	function execute() {
+   	async function execute() {
+   		
+	   	//comment
+		if(!document.getElementById("comment").value) {
+			alert("Comment를 입력해 주세요.");
+			return;
+		}
    		
    		//VCF파일 목록 선택 안했으면 return
    		if($("#VcfSelect :selected").data('jobid') == '-1') {
    			alert("VCF파일을 선택하세요.");
    			return;
    		} 
+   		
+   		const jobid_gwas = await fetch('../getJobid.jsp')
+	   							.then((response) => response.text())
+	   							.then((data) => data);
    		
    		//select Phenotype Database
    		if(document.querySelector('input[name="radio_phenotype"]:checked').value == '0') {
@@ -693,27 +703,121 @@ body {
    				return;
    			}
    			
-   			 
-   			const permissionUid = "<%=permissionUid%>";
-   	   		const variety_id = $( "#variety-select option:selected" ).val();
-   	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
-   	    	const filename_vcf = $('#VcfSelect :selected').data('filename');
+   			// permissionUid 삭제 (jsp session에서 받음)
+   			const varietySelectEl = document.getElementById('variety-select');
+   			const variety_id = varietySelectEl.options[varietySelectEl.selectedIndex].value;
+
+   			const comment = document.getElementById('comment').value;
+   			
+   			const VcfSelectEl = document.getElementById('VcfSelect');
+   			const jobid_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.jobid;
+   			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename
+   					
+   	   		//const variety_id = $( "#variety-select option:selected" ).val();
+   	    	//const jobid_vcf = $('#VcfSelect :selected').data('jobid');
+   	    	//const filename_vcf = $('#VcfSelect :selected').data('filename');
    	    	
-   	    	const selectedData = gridOptionsTraitName.api.getSelectedRows();
+   	    	const selectedTrait = gridOptionsTraitName.api.getSelectedRows();
    	    	//console.log("selectedData : ", selectedData);
    	    	let traitname_arr = new Array();
    	    	let traitname_key_arr = new Array();
 			  
-			for (var i = 0; i < selectedData.length; i++) {
-				traitname_arr.push(selectedData[i].traitname);
-				traitname_key_arr.push(selectedData[i].traitname_key);
+			for (var i = 0; i < selectedTrait.length; i++) {
+				traitname_arr.push(selectedTrait[i].traitname);
+				traitname_key_arr.push(selectedTrait[i].traitname_key);
 			}
    	    	
+			
+			const cre_date = document.getElementById('cre_date').value;
+			//if(!cre_date) {
+			//	cre_date = "-"
+			//}
+			const inv_date = document.getElementById('inv_date').value;
+			//if(!inv_date) {
+			//	inv_date = "-"
+			//}
+			
+			const modelArr = ['GLM', 'MLM', 'CMLM', 'FarmCPU', 'SUPER', 'BLINK', 'MLMM'];
+
+			//체크하지 않은 model은 배열에서 탈락
+			for(let i=0 ; i<modelArr.length ; i++) {
+				const modelCheckbox = document.getElementById(modelArr[i]);
+				if(!modelCheckbox.checked) {
+					modelArr.splice(i,1);
+					i--;
+				}
+			}
+			console.log(modelArr);
+			
+			
    	    	
    	    	//console.log(traitname_arr);
    	    	//console.log(traitname_key_arr);
    	    	
+   	    	const data = {
+   	    			"variety_id": variety_id,
+   	    			"comment": comment,
+   	    			"jobid_gwas": jobid_gwas,
+   	    			"jobid_vcf": jobid_vcf,
+   	    			"filename_vcf": filename_vcf,
+   	    			"traitname_arr": traitname_arr,
+   	    			"traitname_key_arr": traitname_key_arr,
+   	    			"modelArr": modelArr,
+   	    			"cre_date": cre_date,
+   	    			"inv_date": inv_date,
+   	    	}
    	    	
+   	    	
+   	    	const check_data = await $.ajax({
+							   	    		url: "./gwas_check.jsp",
+							   	    		method: "POST",
+							   	    		data: data,
+							   	    		async: false,
+							   	    	})
+							  
+   	    	
+			const check_data_arr = check_data.substring(0, check_data.length - 1).split(",");
+							   	    	
+   	    	console.log(check_data_arr);
+   	    	
+   	    	if(check_data_arr.length == 0 ) {
+   				alert("분석이 시작됩니다. 잠시만 기다려주세요.");
+   			} else {
+   				if(!confirm(check_data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?"))	return; 
+   			}
+   	    	
+   	    	
+			// 2023-01-10 | 파라미터에 refgenome 추가
+			const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
+   	    	
+   	    	//data['refgenome'] = refgenome;
+   	    	
+   	    	
+   	    	data_added = {
+   	    			"refgenome": refgenome,
+   	    			"radio_phenotype": 0
+   	    			
+   	    	}
+   	    	
+   	    	//data2 = { ...data, ...data_added};
+   	    	data2 = Object.assign(data, data_added);
+   	    	
+   	    	
+   	    	
+   	    	$.ajax({
+				url: "./gwas_analysis.jsp",
+				method: "POST",
+				data: data2,
+				
+			})
+			
+			setTimeout( function () {
+	   			refresh();
+	   			$("#backdrop").modal("hide");
+	   		}, 1000);
+   	    	
+   	    	
+   	    	/*
    	    	let formData = new FormData($("#uploadGwasForm")[0]);
    	    	
    	    	formData.append('permissionUid', permissionUid);
@@ -778,31 +882,10 @@ body {
     		   			refresh();
     		   			$("#backdrop").modal("hide");
     		   		}, 1000);
-   	    			
-   	    			/*
-   	    			if(confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?")) {
-   	    				$.ajax(
-   	    				{
-   	    					url: "./gwas_analysis.jsp",
-   	    					method: "POST",
-   	    					data: queryString2,
-   	    					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-   	    					success: function(result) {
-   	    						
-   	    					}
-   	    					
-   	    				})
-   	    				
-   	    				setTimeout( function () {
-   	    		   			refresh();
-   	    		   			$("#backdrop").modal("hide");
-   	    		   		}, 1000);
-   	    			} 
-   	    			*/
    	    		}
    	    		
    	    	})
-   			
+   			*/
    			
    			
    		// select New Phenotype File	

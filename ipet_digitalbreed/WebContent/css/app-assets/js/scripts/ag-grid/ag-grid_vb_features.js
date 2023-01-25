@@ -30,24 +30,24 @@
 	}
 
 	var VariantBrowser_columnDefs = [];
-	
 	var VariantBrowser_gridOptions = {
 			defaultColDef: { 
 				editable: false, 
 				sortable: true, 
-				resizable: true, 
+				resizable: false, 
 				suppressMenu: true, 
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], 
 			},
 			columnDefs: VariantBrowser_columnDefs, 
 			rowHeight: 35, 
+			headerHeight: 100,
 			enableRangeSelection: true, 
 			suppressMultiRangeSelection: true, 
 			pagination: true, 
 			paginationPageSize: 20,
 			pivotPanelShow: "always", 
-			colResizeDefault: "shift", 
+			//colResizeDefault: "shift", 
 			animateRows: true, 
 			tooltipShowDelay: 0,
 		    tooltipHideDelay: 20000,
@@ -299,7 +299,7 @@
     			} else {
     				VariantBrowser_columnDefs.push({
     					'field': columnKeys[i], 
-    					'width': 120,
+    					'width': 60,
     					tooltipComponent: CustomTooltip, 
     					cellStyle: cellStyle,
     				}) 
@@ -308,8 +308,11 @@
     		
     		const VariantBrowser_gridTable = document.getElementById("VariantBrowserGrid");
     		const VariantBrowser_Grid = new agGrid.Grid(VariantBrowser_gridTable, VariantBrowser_gridOptions);
-    		
     		VariantBrowser_gridOptions.api.setRowData(data);
+    		
+    		//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
+    		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
+    		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb'; 
     	})
   		
   		
