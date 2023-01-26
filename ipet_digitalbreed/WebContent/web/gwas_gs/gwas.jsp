@@ -433,148 +433,96 @@ body {
 	    box.on('uploadComplete', function (p) {
 			//document.getElementById('uploadGwasForm').reset();
 	    	box.removeAllFiles();
-	    	const jobid_gwas = $("#jobid_gwas").val();
+	    	//const jobid_gwas = $("#jobid_gwas").val();
+	    	const jobid_gwas = p.postData.jobid_gwas;
 	    	console.log("jobid_gwas : ", jobid_gwas);
 	    	
+	    	let data_arr;
 	    	$.ajax({
 	    		url: "./gwas_samplecheck.jsp",
 	    		method: "POST",
 	    		data: {"jobid_gwas": jobid_gwas},
+	    		async: false,
 	    		success: function(data) {
 					console.log("없는 표현형 : ", data);
    	    			
-   	    			let data_arr = data.split(",");
-   	    			data_arr.pop();
-   	    	    	
-   	    			
+   	    			//let data_arr = data.split(",");
+   	    			//data_arr.pop();
+   	    			let data_arr = data.substring(0, data.length - 1).split(",");
    	    			
    	    			$.ajax({
    	    				url: "./gwas_phenotypeFromCsv.jsp",
    	    				method: "POST",
    	    				data: {"jobid_gwas": jobid_gwas},
-   	    				success: function(phenotype) {
-   	    					//console.log("phenotype_input : ", phenotype_input);
-   	    					console.log("phenotype : ", phenotype);
-   	    					$("#phenotype_input").val(phenotype);
-   	    					//const phenotype_input = $("#phenotype_input").val();
+   	    				success: function(result_phenotype) {
+   	    					
+   	    					console.log("result_phenotype : ", result_phenotype);
    	    					
    	    					if(data_arr.length == 0 ) {
-		   	    				alert("분석이 시작됩니다. 잠시만 기다려주세요.");
-		   	    			} else {
-		   	    				if(!confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?"))	return; 
-		   	    			}
+   	    	    				alert("분석이 시작됩니다. 잠시만 기다려주세요.");
+   	    	    			} else {
+   	    	    				if(!confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?"))	return; 
+   	    	    			}
    	    					
-   	    					const permissionUid = "<%=permissionUid%>";
-    	   	    	   		const variety_id = $( "#variety-select option:selected" ).val();
-    	   	    	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
-    	   	    	    	const filename_vcf = $('#VcfSelect :selected').data('filename');
     	   	    	    	
     	   	    	    	
-    	   	    	    	let traitname_arr = new Array();
-    	   	    	    	let traitname_key_arr = new Array();
+    	   	    	  		// permissionUid 삭제 (jsp session에서 받음)
+    	   	    			const varietySelectEl = document.getElementById('variety-select');
+    	   	    			const variety_id = varietySelectEl.options[varietySelectEl.selectedIndex].value;
+
+    	   	    			const comment = document.getElementById('comment').value;
+    	   	    			
+    	   	    			const VcfSelectEl = document.getElementById('VcfSelect');
+    	   	    			const jobid_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.jobid;
+    	   	    			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename
+    	   	    			// 2023-01-10 | 파라미터에 refgenome 추가
+    	   	 				const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
+    	   	    					
     	   	    	    	
-    	   	    	    	const _phenotype = $("#phenotype_input").val();
+	    	   	 			
+    	   	    	    	const model_arr = ['GLM', 'MLM', 'CMLM', 'FarmCPU', 'SUPER', 'BLINK', 'MLMM'];
+	    	   	 	   		//체크하지 않은 model은 배열에서 탈락
+	    	   	 			for(let i=0 ; i<model_arr.length ; i++) {
+	    	   	 				const modelCheckbox = document.getElementById(model_arr[i]);
+	    	   	 				if(!modelCheckbox.checked) {
+	    	   	 					model_arr.splice(i,1);
+	    	   	 					i--;
+	    	   	 				}
+	    	   	 			}
     	   	    	    	
-    	   	    	    	for(let i=0 ; i<_phenotype.length ; i++) {
-    	   	    	    		traitname_arr.push( $(this).data('traitname'));
- 	   	    	    			traitname_key_arr.push( $(this).data('traitname_key'));
+    	   	    	    	
+    	   	    	    	const phenotype = result_phenotype;
+    	   	    	    	
+    	   	    	    	
+    	   	    	    	const data = {
+   	   	    	    			"variety_id": variety_id,
+   	   	    	    			"comment": comment,
+   	   	    	    			"jobid_gwas": jobid_gwas,
+   	   	    	    			"jobid_vcf": jobid_vcf,
+   	   	    	    			"refgenome": refgenome,						// analysis.jsp에서 사용
+   	   	    	    			"radio_phenotype": 1,						// New Phenotype
+   	   	    	    			"filename_vcf": filename_vcf,
+   	   	    	    			"model_arr": model_arr,
+   	   	    	    			"phenotype": phenotype,
     	   	    	    	}
     	   	    	    	
-    	    	    		
-    	   	    	    	let formData = new FormData($("#uploadGwasForm")[0]);
-    	   	   	    	
-    			   	    	formData.append('permissionUid', permissionUid);
-    			   	    	formData.append('variety_id', variety_id);
-    			   	    	formData.append('jobid_gwas', jobid_gwas);
-    			   	  		formData.append('jobid_vcf', jobid_vcf);
-    			   	    	formData.append('filename_vcf', filename_vcf);
-    			   	    	formData.append('traitname_arr', traitname_arr);
-    			   	    	formData.append('traitname_key_arr', traitname_key_arr);
-    			   	    	formData.append('phenotype', _phenotype);
-    			   	    	
-    			   			// 2023-01-10 | 파라미터에 refgenome 추가
-    	   	    			const refgenome = $('#VcfSelect :selected').data('refgenome');
-    	   	    			formData.append('refgenome', refgenome);
-    			   	    	
-    			   	  		let queryString = new URLSearchParams(formData).toString();
-    	    	    		
-    	    				$.ajax(
-    	    				{
+    	   	    	    	$.ajax({
     	    					url: "./gwas_analysis.jsp",
     	    					method: "POST",
-    	    					data: queryString,
-    	    					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-    	    					success: function(result) {
-    	    						
-    	    					}
-    	    					
+    	    					data: data,
     	    				})
     	    				
     	    				setTimeout( function () {
     	    		   			refresh();
     	    		   			$("#backdrop").modal("hide");
     	    		   		}, 1000);
-   	    					
-   	    					/*
-   	    					if(confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?")) {
-   	    	    	    		
-   	    	    	    		const permissionUid = "<%=permissionUid%>";
-   	    	   	    	   		const variety_id = $( "#variety-select option:selected" ).val();
-   	    	   	    	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
-   	    	   	    	    	const filename_vcf = $('#VcfSelect :selected').data('filename');
-   	    	   	    	    	
-   	    	   	    	    	
-   	    	   	    	    	let traitname_arr = new Array();
-   	    	   	    	    	let traitname_key_arr = new Array();
-   	    	   	    	    	
-   	    	   	    	    	const phenotype = $("#phenotype_input").val();
-   	    	   	    	    	
-   	    	   	    	    	for(let i=0 ; i<phenotype.length ; i++) {
-   	    	   	    	    		traitname_arr.push( $(this).data('traitname'));
-   	 	   	    	    			traitname_key_arr.push( $(this).data('traitname_key'));
-   	    	   	    	    	}
-   	    	   	    	    	
-   	    	    	    		
-   	    	   	    	    	let formData = new FormData($("#uploadGwasForm")[0]);
-   	    	   	   	    	
-   	    			   	    	formData.append('permissionUid', permissionUid);
-   	    			   	    	formData.append('variety_id', variety_id);
-   	    			   	    	formData.append('jobid_gwas', jobid_gwas);
-   	    			   	  		formData.append('jobid_vcf', jobid_vcf);
-   	    			   	    	formData.append('filename_vcf', filename_vcf);
-   	    			   	    	formData.append('traitname_arr', traitname_arr);
-   	    			   	    	formData.append('traitname_key_arr', traitname_key_arr);
-   	    			   	    	formData.append('phenotype', phenotype);
-   	    			   	    	
-   	    			   			// 2023-01-10 | 파라미터에 refgenome 추가
-   	    	   	    			const refgenome = $('#VcfSelect :selected').data('refgenome');
-   	    	   	    			formData.append('refgenome', refgenome);
-   	    			   	    	
-   	    			   	  		let queryString = new URLSearchParams(formData).toString();
-   	    	    	    		
-   	    	    				$.ajax(
-   	    	    				{
-   	    	    					url: "./gwas_analysis.jsp",
-   	    	    					method: "POST",
-   	    	    					data: queryString,
-   	    	    					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-   	    	    					success: function(result) {
-   	    	    						
-   	    	    					}
-   	    	    					
-   	    	    				})
-   	    	    				
-   	    	    				setTimeout( function () {
-   	    	    		   			refresh();
-   	    	    		   			$("#backdrop").modal("hide");
-   	    	    		   		}, 1000);
-   	    	    			} 
-   	    					*/
+    	   	    	    	
    	    				}
-   	    			})
+   	 	    		});	
+   	    			
 	    		}
-	    	})
-			
+	    	});
+   	    	
         });
 	    
 	    //console.log("box? : ", box);
@@ -712,6 +660,8 @@ body {
    			const VcfSelectEl = document.getElementById('VcfSelect');
    			const jobid_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.jobid;
    			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename
+   			// 2023-01-10 | 파라미터에 refgenome 추가
+			const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
    					
    	   		//const variety_id = $( "#variety-select option:selected" ).val();
    	    	//const jobid_vcf = $('#VcfSelect :selected').data('jobid');
@@ -737,17 +687,17 @@ body {
 			//	inv_date = "-"
 			//}
 			
-			const modelArr = ['GLM', 'MLM', 'CMLM', 'FarmCPU', 'SUPER', 'BLINK', 'MLMM'];
+			const model_arr = ['GLM', 'MLM', 'CMLM', 'FarmCPU', 'SUPER', 'BLINK', 'MLMM'];
 
 			//체크하지 않은 model은 배열에서 탈락
-			for(let i=0 ; i<modelArr.length ; i++) {
-				const modelCheckbox = document.getElementById(modelArr[i]);
+			for(let i=0 ; i<model_arr.length ; i++) {
+				const modelCheckbox = document.getElementById(model_arr[i]);
 				if(!modelCheckbox.checked) {
-					modelArr.splice(i,1);
+					model_arr.splice(i,1);
 					i--;
 				}
 			}
-			console.log(modelArr);
+			//console.log(modelArr);
 			
 			
    	    	
@@ -759,10 +709,12 @@ body {
    	    			"comment": comment,
    	    			"jobid_gwas": jobid_gwas,
    	    			"jobid_vcf": jobid_vcf,
+   	    			"refgenome": refgenome,						// analysis.jsp에서 사용
+   	    			"radio_phenotype": 0,						// Phenotype Database
    	    			"filename_vcf": filename_vcf,
    	    			"traitname_arr": traitname_arr,
    	    			"traitname_key_arr": traitname_key_arr,
-   	    			"modelArr": modelArr,
+   	    			"model_arr": model_arr,
    	    			"cre_date": cre_date,
    	    			"inv_date": inv_date,
    	    	}
@@ -787,12 +739,8 @@ body {
    			}
    	    	
    	    	
-			// 2023-01-10 | 파라미터에 refgenome 추가
-			const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
-   	    	
-   	    	//data['refgenome'] = refgenome;
-   	    	
-   	    	
+			
+   	    	/*
    	    	data_added = {
    	    			"refgenome": refgenome,
    	    			"radio_phenotype": 0
@@ -801,13 +749,14 @@ body {
    	    	
    	    	//data2 = { ...data, ...data_added};
    	    	data2 = Object.assign(data, data_added);
-   	    	
+   	    	*/
    	    	
    	    	
    	    	$.ajax({
 				url: "./gwas_analysis.jsp",
 				method: "POST",
-				data: data2,
+				//data: data2,
+				data: data,
 				
 			})
 			
@@ -816,81 +765,11 @@ body {
 	   			$("#backdrop").modal("hide");
 	   		}, 1000);
    	    	
-   	    	
-   	    	/*
-   	    	let formData = new FormData($("#uploadGwasForm")[0]);
-   	    	
-   	    	formData.append('permissionUid', permissionUid);
-   	    	formData.append('variety_id', variety_id);
-   	    	formData.append('jobid_vcf', jobid_vcf);
-   	    	formData.append('filename_vcf', filename_vcf);
-   	    	formData.append('traitname_arr', traitname_arr);
-   	    	formData.append('traitname_key_arr', traitname_key_arr);
-   	    	
-   	    	let queryString = new URLSearchParams(formData).toString();
-   			
-   	    	//console.log(queryString);
-   	    	
-   	    	$.ajax(
-   	    	{
-   	    		url: "./gwas_check.jsp",
-   	    		method: "POST",
-   	    		data: queryString,
-   	    		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-   	    		//dataType:"json",
-   	    		success: function(data) {
-   	    			
-   	    			//$("#backdrop").modal("hide");
-   	    			
-   	    			//console.log("없는 표현형 : ", data);
-   	    			
-   	    			let data_arr = data.split(",");
-   	    			
-   	    			const jobid_gwas = data_arr.pop();
-   	    			//console.log("jobid_gwas : ", jobid_gwas);
-   	    			formData.append('jobid_gwas', jobid_gwas);
-   	    			
-   	    			// 2023-01-10 | 파라미터에 refgenome 추가
-   	    			const refgenome = $('#VcfSelect :selected').data('refgenome');
-   	    			formData.append('refgenome', refgenome);
-   	    			
-   	    			let queryString2 = new URLSearchParams(formData).toString();
-   	    			
-   	    			//console.log(data_arr);
-   	    			
-   	    			
-   	    			//if(data_arr.length != 0 || confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?")) return;
-   	    			
-   	    			if(data_arr.length == 0 ) {
-   	    				alert("분석이 시작됩니다. 잠시만 기다려주세요.");
-   	    			} else {
-   	    				if(!confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?"))	return; 
-   	    			}
-   	    			
-   	    			$.ajax({
-    					url: "./gwas_analysis.jsp",
-    					method: "POST",
-    					data: queryString2,
-    					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-    					success: function(result) {
-    						
-    					}
-    					
-    				})
-    				
-    				setTimeout( function () {
-    		   			refresh();
-    		   			$("#backdrop").modal("hide");
-    		   		}, 1000);
-   	    		}
-   	    		
-   	    	})
-   			*/
    			
    			
    		// select New Phenotype File	
    		} else {
-   			console.log(box.fileList.files.length);
+   			//console.log(box.fileList.files.length);
    			if(!box.fileList.files.length) {
    				alert("파일을 아래 영역에 넣어주세요.");
    				return;
@@ -898,11 +777,34 @@ body {
    			
    			//modelGroup
    			if(document.querySelectorAll('input[name="modelGroup"]:checked').length == 0) {
-   				alert("Model을 최소 1개 선택하세요.")
+   				alert("Model을  한 개 이상 선택해 주세요.")
    				return;
    			}
    			
-   			const permissionUid = "<%=permissionUid%>";
+   			/*
+   			const varietySelectEl = document.getElementById('variety-select');
+   			const variety_id = varietySelectEl.options[varietySelectEl.selectedIndex].value;
+
+   			const comment = document.getElementById('comment').value;
+   			*/
+   			
+   			const VcfSelectEl = document.getElementById('VcfSelect');
+   			const jobid_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.jobid;
+   			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename;
+   			
+   			
+			// 파일 업로드 영역
+	    	var postObj = new Object();
+	    	//postObj.comment = comment;       
+	        //postObj.variety_id = variety_id;
+	        postObj.jobid_vcf = jobid_vcf;
+	        postObj.filename_vcf = filename_vcf;
+	        //postObj.model_arr = model_arr;
+	        postObj.jobid_gwas = jobid_gwas;
+	        box.setPostData(postObj);
+	        box.upload();
+	   		
+   			/*
    	   		const varietyid = $( "#variety-select option:selected" ).val();
    	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
    	    	const filename = $('#VcfSelect :selected').data('filename');
@@ -929,6 +831,7 @@ body {
 		        box.setPostData(postObj);
 		        box.upload();
    			});
+   			*/
    		}
     }
    	

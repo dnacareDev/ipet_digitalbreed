@@ -237,74 +237,88 @@
   	function onCellClicked(params) {
   		//console.log("onCellClicked params : ", params);
   		
-		if(params.column.getId() != "filename" && params.column.getId() != "refgenome"){
-		   const element = document.getElementById('vcf_status');
-	   	   element.innerHTML  = `<div class='card-content'>
-	   		   						<div class='card-body'>
-	   		   							<div class='row'>
-	   		   								<div class='col-12'>
-	   		   									<ul class='nav nav-pills nav-active-bordered-pill'>
-	   		   										<li class='nav-item'>
-	   		   											<a class='nav-link active' id='base-pill31' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info</a>
-	   		   										</li>
-	   		   										<li class='nav-item'>
-	   		   											<a class='nav-link' id='base-pill32' data-toggle='pill' href='#pill2' aria-expanded='false'>VCF viewer</a>
-	   		   										</li>
-	   		   										<li class='nav-item'>
-	   		   											<a class='nav-link' id='base-pill33' data-toggle='pill' href='#pill3' aria-expanded='false'>Variant</a>
-	   		   										</li>
-	   		   										<li class='nav-item'>
-	   		   											<a class='nav-link' id='base-pill34' data-toggle='pill' href='#pill4' aria-expanded='false'>DP</a>
-	   		   										</li>
-	   		   										<li class='nav-item'>
-	   		   											<a class='nav-link' id='base-pill35' data-toggle='pill' href='#pill5' aria-expanded='false'>Missing</a>
-	   		   										</li>
-	   		   									</ul>
-	   		   									<div class='tab-content'>
-	   		   										<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='gridOptions.api.sizeColumnsToFit();'></iframe>
-	   		   										</div>
-	   		   										<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-	   		   											<div id='pill2_frame' class="ag-theme-alpine" style='height:501px; margin-top:25px;'></div>
-	   		   										</div>
-	   		   										<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame'></iframe>
-	   		   										</div>
-	   		   										<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill4_frame'></iframe>
-	   		   										</div>
-	   		   										<div class='tab-pane' id='pill5' aria-labelledby='base-pill5'>
-	   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill5_frame'></iframe>
-	   		   										</div>
-	   		   									</div>
-	   		   								</div>
-	   		   							</div>
-	   		   						</div>
-	   		   					</div>`;
-	       replaceClass("base-pill31", "nav-link", "nav-link active");
-	       replaceClass("base-pill32", "nav-link", "nav-link");
-	       replaceClass("base-pill33", "nav-link", "nav-link");
-	       replaceClass("base-pill34", "nav-link", "nav-link");
-	       replaceClass("base-pill35", "nav-link", "nav-link");	  
-		   
-	       $("#base-pill32").data('jobid', params.data.jobid);
-	       
-		   $('#pill1_frame').attr('height',"130px");
-		   $('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/database/genotype_vcfinfo.jsp?jobid="+params.data.jobid);
-		   $('#pill2_frame').empty();
-		   print_pill2_frame(params.data.jobid, params.data.variablecnt);
-		   $('#pill2_frame').data('jobid',params.data.jobid);
-		   $('#pill3_frame').attr('height',"500px");
-		   $('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
-		   $('#pill4_frame').attr('height',"500px");
-		   $('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
-		   $('#pill5_frame').attr('height',"500px");
-		   $('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
-		   
-		   
-		   
+		if(params.column.getId() == "filename" && params.column.getId() == "refgenome"){
+			return;
 		}
-	}    
+		    
+		switch(Number(params.data.status)) {
+			case 0:
+				alert("분석 중입니다.");
+				break;
+			case 1:
+				const element = document.getElementById('vcf_status');
+		   	   	element.innerHTML  = `<div class='card-content'>
+		   		   						<div class='card-body'>
+		   		   							<div class='row'>
+		   		   								<div class='col-12'>
+		   		   									<ul class='nav nav-pills nav-active-bordered-pill'>
+		   		   										<li class='nav-item'>
+		   		   											<a class='nav-link active' id='base-pill31' data-toggle='pill' href='#pill1' aria-expanded='true'>VCF Info</a>
+		   		   										</li>
+		   		   										<li class='nav-item'>
+		   		   											<a class='nav-link' id='base-pill32' data-toggle='pill' href='#pill2' aria-expanded='false'>VCF viewer</a>
+		   		   										</li>
+		   		   										<li class='nav-item'>
+		   		   											<a class='nav-link' id='base-pill33' data-toggle='pill' href='#pill3' aria-expanded='false'>Variant</a>
+		   		   										</li>
+		   		   										<li class='nav-item'>
+		   		   											<a class='nav-link' id='base-pill34' data-toggle='pill' href='#pill4' aria-expanded='false'>DP</a>
+		   		   										</li>
+		   		   										<li class='nav-item'>
+		   		   											<a class='nav-link' id='base-pill35' data-toggle='pill' href='#pill5' aria-expanded='false'>Missing</a>
+		   		   										</li>
+		   		   									</ul>
+		   		   									<div class='tab-content'>
+		   		   										<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+		   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='gridOptions.api.sizeColumnsToFit();'></iframe>
+		   		   										</div>
+		   		   										<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
+		   		   											<div id='pill2_frame' class="ag-theme-alpine" style='height:501px; margin-top:25px;'></div>
+		   		   										</div>
+		   		   										<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
+		   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame'></iframe>
+		   		   										</div>
+		   		   										<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
+		   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill4_frame'></iframe>
+		   		   										</div>
+		   		   										<div class='tab-pane' id='pill5' aria-labelledby='base-pill5'>
+		   		   											<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill5_frame'></iframe>
+		   		   										</div>
+		   		   									</div>
+		   		   								</div>
+		   		   							</div>
+		   		   						</div>
+		   		   					</div>`;
+		   	   	replaceClass("base-pill31", "nav-link", "nav-link active");
+		   	   	replaceClass("base-pill32", "nav-link", "nav-link");
+		   	   	replaceClass("base-pill33", "nav-link", "nav-link");
+		   	   	replaceClass("base-pill34", "nav-link", "nav-link");
+		   	   	replaceClass("base-pill35", "nav-link", "nav-link");	  
+		   	   	
+		   	   	$("#base-pill32").data('jobid', params.data.jobid);
+		       
+		   	   	$('#pill1_frame').attr('height',"130px");
+		   	   	$('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/database/genotype_vcfinfo.jsp?jobid="+params.data.jobid);
+		   	   	$('#pill2_frame').empty();
+		   	   	print_pill2_frame(params.data.jobid, params.data.variablecnt);
+		   	   	$('#pill2_frame').data('jobid',params.data.jobid);
+		   	   	$('#pill3_frame').attr('height',"500px");
+		   	   	$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_variant.html");
+		   	   	$('#pill4_frame').attr('height',"500px");
+		   	   	$('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_depth.html");
+		   	   	$('#pill5_frame').attr('height',"500px");
+		   	   	$('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
+			   
+		   	   	//window.scrollTo(0,document.body.scrollHeight);
+				
+				break;
+			case 2:
+				alert("분석에 실패했습니다.");
+				break;
+		}
+			
+			
+	}  
   	
 	function replaceClass(id, oldClass, newClass) {
 	    var elem = $(`#${id}`);
@@ -338,9 +352,6 @@
 	    tooltipHideDelay: 20000,
 	}
 	
-	function sleep(ms) {
-		return new Promise((r) => setTimeout(r, ms));
-	}
 	
 	async function print_pill2_frame(jobid, row_count) {
 		
@@ -577,6 +588,10 @@
 				});
 			});
 	});
+  
+  	document.addEventListener('click', function(event) {
+  		
+  	});
 
   	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();

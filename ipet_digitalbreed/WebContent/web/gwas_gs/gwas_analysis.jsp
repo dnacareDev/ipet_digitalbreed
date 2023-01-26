@@ -18,7 +18,7 @@
 	String[] traitname_arr = request.getParameterValues("traitname_arr[]");
 	String cre_date = request.getParameter("cre_date");
 	String inv_date = request.getParameter("inv_date");
-	String[] modelArr = request.getParameterValues("modelArr[]");
+	String[] model_arr = request.getParameterValues("model_arr[]");
 	String phenotype = request.getParameter("phenotype");
 	String radio_phenotype = request.getParameter("radio_phenotype");
 	String refgenome = request.getParameter("refgenome");
@@ -37,7 +37,7 @@
 	//System.out.println("cre_date_arr : " + Arrays.toString(cre_date_arr));
 	//System.out.println("inv_date : " + inv_date);
 	//System.out.println("inv_date_arr : " + Arrays.toString(inv_date_arr));
-	System.out.println("modelArr : " + Arrays.toString(modelArr));
+	System.out.println("modelArr : " + Arrays.toString(model_arr));
 	System.out.println("radio_phenotype : " + radio_phenotype);
 	System.out.println("refgenome : " + refgenome);
 	System.out.println("=========================================");
@@ -81,10 +81,10 @@
 	if(Integer.parseInt(radio_phenotype) == 0) {
 		//insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
 		//insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+refgenome+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
-		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+refgenome+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]| ", "")+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+refgenome+"', '"+Arrays.toString(traitname_arr).replaceAll("\\[|\\]| ", "")+"', '"+Arrays.toString(model_arr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
 	} else {
 		//insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+phenotype+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
-		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+refgenome+"', '"+phenotype+"', '"+Arrays.toString(modelArr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
+		insertGwasinfo_sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '"+refgenome+"', '"+phenotype+"', '"+Arrays.toString(model_arr).replaceAll("\\[|\\]", "")+"', '"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_gwas+"','"+permissionUid+"',now());";
 	}
 	
 	System.out.println(jobid_gwas);
@@ -104,11 +104,11 @@
 
 	
 	String GwasGapit = "Rscript " +script_path+ "gwas_gapit_final.R " +vcf_path+ " " +gwas_pheno_path+ " " +outputdir+ " " +jobid_gwas+ " " +filename_vcf+ " " +jobid_gwas+"_phenotype.csv ";
-	for(int i=0 ; i<modelArr.length ; i++) {
-		if(i == modelArr.length - 1) {
-			GwasGapit += modelArr[i];
+	for(int i=0 ; i<model_arr.length ; i++) {
+		if(i == model_arr.length - 1) {
+			GwasGapit += model_arr[i];
 		} else {
-			GwasGapit += modelArr[i]+",";
+			GwasGapit += model_arr[i]+",";
 		}
 	}
 	System.out.println("=========================================");

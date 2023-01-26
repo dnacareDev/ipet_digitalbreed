@@ -278,6 +278,9 @@
 						}
 						
 						gridOptions.api.sizeColumnsToFit();
+						
+						window.scrollTo(0,document.body.scrollHeight);
+						
 						break;
 					case 2:
 						alert("분석에 실패했습니다.");
@@ -520,20 +523,29 @@
 	}
 
 	var columnDefs2 = [
-		{field: "SNP",cellClass: "grid-cell-centered", width: 110, resizable: true, hide: true, },
-		{field: "Chr",cellClass: "grid-cell-centered", width: 80,  resizable: true,},
-		{field: "Pos",cellClass: "grid-cell-centered", width: 90,  resizable: true,},
-		{field: "P-value",cellClass: "grid-cell-centered", width: 90, sortable: true, resizable: true,},
-		{field: "MAF",cellClass: "grid-cell-centered", width: 80, resizable: true,},
-		{field: "Effect",cellClass: "grid-cell-centered", width: 90, resizable: true,}]
+		{field: "SNP", width: 180, hide: true, },
+		{field: "Chr", width: 180, },
+		{field: "Pos", width: 120, },
+		{field: "P-value", width: 120, sortable: true, },
+		{field: "MAF", width: 120, },
+		{field: "Effect", width: 120, }
+	]
 	
 	var gridOptions2 = {
+			defaultColDef: { 
+				editable: false, 
+				sortable: false, 
+				resizable: true,
+				suppressMenu: true, 
+				cellClass: "grid-cell-centered", 
+				menuTabs: ['filterMenuTab'], 
+			},
 			columnDefs: columnDefs2,
 			colResizeDefault: "shift",
 			rowHeight: 35,
 			rowSelection: "single",
 			animateRows: true,
-			suppressHorizontalScroll: true,
+			//suppressHorizontalScroll: true,
 			serverSideInfiniteScroll: true,
 	}
 	
@@ -605,8 +617,11 @@
 		        //console.log(csv_to_grid);
 		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
 		        gridOptions2.api.setRowData(rowObj);
-		        gridOptions2.api.sizeColumnsToFit();
+		        //gridOptions2.api.sizeColumnsToFit();
 		        //console.log(document.querySelector(`#grid_${model_name}`));
+		        
+		        gridOptions2.columnApi.autoSizeAllColumns();
+		        
 		    };
 		    reader.readAsBinaryString(file);
 		});

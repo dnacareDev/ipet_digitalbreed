@@ -5,103 +5,55 @@
 <%@ page import="com.google.gson.*" %>
 
 <%
-	String permissionUid = session.getAttribute("permissionUid")+"";
+	//String permissionUid = session.getAttribute("permissionUid")+"";
 
-	String rootFolder = request.getSession().getServletContext().getRealPath("/");
-	String path = rootFolder+"result/database/genotype_statistics/20230112141338/";
+	//String rootFolder = request.getSession().getServletContext().getRealPath("/");
+	//String path = rootFolder+"result/database/genotype_statistics/20230112141338/";
 
 	String jobid = "20230112141338";
 	
+	String gwas_pheno_path = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/uploads/gwas/";
+	String jobid_gwas = "20230119184818";
 	
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	transferToUtf8(gwas_pheno_path,jobid_gwas);
 	
 	
-	File txtFile = new File(path+"20230112141338_genotype_matrix_viewer.csv");
-	System.out.println("read csv file");
-	
-	try {
-		BufferedReader br = new BufferedReader(new FileReader(txtFile));
-		
-		
-		//br.readLine();
-		
-		String line = br.readLine();		// 첫줄
-		
-		List<String> columns = Arrays.asList(line.split(","));;
-		
-		
-		System.out.println("column size : " + columns.size());
-		
-		
-		//String insertSqlColumnPart = "insert into vcfviewer_t (jobid, row_index, contents, creuser) values ('";
-		String insertSqlColumnPart = "insert into vcfviewer_t (chr, position, jobid, row_index, contents, creuser) values ('";
-		StringBuilder insertSqlValuesPart = new StringBuilder();
-		
-		int count = 0;
-		line = br.readLine();		// 첫줄 스킵용
-		while (line != null) {
-			
-			count++;
+%>
 
-			JsonObject obj = new JsonObject(); 
-            List<String> chunks = Arrays.asList(line.split(","));
-            //System.out.println(chunks.size());
-            
-            /*
-            for(int i = 0; i < columns.size(); i++) {
-                obj.addProperty(columns.get(i), chunks.get(i));
-            }
-            */
-            for(int i = -2; i < columns.size(); i++) {
-            	if(i==-2) {
-            		String chr = chunks.get(0).substring(0, chunks.get(0).lastIndexOf("_"));
-            		//obj.addProperty("chr", chr);
-            		insertSqlValuesPart.append(chr + "', ");
-            	} else if(i==-1) {
-            		String position = chunks.get(0).substring(chunks.get(0).lastIndexOf("_")+1, chunks.get(0).length());
-            		//obj.addProperty("position", position);
-            		insertSqlValuesPart.append(position + ", '");
-            	} else {
-            		obj.addProperty(columns.get(i), chunks.get(i));
-            	}
-            }
-            //System.out.println(obj);
-            
-            
-            // 파일 내용 insert
-            insertSqlValuesPart.append(jobid+ "'," +count+ ",'" +obj.toString()+ "','" +permissionUid+ "')");
-        
-			System.out.println(insertSqlColumnPart+insertSqlValuesPart);
-		
-			break;
-			/* 
-            line = br.readLine();
-            if(line == null || count % 1000 == 0) {
-            	System.out.println("1000 inserts executed & count passed - " + count);
-            	//System.out.println(insertSqlColumnPart+insertSqlValuesPart);
-            	//System.out.println("String length - " + (insertSqlColumnPart+insertSqlValuesPart).length() );
-            	ipetdigitalconndb.stmt.executeUpdate(insertSqlColumnPart+insertSqlValuesPart);
-            	//insertSqlValuesPart = "";
-            	insertSqlValuesPart.setLength(0);
-            } else {
-            	//insertSqlValuesPart += ",('";
-            	insertSqlValuesPart.append(",('");
-            }
-            
-            */
-            
+<%! 
+	private void transferToUtf8(String csvPath, String jobid_gwas) {
+	
+		System.out.println("in function");
+	
+		try {
+			File csvEucKr = new File(csvPath+jobid_gwas+"/"+jobid_gwas+"_phenotype-eucKr.csv");
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(csvEucKr), "EUC-KR"));
+
+			File csvUtf8 = new File(csvPath+jobid_gwas+"/"+jobid_gwas+"_phenotype.csv");
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(csvUtf8), "UTF-8"));
+
+			String line;
+			for(int i=0 ; (line = br.readLine()) != null ; i++) {
+				System.out.println(line);
+				
+				String[] arr = line.split(",");
+				
+				for(int j=0 ; j<arr.length ; j++) {
+					bw.write(arr[j]);
+					if(j == arr.length -1) {
+						bw.newLine();
+					} else {
+						bw.write(",");
+					}
+				}
+			}
+			bw.flush();
+			bw.close();
+			br.close();
+			
+			
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
-		
-		br.close();
-		
-		
-	} catch (IOException e) {
-		e.printStackTrace();
-	} finally {
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.conn.close();
 	}
-	
-	
 %>

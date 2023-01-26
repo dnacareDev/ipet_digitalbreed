@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.innorix.transfer.InnorixUpload" %>
-<%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*,java.nio.file.*"%>
+<%@ page import="java.util.*, java.nio.*, java.io.*, java.sql.*, java.text.*,java.nio.file.*"%>
 <%@ page import="ipet_digitalbreed.*"%>    
 <%
 	String jobid_gwas = request.getParameter("jobid_gwas");
@@ -34,19 +34,18 @@
 		}        
 	}
 	
+	out.clear();
 	
 	List<List<String>> list = new ArrayList<List<String>>();
 	File csv = new File(gwas_pheno_path+jobid_gwas+"/"+jobid_gwas+"_phenotype.csv");
 	BufferedReader br = null;
 	try {
-		br = new BufferedReader(new FileReader(csv));
+		//br = new BufferedReader(new FileReader(csv));
+		br = new BufferedReader(new InputStreamReader(new FileInputStream(csv), "UTF-8"));
 		String line = "";
 		
 		if((line=br.readLine()) != null) {
-			//out.clear();
 			out.print(line.substring(line.indexOf(",")+1));
-			System.out.println(line.substring(line.indexOf(",")+1));
-			
 		}
 		
 	} catch (FileNotFoundException e) {

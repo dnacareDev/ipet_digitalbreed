@@ -2,8 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ page import="com.innorix.transfer.InnorixUpload" %>
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
-<%@ page import="org.json.simple.*" %>
-<%@ page import="ipet_digitalbreed.*"%>    
 <%
 	String jobid_gwas = request.getParameter("jobid_gwas");
 	String outputdir = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/result/gwas/";
@@ -29,5 +27,5 @@
 	} catch(IOException e) {
 		e.printStackTrace();
 	}
-	out.print(jobid_gwas);
+	//out.print(jobid_gwas);
 %>
