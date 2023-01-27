@@ -18,9 +18,9 @@
 	try{
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-		String sql="select reference from reference_genome_t where creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "';";
-		//String sql="select refgenome from variant_gff_t where creuser='" +permissionUid+ "';";
-		//System.out.println(sql);
+		//String sql="select reference from reference_genome_t where creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "';";
+		String sql="select reference from reference_genome_t where creuser='" +permissionUid+ "';";
+		System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
 			

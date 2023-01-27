@@ -73,8 +73,7 @@
 	  	color : #212529;
 	  	font-size : 1rem;
 	  	font-family: 'SDSamliphopangche_Outline';
-	  	-webkit-transition : all 0.2s ease;
-	    transition : all 0.2s ease;
+	    transition : all 0.1s ease;
 	}
 	
 	/************************ AG-Grid 헤더 수직 & borderline **************************/
@@ -87,19 +86,76 @@
 	}
 	/************************ AG-Grid 헤더 수직  & borderline **************************/
 	
+	.expandAndCollapse  {
+     	box-sizing: border-box;
+     	padding: 10px;
+     	overflow: hidden;
+     	/*float: left;*/
+     	align-items: center;
+     	transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+     	/*border-left: 1px solid black;*/
+	}
+	.smallMain {
+		width: 66.66%;
+	}
+	.expandMain {
+		width: 100%;
+	}
+	
+	.expand {
+	    width: 33.33%;
+	    transition-delay: 20ms;
+	    opacity: 1;
+	}
+	.expandSide1 {
+		width: 100%;
+		height: 480px;
+		opacity: 1;
+		transition-delay: 20ms;
+	}
+	.small{
+	    width: 0px;
+	    height: 0px;
+	    padding: 0px;
+	    opacity: 0;
+	    border: none;
+	    transition-delay: 20ms;
+	}
+	
+	.small > div {
+    	
+	}
+	.unset > div > p{
+	    opacity: 0;
+	}
+	.expand > div {
+	    
+	}
+
+	.sideButton, .slideButtion:active {
+		color : #2A2E30;
+		background-color : #B8C2CC;
+		border-color : #B8C2CC;
+		width:42px; 
+		height:70px; 
+		border: 0 solid transpart; 
+		padding: 0.9rem 2rem; 
+		outline: none;
+		box-shadow: none;
+	}
 
 </style>
 <%
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	String permissionUid = session.getAttribute("permissionUid")+"";
-	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
+	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	//String permissionUid = session.getAttribute("permissionUid")+"";
+	//String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
 	String linkedJobid = request.getParameter("jobid");
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
-
+	
 	<%-- 
     <jsp:include page="../../css/topmenu.jsp" flush="true"/>
 	
@@ -112,40 +168,31 @@
     <div class="app-content content" style="padding-top: 0px;">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
-            <!--  
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-2">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">&nbsp;Variants browser</h2>
-                            <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="../index.jsp">Home</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">Variants browser
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            -->
             <div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
                     <div class="card">
                         <div class="card-content">
-                            <div class="card-body">
-                                <div class="row">
-	                                <div class="col-xl-8">
+                            <div class="card-body pt-0 pb-0">
+                                <div class="row justify-content-between">
+	                                <div id="main" class="expandAndCollapse smallMain" style="position: relative;">
+	                                	
+	                                	<!-- right side 고정버튼 -->
+	                                	<div style="position: absolute; top: 19px; right: -20px;">
+											<button type="button" class="btn btn-success" style="width:65px; height:30px; padding: 0 10px 0 10px; transform:rotate(-90deg); border-radius: 0.4285rem 0.4285rem 0 0;"  onclick="expandAndCollapse2();">TOP</button>
+										</div>
+										<div style="position: absolute; z-index:10; top: 85px; right: -20px;">
+											<button type="button" class="btn btn-danger" style="width:65px; height:30px; padding: 0 10px 0 10px; transform:rotate(-90deg); border-radius: 0.4285rem 0.4285rem 0 0;"  onclick="expandAndCollapse3();">BOT</button>
+										</div>
+										<!-- right side 고정버튼 -->
+	                                	
 	                                	<div class="row">
-	                                		<div style="width:20%; min-width:200px; padding-left:13px;"> 
+	                                		<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:13px;"> 
 												<select id='Chr_select' class='select2 form-select float-left'>
 													<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
 												</select>
 											</div>
-											<div style="width:20%; min-width:200px; padding-left:14px;"> 
+											<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:14px;"> 
 												<input type="text" id="comment" class="form-control" placeholder="Select Position" oninput="inputNumberRange(this);">
 											</div>
 	                                	</div>
@@ -163,9 +210,9 @@
 				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px auto; width: 98%; height:420px;"></div><br>
 	                                	</div>
 	                                </div>
-	                                <div class="col-xl-4">
+	                                <div id="sideRow" class="expandAndCollapse expand" style="border-left: 1px solid black;">
 		                                <div class="row">
-		                                	<div class="col-12">
+		                                	<div id="side1"  class="expandAndCollapse expandSide1">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' aria-expanded='true'>SnpEff</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' aria-expanded='false'>GWAS</a></li>
@@ -204,7 +251,7 @@
 											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">표지</button>
 											            	</div>
 									            		</div>
-									            		<div class="row col-12 mt-1">
+									            		<div class="row col-12 mt-1" style="margin-left:0px;">
 															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
 														</div>
 	  												</div>
@@ -294,7 +341,7 @@
 		                                	</div>
 		                                </div>
 		                                <div class="row mt-2">
-		                                	<div class="col-12">
+		                                	<div id="side2" class="expandAndCollapse expandSide1">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill5' aria-expanded='true'>UPGMA</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill6' aria-expanded='false'>STRUCTURE</a></li>
@@ -372,6 +419,7 @@
     </div>
     
     
+    
 	<!-- Modal start-->
 	<!-- Modal end-->
                         
@@ -424,96 +472,157 @@
 	var linkedJobid = "<%=linkedJobid%>";
 
 	document.addEventListener('DOMContentLoaded', function() {
-		//위쪽 캔버스
-		const canvas = document.getElementById("chromosomeCanvas");
-   		const canvasArea = document.getElementById("chromosomeCanvasArea");
-   		
-		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
-   		
-   		const startX = canvas.width * 0.2;
-   		const startY = canvas.height * 0.45;
-   		const width = canvas.width  - (startX * 2);
-   		const height = canvas.height - (startY * 2);
+		const canvas = getCanvasInfo();
 		
-		drawChromosome(canvas, startX, startY, width, height);
+		drawChromosome(canvas);
 
 		//1번 염색체 길이정보 획득
-		readChrLength(1);
-		
-		
-		
+		//readChrLength(1);
 		
    		drawGeneModel();
-   		
    		
    		getGwasList();
    		
 	})
 	
-	window.addEventListener('resize', function(e) {
-		//위쪽 캔버스
-		const canvas = document.getElementById("chromosomeCanvas");
-   		const canvasArea = document.getElementById("chromosomeCanvasArea");
-   		
-		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
-   		
-   		const startX = canvas.width * 0.2;
-   		const startY = canvas.height * 0.45;
-   		const width = canvas.width  - (startX * 2);
-   		const height = canvas.height - (startY * 2);
+	function getCanvasInfo() {
+		const canvas = {
+				"El": document.getElementById("chromosomeCanvas"),
+				"areaEl": document.getElementById("chromosomeCanvasArea"),
+		}
 		
-		drawChromosome(canvas, startX, startY, width, height);
-		drawChrPosition(canvas, startX, startY, width, height);
+		canvas.El.width = canvas.areaEl.offsetWidth * ( 1 - parseFloat(canvas.areaEl.style.paddingRight) * 2 / 100 )
+   		
+   		canvas["startX"] = canvas.El.width * 0.2;
+		canvas["startY"] = canvas.El.height * 0.45;
+		canvas["width"] = canvas.El.width  - (canvas.startX * 2);
+		canvas["height"] = canvas.El.height - (canvas.startY * 2);
+		
+   		return canvas;
+   		
+	}
+	
+	function expandAndCollapse1() {
+		
+		const main = document.getElementById('main');
+		const side = document.getElementById('sideRow');
+		
+		if ( sideFlag.collapse_1 && sideFlag.collapse_2) {
+			main.classList.replace('smallMain', 'expandMain');
+			side.classList.replace('expand', 'small');
+			
+		} else if( !(sideFlag.collapse_1 && sideFlag.collapse_2) && main.classList.contains('expandMain') ) {
+			
+			main.classList.replace('expandMain', 'smallMain');
+			side.classList.replace('small', 'expand');
+		} else {
+			return;
+		}
+		
+		setTimeout(function() {
+			const canvas = getCanvasInfo();
+			drawChromosome(canvas);
+			drawGeneModel(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
+			
+		}, 200);
+		
+	}
+	
+	const sideFlag = {
+			collapse_1: false,
+			collapse_2: false,
+	}
+	
+	function expandAndCollapse2() {
+		const side1 = document.getElementById('side1');
+		
+		if(side1.classList.contains('expandSide1')) {
+			side1.classList.replace('expandSide1', 'small');
+			sideFlag.collapse_1 = true;
+		} else {
+			side1.classList.replace('small', 'expandSide1');
+			sideFlag.collapse_1 = false;
+		}
+		
+		expandAndCollapse1();
+		
+	}
+	
+	function expandAndCollapse3() {
+		const side2 = document.getElementById('side2');
+		
+		if(side2.classList.contains('expandSide1')) {
+			side2.classList.replace('expandSide1', 'small');
+			sideFlag.collapse_2 = true;
+		} else {
+			side2.classList.replace('small', 'expandSide1');
+			sideFlag.collapse_2 = false;
+		}
+		
+		expandAndCollapse1();
+		
+	}
+	
+	window.addEventListener('resize', drawCanvas);
+	
+	function drawCanvas(e) {
+		const canvas = getCanvasInfo();
+		
+		//drawChromosome(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
+		drawChromosome(canvas);
+		//drawChrPosition(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
+		drawChrPosition(canvas);
 		
 		
 		
    		drawGeneModel();
-	})
-	
+	}
 	
 	var relativePositionX = null;
    	// resize시 mousemove event로 그렸던 빨간줄이 사라지지 않고 유지
-	function drawChrPosition(canvas, startX, startY, width, height) {
+	//function drawChrPosition(canvas, startX, startY, width, height) {
+   	function drawChrPosition(canvas) {
 		// 염색체 사각형 영역 내에서의 이벤트
-			const context = canvas.getContext("2d");
+			const context = canvas.El.getContext("2d");
 			
 			context.beginPath();
-   			context.moveTo(startX + relativePositionX * width , startY);
-   			context.lineTo(startX + relativePositionX * width , startY + height);
+   			context.moveTo(canvas.startX + relativePositionX * canvas.width , canvas.startY);
+   			context.lineTo(canvas.startX + relativePositionX * canvas.width , canvas.startY + canvas.height);
    			context.strokeStyle = '#DC0F00';
    			context.lineWidth = 2;
    			context.stroke();
    		
 	}
    	
-   	function drawChromosome(canvas, startX, startY, width, height) {
-   		
-   		if(canvas.getContext) {
-   			const context = canvas.getContext("2d");
+   	//function drawChromosome(canvas, startX, startY, width, height) {
+	function drawChromosome(canvas) {   		
+   		if(canvas.El.getContext) {
+   			const context = canvas.El.getContext("2d");
    			context.strokeStyle="#333333";
-   			context.strokeRect(startX, startY, width, height);
+   			context.strokeRect(canvas.startX, canvas.startY, canvas.width, canvas.height);
    			
    			context.beginPath();
-   			context.moveTo(startX + width * 0.1 , startY);
-   			context.lineTo(startX + width * 0.1 , startY + height);
+   			context.moveTo(canvas.startX + canvas.width * 0.1 , canvas.startY);
+   			context.lineTo(canvas.startX + canvas.width * 0.1 , canvas.startY + canvas.height);
    			context.strokeStyle = '#808000';
    			context.lineWidth = 5;
    			context.stroke();
    			
    			context.beginPath();
-   			context.moveTo(startX + width * 0.8 , startY);
-   			context.lineTo(startX + width * 0.8 , startY + height);
+   			context.moveTo(canvas.startX + canvas.width * 0.8 , canvas.startY);
+   			context.lineTo(canvas.startX + canvas.width * 0.8 , canvas.startY + canvas.height);
    			context.strokeStyle = '#808000';
    			context.lineWidth = 5;
    			context.stroke();
    			
    		}
    		
-   		canvas.addEventListener('mousemove', searchPosition);
+   		canvas.El.addEventListener('mousemove', searchPosition);
    		
    	}
    	
    	function searchPosition(e) {
+   		
    		//console.log(e);
    		const canvas = document.getElementById("chromosomeCanvas");
    		const startX = canvas.width * 0.2;
@@ -671,15 +780,6 @@
 			
 		}
    		
-   		// phenotype list 드롭박스에 나열
-   		/*
-   		const phenotype = HTML_element.dataset.phenotype.split("|");
-   		$("#GWAS_select_phenotype").empty();
-   		$("#GWAS_select_phenotype").append('<option data-phenotype="-1" disabled hidden selected>Select Phenotype</option>')
-   		for(let i=0 ; i<phenotype.length ; i++) {
-			$("#GWAS_select_phenotype").append(`<option data-phenotype=\${phenotype[i]} > \${phenotype[i]} </option>`);
-		}
-   		*/
    	}
    	
    	
@@ -714,52 +814,6 @@
 		    reader.readAsBinaryString(file);
 		});
 
-   		/*
-   		const GWAS_select = document.getElementById('GWAS_select');
-   		const jobid = GWAS_select.options[GWAS_select.selectedIndex].dataset.jobid;
-   		
-   		const GWAS_select_phenotype = document.getElementById('GWAS_select_phenotype');
-   		const phenotype = GWAS_select_phenotype.options[GWAS_select_phenotype.selectedIndex].dataset.phenotype;
-   		if(phenotype == "-1")	return;
-   		
-   		
-   		const models = document.getElementById('GWAS_button_list').childNodes;
-   		let model = "";
-   		for(let i=0 ; i<models.length ; i++) {
-   			//console.log(models[i].firstChild)
-   			if(models[i].firstChild.classList.contains('active')) {
-   				model = models[i].firstChild.dataset.model;
-   				break;
-   			}
-   		}
-   		
-   		
-   		console.log(jobid, phenotype, model);
-   		
-   		const resultpath = '/ipet_digitalbreed/result/gwas/';
-   		
-   		fetch(resultpath+jobid+ "/GAPIT.Association.GWAS_Results." +model+ "." +phenotype+ ".csv")
-		.then((response) => response.blob())
-		.then((file) => {
-			var reader = new FileReader();
-		    reader.onload = function(){
-		        const fileData = reader.result;
-		        const wb = XLSX.read(fileData, {type : 'binary'});
-		        
-		        const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-		        
-		        GWAS_gridOptions.api.setRowData(rowObj);
-		        
-		        //console.log("rowObj : ", rowObj);
-		        //console.log(csv_to_grid);
-		        //const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
-		        //gridOptions2.api.setRowData(rowObj);
-		        //gridOptions2.api.sizeColumnsToFit();
-		        //console.log(document.querySelector(`#grid_${model_name}`));
-		    };
-		    reader.readAsBinaryString(file);
-		});
-   		*/
    	}
    	
    	function inputNumberRange(HTML_element) {

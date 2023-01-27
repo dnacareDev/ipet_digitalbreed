@@ -295,18 +295,18 @@ body {
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
-											<div class="col-4" style="margin-top:8px;">MAF (%)</div>
+											<div class="col-4" style="margin-top:8px;">MAF </div>
 	                                        <div class="col-5" style="margin-top:8px;">
 	                                        	<div class="row">
 	                                        		<div class="col-1 min-range-max" onclick="document.getElementById('maf-range').value = 0; document.getElementById('maf-number').value = 0;">0</div>
 	                                        		<div class="col-8" style="margin-right:-3px; padding-left:3px; padding-right:0px;">
-			                                        	<input type="range" class="form-range" id="maf-range" min="0" max="50" value="25" step="1" oninput="document.getElementById('maf-number').value = this.value" />
+			                                        	<input type="range" class="form-range" id="maf-range" min="0" max="0.5" value="0.25" step="0.01" oninput="document.getElementById('maf-number').value = this.value" />
 	                                        		</div>
-	                                        		<div class="col-1 min-range-max" onclick="document.getElementById('maf-range').value = 50; document.getElementById('maf-number').value = 50;"> 50</div>
+	                                        		<div class="col-1 min-range-max" onclick="document.getElementById('maf-range').value = 0.5; document.getElementById('maf-number').value = 0.5;"> 0.5</div>
 	                                        	</div>
 	                                        </div>
 	                                        <div class="col-3">
-						            			<input type="text" class="form-control" id="maf-number" autocomplete="off" value="25" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>50)this.value=50; document.getElementById('maf-range').value = this.value;" />
+						            			<input type="text" class="form-control" id="maf-number" autocomplete="off" value="0.25" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('maf-range').value = this.value;" />
 						            		</div>
 	                                    </div>
 						            </div>

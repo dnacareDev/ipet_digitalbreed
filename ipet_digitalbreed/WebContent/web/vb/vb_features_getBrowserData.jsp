@@ -36,11 +36,11 @@
 	int row_index = 1;
 	try {
 		String sql = "select abs(position-"+position+") as gap, row_index from vcfviewer_t where position>=" + (position-100000) + " and position<=" +(position+100000)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "' order by gap limit 1;";
-		System.out.println(sql);
+		//System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		ipetdigitalconndb.rs.next();
 		row_index = ipetdigitalconndb.rs.getInt("row_index");
-		System.out.println(row_index);
+		//System.out.println(row_index);
 	} catch (SQLException e) {
 		System.out.println("error - vb_features_getBrowserData - " + e);
 		e.printStackTrace();
@@ -49,8 +49,8 @@
 	
 	try {
 		
-		String sql = "select * from vcfviewer_t where row_index<="+(row_index+8)+" and row_index>="+(row_index-8)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
-		System.out.println(sql);
+		String sql = "select * from vcfviewer_t where row_index<="+(row_index+17)+" and row_index>="+(row_index-17)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
+		//System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		
 		for(int i=0 ; ipetdigitalconndb.rs.next() ; i++) {

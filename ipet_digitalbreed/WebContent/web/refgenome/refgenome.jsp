@@ -125,7 +125,8 @@ body {
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
+                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1 float-right">
+                                            <%-- 
                                             <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
                                                 <select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
                                                     <%
@@ -149,9 +150,10 @@ body {
 	                                                   	}
                                                     %>       
                                                      </select>                                          
-                                            </div>           
+                                            </div>
+                                            --%>           
                                             <div class="ag-btns d-flex flex-wrap">                                            
-                                                <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
+                                                <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0 " id="filter-text-box" placeholder="Search...." />
                                             </div>
                                         </div>
                                     </div>
@@ -159,7 +161,7 @@ body {
                                   
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> Upload</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
@@ -216,7 +218,7 @@ body {
 												출처
 											</div>
 											<div class="col-8">
-							                	<input type="text" id="authorParam" class="form-control" name="authorParam" placeholder="GFF" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+							                	<input type="text" id="authorParam" class="form-control" name="authorParam" placeholder="참조유전체 출처" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 											</div>
 										</div>
 					                </div>
@@ -233,7 +235,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/fasta/Annuum.v1.6.chromosome.fa" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a> 
+											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/fasta/Annuum.v1.6.chromosome.fa" download="sampledata.fa"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a> 
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -245,7 +247,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/gff/Sol2.Annotation_Annuum.gene.v1.6.gff" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/gff/Sol2.Annotation_Annuum.gene.v1.6.gff" download="sampledata.gff"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -257,7 +259,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/cds/Annuum.v1.6.chromosome.cds.fa" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/cds/Annuum.v1.6.chromosome.cds.fa" download="sampleCDSsequence.fa"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -269,13 +271,15 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/protein/Annuum.v1.6.Total.pep" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/protein/Annuum.v1.6.Total.pep" download="sampledata.pep"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						        </fieldset>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Upload</button>
+					                <!--  
 					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetPCA();">Reset</button>
+					                -->
 					            </div>
 					        </div>
 					    </div>

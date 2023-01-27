@@ -385,9 +385,9 @@ body {
         	.then((response) => response.json())
         	.then((data) => {
         		const selectEl = document.getElementById("refGenomeSelect");
-        		const objOption = document.createElement("option");
         		
         		for(let i=0 ; i<data.length ; i++) {
+	        		const objOption = document.createElement("option");
 	        		objOption.text = data[i]['reference'];
 	        		objOption.dataset.refgenome = data[i]['reference'];
 	        		selectEl.options.add(objOption);

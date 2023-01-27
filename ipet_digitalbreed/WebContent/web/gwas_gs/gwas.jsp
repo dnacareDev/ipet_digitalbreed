@@ -32,9 +32,6 @@
 
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap.css">
-	<!--  
-    <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap5.min.css">
-    -->
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/colors.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/components.css">
