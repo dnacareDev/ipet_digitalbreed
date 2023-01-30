@@ -310,6 +310,7 @@
 		   	   	$('#pill5_frame').attr('src', params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_miss.html");
 			   
 		   	   	//window.scrollTo(0,document.body.scrollHeight);
+		   	   	$("html").animate({ scrollTop: $(document).height() }, 1000);
 				
 				break;
 			case 2:
@@ -590,7 +591,9 @@
 	});
   
   	document.addEventListener('click', function(event) {
-  		
+  		if(event.composedPath()[0].classList.contains("nav-link")) {
+  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+  		}
   	});
 
   	$(window).on("resize", function() {

@@ -289,7 +289,10 @@
 				   		$("#jobid").val(params.data.jobid);
 				   		$("#resultpath").val(params.data.resultpath);
 				   		
-						//gridOptions.api.sizeColumnsToFit();
+				   		//gridOptions.api.sizeColumnsToFit();
+				   		
+				   	  	$("html").animate({ scrollTop: $(document).height() }, 1000);
+				   		
 						break;
 					case 2:
 						//$("#analysis_fail").modal('show');
@@ -402,22 +405,15 @@
 	/*** INIT TABLE ***/
 	new agGrid.Grid(gridTable, gridOptions);
 	
-	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
 	
-	if ($(window).width() < 768) {
-	    //gridOptions.columnApi.setColumnPinned("email", null);
-	} else {
-	   // gridOptions.columnApi.setColumnPinned("email", "left");
-	}
+	document.addEventListener('click', function(event) {
+  		if(event.composedPath()[0].classList.contains("nav-link")) {
+  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+  		}
+  	});
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
-		
-	    if ($(window).width() < 768) {
-	      //gridOptions.columnApi.setColumnPinned("email", null);
-	    } else {
-	     // gridOptions.columnApi.setColumnPinned("email", "left");
-	    }
 	});
   
 	//console.log(gridOptions);

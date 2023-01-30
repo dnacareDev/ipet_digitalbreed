@@ -253,6 +253,10 @@
 				    $('#jobid').val(params.data.jobid);
 				    $('#filename').val(params.data.file_name);
 				    $('#resultpath').val(params.data.resultpath);
+
+				    // 맨 아래로 스크롤
+		  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+				    
 				    break;
 				case 2:
 					//$("#analysis_fail").modal('show');
@@ -521,7 +525,13 @@
 				});
 			});
   	});
-  		
+  	
+  	document.addEventListener('click', function(event) {
+  		if(event.composedPath()[0].classList.contains("nav-link")) {
+  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+  		}
+  	});
+  	
   	$(window).on("resize", function() {
   		gridOptions.api.sizeColumnsToFit();
 	  	gridOptions2.api.sizeColumnsToFit();

@@ -7,82 +7,8 @@
 <%-- vcfViewer를 variant browser에 사용 --%>
 
 <%
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-	
-	//
-	
-	
-	JsonArray variantArr = new JsonArray();
-	JsonArray jsonArray = new JsonArray();
 
-	try {
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-		String sql = "select vcf_id, jobid, row_index, contents, contents->'$.Reference' from vcfviewer_t where row_index in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20) and jobid='20230112165329'";
-		//System.out.println("sql : " + sql);
-		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
-		
-
-		
-		for(int i=0 ; ipetdigitalconndb.rs.next() ; i++ ) {
-			
-			JsonObject jsonObj = JsonParser.parseString(ipetdigitalconndb.rs.getString("contents")).getAsJsonObject();
-			jsonArray.add(jsonObj);
-			/*
-			JsonObject jsonObj = JsonParser.parseString(ipetdigitalconndb.rs.getString("contents")).getAsJsonObject();
-
-			String[] keyArr = jsonObj.keySet().toArray(new String[0]);
-			System.out.println(Arrays.toString(keyArr));
-			
-			if(i==0) {
-				System.out.println(i);
-				
-				
-				//List<String> list = new ArrayList<>(jsonObj.keySet());
-				//System.out.println(list);
-				
-				for(int j=1 ; j<keyArr.length ; j++) {
-					JsonObject variantObj = new JsonObject();
-					variantObj.addProperty("ID", keyArr[j]);
-					variantObj.addProperty("position_"+i, jsonObj.get(keyArr[j]).getAsString());
-					//System.out.println(keyArr[j]);
-					variantArr.add(variantObj);
-				}
-			} else {
-				for(int j=1 ; j<keyArr.length ; j++) {
-					JsonObject variantObj = new JsonObject();
-					variantObj.addProperty("ID", keyArr[j]);
-					variantObj.addProperty("position_"+i, jsonObj.get(keyArr[j]).getAsString());
-					//System.out.println(keyArr[j]);
-					variantArr.add(variantObj);
-				}
-			}
-			
-			System.out.println(variantArr);
-			
-			//System.out.println(jsonObj.size());
-			System.out.println(jsonObj);
-			
-			
-			//jsonArray.add(jsonObj);
-			*/
-		}
-		
-		
-		//System.out.println(jsonArray);
-		//out.print(jsonArray);
-		
-		
-		
-	} catch(Exception e) {
-		e.printStackTrace();
-	} finally {
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.rs.close();
-		ipetdigitalconndb.conn.close();
-	}
-	
 %>
 
 
@@ -154,29 +80,40 @@
 
 <script type="text/javascript">
 	
-	<%--
-	var variantArr = <%= variantArr %> 
-	console.log(variantArr);
-	--%>
-	
-	var jsonArray = <%= jsonArray %>
-	console.log(jsonArray);
 	
 	
 	/*
-	fetch('./test.jsp')
-	.then((response) => response.text())
-	.then((data) => {
-		const arr = data.split(",");
-		if(arr[arr.length-1] == "") {
-			arr.pop();
-		}
-		console.log(arr);
-		for(let i=0 ; i<arr.length ; i++) {
-			console.log( Math.floor(Number(arr[i])*100 / 309097251) / 100);
-		}
+	const data = { username: 'example' };
+	
+	console.log(data);
+	console.log(JSON.stringify(data));
+	
+	fetch('./test.jsp', {
+	  method: 'POST', // or 'PUT'
+	  mode: 'cors',
+	  headers: {
+	    'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify(data),
 	})
+	.then((response) => response.json())
+	.then((data) => {
+	    console.log('Success:', data);
+	})
+	.catch((error) => {
+		console.error('Error:', error);
+	});
 	*/
+	var formData = new FormData();
+    formData.append('key1', 'value1');
+    //formData.append('key1', 'value2');
+
+    fetch('./test.jsp', {
+        method: 'POST',
+        body: formData
+    })
+	
+	
 </script>
 </body>
 </html>

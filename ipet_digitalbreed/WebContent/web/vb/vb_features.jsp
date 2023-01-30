@@ -107,7 +107,7 @@
 	    transition-delay: 20ms;
 	    opacity: 1;
 	}
-	.expandSide1 {
+	.expandSide {
 		width: 100%;
 		height: 480px;
 		opacity: 1;
@@ -121,27 +121,12 @@
 	    border: none;
 	    transition-delay: 20ms;
 	}
-	
-	.small > div {
-    	
-	}
-	.unset > div > p{
-	    opacity: 0;
-	}
-	.expand > div {
-	    
-	}
-
-	.sideButton, .slideButtion:active {
-		color : #2A2E30;
-		background-color : #B8C2CC;
-		border-color : #B8C2CC;
-		width:42px; 
-		height:70px; 
-		border: 0 solid transpart; 
-		padding: 0.9rem 2rem; 
-		outline: none;
-		box-shadow: none;
+	.sideButton {
+		width:65px; 
+		height:30px; 
+		padding: 0 10px 0 10px; 
+		transform:rotate(-90deg); 
+		border-radius: 0.4285rem 0.4285rem 0 0;
 	}
 
 </style>
@@ -179,10 +164,10 @@
 	                                	
 	                                	<!-- right side 고정버튼 -->
 	                                	<div style="position: absolute; top: 19px; right: -20px;">
-											<button type="button" class="btn btn-success" style="width:65px; height:30px; padding: 0 10px 0 10px; transform:rotate(-90deg); border-radius: 0.4285rem 0.4285rem 0 0;"  onclick="expandAndCollapse2();">TOP</button>
+											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain();">TOP</button>
 										</div>
 										<div style="position: absolute; z-index:10; top: 85px; right: -20px;">
-											<button type="button" class="btn btn-danger" style="width:65px; height:30px; padding: 0 10px 0 10px; transform:rotate(-90deg); border-radius: 0.4285rem 0.4285rem 0 0;"  onclick="expandAndCollapse3();">BOT</button>
+											<button type="button" class="btn btn-danger sideButton" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain();">BOT</button>
 										</div>
 										<!-- right side 고정버튼 -->
 	                                	
@@ -212,7 +197,7 @@
 	                                </div>
 	                                <div id="sideRow" class="expandAndCollapse expand" style="border-left: 1px solid black;">
 		                                <div class="row">
-		                                	<div id="side1"  class="expandAndCollapse expandSide1">
+		                                	<div id="side1"  class="expandAndCollapse expandSide">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' aria-expanded='true'>SnpEff</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' aria-expanded='false'>GWAS</a></li>
@@ -341,7 +326,7 @@
 		                                	</div>
 		                                </div>
 		                                <div class="row mt-2">
-		                                	<div id="side2" class="expandAndCollapse expandSide1">
+		                                	<div id="side2" class="expandAndCollapse expandSide">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill5' aria-expanded='true'>UPGMA</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill6' aria-expanded='false'>STRUCTURE</a></li>
@@ -474,16 +459,15 @@
 	document.addEventListener('DOMContentLoaded', function() {
 		const canvas = getCanvasInfo();
 		
-		drawChromosome(canvas);
+		//readChromosomeInfo();
 
-		//1번 염색체 길이정보 획득
-		//readChrLength(1);
-		
-   		drawGeneModel();
-   		
-   		getGwasList();
+		drawCanvas();
    		
 	})
+	
+	window.addEventListener('resize', drawCanvas);
+	
+	
 	
 	function getCanvasInfo() {
 		const canvas = {
@@ -502,99 +486,15 @@
    		
 	}
 	
-	function expandAndCollapse1() {
-		
-		const main = document.getElementById('main');
-		const side = document.getElementById('sideRow');
-		
-		if ( sideFlag.collapse_1 && sideFlag.collapse_2) {
-			main.classList.replace('smallMain', 'expandMain');
-			side.classList.replace('expand', 'small');
-			
-		} else if( !(sideFlag.collapse_1 && sideFlag.collapse_2) && main.classList.contains('expandMain') ) {
-			
-			main.classList.replace('expandMain', 'smallMain');
-			side.classList.replace('small', 'expand');
-		} else {
-			return;
-		}
-		
-		setTimeout(function() {
-			const canvas = getCanvasInfo();
-			drawChromosome(canvas);
-			drawGeneModel(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
-			
-		}, 200);
-		
-	}
-	
-	const sideFlag = {
-			collapse_1: false,
-			collapse_2: false,
-	}
-	
-	function expandAndCollapse2() {
-		const side1 = document.getElementById('side1');
-		
-		if(side1.classList.contains('expandSide1')) {
-			side1.classList.replace('expandSide1', 'small');
-			sideFlag.collapse_1 = true;
-		} else {
-			side1.classList.replace('small', 'expandSide1');
-			sideFlag.collapse_1 = false;
-		}
-		
-		expandAndCollapse1();
-		
-	}
-	
-	function expandAndCollapse3() {
-		const side2 = document.getElementById('side2');
-		
-		if(side2.classList.contains('expandSide1')) {
-			side2.classList.replace('expandSide1', 'small');
-			sideFlag.collapse_2 = true;
-		} else {
-			side2.classList.replace('small', 'expandSide1');
-			sideFlag.collapse_2 = false;
-		}
-		
-		expandAndCollapse1();
-		
-	}
-	
-	window.addEventListener('resize', drawCanvas);
-	
-	function drawCanvas(e) {
+	function drawCanvas() {
 		const canvas = getCanvasInfo();
 		
-		//drawChromosome(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
 		drawChromosome(canvas);
-		//drawChrPosition(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
+
+		drawGeneModel();
 		drawChrPosition(canvas);
-		
-		
-		
-   		drawGeneModel();
 	}
 	
-	var relativePositionX = null;
-   	// resize시 mousemove event로 그렸던 빨간줄이 사라지지 않고 유지
-	//function drawChrPosition(canvas, startX, startY, width, height) {
-   	function drawChrPosition(canvas) {
-		// 염색체 사각형 영역 내에서의 이벤트
-			const context = canvas.El.getContext("2d");
-			
-			context.beginPath();
-   			context.moveTo(canvas.startX + relativePositionX * canvas.width , canvas.startY);
-   			context.lineTo(canvas.startX + relativePositionX * canvas.width , canvas.startY + canvas.height);
-   			context.strokeStyle = '#DC0F00';
-   			context.lineWidth = 2;
-   			context.stroke();
-   		
-	}
-   	
-   	//function drawChromosome(canvas, startX, startY, width, height) {
 	function drawChromosome(canvas) {   		
    		if(canvas.El.getContext) {
    			const context = canvas.El.getContext("2d");
@@ -620,6 +520,24 @@
    		canvas.El.addEventListener('mousemove', searchPosition);
    		
    	}
+	
+	
+	
+	var relativePositionX = null;
+   	// resize시 mousemove event로 그렸던 빨간줄이 사라지지 않고 유지
+   	function drawChrPosition(canvas) {
+		
+   		// 염색체 사각형 영역 내에서의 이벤트 (2번째 캔버스)
+		const context = canvas.El.getContext("2d");
+		
+		context.beginPath();
+  		context.moveTo(canvas.startX + relativePositionX * canvas.width , canvas.startY);
+  		context.lineTo(canvas.startX + relativePositionX * canvas.width , canvas.startY + canvas.height);
+  		context.strokeStyle = '#DC0F00';
+  		context.lineWidth = 2;
+  		context.stroke();
+   		
+	}
    	
    	function searchPosition(e) {
    		
@@ -710,6 +628,44 @@
    			context.stroke();
    		}
    	}
+   	
+	function expandAndCollapseMain() {
+		
+		const main = document.getElementById('main');
+		const side = document.getElementById('sideRow');
+		
+		const side1 = document.getElementById('side1');
+		const side2 = document.getElementById('side2');
+		
+		if ( side1.classList.contains('small') && side2.classList.contains('small') ) {
+			main.classList.replace('smallMain', 'expandMain');
+			side.classList.replace('expand', 'small');
+			
+		} else if( !(side1.classList.contains('small') && side2.classList.contains('small')) && main.classList.contains('expandMain') ) {
+			
+			main.classList.replace('expandMain', 'smallMain');
+			side.classList.replace('small', 'expand');
+		} else {
+			return;
+		}
+		
+		setTimeout(function() {
+			const canvas = getCanvasInfo();
+			drawChromosome(canvas);
+			drawGeneModel(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
+			
+		}, 200);
+		
+	}
+	
+	function expandAndCollapseSide(text) {
+		const side = document.getElementById(text);
+		if(side.classList.contains('expandSide')) {
+			side.classList.replace('expandSide', 'small');
+		} else {
+			side.classList.replace('small', 'expandSide');
+		}
+	}
    	
    	function readChrLength(chr_num) {
    		//console.log(chr_num);

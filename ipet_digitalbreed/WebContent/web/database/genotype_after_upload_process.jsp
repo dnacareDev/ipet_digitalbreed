@@ -70,6 +70,8 @@
 	csvToJson.getJson(outputPath, jobid, permissionUid);
 	System.out.println("========CSV to Json end========"); 
 	
+	System.out.println("========save chromosome list start========");
+	System.out.println("========save chromosome list end========");
 
 	/*
 	// CSV => 행렬변환된 CSV파일 생성

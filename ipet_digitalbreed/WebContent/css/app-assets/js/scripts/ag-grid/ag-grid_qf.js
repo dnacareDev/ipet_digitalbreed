@@ -233,6 +233,9 @@
 				   		$("#resultpath").val(params.data.resultpath);
 				   		
 						gridOptions.api.sizeColumnsToFit();
+						
+			  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+						
 						break;
 					case 2:
 						//$("#analysis_fail").modal('show');
@@ -353,6 +356,12 @@
 	$(".ag-grid-export-btn").on("click", function(params) {
 	    gridOptions.api.exportDataAsCsv();
 	});
+	
+	document.addEventListener('click', function(event) {
+  		if(event.composedPath()[0].classList.contains("nav-link")) {
+  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+  		}
+  	});
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
