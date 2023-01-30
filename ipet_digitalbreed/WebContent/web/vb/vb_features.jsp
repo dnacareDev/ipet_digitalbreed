@@ -173,7 +173,7 @@
 	                                	
 	                                	<div class="row">
 	                                		<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:13px;"> 
-												<select id='Chr_select' class='select2 form-select float-left'>
+												<select id='Chr_select' class='select2 form-select float-left' onChange="selectChr(this)">
 													<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
 												</select>
 											</div>
@@ -459,15 +459,38 @@
 	document.addEventListener('DOMContentLoaded', function() {
 		const canvas = getCanvasInfo();
 		
-		//readChromosomeInfo();
-
+		readChromosomeInfo();
+		
 		drawCanvas();
    		
 	})
 	
-	window.addEventListener('resize', drawCanvas);
+	function readChromosomeInfo() {
+		fetch(`./vb_features_chrDataList.jsp?jobid=\${linkedJobid}`)
+		.then((response) => response.json())
+		.then((data) => {
+			//console.log(data);
+			
+			const chrSelectEl = document.getElementById("Chr_select");
+			for(let i=0 ; i<data.length ; i++) {
+				const option = document.createElement("option");
+				option.innerText = data[i]['chr'];
+				option.dataset.chr = data[i]['chr'];
+				option.dataset.vcfId_at_firstRow = data[i]['vcfId_at_firstRow'];
+				option.dataset.row_count = data[i]['row_count'];
+				chrSelectEl.append(option);
+			}
+		})
+	}
 	
-	
+	function selectChr(chrSelectElement) {
+		console.log(chrSelectElement);
+		const vcf_id = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.vcfId_at_firstRow;
+		const row_count = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.row_count;
+		
+		console.log(vcf_id);
+		console.log(row_count);
+	}
 	
 	function getCanvasInfo() {
 		const canvas = {
@@ -494,6 +517,8 @@
 		drawGeneModel();
 		drawChrPosition(canvas);
 	}
+	
+	window.addEventListener('resize', drawCanvas);
 	
 	function drawChromosome(canvas) {   		
    		if(canvas.El.getContext) {
@@ -666,20 +691,6 @@
 			side.classList.replace('small', 'expandSide');
 		}
 	}
-   	
-   	function readChrLength(chr_num) {
-   		//console.log(chr_num);
-   		
-   		fetch(`./vb_readChrLength.jsp?chr_num=\${chr_num}`)
-   		.then((response) => response.json())
-   		.then((data) => {
-   			//문자열 value값을 숫자화
-   			for (key in data) {
-   				data[key] = Number(data[key]);
-   			}
-   			console.log(data);
-   		})
-   	}
    	
    	function getGwasList() {
    		fetch(`./vb_getLists.jsp?command=GWAS&jobid=\${linkedJobid}`)

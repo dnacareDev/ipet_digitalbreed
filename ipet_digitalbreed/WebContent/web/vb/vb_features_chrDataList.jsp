@@ -11,8 +11,8 @@
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String path = rootFolder+"result/database/genotype_statistics/";
 
-	String jobid = "20230130185914";
-	
+	//String jobid = "20230130185914";
+	String jobid = request.getParameter("jobid");
 	
 	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	//ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -20,9 +20,9 @@
 	
 	File csvFile = new File(path+jobid+"/"+jobid+"_chr_row_index_data.csv");
 	
-	System.out.println("==============");
-	System.out.println("read list file");
-	System.out.println("==============");
+	System.out.println("======================");
+	System.out.println("read chr datalist file");
+	System.out.println("======================");
 	
 	JsonArray jsonArray = new JsonArray();
 
