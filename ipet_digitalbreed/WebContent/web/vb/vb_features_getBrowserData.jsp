@@ -45,7 +45,7 @@
 	
 	try {
 		
-		String sql = "select * from vcfviewer_t where row_index<="+(row_index+17)+" and row_index>="+(row_index-17)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
+		String sql = "select * from vcfviewer_t where row_index<="+(row_index+25)+" and row_index>="+(row_index-25)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		

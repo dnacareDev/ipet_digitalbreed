@@ -81,7 +81,8 @@
 	    },
 	    {
 			headerName: "Reference",
-			field: "reference",
+			//field: "reference",
+			field: "refgenome",
 			filter: true,
 			width: 250,
 			minWidth: 120,

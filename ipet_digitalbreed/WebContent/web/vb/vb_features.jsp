@@ -1,7 +1,9 @@
+<%@page import="java.sql.SQLException"%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
+<%@ page import="com.google.gson.JsonArray, com.google.gson.JsonObject " %>
 <%@ page import="ipet_digitalbreed.*"%>    
 
 <head>
@@ -134,18 +136,44 @@
 		width: 0.1003%;
 		height: 19px;
 		display: inline-block;
+		
 	}
 	
 
 </style>
 <%
-	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	//String permissionUid = session.getAttribute("permissionUid")+"";
 	//String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
 	String linkedJobid = request.getParameter("jobid");
+	String refgenome_id = request.getParameter("refgenome_id");
+	
+	String refgenome = "";
+	try {
+		String sql = "select refgenome from reference_genome_t where refgenome_id="+refgenome_id+";";
+		//System.out.println(sql);
+		
+		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+		ipetdigitalconndb.rs.next();
+		
+		refgenome = ipetdigitalconndb.rs.getString("refgenome");
+		
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	} finally {
+		ipetdigitalconndb.rs.close();
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
+	}
+	
+	//System.out.println(refgenome_id);
+	System.out.println(refgenome);
+	
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 	
@@ -204,7 +232,7 @@
 	                                	</div>
 	                                	-->
 	                                	<div class="row" style="margin-top: 50px; margin-bottom:30px;">
-	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black;">
+	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black; display: flex;">
 	                                		</div>
 	                                	</div>
 	                                	<div class="row" style="margin-bottom:150px;">
@@ -471,6 +499,7 @@
 
 	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
 	var linkedJobid = "<%=linkedJobid%>";
+	var refgenome = "<%=refgenome%>";
 
 	
 	//addChromosomeInfo();
@@ -556,10 +585,10 @@
 								const chrSelectEl = document.getElementById("Chr_select");
 								for(let i=0 ; i<data.length ; i++) {
 									const option = document.createElement("option");
-									//option.dataset.order = i+1;
 									option.dataset.chr = data[i]['chr'];
 									option.dataset.vcfId_at_firstRow = data[i]['vcfId_at_firstRow'];
 									option.dataset.row_count = data[i]['row_count'];
+									option.dataset.length = data[i]['length'];
 									option.innerText = data[i]['chr'];
 									chrSelectEl.append(option);
 								}

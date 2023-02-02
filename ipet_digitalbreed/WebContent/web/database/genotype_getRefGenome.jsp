@@ -19,13 +19,15 @@
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
 		//String sql="select reference from reference_genome_t where creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "';";
-		String sql="select reference from reference_genome_t where creuser='" +permissionUid+ "';";
-		System.out.println(sql);
+		String sql="select * from reference_genome_t where creuser='" +permissionUid+ "';";
+		//System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
 			
 			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("reference", ipetdigitalconndb.rs.getString("reference"));
+			jsonObject.addProperty("refgenome_id", ipetdigitalconndb.rs.getString("refgenome_id"));
+			jsonObject.addProperty("refgenome", ipetdigitalconndb.rs.getString("refgenome"));
+			jsonObject.addProperty("gff", ipetdigitalconndb.rs.getString("gff"));
 			
 			jsonArray.add(jsonObject);
 		}
@@ -37,7 +39,7 @@
 		ipetdigitalconndb.conn.close();
 	}
 
-	System.out.println(jsonArray);
+	//System.out.println(jsonArray);
 	out.clear();
 	out.print(jsonArray);
 %>

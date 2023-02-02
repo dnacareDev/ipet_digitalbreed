@@ -27,10 +27,13 @@
 			
 			String[] arr = line.split(",");
 			
+			//System.out.println(Arrays.toString(arr));
+			
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("chr", arr[0]);
 			jsonObject.addProperty("vcfId_at_firstRow", arr[1]);
 			jsonObject.addProperty("row_count", arr[2]);
+			jsonObject.addProperty("length", arr[3]);
 			
 			jsonArray.add(jsonObject);
 		}
@@ -48,10 +51,3 @@
 	
 %>
 
-
-<%!
-	public void readCSV(String jobid, String permissionUid, String path, int lineCount, String listLine) {
-		
-		
-	}
-%>

@@ -16,8 +16,8 @@
 
 	try{
 
-		//String sql="select a.refgenome_id, b.cropname, a.reference, a.gff, a.anno, a.length, a.author, DATE_FORMAT(a.cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t a inner join crop_t b on a.cropid = b.cropid where a.creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by no DESC;";
-		String sql="select refgenome_id, crop_name, reference, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' order by refgenome_id DESC;";
+		//String sql="select refgenome_id, crop_name, reference, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' order by refgenome_id DESC;";
+		String sql="select refgenome_id, crop_name, refgenome, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' order by refgenome_id DESC;";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
@@ -25,8 +25,8 @@
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("refgenome_id", ipetdigitalconndb.rs.getInt("refgenome_id"));
 			jsonObject.addProperty("crop_name", ipetdigitalconndb.rs.getString("crop_name"));
-			//jsonObject.addProperty("cropname", ipetdigitalconndb.rs.getString("crop_name"));
-			jsonObject.addProperty("reference", ipetdigitalconndb.rs.getString("reference"));
+			//jsonObject.addProperty("reference", ipetdigitalconndb.rs.getString("reference"));
+			jsonObject.addProperty("refgenome", ipetdigitalconndb.rs.getString("refgenome"));
 			jsonObject.addProperty("gff", ipetdigitalconndb.rs.getString("gff"));
 			//jsonObject.addProperty("anno", ipetdigitalconndb.rs.getString("anno"));
 			//jsonObject.addProperty("length", ipetdigitalconndb.rs.getString("length"));

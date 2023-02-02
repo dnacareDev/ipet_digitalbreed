@@ -328,8 +328,8 @@ body {
         	
         	
         	const jobid = await fetch('../getJobid.jsp')
-        				.then((response) => response.text())
-        				.then((data) => data);
+		        				.then((response) => response.text())
+		        				.then((data) => data);
         	
         	
         	//const jobid = "20221214133523"			// csv 1.4GB
@@ -341,6 +341,7 @@ body {
         	
         	const selectEl = document.getElementById("refGenomeSelect");
         	const refgenome = selectEl.options[selectEl.selectedIndex].dataset.refgenome;
+        	const refgenome_id = selectEl.options[selectEl.selectedIndex].dataset.refgenome_id;
         	
         	
 			var postObj = new Object();
@@ -350,8 +351,10 @@ body {
 			
 			if(refgenome === undefined || refgenome === "") {
 				postObj.refgenome = "-";
+				postObj.refgenome_id = 0;
 			} else {
 				postObj.refgenome = refgenome;
+				postObj.refgenome_id = refgenome_id;
 			}
 			
 			box.setPostData(postObj);
@@ -388,8 +391,10 @@ body {
         		
         		for(let i=0 ; i<data.length ; i++) {
 	        		const objOption = document.createElement("option");
-	        		objOption.text = data[i]['reference'];
-	        		objOption.dataset.refgenome = data[i]['reference'];
+	        		objOption.dataset.refgenome_id = data[i]['refgenome_id'];
+	        		objOption.dataset.refgenome = data[i]['refgenome'];
+	        		objOption.dataset.gff = data[i]['gff'];
+	        		objOption.text = "" + data[i]['refgenome'] + " (" + data[i]['gff'] + ")";
 	        		selectEl.options.add(objOption);
         		}
         		

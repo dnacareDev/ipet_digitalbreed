@@ -10,21 +10,21 @@
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String jobid = request.getParameter("jobid");
 	String _orig_filename = request.getParameter("filename");
-	String comment = request.getParameter("comment");
+	//String comment = request.getParameter("comment");
 	String varietyid = request.getParameter("varietyid");
 	String refgenome = request.getParameter("refgenome");
-	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String savePath = rootFolder+"uploads/database/db_input/";
 	String outputPath = rootFolder+"result/database/genotype_statistics/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";	
 	
-
 	
 	String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 	String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 	String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 	//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
+	
+	System.out.println(genotype_sequence);
 	
 	System.out.println("========genotype_sequence========");
 	runanalysistools.execute(genotype_sequence, "cmd");
@@ -49,7 +49,8 @@
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	//String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
-	String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refgenome+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
+	//String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refgenome+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
+	String updateVcfinfo_sql="update vcfdata_info_t set status=1, samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
 	System.out.println(updateVcfinfo_sql);
 	
 	try{
@@ -71,7 +72,7 @@
 	System.out.println("========CSV to Json & excuteUpdate end========"); 
 	
 	System.out.println("========save chromosome list start========");
-	makeChrDataCsv(rootFolder, jobid);
+	makeChrDataCsv(rootFolder, jobid, refgenome);
 	System.out.println("========save chromosome list end========");
 
 	/*
@@ -123,7 +124,7 @@
 				JsonObject obj = new JsonObject(); 
 	            List<String> chunks = Arrays.asList(line.split(","));
 	            //System.out.println(chunks.size());
-	            
+	            /*
 	            for(int i = -2; i < columns.size(); i++) {
 	            	if(i==-2) {
 	            		String chr = chunks.get(0).substring(0, chunks.get(0).lastIndexOf("_"));
@@ -137,6 +138,20 @@
 	            		obj.addProperty(columns.get(i), chunks.get(i));
 	            	}
 	            }
+	            */
+	            for(int i = 0; i < columns.size(); i++) {
+		        	if(i==0) {
+		        		String chr = chunks.get(0);
+		        		//obj.addProperty("chr", chr);
+		        		insertSqlValuesPart.append(chr + "', ");
+		        	} else if(i==1) {
+		        		String position = chunks.get(1);
+		        		//obj.addProperty("position", position);
+		        		insertSqlValuesPart.append(position + ", '");
+		        	} else {
+		        		obj.addProperty(columns.get(i), chunks.get(i));
+		        	}
+		        }
 	            //System.out.println(obj);
 	            
 	            
@@ -172,19 +187,50 @@
 %>
 
 <%!
-	private void makeChrDataCsv(String rootFolder, String jobid) throws IOException, SQLException {
+	private void makeChrDataCsv(String rootFolder, String jobid, String refgenome) throws IOException, SQLException {
 		String path = rootFolder+"result/database/genotype_statistics/";
 		
-		File fileRead = new File(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
+		//File fileRead = new File(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
+		File fileRead2 = new File(rootFolder+"uploads/reference_database/"+refgenome+"/len/"+refgenome+".len.csv");
 		File fileWrite = new File(path+"/"+jobid+"/"+jobid+"_chr_row_index_data.csv");
 		
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead), "UTF-8"));
+		System.out.println(rootFolder+"uploads/reference_database/"+refgenome+"/len/"+refgenome+".csv");
+		
+		//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead), "UTF-8"));
+		BufferedReader br2 = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead2), "UTF-8"));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileWrite), "UTF-8"));
 		
-		bw.write("chr,vcfId_at_firstRow,row_count");
+		bw.write("chr,vcfId_at_firstRow,row_count,length");
 		bw.newLine();
 		
+		br2.readLine();
+		String line = br2.readLine();
 		
+		for(int i=0 ; true ; i++) {
+			//System.out.println(line);
+			
+			String[] line_arr = line.split(",");
+			String chr = line_arr[0];
+			String len = line_arr[1];
+			
+			String vcf_id = getVcfId(chr, jobid);
+			String row_count = getChrCount(chr, jobid);
+			
+			System.out.println(chr + "," + vcf_id + "," + row_count + "," + len);
+			bw.write(chr + "," + vcf_id + "," + row_count + "," + len);
+			if((line=br2.readLine()) != null) {
+				bw.newLine();
+			} else {
+				break;
+			}
+		}
+		
+		br2.close();
+		
+		bw.flush();
+		bw.close();
+		
+		/*
 		List<List<String>> chrList = new ArrayList<>();
 		
 		br.readLine();
@@ -192,7 +238,7 @@
 		
 		for(int i=1, chrListCount=0 ; true ; i++) {
 			//System.out.println(line);
-			String chr = line.substring(0, line.indexOf("_"));
+			String chr = line.substring(0, line.indexOf(","));
 			
 			if(i==1) {
 				String vcf_id = getVcfId(chr, jobid);
@@ -200,7 +246,7 @@
 				chrList.add( Arrays.asList(chr, vcf_id, "") );
 				bw.write( chr + "," + vcf_id + ",");
 				
-				System.out.println("chr : " + chr + "& vcf_id : " + vcf_id);
+				System.out.println("chr : " + chr + " & vcf_id : " + vcf_id);
 				
 			}
 			
@@ -237,6 +283,7 @@
 		
 		bw.flush();
 		bw.close();
+		*/
 	}
 %>
 
@@ -259,6 +306,35 @@ private String  getVcfId(String chr, String jobid) throws SQLException {
 		
 	}catch(Exception e){
 		System.out.println("getVcfId error");
+   		System.out.println(e);
+		return "1";
+   	}finally { 
+   		ipetdigitalconndb.stmt.close();
+   		ipetdigitalconndb.conn.close();
+   	}
+
+} 
+%>
+
+<%! 
+private String getChrCount(String chr, String jobid) throws SQLException {
+	
+	
+	
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	try{
+		String sql = "select count(*) as count from vcfviewer_t where chr='" +chr+ "' and jobid='"+jobid+"' limit 1;";
+		//System.out.println(sql);
+		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+		
+		ipetdigitalconndb.rs.next();
+		String count = ipetdigitalconndb.rs.getString("count");
+		//System.out.println(vcf_id);
+		return count;
+		
+	}catch(Exception e){
+		System.out.println("getChrCount error");
    		System.out.println(e);
 		return "1";
    	}finally { 

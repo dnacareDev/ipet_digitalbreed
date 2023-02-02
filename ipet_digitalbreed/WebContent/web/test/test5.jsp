@@ -10,7 +10,7 @@
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String path = rootFolder+"result/database/genotype_statistics/";
 
-	String jobid= "20230130171154";
+	String jobid= "20230202163316";
 	
 	File fileRead = new File(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
 	File fileWrite = new File(path+"/"+jobid+"/"+jobid+"_chr_row_index_data.csv");
@@ -30,7 +30,7 @@
 	
 	for(int i=1, chrListCount=0 ; true ; i++) {
 		//System.out.println(line);
-		String chr = line.substring(0, line.indexOf("_"));
+		String chr = line.substring(0, line.indexOf(","));
 
 		if(i==1) {
 			String vcf_id = getVcfId(chr, jobid);
@@ -85,7 +85,7 @@ private String  getVcfId(String chr, String jobid) throws SQLException {
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	try{
 		String sql = "select vcf_id from vcfviewer_t where chr='" +chr+ "' and jobid='"+jobid+"' limit 1;";
-		//System.out.println(sql);
+		System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		
 		ipetdigitalconndb.rs.next();

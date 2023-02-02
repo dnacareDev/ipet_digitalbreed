@@ -194,7 +194,7 @@ body {
 												작목
 											</div>
 											<div class="col-8">
-							                	<input type="text" id="cropParam" class="form-control" name="cropParam" placeholder="Crop" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+							                	<input type="text" id="cropParam" class="form-control" name="cropParam" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 											</div>
 										</div>
 										<div class="row mt-1">
@@ -202,7 +202,7 @@ body {
 												참조유전체
 											</div>
 											<div class="col-8">
-							                	<input type="text" id="refgenomeParam" class="form-control" name="refgenomeParam" placeholder="refgenome" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+							                	<input type="text" id="refgenomeParam" class="form-control" name="refgenomeParam" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 											</div>
 										</div>
 										<div class="row mt-1">
@@ -210,7 +210,7 @@ body {
 												GFF
 											</div>
 											<div class="col-8">
-							                	<input type="text" id="gffParam" class="form-control" name="gffParam" placeholder="GFF" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+							                	<input type="text" id="gffParam" class="form-control" name="gffParam" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 											</div>
 										</div>
 										<div class="row mt-1">
@@ -218,7 +218,7 @@ body {
 												출처
 											</div>
 											<div class="col-8">
-							                	<input type="text" id="authorParam" class="form-control" name="authorParam" placeholder="참조유전체 출처" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+							                	<input type="text" id="authorParam" class="form-control" name="authorParam" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 											</div>
 										</div>
 					                </div>
@@ -235,7 +235,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/fasta/Annuum.v1.6.chromosome.fa" download="sampledata.fa"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a> 
+											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/fasta/CsGojo-0_v1.LG1-9.fasta" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a> 
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -247,7 +247,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/gff/Sol2.Annotation_Annuum.gene.v1.6.gff" download="sampledata.gff"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/gff/CsGojo-0_v1_HC.gff3" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -259,7 +259,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/cds/Annuum.v1.6.chromosome.cds.fa" download="sampleCDSsequence.fa"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/cds/CsGojo-0_v1_HC.cds" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -271,7 +271,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/Annuum_v1_6/protein/Annuum.v1.6.Total.pep" download="sampledata.pep"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/protein/CsGojo-0_v1_HC.pep" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						        </fieldset>

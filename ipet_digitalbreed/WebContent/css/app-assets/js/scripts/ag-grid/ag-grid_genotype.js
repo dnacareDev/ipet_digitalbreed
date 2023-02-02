@@ -361,8 +361,11 @@
 								.then((data) => {
 									//const row = data.split(",");
 
-									//console.log(filter);
-									return data.split(",");
+									
+									const data_arr = data.split(",");
+									return data_arr.splice(2,data_arr.length);
+									
+									//return data.split(",");
 								})
 		console.log("header : ", header);
 	
