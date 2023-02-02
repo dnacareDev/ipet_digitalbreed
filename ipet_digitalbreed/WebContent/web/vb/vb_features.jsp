@@ -109,7 +109,7 @@
 	}
 	.expandSide {
 		width: 100%;
-		height: 480px;
+		height: 770px;
 		opacity: 1;
 		transition-delay: 20ms;
 	}
@@ -122,12 +122,20 @@
 	    transition-delay: 20ms;
 	}
 	.sideButton {
-		width:65px; 
+		width:80px; 
 		height:30px; 
 		padding: 0 10px 0 10px; 
 		transform:rotate(-90deg); 
 		border-radius: 0.4285rem 0.4285rem 0 0;
 	}
+	
+	
+	.chromosomeStackDiv {
+		width: 0.1003%;
+		height: 19px;
+		display: inline-block;
+	}
+	
 
 </style>
 <%
@@ -160,27 +168,30 @@
                         <div class="card-content">
                             <div class="card-body pt-0 pb-0">
                                 <div class="row justify-content-between">
-	                                <div id="main" class="expandAndCollapse smallMain" style="position: relative;">
+	                                <div id="main" class="expandAndCollapse expandMain" style="position: relative;">
 	                                	
 	                                	<!-- right side 고정버튼 -->
-	                                	<div style="position: absolute; top: 19px; right: -20px;">
-											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain();">TOP</button>
+	                                	<div style="position: absolute; top: 25px; right: -25px;">
+											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain();">Mapping</button>
 										</div>
-										<div style="position: absolute; z-index:10; top: 85px; right: -20px;">
-											<button type="button" class="btn btn-danger sideButton" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain();">BOT</button>
+										<div style="position: absolute; top: 105px; right: -25px;">
+											<button type="button" class="btn btn-danger sideButton" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain();">Sorting</button>
 										</div>
 										<!-- right side 고정버튼 -->
 	                                	
 	                                	<div class="row">
-	                                		<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:13px;"> 
+	                                		<div style="width:20%; min-width:200px; margin-top:1.5rem; margin-left:10px; padding-left:13px;"> 
 												<select id='Chr_select' class='select2 form-select float-left' onChange="selectChr(this)">
+													<!--  
 													<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
+													-->
 												</select>
 											</div>
 											<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:14px;"> 
 												<input type="text" id="comment" class="form-control" placeholder="Select Position" oninput="inputNumberRange(this);">
 											</div>
 	                                	</div>
+	                                	<!--  
 	                                	<div class="row mt-1">
 	                                		<div id="chromosomeCanvasArea" class="col-12" style="padding:0px 1%;">
 		                                		<canvas id="chromosomeCanvas" height="200px"></canvas>
@@ -191,27 +202,39 @@
 		                                		<canvas id="geneModelCanvas" height="200px"></canvas>
 	                                		</div>
 	                                	</div>
+	                                	-->
+	                                	<div class="row" style="margin-top: 50px; margin-bottom:30px;">
+	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black;">
+	                                		</div>
+	                                	</div>
+	                                	<div class="row" style="margin-bottom:150px;">
+	                                		<div id="chromosomeDiv2"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black;">
+	                                		</div>
+	                                	</div>
 	                                	<div class="row">
-				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px auto; width: 98%; height:420px;"></div><br>
+				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:420px;"></div><br>
 	                                	</div>
 	                                </div>
-	                                <div id="sideRow" class="expandAndCollapse expand" style="border-left: 1px solid black;">
+	                                <div id="sideRow" class="expandAndCollapse small" style="border-left: 1px solid black;">
 		                                <div class="row">
-		                                	<div id="side1"  class="expandAndCollapse expandSide">
-			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
+		                                	<div id="side1"  class="expandAndCollapse small">
+			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' aria-expanded='true'>SnpEff</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' aria-expanded='false'>GWAS</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill3' aria-expanded='false'>Marker</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_4' data-toggle='pill' href='#pill4' aria-expanded='false'>Selection</a></li>
 												</ul>
 												<div class='tab-content'>
-	  												<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-	  													<div class="row">
+	  												<div role='tabpanel' class='tab-pane active pl-1' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+	  													<div class="row justify-content-between">
 		  													<div style="width:50%; padding-left:14px;"> 
 																<select id='SnpEff_select' class='select2 form-select float-left'>
 																	<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
 																</select>
 															</div>
+															<div class="float-right">
+											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="filter_SnpEff();">표지</button>
+											            	</div>
 														</div>
 														<div class="row mt-2" style="padding-left: 6px;">
 											            	<div class="form-check" style="margin-right:1vw;">
@@ -231,29 +254,36 @@
 						                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
 											            	</div>
 									            		</div>
+									            		<!--  
 									            		<div class="row mt-1" style="float:right;">
 									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">표지</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-right:15px;" onclick="filter_SnpEff();">표지</button>
 											            	</div>
 									            		</div>
-									            		<div class="row col-12 mt-1" style="margin-left:0px;">
-															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
+									            		-->
+									            		<div class="row col-12 mt-1 pl-0" style="margin-left:0px;">
+															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:600px; width:100%;"></div>
 														</div>
 	  												</div>
 	  												<!-- GWAS pill -->
-	  												<div class='tab-pane' id='pill2' aria-labelledby='base-pill2'>
-	  													<div class="row mt-1">
+	  												<div class='tab-pane pl-1' id='pill2' aria-labelledby='base-pill2'>
+	  													<div class="row mt-1 justify-content-between">
 		  													<div class="col-6">
 																<select id='GWAS_select' class='select2 form-select float-left' onchange='GWAS_select_change(this.options[this.selectedIndex]);'>
 																	<option data-chr="-1" disabled hidden selected>Select result</option>
 																</select>
 															</div>
+															<div class="float-right">
+											            		<button type="button" class="btn btn-light float-right" style="margin-right:30px;" onclick="filter_SnpEff();">표지</button>
+											            	</div>
 														</div>
+														<!--  
 									            		<div class="row mt-1">
 									            			<div class="col-12">
 											            		<button type="button" class="btn btn-light float-right" style="margin-right:29px;" onclick="filter_SnpEff();">표지</button>
 											            	</div>
 									            		</div>
+									            		-->
 														<div class="row mt-1">
 															<div class="col-12">
 																<ul id='GWAS_button_list' class='nav nav-pills nav-active-bordered-pill'>
@@ -261,51 +291,30 @@
 																	<li class='nav-item'><a class='nav-link active' id='GWAS_1' data-toggle='pill' href='#GWAS_pill1' aria-expanded='true'>GLM(test)</a></li>
 																	-->
 																</ul>
-																<!--  
-																<div class="row mt-1">
-																	<div class="col-4">
-																		<select id='GWAS_select_phenotype' class='select2 form-select float-left' onchange='GWAS_phenotype_change(this)'>
-																			<option data-chr="-1" disabled hidden selected>Select Phenotype</option>
-																		</select>
-																	</div>
-																</div>
-																-->
 																<div class="row mt-1">
 																	<div id="GWAS_content_list" class='tab-content col-12'>
-		  																<!--  
-		  																<div role='tabpanel' class='tab-pane active' id='GWAS_pill_1' aria-expanded='true' aria-labelledby='base-pill1'>
-		  																	"aaaaaa"
-		  																</div>
-		  																<div class='tab-pane' id='GWAS_pill_2' aria-expanded='true' aria-labelledby='base-pill1'>
-		  																	"bbbbb"
-		  																</div>
-		  																-->
 		  															</div>
 																</div>
 															</div>
 														</div>
-														<!--  
-									            		<div class="row col-12 mt-1">
-	  														<div id='GWAS_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
-	  													</div>
-	  													-->
 	  												</div>
-	  												<div class='tab-pane' id='pill3' aria-labelledby='base-pill3'>
-	  													<div style="width:50%;"> 
-															<select id='Marker_select' class='select2 form-select float-left'>
-																<option data-chr="-1" disabled hidden selected>Select result</option>
-															</select>
-														</div>
-														<div class="row mt-1" style="float:right;">
-									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">표지</button>
+	  												<div class='tab-pane pl-1' id='pill3' aria-labelledby='base-pill3'>
+	  													<div class="row mt-1 justify-content-between">
+	  														<div class="col-6"> 
+																<select id='Marker_select' class='select2 form-select float-left'>
+																	<option data-chr="-1" disabled hidden selected>Select result</option>
+																</select>
+															</div>
+									            			<div class="float-right">
+											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="filter_SnpEff();">표지</button>
 											            	</div>
-									            		</div>
-									            		<div class="row col-12 mt-1">
-	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:245px; width:100%;"></div>
+	  													</div>
+	  													
+									            		<div class="row mt-1">
+	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:642px; width:100%; padding-left:14px; padding-right: 28px;"></div>
 	  													</div>
 	  												</div>
-	  												<div class='tab-pane' id='pill4' aria-labelledby='base-pill4'>
+	  												<div class='tab-pane pl-1' id='pill4' aria-labelledby='base-pill4'>
 	  													<div style="width:50%;"> 
 															<select id='SelectionList_select' class='select2 form-select float-left'>
 																<option data-chr="-1" disabled hidden selected>Select result</option>
@@ -313,27 +322,27 @@
 														</div>
 														<div class="row mt-1" style="float:right;">
 									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:16px;" onclick="filter_SnpEff();">Flanking sequence</button>
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:16px;" onclick="alert('전송되었습니다.');">Primer Design</button>
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:29px;" onclick="filter_SnpEff();">표지</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="filter_SnpEff();">Flanking sequence</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="alert('전송되었습니다.');">Primer Design</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="filter_SnpEff();">표지</button>
 											            	</div>
 									            		</div>
-									            		<div class="row col-12 mt-1">
-	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:245px; width:100%;'></div>
+									            		<div class="row col-12 mt-1 pr-0">
+	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:604px; width:100%;'></div>
 	  													</div>
 	  												</div>
 	  											</div>
 		                                	</div>
 		                                </div>
-		                                <div class="row mt-2">
-		                                	<div id="side2" class="expandAndCollapse expandSide">
-			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
+		                                <div class="row">
+		                                	<div id="side2" class="expandAndCollapse small">
+			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill5' aria-expanded='true'>UPGMA</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill6' aria-expanded='false'>STRUCTURE</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill7' aria-expanded='false'>Haplotype</a></li>
 												</ul>
 												<div class='tab-content'>
-	  												<div role='tabpanel' class='tab-pane active' id='pill5' aria-expanded='true' aria-labelledby='base-pill1'>
+	  												<div role='tabpanel' class='tab-pane active pl-1' id='pill5' aria-expanded='true' aria-labelledby='base-pill1'>
 	  													<div class="row">
 		  													<div style="width:50%; padding-left:14px;"> 
 																<select id='UPGMA_select' class='select2 form-select float-left'>
@@ -351,41 +360,48 @@
 											            		<button type="button" class="btn btn-light mb-1 float-right" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
 											            	</div>
 									            		</div>
-									            		<div class="row col-12 mt-1">
-															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"></div>
+									            		<div class="row">
+															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:604px; width:93%; margin-left: 15px;"></div>
 														</div>
 	  												</div>
-	  												<div class='tab-pane' id='pill6' aria-labelledby='base-pill2'>
-	  													<div style="width:50%;"> 
-															<select id='STRUCTURE_select' class='select2 form-select float-left'>
-																<option data-chr="-1" disabled hidden selected>Select result</option>
-															</select>
+	  												<div class='tab-pane pl-1' id='pill6' aria-labelledby='base-pill2'>
+	  													<div class="row justify-content-between"> 
+															<div class="col-6">
+																<select id='STRUCTURE_select' class='select2 form-select float-left'>
+																	<option data-chr="-1" disabled hidden selected>Select result</option>
+																</select>
+															</div>
+															<div class="float-right">
+											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
+											            	</div>
 														</div>
+														<!--  
 														<div class="row mt-1" style="float:right;">
 									            			<div class="col-12">
 											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
 											            	</div>
 									            		</div>
-									            		<div class="row col-12 mt-1">
-	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"></div>
+									            		-->
+									            		<div class="row mt-1">
+	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:642px; width:93%; margin-left: 15px;"></div>
 	  													</div>
 	  												</div>
-	  												<div class='tab-pane' id='pill7' aria-labelledby='base-pill3'>
+	  												<div class='tab-pane pl-1' id='pill7' aria-labelledby='base-pill3'>
 	  													<div class="row" style="width:50%; padding-left:14px;"> 
 															<button type="button" class="btn btn-light" style="margin-right:29px;" onclick="filter_SnpEff();">Haplotype Analysis</button>
 														</div>
 														<div class="row mt-1" >
 									            			<div class="col-6 pr-0">
 									            				<select id='Haplotype_select' class='select2 form-select float-left'>
-																<option data-chr="-1" disabled hidden selected>Select result</option>
-															</select>
+																	<option data-chr="-1" disabled hidden selected>Select result</option>
+																</select>
 									            			</div>
 									            			<div class="col-6">
 											            		<button type="button" class="btn btn-light mb-1 float-right" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
 											            	</div>
 									            		</div>
-									            		<div class="row col-12 mt-1">
-	  														<div id='Haplotype_Grid' class="ag-theme-alpine" style="height:260px; width:100%;"><%-- --%></div>
+									            		<div class="row">
+	  														<div id='Haplotype_Grid' class="ag-theme-alpine" style="height:604px; width:93%; margin-left: 15px;"></div>
 	  													</div>
 	  												</div>
 	  											</div>
@@ -456,40 +472,229 @@
 	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
 	var linkedJobid = "<%=linkedJobid%>";
 
+	
+	//addChromosomeInfo();
+	
 	document.addEventListener('DOMContentLoaded', function() {
-		const canvas = getCanvasInfo();
+		//const canvas = getCanvasInfo();
 		
-		readChromosomeInfo();
 		
-		drawCanvas();
-   		
+		
+		//drawCanvas();
+
+		appendChromosomeDiv();
+		
+		getGwasList();
+		
 	})
 	
-	function readChromosomeInfo() {
-		fetch(`./vb_features_chrDataList.jsp?jobid=\${linkedJobid}`)
-		.then((response) => response.json())
-		.then((data) => {
-			//console.log(data);
+	// 1000등분하여 div상에 출력
+	function appendChromosomeDiv() {
+		
+		console.time("make1000Div");
+		
+		const chromosomeDiv = document.getElementById('chromosomeDiv');
+		//chromosomeDiv.innerHTML = "";
+		
+		for(let i=0 ; i<=998 ; i++) {
 			
-			const chrSelectEl = document.getElementById("Chr_select");
-			for(let i=0 ; i<data.length ; i++) {
-				const option = document.createElement("option");
-				option.innerText = data[i]['chr'];
-				option.dataset.chr = data[i]['chr'];
-				option.dataset.vcfId_at_firstRow = data[i]['vcfId_at_firstRow'];
-				option.dataset.row_count = data[i]['row_count'];
-				chrSelectEl.append(option);
-			}
+			const child = document.createElement('div');
+			child.classList.add('chromosomeStackDiv');
+			child.dataset.order = i;
+			child.dataset.selected = false;
+			//child.style.width = '0.1003%';
+			//child.style.height = '19px';
+			//child.style.display = 'inline-block';
+			
+			chromosomeDiv.append(child);
+		}
+		
+		
+		document.querySelectorAll('.chromosomeStackDiv').forEach(El => {
+			El.addEventListener('click', (e) => {
+				//console.log(e.composedPath()[0].dataset.order);
+				//console.log(document.querySelector('.chromosomeStackDiv[data-order="0"]').offsetLeft);
+				//console.log(document.querySelector('.chromosomeStackDiv[data-order="998"]').offsetLeft);
+				
+				const clickedOrder = e.composedPath()[0].dataset.order
+				let closestPositionedOrder = 1000;
+				let gap = 1000;
+				
+				e.composedPath()[1].querySelectorAll('[data-position]').forEach( (el) => {
+					
+					el.style.backgroundColor = "#808000";
+					
+					
+					//console.log("each el : ", el.dataset.order)
+					
+					const order = el.dataset.order;
+					
+					if(Math.abs( Number(order) - Number(clickedOrder) ) < gap ) {
+						//console.log("closer");
+						gap = Math.abs( Number(order) - Number(clickedOrder) );
+						//console.log( "gap : ", gap);
+						closestPositionedOrder = Number(order);
+						//console.log("closest : ", closestPositionedOrder);
+					}
+				})
+				
+				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).style.backgroundColor = 'red';
+				document.getElementById('comment').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position;
+			})
 		})
+		console.timeEnd("make1000Div");
 	}
 	
+	// 염색체 드롭박스에 option 추가
+	async function addChromosomeInfo() {
+		console.time("addOption");
+		const firstChr = await fetch(`./vb_features_chrDataList.jsp?jobid=\${linkedJobid}`)
+							.then((response) => response.json())
+							.then((data) => {
+								//console.log(data);
+								
+								const chrSelectEl = document.getElementById("Chr_select");
+								for(let i=0 ; i<data.length ; i++) {
+									const option = document.createElement("option");
+									//option.dataset.order = i+1;
+									option.dataset.chr = data[i]['chr'];
+									option.dataset.vcfId_at_firstRow = data[i]['vcfId_at_firstRow'];
+									option.dataset.row_count = data[i]['row_count'];
+									option.innerText = data[i]['chr'];
+									chrSelectEl.append(option);
+								}
+								
+								return chrSelectEl.options[0].dataset.chr
+								
+							})
+		console.timeEnd("addOption");
+		return firstChr;
+	}
+	
+	// select options 선택시 이벤트. jobid, chr값으로 position 정보 로드
 	function selectChr(chrSelectElement) {
-		console.log(chrSelectElement);
+		console.time("selectOption");
+		//console.log(chrSelectElement);
 		const vcf_id = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.vcfId_at_firstRow;
 		const row_count = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.row_count;
+		const chr = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.chr;
 		
-		console.log(vcf_id);
-		console.log(row_count);
+		//console.log(vcf_id);
+		//console.log(row_count);
+		//console.log(chr);
+		
+		
+		fetch(`./vb_features_positionListFromChr.jsp?vcf_id=\${vcf_id}&row_count=\${row_count}&chr=\${chr}&jobid=\${linkedJobid}`)
+		.then((response) => response.json())
+		.then((position_data) => {
+			//console.log(position_data);
+			
+			let position_ratio = new Array();
+			
+			const last_position = position_data[position_data.length-1]['position'];
+			
+			for(let i=0 ; i<position_data.length ; i++) {
+				position_ratio.push( parseInt(position_data[i]['position'] * 998 / last_position ) )
+			}
+			//console.log(position_ratio);
+			
+			colorPosition(position_data, position_ratio);
+			
+			//variant browser 로드
+			getVariantBrowserGrid();
+			console.timeEnd("selectOption");
+		})
+		
+	}
+	
+	
+	
+	// position과 일치하는 div에 색칠
+	function colorPosition(position_data, position_ratio) {
+		console.log("position_data : ", position_data);
+		console.log("position_ratio : ", position_ratio);
+		console.time("color");
+		
+		for(let i=0 ; i<=998 ; i++) {
+			document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.selected = "false";
+			document.querySelectorAll('#chromosomeDiv > [data-order]')[i].style.backgroundColor = '';
+			delete document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.position;
+			delete document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.vcf_id;
+			/*
+			document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).dataset.selected = "false";
+			document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).style.backgroundColor = '';
+			delete document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).dataset.position;
+			delete document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).dataset.vcf_id;
+			*/
+		}
+		
+		for(let i=0 ; i<position_ratio.length ; i++) {
+			
+			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.position = position_data[i]['position'];
+			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.vcf_id = position_data[i]['vcf_id'];
+			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.selected = "false";
+			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].style.backgroundColor = '#808000';
+			
+		}
+		
+		document.querySelectorAll('.chromosomeStackDiv[data-position]')[0].dataset.selected = "true";
+		document.querySelectorAll('.chromosomeStackDiv[data-position]')[0].style.backgroundColor = 'red';
+		
+		console.timeEnd("color");
+	}
+	
+	function getVariantBrowserGrid() {
+		const position = document.querySelector('.chromosomeStackDiv[data-selected="true"]').dataset.position;
+		const chrSelectEl = document.getElementById('Chr_select');
+		const chr = chrSelectEl.options[chrSelectEl.selectedIndex].dataset.chr;
+		
+		console.log(position);
+		console.log(chr);
+		
+		fetch(`./vb_features_getBrowserData.jsp?chr=\${chr}&position=\${position}&jobid=\${linkedJobid}`)
+    	.then((response) => response.json())
+    	.then((data) => {
+    		//console.log("chr=1, position=3374674로 설정")
+    		//console.log(data);
+    		
+    		let columnKeys = new Array('id')
+    		
+    		for(const key in data[0]) {
+    			if(key == 'id')	continue;
+    			columnKeys.push(key);
+    		}
+    		//console.log(columnKeys);
+    		
+    		VariantBrowser_columnDefs = [];
+    		for(let i=0 ; i<columnKeys.length ; i++) {
+    			if(columnKeys[i] == 'id') {
+    				VariantBrowser_columnDefs.push({
+    					'field': columnKeys[i], 
+    					'width': 150,
+    				}) 
+    			} else {
+    				VariantBrowser_columnDefs.push({
+    					'field': columnKeys[i], 
+    					'width': 60,
+    					tooltipComponent: CustomTooltip, 
+    					cellStyle: cellStyle,
+    				}) 
+    			}
+    		}
+    		
+    		
+    		const VariantBrowser_gridTable = document.getElementById("VariantBrowserGrid");
+    		if(!VariantBrowser_gridTable.innerHTML) {
+	    		const VariantBrowser_Grid = new agGrid.Grid(VariantBrowser_gridTable, VariantBrowser_gridOptions);
+    		}
+
+    		VariantBrowser_gridOptions.api.setColumnDefs(VariantBrowser_columnDefs);
+    		VariantBrowser_gridOptions.api.setRowData(data);
+    		
+    		//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
+    		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
+    		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb'; 
+    	})
 	}
 	
 	function getCanvasInfo() {
@@ -673,23 +878,51 @@
 		} else {
 			return;
 		}
-		
+		/*
 		setTimeout(function() {
 			const canvas = getCanvasInfo();
 			drawChromosome(canvas);
 			drawGeneModel(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
 			
 		}, 200);
-		
+		*/
 	}
 	
 	function expandAndCollapseSide(text) {
+		
+		const side1 = document.getElementById('side1');
+		const side2 = document.getElementById('side2');
+		
+
+		if(text == 'side1') {
+			
+			side2.classList.replace('expandSide', 'small');
+			if(side1.classList.contains('expandSide')) {
+				side1.classList.replace('expandSide', 'small');
+			} else {
+				side1.classList.replace('small', 'expandSide');
+			}
+			
+		} else if(text == 'side2') {
+			
+			if(side2.classList.contains('expandSide')) {
+				side2.classList.replace('expandSide', 'small');
+			} else {
+				side2.classList.replace('small', 'expandSide');
+			}
+			side1.classList.replace('expandSide', 'small');
+			
+		}
+		
+		
+		/*
 		const side = document.getElementById(text);
 		if(side.classList.contains('expandSide')) {
 			side.classList.replace('expandSide', 'small');
 		} else {
 			side.classList.replace('small', 'expandSide');
 		}
+		*/
 	}
    	
    	function getGwasList() {
@@ -737,7 +970,7 @@
 			}
 			jQuery(`#GWAS_select_\${model[i]}`).select2({width: '35%'});
 			
-			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:245px;' ></div></div>`); 
+			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:561px; padding-right:28px;' ></div></div>`); 
 			
 			const GWAS_gridTable = document.getElementById(`GWAS_Grid_\${model[i]}`);
 			GWAS_gridOptions_model[`\${model[i]}`] = Object.assign({},GWAS_gridOptions);
@@ -786,7 +1019,6 @@
    	function inputNumberRange(HTML_element) {
    		//console.log(HTML_element);
    		HTML_element.value = HTML_element.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-   		// if(params.value > 1000(chr length)) return 'chr length'
    	}
    	
 </script>

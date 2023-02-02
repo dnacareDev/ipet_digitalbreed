@@ -260,27 +260,48 @@
 	/*** DEFINED TABLE VARIABLE ***/
 	var gridTable = document.getElementById("myGrid");
 
-	/*** GET TABLE DATA FROM URL ***/
 
   	
   	/*** INIT TABLE ***/
   	// setup the grid after the page has finished loading
-  	document.addEventListener('DOMContentLoaded', () => {
+  	document.addEventListener('DOMContentLoaded', async () => {
   		/*** DEFINED TABLE VARIABLE ***/
+  		/*
+  		const chrSelectElement = document.getElementById('Chr_select');
+  		const vcf_id = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.vcfId_at_firstRow;
+		const row_count = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.row_count;
+		const chr = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.chr;
+  		*/
   		
-  		//const VariantBrowser_rowData = [ {"position":"pos_17445", "1":"T", "8":"G"} ]
+  		const firstChr = await addChromosomeInfo();
+  		//console.log(firstChr);
   		
+  		document.getElementById("Chr_select").dispatchEvent(new Event("change"));
+  		
+  		//여기서 로딩하지말고 dispatchEvent(click)에서 Ag-grid를 로딩해야함. async await가 안 먹힌다.
+  		/*
+  		setTimeout(() => {
+  			document.querySelector(".chromosomeStackDiv[data-order='0']").dispatchEvent(new Event("click"));
+  		}, 500);
+  		*/
+  		
+  		
+  		/*
+  		const selectedLine = document.querySelector('.chromosomeStackDiv[style="width: 0.1003%; height: 19px; display: inline-block; background-color: red;"]').dataset.position;
+  		
+  		console.log(selectedLine);
   		
   		// 염색체, position 하드코딩
-  		const chr = 1;
+  		//const chr = 1;
   		//const position = 3374674;
-  		const position = 1297413;
+  		const position = 0;
   		
-  		fetch(`./vb_features_getBrowserData.jsp?chr=${chr}&position=${position}&jobid=${linkedJobid}`)
+  		
+  		fetch(`./vb_features_getBrowserData.jsp?chr=${firstChr}&position=${position}&jobid=${linkedJobid}`)
     	.then((response) => response.json())
     	.then((data) => {
-    		console.log("chr=1, position=3374674로 설정")
-    		console.log(data);
+    		//console.log("chr=1, position=3374674로 설정")
+    		//console.log(data);
     		
     		let columnKeys = new Array('id')
     		
@@ -314,7 +335,7 @@
     		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
     		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb'; 
     	})
-  		
+  		*/
   		
   		
   		

@@ -16,6 +16,8 @@ public class IPETDigitalConnDB {
 		public ResultSet rs = null;
 		public Statement stmt1 = null;
 		public ResultSet rs1 = null;
+		
+		//public PreparedStatement pstmt = null;
 
 	public IPETDigitalConnDB(){
 		try {
