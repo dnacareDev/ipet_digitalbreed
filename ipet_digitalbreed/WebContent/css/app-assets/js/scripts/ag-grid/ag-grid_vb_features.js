@@ -33,9 +33,10 @@
 	var VariantBrowser_gridOptions = {
 			defaultColDef: { 
 				editable: false, 
-				sortable: true, 
+				sortable: false, 
 				resizable: false, 
 				suppressMenu: true, 
+				suppressMovable: true,
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], 
 			},
@@ -44,8 +45,8 @@
 			headerHeight: 100,
 			enableRangeSelection: true, 
 			suppressMultiRangeSelection: true, 
-			pagination: true, 
-			paginationPageSize: 20,
+			//pagination: true, 
+			//paginationPageSize: 20,
 			pivotPanelShow: "always", 
 			//colResizeDefault: "shift", 
 			animateRows: true, 
@@ -60,56 +61,82 @@
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
-			width: 50, 
+			maxWidth: 100, 
 		},
 		{ 
 			field: "selection", 
 			maxWidth: 100, 
-			minWidth: 100, 
+			//minWidth: 100, 
 			suppressMenu: true,
 		},
 	    { 
-			field: "Chr", 
+			headerName: "chr",
+			field: "chr", 
 			filter: true, 
 			width: 60, 
-			minWidth: 60, 
+			//minWidth: 60, 
 		},
 	    { 
-			field: "Pos", 
+			headerName: "Pos",
+			field: "pos",
 			filter: 'agNumberColumnFilter', 
+			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 			width: 70, 
-			minWidth: 70, 
+			//minWidth: 70, 
+			cellClass: "",
 		},
 	    { 
-			field: "Impact", 
-			filter: "agTextColumnFilter",
+			headerName: "Impact",
+			field: "impact",
+			//filter: "agTextColumnFilter",
+			filter: 'agSetColumnFilter',
 			width: 80, 
-			minWidth: 80, 
+			//minWidth: 80, 
 		},
 	    { 
-			field: "Effect Classic", 
+			headerName: "Effect Classic",
+			field: "effect_classic",
 			filter: 'agNumberColumnFilter', 
 			width: 120, 
-			minWidth: 120, 
+			//minWidth: 120, 
 		},
 	    { 
-			field: "GeneID", 
+			headerName: "GeneID",
+			field: "gene_id",
 			filter: 'agNumberColumnFilter', 
 			width: 120, 
-			minWidth: 100, 
+			//minWidth: 100, 
 		},
 	    { 
-			field: "Description", 
+			headerName: "Description",
+			field: "description",
 			filter: 'agDateColumnFilter', 
 			width: 150, 
-			minWidth: 110, 
-			cellClass: "", 
+			//minWidth: 110, 
 		},
 	];
 	var SnpEff_gridOptions = {
-		defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-		columnDefs: SnpEff_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, pagination: true, paginationPageSize: 20,
-		pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>
+		defaultColDef: { 
+			editable: false, 
+			sortable: true, 
+			resizable: true, 
+			suppressMenu: true, 
+			cellClass: "grid-cell-centered", 
+			menuTabs: ['filterMenuTab'], 
+		},
+		columnDefs: SnpEff_columnDefs, 
+		rowHeight: 35, 
+		enableRangeSelection: true, 
+		suppressMultiRangeSelection: true, 
+		//pagination: true, 
+		//paginationPageSize: 20,
+		pivotPanelShow: "always", 
+		colResizeDefault: "shift", 
+		animateRows: true, 
+		//isExternalFilterPresent: isExternalFilterPresent,
+		//isExternalFilterPresent: true;
+		//doesExternalFilterPass: doesExternalFilterPass,
+		//onCellClicked: (params) =>
 	};
 	
 	var GWAS_columnDefs = [
@@ -134,35 +161,57 @@
 	    { 
 			field: "Pos",
 			filter: 'agNumberColumnFilter', 
+			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+			cellClass: "",
 			width: 160, 
 			minWidth: 100, 
 		},
 	    { 
 			field: "P-value", 
 			filter: "agTextColumnFilter",
+			valueFormatter: (params) => Number(params.value).toFixed(5),
+			cellClass: "",
 			width: 360, 
 			minWidth: 180, 
-			//cellRenderer: (params) => Math.round(params.value * 10000000) / 10000000
 		},
 	    { 
 			field: "MAF", 
 			filter: 'agNumberColumnFilter', 
+			valueFormatter: (params) => Number(params.value).toFixed(5),
+			cellClass: "",
 			width: 360, 
 			minWidth: 180, 
-			//cellRenderer: (params) => Math.round(params.value * 10000000) / 10000000
 		},
 	    { 
 			field: "Effect", 
 			filter: 'agNumberColumnFilter', 
+			valueFormatter: (params) => Number(params.value).toFixed(5),
+			cellClass: "",
 			width: 360, 
 			minWidth: 200, 
-			//cellRenderer: (params) => Math.round(params.value * 10000000) / 10000000
 		},
 	];
 	var GWAS_gridOptions = {
-		defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-		columnDefs: GWAS_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, pagination: true, paginationPageSize: 20,
-		pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
+		defaultColDef: { 
+			editable: false, 
+			sortable: true, 
+			resizable: true, 
+			suppressMenu: true, 
+			cellClass: "grid-cell-centered", 
+			menuTabs: ['filterMenuTab'], 
+		},
+		columnDefs: GWAS_columnDefs, 
+		rowHeight: 35, 
+		enableRangeSelection: true, 
+		suppressMultiRangeSelection: true, 
+		/*
+		pagination: true, 
+		paginationPageSize: 20,
+		*/
+		pivotPanelShow: "always", 
+		colResizeDefault: "shift", 
+		animateRows: true, 
+		//onCellClicked: (params) =>	
 	}
 	
 	var Marker_columnDefs = [
@@ -174,9 +223,26 @@
 	    { field: "Indel Length", filter: 'agNumberColumnFilter', width: 120, minWidth: 120, },
 	];
 	var Marker_gridOptions = {
-			defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-			columnDefs: Marker_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, pagination: true, paginationPageSize: 20,
-			pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
+			defaultColDef: { 
+				editable: false, 
+				sortable: true, 
+				resizable: true, 
+				suppressMenu: true, 
+				cellClass: "grid-cell-centered", 
+				menuTabs: ['filterMenuTab'], 
+			},
+			columnDefs: Marker_columnDefs, 
+			rowHeight: 35, 
+			enableRangeSelection: true,
+			suppressMultiRangeSelection: true, 
+			/*
+			pagination: true, 
+			paginationPageSize: 20,
+			*/
+			pivotPanelShow: "always", 
+			colResizeDefault: "shift",
+			animateRows: true, 
+			//onCellClicked: (params) =>	
 	}
 	
 	var Selection_columnDefs = [
@@ -189,9 +255,25 @@
 	    { field: "Marker Candidate", filter: 'agNumberColumnFilter', width: 120, minWidth: 100, },
 	];
 	var SelectionList_gridOptions = {
-			defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-			columnDefs: Selection_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, pagination: true, paginationPageSize: 20,
-			pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
+			defaultColDef: { 
+				editable: false, 
+				sortable: true, 
+				resizable: true, 
+				suppressMenu: true, 
+				cellClass: "grid-cell-centered", 
+				menuTabs: ['filterMenuTab'], },
+			columnDefs: Selection_columnDefs, 
+			rowHeight: 35, 
+			enableRangeSelection: true, 
+			suppressMultiRangeSelection: true, 
+			/*
+			pagination: true, 
+			paginationPageSize: 20,
+			*/
+			pivotPanelShow: "always", 
+			colResizeDefault: "shift", 
+			animateRows: true, 
+			//onCellClicked: (params) =>	
 	}
 	
 	var UPGMA_columnDefs = [
@@ -201,9 +283,26 @@
 	    { field: "Similarity", filter: 'agNumberColumnFilter', width: 160, minWidth: 160, },
 	];
 	var UPGMA_gridOptions = {
-			defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-			columnDefs: UPGMA_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, pagination: true, paginationPageSize: 20,
-			pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
+			defaultColDef: { 
+				editable: false, 
+				sortable: true, 
+				resizable: true, 
+				suppressMenu: true, 
+				cellClass: "grid-cell-centered", 
+				menuTabs: ['filterMenuTab'], 
+			},
+			columnDefs: UPGMA_columnDefs, 
+			rowHeight: 35, 
+			enableRangeSelection: true, 
+			suppressMultiRangeSelection: true, 
+			/*
+			pagination: true, 
+			paginationPageSize: 20,
+			*/
+			pivotPanelShow: "always", 
+			colResizeDefault: "shift", 
+			animateRows: true, 
+			//onCellClicked: (params) =>	
 	}
 	
 	
@@ -216,7 +315,7 @@
 	];
 	var STRUCTURE_gridOptions = {
 			defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-			columnDefs: STRUCTURE_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, pagination: true, paginationPageSize: 20,
+			columnDefs: STRUCTURE_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, /*pagination: true, paginationPageSize: 20,*/
 			pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
 	}
 	
@@ -227,7 +326,7 @@
 	];
 	var Haplotype_gridOptions = {
 			defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-			columnDefs: Haplotype_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, pagination: true, paginationPageSize: 20,
+			columnDefs: Haplotype_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, /*pagination: true, paginationPageSize: 20,*/
 			pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
 	}
 	
@@ -278,71 +377,12 @@
   		
   		document.getElementById("Chr_select").dispatchEvent(new Event("change"));
   		
-  		//여기서 로딩하지말고 dispatchEvent(click)에서 Ag-grid를 로딩해야함. async await가 안 먹힌다.
-  		/*
-  		setTimeout(() => {
-  			document.querySelector(".chromosomeStackDiv[data-order='0']").dispatchEvent(new Event("click"));
-  		}, 500);
-  		*/
-  		
-  		
-  		/*
-  		const selectedLine = document.querySelector('.chromosomeStackDiv[style="width: 0.1003%; height: 19px; display: inline-block; background-color: red;"]').dataset.position;
-  		
-  		console.log(selectedLine);
-  		
-  		// 염색체, position 하드코딩
-  		//const chr = 1;
-  		//const position = 3374674;
-  		const position = 0;
-  		
-  		
-  		fetch(`./vb_features_getBrowserData.jsp?chr=${firstChr}&position=${position}&jobid=${linkedJobid}`)
-    	.then((response) => response.json())
-    	.then((data) => {
-    		//console.log("chr=1, position=3374674로 설정")
-    		//console.log(data);
-    		
-    		let columnKeys = new Array('id')
-    		
-    		for(const key in data[0]) {
-    			if(key == 'id')	continue;
-    			columnKeys.push(key);
-    		}
-    		//console.log(columnKeys);
-    		
-    		for(let i=0 ; i<columnKeys.length ; i++) {
-    			if(columnKeys[i] == 'id') {
-    				VariantBrowser_columnDefs.push({
-    					'field': columnKeys[i], 
-    					'width': 150,
-    				}) 
-    			} else {
-    				VariantBrowser_columnDefs.push({
-    					'field': columnKeys[i], 
-    					'width': 60,
-    					tooltipComponent: CustomTooltip, 
-    					cellStyle: cellStyle,
-    				}) 
-    			}
-    		}
-    		
-    		const VariantBrowser_gridTable = document.getElementById("VariantBrowserGrid");
-    		const VariantBrowser_Grid = new agGrid.Grid(VariantBrowser_gridTable, VariantBrowser_gridOptions);
-    		VariantBrowser_gridOptions.api.setRowData(data);
-    		
-    		//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
-    		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
-    		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb'; 
-    	})
-  		*/
-  		
-  		
   		
   		const SnpEff_gridTable = document.getElementById("SnpEff_Grid");
   		const SnpEff_Grid = new agGrid.Grid(SnpEff_gridTable, SnpEff_gridOptions);
-  		const SnpEff_rowData = [ { "selection": "star", "Chr": 1, "Pos": 40326, "Impact": "HIGH", } ];
-  		SnpEff_gridOptions.api.setRowData(SnpEff_rowData)
+  		//const SnpEff_rowData = [ { "selection": "star", "Chr": 1, "Pos": 40326, "Impact": "HIGH", } ];
+  		//const SnpEff_rowData = [];
+  		//SnpEff_gridOptions.api.setRowData(SnpEff_rowData)
   		
   		/*
   		const GWAS_gridTable = document.getElementById("GWAS_Grid");
@@ -416,11 +456,19 @@
 	
 	function cellStyle(params) {
 		const map = new Map([
+			/*
 			["A", {backgroundColor : '#46FF2D'}], ["C", {backgroundColor : '#F24641'}], ["G", {backgroundColor : '#FFAE01'}],
 			["T", {backgroundColor : '#4192FC'}], ["I", {backgroundColor : '#FFFFFF'}], ["R", {backgroundColor : '#FCFC0F'}],
 			["Y", {backgroundColor : '#E280EF'}], ["M", {backgroundColor : '#838308'}], ["K", {backgroundColor : '#8A4913'}],
 			["S", {backgroundColor : '#FF9D81'}], ["W", {backgroundColor : '#81FFF3'}], ["H", {backgroundColor : '#C0D8FB'}],
 			["B", {backgroundColor : '#F7C1C3'}], ["V", {backgroundColor : '#FDE4B9'}], ["D", {backgroundColor : '#C7FFBA'}],
+			["N", {backgroundColor : '#E7E7E7'}]
+			*/
+			["A", {backgroundColor : '#46FF2D'}], ["C", {backgroundColor : '#F24641'}], ["G", {backgroundColor : '#FFAE01'}],
+			["T", {backgroundColor : '#4192FC'}], ["I", {backgroundColor : '#9fc5e8'}], ["R", {backgroundColor : '#9fc5e8'}],
+			["Y", {backgroundColor : '#9fc5e8'}], ["M", {backgroundColor : '#9fc5e8'}], ["K", {backgroundColor : '#9fc5e8'}],
+			["S", {backgroundColor : '#9fc5e8'}], ["W", {backgroundColor : '#9fc5e8'}], ["H", {backgroundColor : '#9fc5e8'}],
+			["B", {backgroundColor : '#9fc5e8'}], ["V", {backgroundColor : '#9fc5e8'}], ["D", {backgroundColor : '#9fc5e8'}],
 			["N", {backgroundColor : '#E7E7E7'}]
 		]);
 		

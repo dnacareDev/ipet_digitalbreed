@@ -474,6 +474,9 @@ body {
     	   	    			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename
     	   	    			// 2023-01-10 | 파라미터에 refgenome 추가
     	   	 				const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
+    	   	    			const refgenome_id = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome_id;
+    	   	    			// 2023-02-03 | vcfdata_no 추가
+    	   	    			const vcfdata_no = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.vcfdata_no;
     	   	    					
     	   	    	    	
 	    	   	 			
@@ -497,6 +500,8 @@ body {
    	   	    	    			"jobid_gwas": jobid_gwas,
    	   	    	    			"jobid_vcf": jobid_vcf,
    	   	    	    			"refgenome": refgenome,						// analysis.jsp에서 사용
+   	   	    	    			"refgenome_id": refgenome_id,
+   	   	    	    			"vcfdata_no": vcfdata_no,
    	   	    	    			"radio_phenotype": 1,						// New Phenotype
    	   	    	    			"filename_vcf": filename_vcf,
    	   	    	    			"model_arr": model_arr,
@@ -532,14 +537,15 @@ body {
    			url: "/ipet_digitalbreed/web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
    			method: 'POST',
    			success: function(data) {
-	  			//console.log("vcf file list : ", data);
+	  			console.log("vcf file list : ", data);
+	  			// data.selectFiles = vcfdata_info_t PK
 	  			
 	  			$("#VcfSelect").empty();
 	  	    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
 	  	    	for(let i=0 ; i<data.length ; i++) {
 	  				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
 	  				//$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
-	  	    		$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
+	  	    		$("#VcfSelect").append(`<option data-vcfdata_no=\${data[i].selectfiles} data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
 	  			}
    			}
    	  	});
@@ -660,10 +666,10 @@ body {
    			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename
    			// 2023-01-10 | 파라미터에 refgenome 추가
 			const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
+   			// 2023-02-03 | vcfdata_no, regenome_id 추가
+   			const vcfdata_no = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.vcfdata_no;
+   			const refgenome_id = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome_id;
    					
-   	   		//const variety_id = $( "#variety-select option:selected" ).val();
-   	    	//const jobid_vcf = $('#VcfSelect :selected').data('jobid');
-   	    	//const filename_vcf = $('#VcfSelect :selected').data('filename');
    	    	
    	    	const selectedTrait = gridOptionsTraitName.api.getSelectedRows();
    	    	//console.log("selectedData : ", selectedData);
@@ -708,6 +714,8 @@ body {
    	    			"jobid_gwas": jobid_gwas,
    	    			"jobid_vcf": jobid_vcf,
    	    			"refgenome": refgenome,						// analysis.jsp에서 사용
+   	    			"refgenome_id": refgenome_id,
+   	    			"vcfdata_no": vcfdata_no,
    	    			"radio_phenotype": 0,						// Phenotype Database
    	    			"filename_vcf": filename_vcf,
    	    			"traitname_arr": traitname_arr,
@@ -771,6 +779,7 @@ body {
    			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename;
    			
    			
+   			
 			// 파일 업로드 영역
 	    	var postObj = new Object();
 	    	//postObj.comment = comment;       
@@ -782,34 +791,6 @@ body {
 	        box.setPostData(postObj);
 	        box.upload();
 	   		
-   			/*
-   	   		const varietyid = $( "#variety-select option:selected" ).val();
-   	    	const jobid_vcf = $('#VcfSelect :selected').data('jobid');
-   	    	const filename = $('#VcfSelect :selected').data('filename');
-   			
-   	    	let model_arr = [];
-   			document.querySelectorAll('input[name="modelGroup"]:checked').forEach(function(item) {
-   				model_arr.push(item.value);
-   			})
-   			
-   			fetch("./gwas_getJobId.jsp")
-   			.then((response) => response.text())
-   			.then((jobid_gwas) => {
-   				$("#jobid_gwas").val(jobid_gwas);
-					
-   				// 파일 업로드 영역
-		    	var postObj = new Object();
-		   		postObj.permissionUid = permissionUid;
-		    	postObj.comment = $("#comment").val();	       
-		        postObj.varietyid = varietyid;
-		        postObj.jobid_vcf = jobid_vcf;
-		        postObj.filename = filename;
-		        postObj.model_arr = model_arr;
-		        postObj.jobid_gwas_ = jobid_gwas;
-		        box.setPostData(postObj);
-		        box.upload();
-   			});
-   			*/
    		}
     }
    	

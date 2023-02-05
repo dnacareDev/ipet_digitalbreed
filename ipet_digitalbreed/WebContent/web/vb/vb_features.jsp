@@ -133,46 +133,41 @@
 	
 	
 	.chromosomeStackDiv {
-		width: 0.1003%;
-		height: 19px;
+		width: 0.103%;
+		height: 18px;
 		display: inline-block;
 		
 	}
 	
+	.ag-theme-alpine {
+	    /*
+	    --ag-foreground-color: rgb(126, 46, 132);
+	    --ag-background-color: rgb(249, 245, 227);
+	    --ag-header-foreground-color: rgb(204, 245, 172);
+	    --ag-header-background-color: rgb(209, 64, 129);
+	    --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
+	    --ag-header-column-resize-handle-color: rgb(126, 46, 132);
+	    --ag-font-size: 8px !important;
+		*/
+	}
+	
+	#VariantBrowserGrid {
+		--ag-font-size: 10px !important;
+		--ag-cell-horizontal-padding: 0px !important;
+		--ag-widget-horizontal-spacing: 0px !important;
+		--ag-widget-vertical-spacing: 0px !important;
+	}
 
 </style>
 <%
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	//ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	//String permissionUid = session.getAttribute("permissionUid")+"";
 	//String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
 	//System.out.println(cropvari_sql);
 	//System.out.println("UID : " + permissionUid);
 	
 	String linkedJobid = request.getParameter("jobid");
-	String refgenome_id = request.getParameter("refgenome_id");
-	
-	String refgenome = "";
-	try {
-		String sql = "select refgenome from reference_genome_t where refgenome_id="+refgenome_id+";";
-		//System.out.println(sql);
-		
-		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
-		ipetdigitalconndb.rs.next();
-		
-		refgenome = ipetdigitalconndb.rs.getString("refgenome");
-		
-		
-	} catch (SQLException e) {
-		e.printStackTrace();
-	} finally {
-		ipetdigitalconndb.rs.close();
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.conn.close();
-	}
-	
-	//System.out.println(refgenome_id);
-	System.out.println(refgenome);
 	
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
@@ -209,7 +204,7 @@
 	                                	
 	                                	<div class="row">
 	                                		<div style="width:20%; min-width:200px; margin-top:1.5rem; margin-left:10px; padding-left:13px;"> 
-												<select id='Chr_select' class='select2 form-select float-left' onChange="selectChr(this)">
+												<select id='Chr_select' class='select2 form-select float-left' onChange="selectChr(this); show_SnpEff_Grid(); show_GWAS_Grid()">
 													<!--  
 													<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
 													-->
@@ -232,7 +227,7 @@
 	                                	</div>
 	                                	-->
 	                                	<div class="row" style="margin-top: 50px; margin-bottom:30px;">
-	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black; display: flex;">
+	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black; display: flex; justify-content: space-around;">
 	                                		</div>
 	                                	</div>
 	                                	<div class="row" style="margin-bottom:150px;">
@@ -247,18 +242,20 @@
 		                                <div class="row">
 		                                	<div id="side1"  class="expandAndCollapse small">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
-		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' aria-expanded='true'>SnpEff</a></li>
-					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' aria-expanded='false'>GWAS</a></li>
-					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill3' aria-expanded='false'>Marker</a></li>
-					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_4' data-toggle='pill' href='#pill4' aria-expanded='false'>Selection</a></li>
+		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' onclick="resizeGrid();" aria-expanded='true'>SnpEff</a></li>
+					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' onclick="resizeGrid();" aria-expanded='false'>GWAS</a></li>
+					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill3' onclick="resizeGrid();" aria-expanded='false'>Marker</a></li>
+					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_4' data-toggle='pill' href='#pill4' onclick="resizeGrid();" aria-expanded='false'>Selection</a></li>
 												</ul>
 												<div class='tab-content'>
 	  												<div role='tabpanel' class='tab-pane active pl-1' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 	  													<div class="row justify-content-between">
-		  													<div style="width:50%; padding-left:14px;"> 
+		  													<div style="width:50%; padding-left:14px; display:hidden;"> 
+		  													<!--  
 																<select id='SnpEff_select' class='select2 form-select float-left'>
 																	<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
 																</select>
+															-->
 															</div>
 															<div class="float-right">
 											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="filter_SnpEff();">표지</button>
@@ -266,19 +263,19 @@
 														</div>
 														<div class="row mt-2" style="padding-left: 6px;">
 											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="high" />
+											            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" />
 						                                        <label class="form-check form-check-label" for="high" style="margin-left:-16px; margin-top:1px;" >HIGH</label>
 											            	</div>
 											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="moderate" />
+											            		<input type="checkbox" class="form-check-input" id="moderate" data-impact="MODERATE" onclick="SnpEff_filter();" />
 						                                        <label class="form-check form-check-label" for="moderate" style="margin-left:-16px; margin-top:1px;" >MODERATE</label>
 											            	</div>
 											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="low" />
+											            		<input type="checkbox" class="form-check-input" id="low" data-impact="LOW" onclick="SnpEff_filter();" />
 						                                        <label class="form-check form-check-label" for="low" style="margin-left:-16px; margin-top:1px;" >LOW</label>
 											            	</div>
 											            	<div class="form-check">
-											            		<input type="checkbox" class="form-check-input" id="modifier" />
+											            		<input type="checkbox" class="form-check-input" id="modifier" data-impact="MODIFIER" onclick="SnpEff_filter();" />
 						                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
 											            	</div>
 									            		</div>
@@ -365,9 +362,9 @@
 		                                <div class="row">
 		                                	<div id="side2" class="expandAndCollapse small">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
-		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill5' aria-expanded='true'>UPGMA</a></li>
-					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill6' aria-expanded='false'>STRUCTURE</a></li>
-					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill7' aria-expanded='false'>Haplotype</a></li>
+		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill5' onclick="resizeGrid();" aria-expanded='true'>UPGMA</a></li>
+					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill6' onclick="resizeGrid();" aria-expanded='false'>STRUCTURE</a></li>
+					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill7' onclick="resizeGrid();" aria-expanded='false'>Haplotype</a></li>
 												</ul>
 												<div class='tab-content'>
 	  												<div role='tabpanel' class='tab-pane active pl-1' id='pill5' aria-expanded='true' aria-labelledby='base-pill1'>
@@ -499,7 +496,6 @@
 
 	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
 	var linkedJobid = "<%=linkedJobid%>";
-	var refgenome = "<%=refgenome%>";
 
 	
 	//addChromosomeInfo();
@@ -525,7 +521,7 @@
 		const chromosomeDiv = document.getElementById('chromosomeDiv');
 		//chromosomeDiv.innerHTML = "";
 		
-		for(let i=0 ; i<=998 ; i++) {
+		for(let i=0 ; i<=999 ; i++) {
 			
 			const child = document.createElement('div');
 			child.classList.add('chromosomeStackDiv');
@@ -607,6 +603,7 @@
 		const vcf_id = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.vcfId_at_firstRow;
 		const row_count = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.row_count;
 		const chr = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.chr;
+		const length = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.length;
 		
 		//console.log(vcf_id);
 		//console.log(row_count);
@@ -618,51 +615,76 @@
 		.then((position_data) => {
 			//console.log(position_data);
 			
-			let position_ratio = new Array();
-			
-			const last_position = position_data[position_data.length-1]['position'];
-			
+			//const last_position = position_data[position_data.length-1]['position'];
+			let position_ratio = [];
+			/*
 			for(let i=0 ; i<position_data.length ; i++) {
-				position_ratio.push( parseInt(position_data[i]['position'] * 998 / last_position ) )
+				//position_ratio.push( parseInt(position_data[i]['position'] * 998 / last_position ) )
+				position_ratio.push( parseInt(position_data[i]['position'] * 998 / length ) )
 			}
-			//console.log(position_ratio);
+			*/
+			let position_at_div = [];
 			
-			colorPosition(position_data, position_ratio);
+			position_data.forEach((El) => {
+				const position = parseInt(El['position'] * 1000 / length );
+				if(!position_ratio.includes(position)) {
+					position_ratio.push(position);
+					position_at_div.push(El['position']);
+				}
+			})
+			
+			//console.log(position_ratio);
+			//console.log(position_at_div);
+			
+			colorPosition(position_data, position_ratio, position_at_div);
 			
 			//variant browser 로드
 			getVariantBrowserGrid();
 			console.timeEnd("selectOption");
 		})
 		
+		
+		
 	}
 	
 	
 	
 	// position과 일치하는 div에 색칠
-	function colorPosition(position_data, position_ratio) {
-		console.log("position_data : ", position_data);
-		console.log("position_ratio : ", position_ratio);
+	function colorPosition(position_data, position_ratio, position_at_div) {
+		//console.log("position_data : ", position_data);
+		//console.log("position_ratio : ", position_ratio);
+		//console.log("position_at_div : ", position_at_div);
 		console.time("color");
 		
-		for(let i=0 ; i<=998 ; i++) {
+		for(let i=0 ; i<=999 ; i++) {
+			/*
 			document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.selected = "false";
 			document.querySelectorAll('#chromosomeDiv > [data-order]')[i].style.backgroundColor = '';
 			delete document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.position;
 			delete document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.vcf_id;
-			/*
-			document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).dataset.selected = "false";
-			document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).style.backgroundColor = '';
-			delete document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).dataset.position;
-			delete document.querySelector(`.chromosomeStackDiv[data-order=\${i}]).dataset.vcf_id;
 			*/
+			const stackDiv = document.querySelector(`.chromosomeStackDiv[data-order="\${i}"]`);
+			stackDiv.dataset.selected = "false";
+			stackDiv.style.backgroundColor = '';
+			delete stackDiv.dataset.position;
+			delete stackDiv.dataset.vcf_id;
 		}
 		
 		for(let i=0 ; i<position_ratio.length ; i++) {
 			
+			
+			const stackDiv = document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]];
+			stackDiv.dataset.position = position_data[i]['position'];
+			stackDiv.dataset.vcf_id = position_data[i]['vcf_id'];
+			stackDiv.dataset.selected = "false";
+			stackDiv.style.backgroundColor = '#808000';
+			
+			/*
 			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.position = position_data[i]['position'];
 			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.vcf_id = position_data[i]['vcf_id'];
 			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.selected = "false";
 			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].style.backgroundColor = '#808000';
+			*/
 			
 		}
 		
@@ -677,8 +699,8 @@
 		const chrSelectEl = document.getElementById('Chr_select');
 		const chr = chrSelectEl.options[chrSelectEl.selectedIndex].dataset.chr;
 		
-		console.log(position);
-		console.log(chr);
+		//console.log(position);
+		//console.log(chr);
 		
 		fetch(`./vb_features_getBrowserData.jsp?chr=\${chr}&position=\${position}&jobid=\${linkedJobid}`)
     	.then((response) => response.json())
@@ -704,7 +726,7 @@
     			} else {
     				VariantBrowser_columnDefs.push({
     					'field': columnKeys[i], 
-    					'width': 60,
+    					'width': 30,
     					tooltipComponent: CustomTooltip, 
     					cellStyle: cellStyle,
     				}) 
@@ -726,167 +748,6 @@
     	})
 	}
 	
-	function getCanvasInfo() {
-		const canvas = {
-				"El": document.getElementById("chromosomeCanvas"),
-				"areaEl": document.getElementById("chromosomeCanvasArea"),
-		}
-		
-		canvas.El.width = canvas.areaEl.offsetWidth * ( 1 - parseFloat(canvas.areaEl.style.paddingRight) * 2 / 100 )
-   		
-   		canvas["startX"] = canvas.El.width * 0.2;
-		canvas["startY"] = canvas.El.height * 0.45;
-		canvas["width"] = canvas.El.width  - (canvas.startX * 2);
-		canvas["height"] = canvas.El.height - (canvas.startY * 2);
-		
-   		return canvas;
-   		
-	}
-	
-	function drawCanvas() {
-		const canvas = getCanvasInfo();
-		
-		drawChromosome(canvas);
-
-		drawGeneModel();
-		drawChrPosition(canvas);
-	}
-	
-	window.addEventListener('resize', drawCanvas);
-	
-	function drawChromosome(canvas) {   		
-   		if(canvas.El.getContext) {
-   			const context = canvas.El.getContext("2d");
-   			context.strokeStyle="#333333";
-   			context.strokeRect(canvas.startX, canvas.startY, canvas.width, canvas.height);
-   			
-   			context.beginPath();
-   			context.moveTo(canvas.startX + canvas.width * 0.1 , canvas.startY);
-   			context.lineTo(canvas.startX + canvas.width * 0.1 , canvas.startY + canvas.height);
-   			context.strokeStyle = '#808000';
-   			context.lineWidth = 5;
-   			context.stroke();
-   			
-   			context.beginPath();
-   			context.moveTo(canvas.startX + canvas.width * 0.8 , canvas.startY);
-   			context.lineTo(canvas.startX + canvas.width * 0.8 , canvas.startY + canvas.height);
-   			context.strokeStyle = '#808000';
-   			context.lineWidth = 5;
-   			context.stroke();
-   			
-   		}
-   		
-   		canvas.El.addEventListener('mousemove', searchPosition);
-   		
-   	}
-	
-	
-	
-	var relativePositionX = null;
-   	// resize시 mousemove event로 그렸던 빨간줄이 사라지지 않고 유지
-   	function drawChrPosition(canvas) {
-		
-   		// 염색체 사각형 영역 내에서의 이벤트 (2번째 캔버스)
-		const context = canvas.El.getContext("2d");
-		
-		context.beginPath();
-  		context.moveTo(canvas.startX + relativePositionX * canvas.width , canvas.startY);
-  		context.lineTo(canvas.startX + relativePositionX * canvas.width , canvas.startY + canvas.height);
-  		context.strokeStyle = '#DC0F00';
-  		context.lineWidth = 2;
-  		context.stroke();
-   		
-	}
-   	
-   	function searchPosition(e) {
-   		
-   		//console.log(e);
-   		const canvas = document.getElementById("chromosomeCanvas");
-   		const startX = canvas.width * 0.2;
-   		const startY = canvas.height * 0.45;
-   		const width = canvas.width  - (startX * 2);
-   		const height = canvas.height - (startY * 2);
-			
-		const offsetX = e.offsetX;
-		const offsetY = e.offsetY;
-		
-		// 염색체 사각형 영역 내에서의 이벤트
-		if( (startX <= offsetX && offsetX <= startX + width) && (startY <= offsetY && offsetY <= startY + height) && canvas.getContext ) {
-  			//console.log(startX, startY);
-  			//console.log(width, height);
-			//console.log(offsetX, offsetY);
-			
-			// 영역 안에 들어왔을때 빨간선의 포지션 (ratio) 저장
-			relativePositionX = Math.floor(offsetX - startX) / width;
-			
-			
-			const context = canvas.getContext("2d");
-			
-			context.clearRect(0,0,canvas.width,canvas.height)
-			
-			context.strokeStyle="#333333";
-			context.lineWidth = 1;
-   			context.strokeRect(startX, startY, width, height);
-   			
-   			context.beginPath();
-   			context.moveTo(startX + width * 0.1 , startY);
-   			context.lineTo(startX + width * 0.1 , startY + height);
-   			context.strokeStyle = '#808000';
-   			context.lineWidth = 5;
-   			context.stroke();
-   			
-   			context.beginPath();
-   			context.moveTo(startX + width * 0.8 , startY);
-   			context.lineTo(startX + width * 0.8 , startY + height);
-   			context.strokeStyle = '#808000';
-   			context.lineWidth = 5;
-   			context.stroke();
-   			
-   			
-   			context.beginPath();
-   			context.moveTo(offsetX , startY);
-   			context.lineTo(offsetX , startY + height);
-   			context.strokeStyle = '#DC0F00';
-   			context.lineWidth = 2;
-   			context.stroke();
-   			
-   			context.strokeStyle="#333333";
-			context.lineWidth = 1;
-   			context.strokeRect(offsetX - 30 , startY - 50 , 60 , 30);
-   			
-   			//context.fillStyle="#000000";
-   			context.font = '16px sans-serif';
-   			context.fillText( Math.floor(offsetX - startX), offsetX - 13 , 60); 
-   			
-		}
-   	}
-   	
-   	function drawGeneModel() {
-   		const canvas = document.getElementById("geneModelCanvas");
-   		const canvasArea = document.getElementById("geneModelCanvasArea");
-   		
-   		//canvas.width = canvasArea.clientWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
-   		canvas.width = canvasArea.offsetWidth * ( 1 - parseFloat(canvasArea.style.paddingRight) * 2 / 100 )
-   		
-   		const startX = canvas.width * 0.2;
-   		const startY = canvas.height * 0.45;
-   		
-   		const width = canvas.width  - (startX * 2);
-   		const height = canvas.height - (startY * 2);
-   		
-   		if(canvas.getContext) {
-   			const context = canvas.getContext("2d");
-   			context.fillStyle="#999999";
-   			context.strokeRect(startX, startY, width, height);
-   			
-   			context.beginPath();
-   			context.moveTo(startX + width * 0.3 , startY);
-   			context.lineTo(startX + width * 0.3 , startY + height);
-   			context.strokeStyle = '#808000';
-   			context.lineWidth = 5;
-   			context.stroke();
-   		}
-   	}
    	
 	function expandAndCollapseMain() {
 		
@@ -907,14 +768,6 @@
 		} else {
 			return;
 		}
-		/*
-		setTimeout(function() {
-			const canvas = getCanvasInfo();
-			drawChromosome(canvas);
-			drawGeneModel(canvas.El, canvas.startX, canvas.startY, canvas.width, canvas.height);
-			
-		}, 200);
-		*/
 	}
 	
 	function expandAndCollapseSide(text) {
@@ -943,17 +796,103 @@
 			
 		}
 		
+		resizeGrid();
+		
+	}
+	
+	function show_SnpEff_Grid() {
+		//const resultpath = '/ipet_digitalbreed/result/database/genotype_statistics/';
+		
+		console.time("SnpEff_Grid");
+		
+		const chr_select = document.getElementById('Chr_select');
+   		const chr = chr_select.options[chr_select.selectedIndex].dataset.chr;
+		
+		fetch(`./vb_features_grid_SnpEff.jsp?jobid=\${linkedJobid}&chr=\${chr}`)
+		.then((response) => response.json())
+		.then((data) => {
+			//console.log(data.split("\n"));
+			/*
+			const header_arr = ['Chr','Pos','Impact','Effect Classic','GeneID','Description'];
+			const body = data.split('\n');
+			*/
+			//console.log(data);
+			SnpEff_gridOptions.api.setRowData(data);
+			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
+			
+			
+		})
+		
+		console.timeEnd("SnpEff_Grid");
+		
+	}
+	
+	function SnpEff_filter() {
+		
+		const impact = document.querySelectorAll("[data-impact]:checked");
+		
+		const impact_filter_values = new Array();
+		for(let i=0 ; i<impact.length ; i++) {
+			impact_filter_values.push(impact[i].dataset.impact);
+		}
+		
+		
+		console.log(impact_filter_values);
+		
+		const impactFilter = {
+				impact: {
+					type: 'set',
+					//values: ['HIGH','LOW']
+					values: impact_filter_values
+				},
+		}
+		
+		//SnpEff_gridOptions.api.setFilterModel(impactFilter);
+		
+		if(impact_filter_values.length == 0) {
+			SnpEff_gridOptions.api.setFilterModel(null);
+		} else {
+			SnpEff_gridOptions.api.setFilterModel(impactFilter);
+		}
+		
+		
 		
 		/*
-		const side = document.getElementById(text);
-		if(side.classList.contains('expandSide')) {
-			side.classList.replace('expandSide', 'small');
-		} else {
-			side.classList.replace('small', 'expandSide');
-		}
+		const impact = SnpEff_gridOptions.api.getFilterInstance('impact');
+		impact.setModel({values: ['HIGH', 'LOW']});
+		impact.applyModel();
 		*/
+		SnpEff_gridOptions.api.onFilterChanged();
+		
+		
+		
 	}
    	
+	/*
+	function isExternalFilterPresent() {
+		// if ageType is not everyone, then we are filtering
+		return ageType !== 'everyone';
+	}
+
+	function doesExternalFilterPass(node) {
+		if (node.data) {
+			switch (true) {
+		    	case 'high':
+		        	return node.data.impact = 'high';
+		      	case 'moderate':
+		      		return node.data.impact = 'moderate';
+		      	case 'low':
+		      		return node.data.impact = 'low';
+		      	case 'modifier':
+		      		return node.data.impact = 'modifier';
+		      	default:
+		        	return true;
+		    }	
+		}
+		return true;
+	}
+	*/
+	
    	function getGwasList() {
    		fetch(`./vb_getLists.jsp?command=GWAS&jobid=\${linkedJobid}`)
    		.then((response) => response.json())
@@ -980,8 +919,9 @@
    		$("#GWAS_button_list").empty();
    		$("#GWAS_content_list").empty();
    		for(let i=0 ; i<model.length ; i++) {
-			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${model[i]}" data-toggle="pill" href="#GWAS_pill_\${model[i]}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} onclick="setPhenotype(this.dataset.phenotype);" >\${model[i]}</a></li>`);
+			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${model[i]}" data-toggle="pill" href="#GWAS_pill_\${model[i]}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} >\${model[i]}</a></li>`);
 			$("#GWAS_content_list").append(`<div role='tabpanel' class='tab-pane' id='GWAS_pill_\${model[i]}' aria-expanded='true' aria-labelledby='base-pill1'>\${model[i]}</div>`)
+			
 			
 			if(i==0) {
 				document.getElementById(`GWAS_\${model[i]}`).classList.add('active');
@@ -989,7 +929,7 @@
 			}
 			
 			const element = document.getElementById(`GWAS_pill_\${model[i]}`);
-			element.innerHTML = `<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="show_GWAS_Grid(this)"></select>`
+			element.innerHTML = `<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="show_GWAS_Grid()"></select>`
 			
 			
 			const phenotype = HTML_element.dataset.phenotype.split("|");
@@ -1011,38 +951,58 @@
    		
    	}
    	
-   	
-   	function show_GWAS_Grid (HTML_element) {
-		console.log(HTML_element);
+   	//function show_GWAS_Grid (HTML_element) {
+   	function show_GWAS_Grid () {
+		
+   		console.log("onchange");
+   		/*
+   		console.log(HTML_element);
 		
 		const model = HTML_element.dataset.model;
 		const phenotype = HTML_element.options[HTML_element.selectedIndex].dataset.phenotype;
    		const jobid = HTML_element.dataset.jobid;
+		*/
+		const model = document.querySelector('#GWAS_button_list .nav-link.active')?.dataset?.model;
+		const select_phenotype = document.getElementById(`GWAS_select_\${model}`);
+		const phenotype = select_phenotype?.options[select_phenotype.selectedIndex]?.dataset?.phenotype;
+		const jobid = select_phenotype?.dataset?.jobid;
 		
-		console.log(model);
-		console.log(phenotype);
-		console.log(jobid);
+		//console.log(model);
+		//console.log(phenotype);
+		//console.log(jobid);
+   		
+		if(!model || !phenotype || !jobid) {
+			//console.log("gwas 영역 생성안됨");
+			return;
+		}
 		
-		
-		const resultpath = '/ipet_digitalbreed/result/gwas/';
-		
-		fetch(resultpath+jobid+ "/GAPIT.Association.GWAS_Results." +model+ "." +phenotype+ ".csv")
-		.then((response) => response.blob())
-		.then((file) => {
-			var reader = new FileReader();
-		    reader.onload = function(){
-		        const fileData = reader.result;
-		        const wb = XLSX.read(fileData, {type : 'binary'});
-		        
-		        const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-		        
-		        const gridOptions = GWAS_gridOptions_model[model]
-		        gridOptions.api.setRowData(rowObj);
-		        
-		    };
-		    reader.readAsBinaryString(file);
+		const chr_select = document.getElementById('Chr_select');
+   		const chr = chr_select.options[chr_select.selectedIndex].dataset.chr;
+   		
+		//console.log(model);
+		//console.log(phenotype);
+		//console.log(jobid);
+		 
+		fetch(`./vb_features_grid_Gwas.jsp?chr=\${chr}&jobid=\${jobid}&model=\${model}&phenotype=\${phenotype}`)
+		.then((response) => response.json())
+		.then((data) => {
+			console.log(data);
+			GWAS_gridOptions_model[`\${model}`].api.setRowData(data);
 		});
 
+   	}
+   	
+   	function resizeGrid() {
+   		setTimeout( () => {
+			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
+			
+			if(Object.keys(GWAS_gridOptions_model).length !== 0) {
+				GWAS_gridOptions_model.forEach((El) => {
+					El.columnApi.autoSizeAllColumns();
+				})
+			}
+			
+		}, 200)
    	}
    	
    	function inputNumberRange(HTML_element) {
