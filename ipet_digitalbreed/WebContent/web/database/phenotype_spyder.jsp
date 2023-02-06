@@ -76,7 +76,7 @@
 		}finally { 
 			ipetdigitalconndb.rs.close();
 		}
-			
+	
 	try{		
 		sql = "select samplename from sampledata_info_t where no='"+one_sampleno+"';";	
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);	
@@ -91,7 +91,7 @@
 	}finally { 
 		ipetdigitalconndb.rs.close();
 	}
-	
+
 	try{		
 		sql = "select value from sampledata_traitval_t where sampleno='"+one_sampleno+"' order by seq asc;";	
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);	
@@ -155,10 +155,11 @@
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();
 	}
+	//System.out.println(fullsamplename);
+	System.out.println(traitcnt);
 	
 	int j=0;
 	int traitcnt_loop=traitcnt;
-
   	for(int i=0;i<fullsamplename.size();) { 
   		
   		fw_full.write(fullsamplename.get(i)+"\t");			

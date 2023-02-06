@@ -31,9 +31,9 @@
 	Part part;
 	while ((part=mp.readNextPart()) != null) {
 		String name = part.getName();
-		//System.out.println(name);
+		System.out.println(name);
 		
-		//파라미터일때
+		// parameters
 		if(part.isParam()) {
 			ParamPart paramPart = (ParamPart) part;
 			String value = paramPart.getStringValue();
@@ -52,15 +52,18 @@
 			
 				
 		} 
-		//파일일때
+		// files
 		else if(part.isFile()) {
 			FilePart filePart = (FilePart) part;
 			filePart.setRenamePolicy(new DefaultFileRenamePolicy()); //중복파일
 			
 			String fileName = filePart.getFileName();
 			if(fileName != null) {
-				//System.out.println("file: name=" + name + ", filename=" +fileName+ ", path=" +rootPath+savePath);
+				System.out.println("file: name=" + name + ", filename=" +fileName+ ", path=" +rootPath+savePath);
 				File dir = new File(rootPath+fsl+savePath+fsl+name);
+				
+				// name == fasta || gff || cds || protein
+				jsonObj.addProperty(name+"FileName", fileName);
 				
 				//System.out.println("dir: "+ dir);
 				
@@ -83,7 +86,7 @@
 	
 	System.out.println(jsonObj);
 	
-	String sql="insert into reference_genome_t(crop_name, reference, gff, author, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +permissionUid+ "', now());";
+	String sql="insert into reference_genome_t(crop_name, refgenome, gff, author, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +permissionUid+ "', now());";
 	System.out.println(sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(sql);
@@ -113,4 +116,15 @@
          out.print(e.getMessage());
      }
 	*/
+	 
+	RunAnalysisTools runanalysistools = new RunAnalysisTools();
+
+	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
+	String refgenomeScript = "Rscript " +script_path+ "reference_database_final.R " +rootPath+fsl+savePath+fsl+ " " +jsonObj.get("fastaFileName")+ " " +jsonObj.get("cdsFileName")+ " " +jsonObj.get("proteinFileName");
+	
+	System.out.println("=========================================");
+	System.out.println("Gwasgapit parameter : " + refgenomeScript);
+	System.out.println("=========================================");
+			
+	runanalysistools.execute(refgenomeScript, "cmd");
 %>

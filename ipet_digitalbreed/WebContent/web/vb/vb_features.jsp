@@ -152,12 +152,12 @@
 	}
 	
 	#VariantBrowserGrid {
-		--ag-font-size: 10px !important;
+		--ag-font-size: 12px !important;
 		--ag-cell-horizontal-padding: 0px !important;
 		--ag-widget-horizontal-spacing: 0px !important;
 		--ag-widget-vertical-spacing: 0px !important;
 	}
-
+	
 </style>
 <%
 	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -211,7 +211,7 @@
 												</select>
 											</div>
 											<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:14px;"> 
-												<input type="text" id="comment" class="form-control" placeholder="Select Position" oninput="inputNumberRange(this);">
+												<input type="text" id="positionInput" class="form-control" placeholder="Select Position" oninput="inputNumberRange(this);">
 											</div>
 	                                	</div>
 	                                	<!--  
@@ -263,19 +263,19 @@
 														</div>
 														<div class="row mt-2" style="padding-left: 6px;">
 											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" />
+											            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" checked />
 						                                        <label class="form-check form-check-label" for="high" style="margin-left:-16px; margin-top:1px;" >HIGH</label>
 											            	</div>
 											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="moderate" data-impact="MODERATE" onclick="SnpEff_filter();" />
+											            		<input type="checkbox" class="form-check-input" id="moderate" data-impact="MODERATE" onclick="SnpEff_filter();" checked />
 						                                        <label class="form-check form-check-label" for="moderate" style="margin-left:-16px; margin-top:1px;" >MODERATE</label>
 											            	</div>
 											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="low" data-impact="LOW" onclick="SnpEff_filter();" />
+											            		<input type="checkbox" class="form-check-input" id="low" data-impact="LOW" onclick="SnpEff_filter();" checked />
 						                                        <label class="form-check form-check-label" for="low" style="margin-left:-16px; margin-top:1px;" >LOW</label>
 											            	</div>
 											            	<div class="form-check">
-											            		<input type="checkbox" class="form-check-input" id="modifier" data-impact="MODIFIER" onclick="SnpEff_filter();" />
+											            		<input type="checkbox" class="form-check-input" id="modifier" data-impact="MODIFIER" onclick="SnpEff_filter();" checked />
 						                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
 											            	</div>
 									            		</div>
@@ -545,9 +545,13 @@
 				let closestPositionedOrder = 1000;
 				let gap = 1000;
 				
+				console.log(clickedOrder);
+				
+				
+				
 				e.composedPath()[1].querySelectorAll('[data-position]').forEach( (el) => {
 					
-					el.style.backgroundColor = "#808000";
+					//el.style.backgroundColor = "#808000";
 					
 					
 					//console.log("each el : ", el.dataset.order)
@@ -560,11 +564,20 @@
 						//console.log( "gap : ", gap);
 						closestPositionedOrder = Number(order);
 						//console.log("closest : ", closestPositionedOrder);
-					}
+					} 
 				})
 				
+				
+				e.composedPath()[1].querySelectorAll('[data-selected="true"]').forEach( (el) => {
+					el.style.backgroundColor = "#808000";
+					el.dataset.selected = "false";
+				})
+				
+				
+				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.selected = 'true';
 				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).style.backgroundColor = 'red';
-				document.getElementById('comment').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position;
+				document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position;
+				
 			})
 		})
 		console.timeEnd("make1000Div");
@@ -613,9 +626,8 @@
 		fetch(`./vb_features_positionListFromChr.jsp?vcf_id=\${vcf_id}&row_count=\${row_count}&chr=\${chr}&jobid=\${linkedJobid}`)
 		.then((response) => response.json())
 		.then((position_data) => {
-			//console.log(position_data);
+			console.log("position_data : ", position_data);
 			
-			//const last_position = position_data[position_data.length-1]['position'];
 			let position_ratio = [];
 			/*
 			for(let i=0 ; i<position_data.length ; i++) {
@@ -623,8 +635,16 @@
 				position_ratio.push( parseInt(position_data[i]['position'] * 998 / length ) )
 			}
 			*/
-			let position_at_div = [];
+			console.time("position div");
 			
+			let position_at_div = [];
+/*
+			position_data.forEach( (El) => {
+				position_ratio
+			})
+	*/		
+			
+			/*
 			position_data.forEach((El) => {
 				const position = parseInt(El['position'] * 1000 / length );
 				if(!position_ratio.includes(position)) {
@@ -632,9 +652,19 @@
 					position_at_div.push(El['position']);
 				}
 			})
+			*/
 			
-			//console.log(position_ratio);
-			//console.log(position_at_div);
+			for(let i=0 ; i<position_data.length ; i++) {
+				const position = parseInt(position_data[i]['position'] * 1000 / length );
+				if(!position_ratio.includes(position)) {
+					position_ratio.push(position);
+					position_at_div.push(position_data[i]['position']);
+				}
+			}
+			
+			console.log(position_ratio);
+			console.log(position_at_div);
+			console.timeEnd("position div");
 			
 			colorPosition(position_data, position_ratio, position_at_div);
 			
@@ -674,8 +704,10 @@
 			
 			
 			const stackDiv = document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]];
-			stackDiv.dataset.position = position_data[i]['position'];
-			stackDiv.dataset.vcf_id = position_data[i]['vcf_id'];
+			//stackDiv.dataset.position = position_data[i]['position'];
+			//stackDiv.dataset.vcf_id = position_data[i]['vcf_id'];
+			stackDiv.dataset.position = position_at_div[i];
+			stackDiv.dataset.vcf_id = position_at_div[i];
 			stackDiv.dataset.selected = "false";
 			stackDiv.style.backgroundColor = '#808000';
 			
@@ -720,13 +752,70 @@
     		for(let i=0 ; i<columnKeys.length ; i++) {
     			if(columnKeys[i] == 'id') {
     				VariantBrowser_columnDefs.push({
-    					'field': columnKeys[i], 
-    					'width': 150,
+    					field: columnKeys[i], 
+    					width: 120,
+    					sorting: false,
     				}) 
     			} else {
     				VariantBrowser_columnDefs.push({
-    					'field': columnKeys[i], 
-    					'width': 30,
+    					headerName: columnKeys[i].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    					field: columnKeys[i], 
+    					//headerClass: "ag-right-aligned-header",
+    					width: 30,
+    					sorting: true,
+    					sortingOrder: ['desc'],
+    					/*
+    		            comparator: (valueA, valueB, nodeA, nodeB, isDescending) => {
+    		                
+    		            	
+    		            	switch(valueA) {
+    		            		case base_order[0]:
+    		            			valueA = 4;
+    		            			break;
+    		            		case base_order[1]:
+    		            			valueA = 3;
+    		            			break;
+    		            		case base_order[2]:
+    		            			valueA = 2;
+    		            			break;
+    		            		case base_order[3]:
+    		            			valueA = 1;
+    		            			break;
+    		            		default:
+    		            			valueA = 0;
+    		            	}
+    		            	
+    		            	switch(valueB) {
+			            		case base_order[0]:
+			            			valueB = 4;
+			            			break;
+			            		case base_order[1]:
+			            			valueB = 3;
+			            			break;
+			            		case base_order[2]:
+			            			valueB = 2;
+			            			break;
+			            		case base_order[3]:
+			            			valueB = 1;
+			            			break;
+			            		default:
+    		            			valueB = 0;
+			            	}
+    		            	
+    		            	if(base_switch) {
+    		            		base_switch = false;
+   		            			const spliced = base_order.shift();
+    		            		base_order.push(spliced);
+    		            		setTimeout(() => {
+	    		            		base_switch = true;
+    		            		}, 200);
+    		            	}
+    		            	
+    		            	if (valueA == valueB) return 0;
+    		                return (valueA > valueB) ? 1 : -1;
+    		            },
+    		            */
+    					tooltipField: columnKeys[i], 
     					tooltipComponent: CustomTooltip, 
     					cellStyle: cellStyle,
     				}) 
@@ -747,7 +836,8 @@
     		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb'; 
     	})
 	}
-	
+	//var base_order = ['A','T','G','C'];
+	//var base_switch = true;
    	
 	function expandAndCollapseMain() {
 		
@@ -847,14 +937,14 @@
 				},
 		}
 		
-		//SnpEff_gridOptions.api.setFilterModel(impactFilter);
-		
+		SnpEff_gridOptions.api.setFilterModel(impactFilter);
+		/*
 		if(impact_filter_values.length == 0) {
 			SnpEff_gridOptions.api.setFilterModel(null);
 		} else {
 			SnpEff_gridOptions.api.setFilterModel(impactFilter);
 		}
-		
+		*/
 		
 		
 		/*
@@ -868,30 +958,6 @@
 		
 	}
    	
-	/*
-	function isExternalFilterPresent() {
-		// if ageType is not everyone, then we are filtering
-		return ageType !== 'everyone';
-	}
-
-	function doesExternalFilterPass(node) {
-		if (node.data) {
-			switch (true) {
-		    	case 'high':
-		        	return node.data.impact = 'high';
-		      	case 'moderate':
-		      		return node.data.impact = 'moderate';
-		      	case 'low':
-		      		return node.data.impact = 'low';
-		      	case 'modifier':
-		      		return node.data.impact = 'modifier';
-		      	default:
-		        	return true;
-		    }	
-		}
-		return true;
-	}
-	*/
 	
    	function getGwasList() {
    		fetch(`./vb_getLists.jsp?command=GWAS&jobid=\${linkedJobid}`)

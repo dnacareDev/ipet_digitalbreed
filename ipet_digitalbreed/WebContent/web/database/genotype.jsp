@@ -74,6 +74,12 @@ body {
     border-right: 1px solid #dde2eb !important;
 }
 
+#pill2_frame {
+	--ag-font-size: 12px !important;
+	--ag-cell-horizontal-padding: 0px !important;
+	--ag-widget-horizontal-spacing: 0px !important;
+	--ag-widget-vertical-spacing: 0px !important;
+}
 
 </style>
 <%

@@ -33,7 +33,7 @@
 	var VariantBrowser_gridOptions = {
 			defaultColDef: { 
 				editable: false, 
-				sortable: false, 
+				sortable: true, 
 				resizable: false, 
 				suppressMenu: true, 
 				suppressMovable: true,
@@ -43,31 +43,36 @@
 			columnDefs: VariantBrowser_columnDefs, 
 			rowHeight: 35, 
 			headerHeight: 100,
-			enableRangeSelection: true, 
-			suppressMultiRangeSelection: true, 
-			//pagination: true, 
-			//paginationPageSize: 20,
-			pivotPanelShow: "always", 
-			//colResizeDefault: "shift", 
+			enableRangeSelection: false, 
+			suppressMultiRangeSelection: true,
 			animateRows: true, 
 			tooltipShowDelay: 0,
 		    tooltipHideDelay: 20000,
+		    postSortRows: (params) => {
+		        const rowNodes = params.nodes;
+		        
+		        for (let i=0, nextInsertPos=0 ; i<rowNodes.length; i++) {
+		        	if(rowNodes[i].rowIndex == 0) {
+		        		rowNodes.splice(nextInsertPos, 0, rowNodes.splice(i, 1)[0]);
+		        		nextInsertPos++;
+		        	}
+		        }
+		        //console.log(rowNodes);
+		    },
 			//onCellClicked: (params) =>
 	};
 
 	
 	var SnpEff_columnDefs = [
 		{ 
+			field: "selection", 
+			width: 200, 
+			minWidth: 150, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
-			maxWidth: 100, 
-		},
-		{ 
-			field: "selection", 
-			maxWidth: 100, 
-			//minWidth: 100, 
 			suppressMenu: true,
+			pinned: 'left'
 		},
 	    { 
 			headerName: "chr",
@@ -121,36 +126,30 @@
 			sortable: true, 
 			resizable: true, 
 			suppressMenu: true, 
+			suppressMovable: true,
 			cellClass: "grid-cell-centered", 
 			menuTabs: ['filterMenuTab'], 
 		},
 		columnDefs: SnpEff_columnDefs, 
 		rowHeight: 35, 
-		enableRangeSelection: true, 
-		suppressMultiRangeSelection: true, 
-		//pagination: true, 
-		//paginationPageSize: 20,
+		rowSelection: 'multiple',
+		rowMultiSelectWithClick: true,
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
-		//isExternalFilterPresent: isExternalFilterPresent,
-		//isExternalFilterPresent: true;
-		//doesExternalFilterPass: doesExternalFilterPass,
 		//onCellClicked: (params) =>
 	};
 	
 	var GWAS_columnDefs = [
 		{ 
+			field: "selection", 
+			width: 220, 
+			minWidth: 150, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
-			width: 120, 
-		},
-		{ 
-			field: "selection", 
-			width: 120, 
-			minWidth: 100, 
 			suppressMenu: true, 
+			pinned: 'left'
 		},
 	    { 
 			field: "Chr", 
@@ -196,18 +195,15 @@
 			editable: false, 
 			sortable: true, 
 			resizable: true, 
-			suppressMenu: true, 
+			suppressMenu: true,
+			suppressMovable: true,
 			cellClass: "grid-cell-centered", 
 			menuTabs: ['filterMenuTab'], 
 		},
 		columnDefs: GWAS_columnDefs, 
 		rowHeight: 35, 
-		enableRangeSelection: true, 
-		suppressMultiRangeSelection: true, 
-		/*
-		pagination: true, 
-		paginationPageSize: 20,
-		*/
+		rowSelection: 'multiple',
+		rowMultiSelectWithClick: true,
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
@@ -233,12 +229,8 @@
 			},
 			columnDefs: Marker_columnDefs, 
 			rowHeight: 35, 
-			enableRangeSelection: true,
-			suppressMultiRangeSelection: true, 
-			/*
-			pagination: true, 
-			paginationPageSize: 20,
-			*/
+			rowSelection: 'multiple',
+			rowMultiSelectWithClick: true,
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift",
 			animateRows: true, 
@@ -264,12 +256,8 @@
 				menuTabs: ['filterMenuTab'], },
 			columnDefs: Selection_columnDefs, 
 			rowHeight: 35, 
-			enableRangeSelection: true, 
-			suppressMultiRangeSelection: true, 
-			/*
-			pagination: true, 
-			paginationPageSize: 20,
-			*/
+			rowSelection: 'multiple',
+			rowMultiSelectWithClick: true,
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift", 
 			animateRows: true, 
@@ -293,12 +281,8 @@
 			},
 			columnDefs: UPGMA_columnDefs, 
 			rowHeight: 35, 
-			enableRangeSelection: true, 
-			suppressMultiRangeSelection: true, 
-			/*
-			pagination: true, 
-			paginationPageSize: 20,
-			*/
+			rowSelection: 'multiple',
+			rowMultiSelectWithClick: true,
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift", 
 			animateRows: true, 
@@ -314,9 +298,22 @@
 	    { field: "K", filter: true, width: 100, minWidth: 100, },
 	];
 	var STRUCTURE_gridOptions = {
-			defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-			columnDefs: STRUCTURE_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, /*pagination: true, paginationPageSize: 20,*/
-			pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
+			defaultColDef: { 
+				editable: false, 
+				sortable: true, 
+				resizable: true, 
+				suppressMenu: true, 
+				cellClass: "grid-cell-centered", 
+				menuTabs: ['filterMenuTab'], 
+			},
+			columnDefs: STRUCTURE_columnDefs, 
+			rowHeight: 35, 
+			rowSelection: 'multiple',
+			rowMultiSelectWithClick: true,
+			pivotPanelShow: "always", 
+			colResizeDefault: "shift", 
+			animateRows: true, 
+			//onCellClicked: (params) =>	
 	}
 	
 	var Haplotype_columnDefs = [
@@ -325,9 +322,22 @@
 	    { field: "Haplotype", filter: true, width: 160, minWidth: 160, },
 	];
 	var Haplotype_gridOptions = {
-			defaultColDef: { editable: false, sortable: true, resizable: true, suppressMenu: true, cellClass: "grid-cell-centered", menuTabs: ['filterMenuTab'], },
-			columnDefs: Haplotype_columnDefs, rowHeight: 35, enableRangeSelection: true, suppressMultiRangeSelection: true, /*pagination: true, paginationPageSize: 20,*/
-			pivotPanelShow: "always", colResizeDefault: "shift", animateRows: true, //onCellClicked: (params) =>	
+			defaultColDef: { 
+				editable: false, 
+				sortable: true, 
+				resizable: true, 
+				suppressMenu: true, 
+				cellClass: "grid-cell-centered", 
+				menuTabs: ['filterMenuTab'], 
+			},
+			columnDefs: Haplotype_columnDefs, 
+			rowHeight: 35, 
+			rowSelection: 'multiple',
+			rowMultiSelectWithClick: true,
+			pivotPanelShow: "always", 
+			colResizeDefault: "shift", 
+			animateRows: true, 
+			//onCellClicked: (params) =>	
 	}
 	
 	
@@ -464,11 +474,11 @@
 			["B", {backgroundColor : '#F7C1C3'}], ["V", {backgroundColor : '#FDE4B9'}], ["D", {backgroundColor : '#C7FFBA'}],
 			["N", {backgroundColor : '#E7E7E7'}]
 			*/
-			["A", {backgroundColor : '#46FF2D'}], ["C", {backgroundColor : '#F24641'}], ["G", {backgroundColor : '#FFAE01'}],
-			["T", {backgroundColor : '#4192FC'}], ["I", {backgroundColor : '#9fc5e8'}], ["R", {backgroundColor : '#9fc5e8'}],
-			["Y", {backgroundColor : '#9fc5e8'}], ["M", {backgroundColor : '#9fc5e8'}], ["K", {backgroundColor : '#9fc5e8'}],
-			["S", {backgroundColor : '#9fc5e8'}], ["W", {backgroundColor : '#9fc5e8'}], ["H", {backgroundColor : '#9fc5e8'}],
-			["B", {backgroundColor : '#9fc5e8'}], ["V", {backgroundColor : '#9fc5e8'}], ["D", {backgroundColor : '#9fc5e8'}],
+			["A", {backgroundColor : '#F69A6D'}], ["C", {backgroundColor : '#8BC2C5'}], ["G", {backgroundColor : '#D3BE58'}],
+			["T", {backgroundColor : '#A1D191'}], ["I", {backgroundColor : '#E7E7E7'}], ["R", {backgroundColor : '#E7E7E7'}],
+			["Y", {backgroundColor : '#E7E7E7'}], ["M", {backgroundColor : '#E7E7E7'}], ["K", {backgroundColor : '#E7E7E7'}],
+			["S", {backgroundColor : '#E7E7E7'}], ["W", {backgroundColor : '#E7E7E7'}], ["H", {backgroundColor : '#E7E7E7'}],
+			["B", {backgroundColor : '#E7E7E7'}], ["V", {backgroundColor : '#E7E7E7'}], ["D", {backgroundColor : '#E7E7E7'}],
 			["N", {backgroundColor : '#E7E7E7'}]
 		]);
 		

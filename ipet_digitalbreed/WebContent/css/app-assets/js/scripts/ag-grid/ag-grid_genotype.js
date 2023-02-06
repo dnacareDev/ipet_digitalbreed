@@ -346,7 +346,7 @@
 	    infiniteInitialRowCount: 1000,
 	    maxBlocksInCache: 10,
 	    
-	    headerHeight: 100,
+	    headerHeight: 120,
 	    animateRows: true,
 	    suppressFieldDotNotation: true,
 	    tooltipShowDelay: 0,
@@ -424,6 +424,7 @@
 					},
 					width: 180, 
 					menuTabs: ["filterMenuTab"], 
+					suppressMovable: true,
 					pinned: 'left',
 					lockPinned: true,
 				});
@@ -514,11 +515,19 @@
 	
 	function cellStyle(params) {
 		const map = new Map([
+			/*
 			["A", {backgroundColor : '#46FF2D'}], ["C", {backgroundColor : '#F24641'}], ["G", {backgroundColor : '#FFAE01'}],
 			["T", {backgroundColor : '#4192FC'}], ["I", {backgroundColor : '#FFFFFF'}], ["R", {backgroundColor : '#FCFC0F'}],
 			["Y", {backgroundColor : '#E280EF'}], ["M", {backgroundColor : '#838308'}], ["K", {backgroundColor : '#8A4913'}],
 			["S", {backgroundColor : '#FF9D81'}], ["W", {backgroundColor : '#81FFF3'}], ["H", {backgroundColor : '#C0D8FB'}],
 			["B", {backgroundColor : '#F7C1C3'}], ["V", {backgroundColor : '#FDE4B9'}], ["D", {backgroundColor : '#C7FFBA'}],
+			["N", {backgroundColor : '#E7E7E7'}]
+			*/
+			["A", {backgroundColor : '#F69A6D'}], ["C", {backgroundColor : '#8BC2C5'}], ["G", {backgroundColor : '#D3BE58'}],
+			["T", {backgroundColor : '#A1D191'}], ["I", {backgroundColor : '#E7E7E7'}], ["R", {backgroundColor : '#E7E7E7'}],
+			["Y", {backgroundColor : '#E7E7E7'}], ["M", {backgroundColor : '#E7E7E7'}], ["K", {backgroundColor : '#E7E7E7'}],
+			["S", {backgroundColor : '#E7E7E7'}], ["W", {backgroundColor : '#E7E7E7'}], ["H", {backgroundColor : '#E7E7E7'}],
+			["B", {backgroundColor : '#E7E7E7'}], ["V", {backgroundColor : '#E7E7E7'}], ["D", {backgroundColor : '#E7E7E7'}],
 			["N", {backgroundColor : '#E7E7E7'}]
 		]);
 		

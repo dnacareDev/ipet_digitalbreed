@@ -74,7 +74,7 @@
 	    },
 	    {
 			headerName: "작목",
-			field: "cropname",
+			field: "crop_name",
 			filter: true,
 			width: 80,
 			minWidth: 80,
