@@ -521,7 +521,7 @@
 		const chromosomeDiv = document.getElementById('chromosomeDiv');
 		//chromosomeDiv.innerHTML = "";
 		
-		for(let i=0 ; i<=999 ; i++) {
+		for(let i=0 ; i<=1999 ; i++) {
 			
 			const child = document.createElement('div');
 			child.classList.add('chromosomeStackDiv');
@@ -542,8 +542,8 @@
 				//console.log(document.querySelector('.chromosomeStackDiv[data-order="998"]').offsetLeft);
 				
 				const clickedOrder = e.composedPath()[0].dataset.order
-				let closestPositionedOrder = 1000;
-				let gap = 1000;
+				let closestPositionedOrder = 2000;
+				let gap = 2000;
 				
 				console.log(clickedOrder);
 				
@@ -578,6 +578,7 @@
 				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).style.backgroundColor = 'red';
 				document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position;
 				
+				getVariantBrowserGrid();
 			})
 		})
 		console.timeEnd("make1000Div");
@@ -628,45 +629,29 @@
 		.then((position_data) => {
 			console.log("position_data : ", position_data);
 			
-			let position_ratio = [];
-			/*
-			for(let i=0 ; i<position_data.length ; i++) {
-				//position_ratio.push( parseInt(position_data[i]['position'] * 998 / last_position ) )
-				position_ratio.push( parseInt(position_data[i]['position'] * 998 / length ) )
-			}
-			*/
 			console.time("position div");
 			
+			let position_ratio = [];
 			let position_at_div = [];
-/*
-			position_data.forEach( (El) => {
-				position_ratio
-			})
-	*/		
-			
-			/*
-			position_data.forEach((El) => {
-				const position = parseInt(El['position'] * 1000 / length );
-				if(!position_ratio.includes(position)) {
-					position_ratio.push(position);
-					position_at_div.push(El['position']);
-				}
-			})
-			*/
+			let vcf_id_at_div = [];
 			
 			for(let i=0 ; i<position_data.length ; i++) {
-				const position = parseInt(position_data[i]['position'] * 1000 / length );
+				const position = parseInt(position_data[i]['position'] * 2000 / length );
 				if(!position_ratio.includes(position)) {
 					position_ratio.push(position);
 					position_at_div.push(position_data[i]['position']);
-				}
+					vcf_id_at_div.push(position_data[i]['vcf_id']);
+				} /* else {
+					position_at_div[position_at_div.length - 1] = position_at_div[position_at_div.length - 1] +","+  position_data[i]['position'];
+				} // 모든 position 정보를 하나의 div [data-position]에 저장. 다른 부분의 코드를 보강해야 정상작동 */
 			}
 			
 			console.log(position_ratio);
 			console.log(position_at_div);
+			console.log(vcf_id_at_div);
 			console.timeEnd("position div");
 			
-			colorPosition(position_data, position_ratio, position_at_div);
+			colorPosition(position_ratio, position_at_div, vcf_id_at_div);
 			
 			//variant browser 로드
 			getVariantBrowserGrid();
@@ -680,19 +665,13 @@
 	
 	
 	// position과 일치하는 div에 색칠
-	function colorPosition(position_data, position_ratio, position_at_div) {
+	function colorPosition(position_ratio, position_at_div, vcf_id_at_div) {
 		//console.log("position_data : ", position_data);
 		//console.log("position_ratio : ", position_ratio);
 		//console.log("position_at_div : ", position_at_div);
 		console.time("color");
 		
-		for(let i=0 ; i<=999 ; i++) {
-			/*
-			document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.selected = "false";
-			document.querySelectorAll('#chromosomeDiv > [data-order]')[i].style.backgroundColor = '';
-			delete document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.position;
-			delete document.querySelectorAll('#chromosomeDiv > [data-order]')[i].dataset.vcf_id;
-			*/
+		for(let i=0 ; i<=1999 ; i++) {
 			const stackDiv = document.querySelector(`.chromosomeStackDiv[data-order="\${i}"]`);
 			stackDiv.dataset.selected = "false";
 			stackDiv.style.backgroundColor = '';
@@ -701,23 +680,11 @@
 		}
 		
 		for(let i=0 ; i<position_ratio.length ; i++) {
-			
-			
 			const stackDiv = document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]];
-			//stackDiv.dataset.position = position_data[i]['position'];
-			//stackDiv.dataset.vcf_id = position_data[i]['vcf_id'];
 			stackDiv.dataset.position = position_at_div[i];
-			stackDiv.dataset.vcf_id = position_at_div[i];
+			stackDiv.dataset.vcf_id = vcf_id_at_div[i];
 			stackDiv.dataset.selected = "false";
 			stackDiv.style.backgroundColor = '#808000';
-			
-			/*
-			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.position = position_data[i]['position'];
-			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.vcf_id = position_data[i]['vcf_id'];
-			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].dataset.selected = "false";
-			document.querySelectorAll('#chromosomeDiv > [data-order]')[position_ratio[i]].style.backgroundColor = '#808000';
-			*/
-			
 		}
 		
 		document.querySelectorAll('.chromosomeStackDiv[data-position]')[0].dataset.selected = "true";
@@ -731,10 +698,12 @@
 		const chrSelectEl = document.getElementById('Chr_select');
 		const chr = chrSelectEl.options[chrSelectEl.selectedIndex].dataset.chr;
 		
+		const vcf_id = document.querySelector('.chromosomeStackDiv[data-selected="true"]').dataset.vcf_id;
+		
 		//console.log(position);
 		//console.log(chr);
-		
-		fetch(`./vb_features_getBrowserData.jsp?chr=\${chr}&position=\${position}&jobid=\${linkedJobid}`)
+		console.time("showVB");
+		fetch(`./vb_features_getBrowserData.jsp?chr=\${chr}&position=\${position}&jobid=\${linkedJobid}&vcf_id=\${vcf_id}`)
     	.then((response) => response.json())
     	.then((data) => {
     		//console.log("chr=1, position=3374674로 설정")
@@ -764,10 +733,9 @@
     					width: 30,
     					sorting: true,
     					sortingOrder: ['desc'],
-    					/*
+    					
     		            comparator: (valueA, valueB, nodeA, nodeB, isDescending) => {
     		                
-    		            	
     		            	switch(valueA) {
     		            		case base_order[0]:
     		            			valueA = 4;
@@ -814,7 +782,7 @@
     		            	if (valueA == valueB) return 0;
     		                return (valueA > valueB) ? 1 : -1;
     		            },
-    		            */
+    		            
     					tooltipField: columnKeys[i], 
     					tooltipComponent: CustomTooltip, 
     					cellStyle: cellStyle,
@@ -833,11 +801,13 @@
     		
     		//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
     		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
-    		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb'; 
+    		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb';
+    		
+    		console.timeEnd("showVB");
     	})
 	}
-	//var base_order = ['A','T','G','C'];
-	//var base_switch = true;
+	var base_order = ['A','T','G','C'];
+	var base_switch = true;
    	
 	function expandAndCollapseMain() {
 		
