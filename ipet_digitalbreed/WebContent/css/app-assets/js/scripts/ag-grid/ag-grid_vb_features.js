@@ -7,6 +7,25 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+	class CustomHeader {
+		// 미완성. header영역 작업은 일단 막아놓음
+	    init(agParams) {
+	    	this.agParams = agParams;
+	    	this.eGui = document.createElement('div');
+	    	this.eGui.style.display = "flex";
+	    	this.eGui.style.justifyContent = "center";
+	    	this.eGui.innerHTML = `
+	    		<div class="customHeaderLabel" onclick="A_T_G_C_sort('${this.agParams.displayName.reapl}');">${this.agParams.displayName}</div>
+	    		`;
+	
+	    }
+	
+	    getGui() {
+	    	return this.eGui;
+	    }
+	
+	}
+
 	class CustomTooltip {
 		init(params) {
 			const eGui = (this.eGui = document.createElement('div'));
@@ -43,16 +62,37 @@
 			columnDefs: VariantBrowser_columnDefs, 
 			rowHeight: 35, 
 			headerHeight: 100,
+			/*
+			components: {
+			    agColumnHeader: CustomHeader,
+			},
+			*/
 			enableRangeSelection: false, 
 			suppressMultiRangeSelection: true,
 			animateRows: true, 
 			tooltipShowDelay: 0,
 		    tooltipHideDelay: 20000,
 		    postSortRows: (params) => {
-		        const rowNodes = params.nodes;
-		        
+		    	const rowNodes = params.nodes;
+
+		    	//base_order
+		    	
+		    	//base_order
+		    	for (let i=0 ; i<rowNodes.length; i++) {
+		    		//if(rowNodes.)
+		    	}
+		    	
+		    	//[A,T,G,C] => [T,G,C,A] 형태로 정렬버튼을 누를때마다 순환
+		    	
+		    	if(base_switch) {
+		    		const spliced = base_order.shift();
+		    		base_order.push(spliced);
+		    	}
+		    	
+		        // 첫번째 Row인 id=reference는 고정
 		        for (let i=0, nextInsertPos=0 ; i<rowNodes.length; i++) {
 		        	if(rowNodes[i].rowIndex == 0) {
+		        		//console.log("post sort??");
 		        		rowNodes.splice(nextInsertPos, 0, rowNodes.splice(i, 1)[0]);
 		        		nextInsertPos++;
 		        	}
@@ -137,7 +177,14 @@
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
-		//onCellClicked: (params) =>
+		/*
+		onCellClicked: (params) => {
+			console.log(params);
+		},
+		*/
+		onSelectionChanged: (params) => {
+			const selectedRows = SnpEff_gridOptions.api.getSelectedNodes();
+		}
 	};
 	
 	var GWAS_columnDefs = [

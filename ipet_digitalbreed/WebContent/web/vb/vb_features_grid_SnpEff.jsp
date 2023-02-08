@@ -13,7 +13,7 @@
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String path = rootFolder+"result/database/genotype_statistics/";
 	
-	System.out.println(chr);
+	//System.out.println(chr);
 	//System.out.println(jobid);
 	
 	//System.out.println(path+jobid+"/"+jobid+"_snpeff.csv");

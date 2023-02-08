@@ -11,10 +11,10 @@
 	String jobid = request.getParameter("jobid");
 	int vcf_id = Integer.parseInt(request.getParameter("vcf_id"));
 	
-	System.out.println(chr);
+	//System.out.println(chr);
 	//System.out.println(position);
-	System.out.println(jobid);
-	System.out.println(vcf_id);
+	//System.out.println(jobid);
+	//System.out.println(vcf_id);
 
 	if(chr.isEmpty() || chr == null || jobid.isEmpty() || jobid == null || request.getParameter("vcf_id").isEmpty() ) {
 		return;
@@ -33,7 +33,7 @@
 	try {
 		
 	
-		String sql = "select * from vcfviewer_t where vcf_id<="+(vcf_id+43)+" and vcf_id>="+(vcf_id-43)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
+		String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+45)+" and vcf_id>="+(vcf_id)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		

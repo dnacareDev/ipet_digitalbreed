@@ -136,19 +136,6 @@
 		width: 0.103%;
 		height: 18px;
 		display: inline-block;
-		
-	}
-	
-	.ag-theme-alpine {
-	    /*
-	    --ag-foreground-color: rgb(126, 46, 132);
-	    --ag-background-color: rgb(249, 245, 227);
-	    --ag-header-foreground-color: rgb(204, 245, 172);
-	    --ag-header-background-color: rgb(209, 64, 129);
-	    --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
-	    --ag-header-column-resize-handle-color: rgb(126, 46, 132);
-	    --ag-font-size: 8px !important;
-		*/
 	}
 	
 	#VariantBrowserGrid {
@@ -214,20 +201,8 @@
 												<input type="text" id="positionInput" class="form-control" placeholder="Select Position" oninput="inputNumberRange(this);">
 											</div>
 	                                	</div>
-	                                	<!--  
-	                                	<div class="row mt-1">
-	                                		<div id="chromosomeCanvasArea" class="col-12" style="padding:0px 1%;">
-		                                		<canvas id="chromosomeCanvas" height="200px"></canvas>
-	                                		</div>
-	                                	</div>
-	                                	<div class="row mt-1">
-	                                		<div id="geneModelCanvasArea" class="col-12" style="padding:0px 1%;">
-		                                		<canvas id="geneModelCanvas" height="200px"></canvas>
-	                                		</div>
-	                                	</div>
-	                                	-->
 	                                	<div class="row" style="margin-top: 50px; margin-bottom:30px;">
-	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black; display: flex; justify-content: space-around;">
+	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; display: flex; justify-content: space-around; position: relative">
 	                                		</div>
 	                                	</div>
 	                                	<div class="row" style="margin-bottom:150px;">
@@ -258,7 +233,7 @@
 															-->
 															</div>
 															<div class="float-right">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="filter_SnpEff();">표지</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="SnpEff_mark();">표지</button>
 											            	</div>
 														</div>
 														<div class="row mt-2" style="padding-left: 6px;">
@@ -299,7 +274,7 @@
 																</select>
 															</div>
 															<div class="float-right">
-											            		<button type="button" class="btn btn-light float-right" style="margin-right:30px;" onclick="filter_SnpEff();">표지</button>
+											            		<button type="button" class="btn btn-light float-right" style="margin-right:30px;" onclick="GWAS_mark();">표지</button>
 											            	</div>
 														</div>
 														<!--  
@@ -501,11 +476,6 @@
 	//addChromosomeInfo();
 	
 	document.addEventListener('DOMContentLoaded', function() {
-		//const canvas = getCanvasInfo();
-		
-		
-		
-		//drawCanvas();
 
 		appendChromosomeDiv();
 		
@@ -527,9 +497,6 @@
 			child.classList.add('chromosomeStackDiv');
 			child.dataset.order = i;
 			child.dataset.selected = false;
-			//child.style.width = '0.1003%';
-			//child.style.height = '19px';
-			//child.style.display = 'inline-block';
 			
 			chromosomeDiv.append(child);
 		}
@@ -545,16 +512,11 @@
 				let closestPositionedOrder = 2000;
 				let gap = 2000;
 				
-				console.log(clickedOrder);
+				//console.log(clickedOrder);
 				
 				
 				
 				e.composedPath()[1].querySelectorAll('[data-position]').forEach( (el) => {
-					
-					//el.style.backgroundColor = "#808000";
-					
-					
-					//console.log("each el : ", el.dataset.order)
 					
 					const order = el.dataset.order;
 					
@@ -612,7 +574,7 @@
 	
 	// select options 선택시 이벤트. jobid, chr값으로 position 정보 로드
 	function selectChr(chrSelectElement) {
-		console.time("selectOption");
+		//console.time("selectOption");
 		//console.log(chrSelectElement);
 		const vcf_id = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.vcfId_at_firstRow;
 		const row_count = chrSelectElement.options[chrSelectElement.selectedIndex].dataset.row_count;
@@ -629,7 +591,7 @@
 		.then((position_data) => {
 			console.log("position_data : ", position_data);
 			
-			console.time("position div");
+			//console.time("position div");
 			
 			let position_ratio = [];
 			let position_at_div = [];
@@ -649,13 +611,13 @@
 			console.log(position_ratio);
 			console.log(position_at_div);
 			console.log(vcf_id_at_div);
-			console.timeEnd("position div");
+			//console.timeEnd("position div");
 			
 			colorPosition(position_ratio, position_at_div, vcf_id_at_div);
 			
 			//variant browser 로드
 			getVariantBrowserGrid();
-			console.timeEnd("selectOption");
+			//console.timeEnd("selectOption");
 		})
 		
 		
@@ -669,12 +631,23 @@
 		//console.log("position_data : ", position_data);
 		//console.log("position_ratio : ", position_ratio);
 		//console.log("position_at_div : ", position_at_div);
-		console.time("color");
+		//console.time("color");
 		
 		for(let i=0 ; i<=1999 ; i++) {
 			const stackDiv = document.querySelector(`.chromosomeStackDiv[data-order="\${i}"]`);
 			stackDiv.dataset.selected = "false";
-			stackDiv.style.backgroundColor = '';
+			
+			/******* 상위 div에서 border를 그어도 하위 div가 양끝을 벗어나거나 미치지 않는 현상 발생.  *******/
+			if(i==0 || i==1999) {
+				stackDiv.style.backgroundColor = 'black';
+			} else {
+				stackDiv.style.backgroundColor = '';
+			}
+			stackDiv.style.borderTop = "1px solid black";
+			stackDiv.style.borderBottom = "1px solid black";
+			/****** 따라서 하위 div자체에 style을 줘서 유사 테두리를 구성 ******/
+			
+			//stackDiv.style.backgroundColor = '';
 			delete stackDiv.dataset.position;
 			delete stackDiv.dataset.vcf_id;
 		}
@@ -684,13 +657,14 @@
 			stackDiv.dataset.position = position_at_div[i];
 			stackDiv.dataset.vcf_id = vcf_id_at_div[i];
 			stackDiv.dataset.selected = "false";
-			stackDiv.style.backgroundColor = '#808000';
+			stackDiv.style.backgroundColor = '#bcbcbc';
+			//stackDiv.style.borderBottom = "1px solid black";
 		}
 		
 		document.querySelectorAll('.chromosomeStackDiv[data-position]')[0].dataset.selected = "true";
 		document.querySelectorAll('.chromosomeStackDiv[data-position]')[0].style.backgroundColor = 'red';
 		
-		console.timeEnd("color");
+		//console.timeEnd("color");
 	}
 	
 	function getVariantBrowserGrid() {
@@ -702,7 +676,7 @@
 		
 		//console.log(position);
 		//console.log(chr);
-		console.time("showVB");
+		//console.time("showVB");
 		fetch(`./vb_features_getBrowserData.jsp?chr=\${chr}&position=\${position}&jobid=\${linkedJobid}&vcf_id=\${vcf_id}`)
     	.then((response) => response.json())
     	.then((data) => {
@@ -732,7 +706,7 @@
     					//headerClass: "ag-right-aligned-header",
     					width: 30,
     					sorting: true,
-    					sortingOrder: ['desc'],
+    					sortingOrder: ['desc', null],
     					
     		            comparator: (valueA, valueB, nodeA, nodeB, isDescending) => {
     		                
@@ -803,7 +777,7 @@
     		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
     		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb';
     		
-    		console.timeEnd("showVB");
+    		//console.timeEnd("showVB");
     	})
 	}
 	var base_order = ['A','T','G','C'];
@@ -885,6 +859,43 @@
 		
 		console.timeEnd("SnpEff_Grid");
 		
+	}
+	
+	function SnpEff_mark() {
+		
+		console.time("snpMark");
+		//선택된 빨간색을 지움
+		document.querySelectorAll(`.chromosomeStackDiv[data-selected="true"]`).forEach((El) => {
+			El.dataset.selected = "false";
+			El.style.backgroundColor = "#bcbcbc";
+			
+			
+		})
+		
+		const chr_select = document.getElementById('Chr_select')
+		const length = chr_select[chr_select.selectedIndex].dataset.length 
+		const marked_SnpEff = SnpEff_gridOptions.api.getSelectedRows();
+		
+		//console.log(marked_SnpEff);
+		console.log(length);
+		
+		if(marked_SnpEff.length == 0) {
+			return;
+		}
+		
+		for(let i=0 ; i<marked_SnpEff.length ; i++) {
+			
+			const mark_pos = Number(marked_SnpEff[i].pos);
+			console.log(mark_pos);
+			//console.log(parseInt(mark_pos * 1000 / length));
+			
+			//const mark = document.querySelector(`.chromosomeStackDiv[data-position="\${marked_SnpEff[i].pos}"]`);
+			const mark = document.querySelector(`.chromosomeStackDiv[data-order="\${parseInt(mark_pos * 2000 / length)}"]`);
+			//console.log(mark);
+			mark.dataset.selected = "true";
+			mark.style.backgroundColor = "red";
+		}
+		console.timeEnd("snpMark");
 	}
 	
 	function SnpEff_filter() {
@@ -988,9 +999,9 @@
    	}
    	
    	//function show_GWAS_Grid (HTML_element) {
-   	function show_GWAS_Grid () {
+   	function show_GWAS_Grid() {
 		
-   		console.log("onchange");
+   		//console.log("onchange");
    		/*
    		console.log(HTML_element);
 		
@@ -1005,7 +1016,7 @@
 		
 		//console.log(model);
 		//console.log(phenotype);
-		//console.log(jobid);
+		//console.log(jobid); 
    		
 		if(!model || !phenotype || !jobid) {
 			//console.log("gwas 영역 생성안됨");
@@ -1026,6 +1037,46 @@
 			GWAS_gridOptions_model[`\${model}`].api.setRowData(data);
 		});
 
+   	}
+   	
+   	function GWAS_mark() {
+   		console.time("gwasMark");
+		//선택된 빨간색을 지움
+		document.querySelectorAll(`.chromosomeStackDiv[data-selected="true"]`).forEach((El) => {
+			El.dataset.selected = "false";
+			El.style.backgroundColor = "#bcbcbc";
+			
+			
+		})
+		
+		const chr_select = document.getElementById('Chr_select')
+		const length = chr_select[chr_select.selectedIndex].dataset.length;
+		
+		const selected_model = document.querySelector('#GWAS_button_list .active').dataset.model;
+		console.log(selected_model);
+
+		const GWAS_model = GWAS_gridOptions_model[selected_model]; 
+		const GWAS_marked_rows = GWAS_model.api.getSelectedRows();
+		
+		//console.log(GWAS_marked_rows);
+		//console.log(length);
+		
+		if(GWAS_marked_rows.length == 0) {
+			return;
+		}
+		
+		for(let i=0 ; i<GWAS_marked_rows.length ; i++) {
+			
+			const mark_pos = Number(GWAS_marked_rows[i]['Pos']);
+			//console.log(mark_pos);
+			//console.log(parseInt(mark_pos * 1000 / length));
+			
+			const mark = document.querySelector(`.chromosomeStackDiv[data-order="\${parseInt(mark_pos * 2000 / length)}"]`);
+			//console.log(mark);
+			mark.dataset.selected = "true";
+			mark.style.backgroundColor = "red";
+		}
+		console.timeEnd("gwasMark");
    	}
    	
    	function resizeGrid() {

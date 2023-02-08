@@ -42,7 +42,7 @@
 		JsonArray jsonArr = new JsonArray();
 		
 		String sql = "select gwas.no as no, gwas.genotype_filename as filename, replace(gwas.phenotype_name, ',', '|') as phenotype_name, replace(gwas.model, ', ', '|') as model, gwas.comment as comment, gwas.jobid as jobid, DATE_FORMAT(gwas.cre_dt, '%Y-%m-%d') AS cre_dt from gwas_info_t gwas inner join vcfdata_info_t vcf on (gwas.vcfdata_no = vcf.no and gwas.refgenome_id = vcf.refgenome_id) where vcf.jobid='" +jobid+ "'and gwas.status=1;";
-		System.out.println(sql);
+		//System.out.println(sql);
 		try{
 			ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 			while (ipetdigitalconndb.rs.next()) { 
