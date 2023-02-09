@@ -15,8 +15,8 @@
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String path = rootFolder+"result/gwas/";
 	
-	System.out.println(chr);
-	System.out.println(jobid);
+	//System.out.println(chr);
+	//System.out.println(jobid);
 	//System.out.println(model);
 	//System.out.println(phenotype);
 	

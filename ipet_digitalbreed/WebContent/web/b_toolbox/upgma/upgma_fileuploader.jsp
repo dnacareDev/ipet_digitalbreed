@@ -36,12 +36,13 @@
 	String comment 			= uploader.getParameter("comment");
 	String varietyid 		= uploader.getParameter("varietyid");
 	String jobid_vcf 			= uploader.getParameter("jobid_vcf");
+	String vcf_id 			= uploader.getParameter("vcf_id");
 	String filename 		= uploader.getParameter("filename");
 	
 	
 	String db_savePath = "uploads/database/db_input/";
 	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/phylogenetic_tree/";
-	String db_pupolationPath = "uploads/Breeder_toolbox_analyses/upgma/";
+	String db_populationPath = "uploads/Breeder_toolbox_analyses/upgma/";
 	
 	
 	File folder_populationPath = new File(populationPath+jobid_upgma);
@@ -70,7 +71,7 @@
 		
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
-		String insertUpgmaInfo_sql="insert into upgma_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,populationpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+db_pupolationPath+"','"+comment+"','"+jobid_upgma+"','"+permissionUid+"',now());";	
+		String insertUpgmaInfo_sql="insert into upgma_info_t(cropid,varietyid,status,vcfdata_no,filename,uploadpath,resultpath,populationpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"', 0,'"+vcf_id+",'"+filename+"','" +db_savePath+"','"+db_outputPath+"','"+db_populationPath+"','"+comment+"','"+jobid_upgma+"','"+permissionUid+"',now());";	
 
 		System.out.println("insertUpgmaInfo_sql : " + insertUpgmaInfo_sql);
 		

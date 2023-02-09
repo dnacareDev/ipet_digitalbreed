@@ -312,10 +312,32 @@
 	}
 	
 	var UPGMA_columnDefs = [
-		{ headerName: "순번",valueGetter: inverseRowCount, width: 80, },
-		{ field: "ID", maxWidth: 100, minWidth: 100, suppressMenu: true, },
-	    { field: "Population", filter: true, width: 160, minWidth: 160, },
-	    { field: "Similarity", filter: 'agNumberColumnFilter', width: 160, minWidth: 160, },
+		/*
+		{ 
+			headerName: "순번",
+			valueGetter: inverseRowCount, 
+			width: 80, 
+		},
+		*/
+		{ 
+			headerName: "ID", 
+			field: "id", 
+			maxWidth: 100, 
+			minWidth: 100, 
+			suppressMenu: true, 
+		},
+	    { field: "population", 
+			filter: true, 
+			width: 160, 
+			minWidth: 160, 
+		},
+	    { 
+			field: "similarity", 
+			filter: 'agNumberColumnFilter', 
+			width: 160, 
+			minWidth: 160, 
+			valueFormatter: (params) => Number(params.value).toFixed(2),
+		},
 	];
 	var UPGMA_gridOptions = {
 			defaultColDef: { 
@@ -333,7 +355,7 @@
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift", 
 			animateRows: true, 
-			//onCellClicked: (params) =>	
+			//onCellClicked: (params) =>
 	}
 	
 	
@@ -465,7 +487,8 @@
   		
   		const UPGMA_gridTable = document.getElementById("UPGMA_Grid");
   		const UPGMA_Grid = new agGrid.Grid(UPGMA_gridTable, UPGMA_gridOptions);
-  		const UPGMA_rowData = [ { "ID": "sample9", "Population": "", "Similarity": "",} ];
+  		//const UPGMA_rowData = [ { "ID": "sample9", "Population": "", "Similarity": "",} ];
+  		const UPGMA_rowData = [];
   		UPGMA_gridOptions.api.setRowData(UPGMA_rowData)
   		
   		const STRUCTURE_gridTable = document.getElementById("STRUCTURE_Grid");

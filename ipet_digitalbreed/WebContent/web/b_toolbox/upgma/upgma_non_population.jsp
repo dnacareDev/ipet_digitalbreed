@@ -11,7 +11,8 @@
 	
 	String comment = request.getParameter("comment");
 	String varietyid = request.getParameter("varietyid");
-	String jobid_vcf = request.getParameter("jobid_vcf");		
+	String jobid_vcf = request.getParameter("jobid_vcf");
+	String vcf_id = request.getParameter("vcf_id");
 	String jobid_upgma = request.getParameter("jobid_upgma");		
 	String filename = request.getParameter("filename");
 
@@ -74,7 +75,7 @@
 	}
 	
 
-	String insertUpgmaInfo_sql="insert into upgma_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_upgma+"','"+permissionUid+"',now());";	
+	String insertUpgmaInfo_sql="insert into upgma_info_t(cropid,varietyid,status,vcfdata_no,filename,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"',0,"+vcf_id+",'"+filename+"','"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid_upgma+"','"+permissionUid+"',now());";	
 	System.out.println("insertUpgmaInfo_sql : " + insertUpgmaInfo_sql);
 	
 	try {

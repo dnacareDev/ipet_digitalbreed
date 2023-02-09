@@ -57,6 +57,12 @@
 </head>
 <body>
 
+	<div>
+		<svg height="5" width="6">
+			<polygon points="3,5 6,0 0,0" style="fill:#0073E5;" />
+		</svg>
+	</div>
+
 	<!-- BEGIN: Vendor JS-->
 	<script src="../../css/app-assets/vendors/js/vendors.min.js"></script>
 	    
@@ -81,37 +87,6 @@
 <script type="text/javascript">
 	
 	
-	
-	/*
-	const data = { username: 'example' };
-	
-	console.log(data);
-	console.log(JSON.stringify(data));
-	
-	fetch('./test.jsp', {
-	  method: 'POST', // or 'PUT'
-	  mode: 'cors',
-	  headers: {
-	    'Content-Type': 'application/json',
-	  },
-	  body: JSON.stringify(data),
-	})
-	.then((response) => response.json())
-	.then((data) => {
-	    console.log('Success:', data);
-	})
-	.catch((error) => {
-		console.error('Error:', error);
-	});
-	*/
-	var formData = new FormData();
-    formData.append('key1', 'value1');
-    //formData.append('key1', 'value2');
-
-    fetch('./test.jsp', {
-        method: 'POST',
-        body: formData
-    })
 	
 	
 </script>
