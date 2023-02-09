@@ -105,6 +105,7 @@
 	
 	var SnpEff_columnDefs = [
 		{ 
+			headerName: "Selection",
 			field: "selection", 
 			width: 200, 
 			minWidth: 150, 
@@ -115,7 +116,7 @@
 			pinned: 'left'
 		},
 	    { 
-			headerName: "chr",
+			headerName: "Chr",
 			field: "chr", 
 			filter: true, 
 			width: 60, 
@@ -177,21 +178,43 @@
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
-		/*
 		onCellClicked: (params) => {
-			console.log(params);
+			//console.log(params);
+			
+			function nodeSelected(isSelected) {
+				return !isSelected;
+			}
+			
+			if (params.column.colId === 'selection' ) {
+				const flag = nodeSelected(params.node.selected);
+				params.node.setSelected(flag);
+	        }
+			
+			if(params.column.colId === 'pos') {
+				const flag = nodeSelected(params.node.selected);
+				params.node.setSelected(flag);
+				
+				const chr_select = document.getElementById('Chr_select')
+				const length = chr_select[chr_select.selectedIndex].dataset.length;
+				
+				const position = params.data.pos;
+				
+				document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+			}
 		},
-		*/
+		/*
 		onSelectionChanged: (params) => {
 			const selectedRows = SnpEff_gridOptions.api.getSelectedNodes();
 		}
+		*/
 	};
 	
 	var GWAS_columnDefs = [
 		{ 
+			headerName: "",
 			field: "selection", 
-			width: 220, 
-			minWidth: 150, 
+			width: 120, 
+			minWidth: 120, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
@@ -254,7 +277,30 @@
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
-		//onCellClicked: (params) =>	
+		onCellClicked: (params) => {
+			//console.log(params);
+			
+			function nodeSelected(isSelected) {
+				return !isSelected;
+			}
+			
+			if (params.column.colId === 'selection' ) {
+				const flag = nodeSelected(params.node.selected);
+				params.node.setSelected(flag);
+	        }
+			
+			if(params.column.colId === 'Pos') {
+				const flag = nodeSelected(params.node.selected);
+				params.node.setSelected(flag);
+				
+				const chr_select = document.getElementById('Chr_select')
+				const length = chr_select[chr_select.selectedIndex].dataset.length;
+				
+				const position = params.data['Pos'];
+				
+				document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+			}
+		},
 	}
 	
 	var Marker_columnDefs = [

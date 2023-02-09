@@ -20,7 +20,7 @@
 	//System.out.println(model);
 	//System.out.println(phenotype);
 	
-	System.out.println(path+jobid+"/"+"GAPIT.Association.GWAS_Results." +model+ "." +phenotype+ ".csv");
+	//System.out.println(path+jobid+"/"+"GAPIT.Association.GWAS_Results." +model+ "." +phenotype+ ".csv");
 	
 	File file = new File(path+jobid+"/"+"GAPIT.Association.GWAS_Results." +model+ "." +phenotype+ ".csv");
 	BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
@@ -28,7 +28,7 @@
 	JsonArray jsonArray = new JsonArray();
 	
 	String line = br.readLine();
-	System.out.println(line);
+	//System.out.println(line);
 	out.clear();
 	while((line=br.readLine()) != null) {
 		

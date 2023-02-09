@@ -206,21 +206,10 @@
 												</select>
 											</div>
 											<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:14px;"> 
-												<input type="text" id="positionInput" class="form-control" placeholder="Select Position" oninput="inputNumberRange(this);">
+												<input type="text" id="positionInput" class="form-control" placeholder="Select Position" readonly>
 											</div>
 	                                	</div>
-	                                	<!--  
-	                                	<div class="row" style="margin-top: 50px; ">
-	                                		<div id="chromosomeMarkerPositionDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; display: flex; justify-content: space-around; position: relative">snpEff</div>
-	                                	</div>
-	                                	-->
-	                                	<div class="row" style="margin-top: 50px; ">
-	                                		<div id="chromosomeGwasPositionDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; display: flex; justify-content: space-around; position: relative"></div>
-	                                	</div>
-	                                	<div class="row" style="margin-top: 10px; ">
-	                                		<div id="chromosomeSnpEffPositionDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; display: flex; justify-content: space-around;" ></div>
-	                                	</div>
-	                                	<div class="row" style="margin-top: 10px; margin-bottom:30px;">
+	                                	<div class="row" style="margin-top: 50px; margin-bottom:30px;">
 	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; display: flex; justify-content: space-around; ">
 	                                		</div>
 	                                	</div>
@@ -317,6 +306,7 @@
 															</div>
 														</div>
 	  												</div>
+	  												<!-- Marker pill -->
 	  												<div class='tab-pane pl-1' id='pill3' aria-labelledby='base-pill3'>
 	  													<div class="row mt-1 justify-content-between">
 	  														<div class="col-6"> 
@@ -333,6 +323,7 @@
 	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:642px; width:100%; padding-left:14px; padding-right: 28px;"></div>
 	  													</div>
 	  												</div>
+	  												<!-- Selection pill -->
 	  												<div class='tab-pane pl-1' id='pill4' aria-labelledby='base-pill4'>
 	  													<div style="width:50%;"> 
 															<select id='SelectionList_select' class='select2 form-select float-left'>
@@ -361,6 +352,7 @@
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill7' onclick="resizeGrid();" aria-expanded='false'>Haplotype</a></li>
 												</ul>
 												<div class='tab-content'>
+	  												<!-- UPGMA pill -->
 	  												<div role='tabpanel' class='tab-pane active pl-1' id='pill5' aria-expanded='true' aria-labelledby='base-pill1'>
 	  													<div class="row">
 		  													<div style="width:50%; padding-left:14px;"> 
@@ -376,13 +368,14 @@
 																</select>
 									            			</div>
 									            			<div class="col-6">
-											            		<button type="button" class="btn btn-light mb-1 float-right" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
+											            		<button type="button" class="btn btn-light mb-1 float-right" style="margin-right:29px;" onclick="sort_vb_by_UPGMA();">정렬</button>
 											            	</div>
 									            		</div>
 									            		<div class="row">
 															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:604px; width:93%; margin-left: 15px;"></div>
 														</div>
 	  												</div>
+	  												<!-- STRUCTURE pill -->
 	  												<div class='tab-pane pl-1' id='pill6' aria-labelledby='base-pill2'>
 	  													<div class="row justify-content-between"> 
 															<div class="col-6">
@@ -405,6 +398,7 @@
 	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:642px; width:93%; margin-left: 15px;"></div>
 	  													</div>
 	  												</div>
+	  												<!-- Haplotype pill -->
 	  												<div class='tab-pane pl-1' id='pill7' aria-labelledby='base-pill3'>
 	  													<div class="row" style="width:50%; padding-left:14px;"> 
 															<button type="button" class="btn btn-light" style="margin-right:29px;" onclick="filter_SnpEff();">Haplotype Analysis</button>
@@ -497,8 +491,6 @@
 	(function() {
 		console.time("IIFE")
 		appendChromosomeDiv();
-		appendChromosomeSnpEffPositionDiv();
-		appendChromosomeGwaspositionDiv();
 		console.timeEnd("IIFE")
 	})();
 	
@@ -567,7 +559,8 @@
 				
 				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.selected = 'true';
 				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).style.backgroundColor = 'red';
-				document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position;
+				//document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position;
+				document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');;
 				
 				getVariantBrowserGrid();
 			})
@@ -575,41 +568,6 @@
 		console.timeEnd("make1000Div");
 	}
 	
-	function appendChromosomeSnpEffPositionDiv() {
-		/*
-		const snpEffPositionDiv = document.getElementById('chromosomeSnpEffPositionDiv');
-		
-		for(let i=0 ; i<=1999 ; i++) {
-			
-			const child = document.createElement('div');
-			child.classList.add('chromosomeSnpEffPositionStackDiv');
-			child.dataset.order = i;
-			//child.dataset.selected = false;
-			//child.style.borderBottom = "1px solid black";
-			//child.style.backgroundColor = "grey";
-			
-			snpEffPositionDiv.append(child);
-		}
-		*/
-		//$(".chromosomeSnpEffPositionStackDiv[data-order='0']").append(`<div data-snpEff="1" ><svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg></div>`)
-		
-	}
-	
-	function appendChromosomeGwaspositionDiv() {
-		/*
-		const gwasPositionDiv = document.getElementById('chromosomeGwasPositionDiv');
-		
-		for(let i=0 ; i<=1999 ; i++) {
-			
-			const child = document.createElement('div');
-			child.classList.add('chromosomeGwasPositionStackDiv');
-			child.dataset.order = i;
-			//child.dataset.selected = false;
-			
-			gwasPositionDiv.append(child);
-		}
-		*/
-	}
 	
 	// 염색체 드롭박스에 option 추가
 	async function addChromosomeInfo() {
@@ -654,7 +612,7 @@
 		fetch(`./vb_features_positionListFromChr.jsp?vcf_id=\${vcf_id}&row_count=\${row_count}&chr=\${chr}&jobid=\${linkedJobid}`)
 		.then((response) => response.json())
 		.then((position_data) => {
-			console.log("position_data : ", position_data);
+			//console.log("position_data : ", position_data);
 			
 			//console.time("position div");
 			
@@ -673,9 +631,9 @@
 				} // 모든 position 정보를 하나의 div [data-position]에 저장. 다른 부분의 코드를 보강해야 정상작동 */
 			}
 			
-			console.log(position_ratio);
-			console.log(position_at_div);
-			console.log(vcf_id_at_div);
+			//console.log(position_ratio);
+			//console.log(position_at_div);
+			//console.log(vcf_id_at_div);
 			//console.timeEnd("position div");
 			
 			colorPosition(position_ratio, position_at_div, vcf_id_at_div);
@@ -701,14 +659,6 @@
 		for(let i=0 ; i<=1999 ; i++) {
 			const stackDiv = document.querySelector(`.chromosomeStackDiv[data-order="\${i}"]`);
 			stackDiv.dataset.selected = "false";
-			
-			/******* 상위 div에서 border를 그어도 하위 div가 양끝을 벗어나거나 미치지 않는 현상 발생.  *******/
-			if(i==0 || i==1999) {
-				stackDiv.style.backgroundColor = 'black';
-			} else {
-				stackDiv.style.backgroundColor = '';
-			}
-			/****** 따라서 하위 div자체에 style을 줘서 유사 테두리를 구성 (border top&bottom 은 css로 이동)******/
 			
 			//stackDiv.style.backgroundColor = '';
 			delete stackDiv.dataset.position;
@@ -941,7 +891,7 @@
 		const marked_SnpEff = SnpEff_gridOptions.api.getSelectedRows();
 		
 		//console.log(marked_SnpEff);
-		console.log(length);
+		//console.log(length);
 		
 		if(marked_SnpEff.length == 0) {
 			return;
@@ -957,14 +907,19 @@
 			const mark = document.querySelector(`.chromosomeStackDiv[data-order="\${parseInt(mark_pos * 2000 / length)}"]`);
 			//console.log(mark);
 			
-			const childDiv = document.createElement('div');
-			childDiv.dataset.GWAS_order = i;
-			childDiv.style.position = "absolute";
-			childDiv.style.bottom = "13px";
-			childDiv.style.right = "-3px";
-			childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg>`;
+			const mark_data_order = mark.dataset.order;
 			
-			mark.appendChild(childDiv);
+			if(!document.querySelector(`[data-snpeff_order="\${mark_data_order}"]`)){
+				const childDiv = document.createElement('div');
+				childDiv.dataset.snpeff_order = mark_data_order;
+				childDiv.style.position = "absolute";
+				childDiv.style.bottom = "13px";
+				childDiv.style.right = "-3px";
+				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg>`;
+				
+				mark.appendChild(childDiv);
+			}
+			
 			
 			//mark.innerHTML = `<div data-snpEff_order=\${i} style="position: absolute; bottom: 15px; right: -3px;" ><svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg></div>`;
 		}
@@ -1142,14 +1097,21 @@
 			
 			const mark = document.querySelector(`.chromosomeStackDiv[data-order="\${parseInt(mark_pos * 2000 / length)}"]`);
 			//console.log(mark);
-			const childDiv = document.createElement('div');
-			childDiv.dataset.GWAS_order = i;
-			childDiv.style.position = "absolute";
-			childDiv.style.bottom = "18px";
-			childDiv.style.right = "-3px";
-			childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#2cb637;" /></svg>`;
 			
-			mark.appendChild(childDiv);
+			const mark_data_order = mark.dataset.order;
+			
+			if(!document.querySelector(`[data-gwas_order="\${mark_data_order}"]`)){
+				const childDiv = document.createElement('div');
+				childDiv.dataset.gwas_order = mark_data_order;
+				childDiv.style.position = "absolute";
+				childDiv.style.bottom = "19px";
+				childDiv.style.right = "-3px";
+				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#2cb637;" /></svg>`;
+				
+				mark.appendChild(childDiv);
+			}
+			
+			
 			
 			//mark.innerHTML = `<div data-GWAS_order=\${i} style="position: absolute; bottom: 25px; right: -3px;" ><svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#2cb637;" /></svg></div>`;
 		}
@@ -1175,7 +1137,7 @@
    		fetch(`./vb_features_grid_UPGMA.jsp?jobid=\${upgma_jobid}`)
    		.then((response) => response.json())
    		.then((data) => {
-   			console.log(data);
+   			//console.log(data);
    			
    			UPGMA_gridOptions.api.setRowData(data);
    			UPGMA_gridOptions.api.sizeColumnsToFit();
@@ -1239,24 +1201,66 @@
    		})
    	}
    	
+   	function sort_vb_by_UPGMA() {
+   		
+   		console.time("sort_vb_by_UPGMA");
+   		
+   		let id_arr = new Array();
+   		
+   		UPGMA_gridOptions.api.forEachNode((node) => {
+   			//console.log(node.data.id);
+   			id_arr.push(node.data.id);
+   		})
+   		
+   		console.log(id_arr);
+   		
+   		// 첫 row(=Reference는 무조건 고정)
+   		//let updatedNodes = [VariantBrowser_gridOptions.api.getRowNode(0)];
+   		let updatedNodesData = [VariantBrowser_gridOptions.api.getRowNode(0).data];
+   		
+   		/*
+   		VariantBrowser_gridOptions.api.forEachNode((node) => {
+   			//console.log(node.data.id);
+   			for(let i=0 ; i<id_arr.length ; i++) {
+   				if(node.data.id == id_arr[i]) {
+   					updatedNodesData.push(node.data);
+   				}
+   			}
+   		})
+   		*/
+   		for(let i=0 ; i<id_arr.length ; i++) {
+   			VariantBrowser_gridOptions.api.forEachNode((node) => {
+   				if(node.data.id == id_arr[i]) {
+   					updatedNodesData.push(node.data);
+   				}
+   			})
+   		}
+   		
+   		console.log(updatedNodesData);
+   		
+   		/*
+   		VariantBrowser_gridOptions.api.applyTransaction({remove: updatedNodesData});
+   		VariantBrowser_gridOptions.api.applyTransaction({add: updatedNodesData});
+   		*/
+   		VariantBrowser_gridOptions.api.setRowData(updatedNodesData);
+   		console.timeEnd("sort_vb_by_UPGMA");
+   	}
    	
    	function resizeGrid() {
    		setTimeout( () => {
 			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
 			
+				/*
 			if(Object.keys(GWAS_gridOptions_model).length !== 0) {
-				GWAS_gridOptions_model.forEach((El) => {
-					El.columnApi.autoSizeAllColumns();
-				})
+				for(const GWAS_gridOptions in GWAS_gridOptions_model) {
+					GWAS_gridOptions.columnApi.autoSizeAllColumns();
+				}
 			}
+				*/
 			
 		}, 200)
    	}
    	
-   	function inputNumberRange(HTML_element) {
-   		//console.log(HTML_element);
-   		HTML_element.value = HTML_element.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-   	}
    	
 </script>
 
