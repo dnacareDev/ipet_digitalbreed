@@ -38,6 +38,14 @@
 	    	cellClass: "grid-cell-centered",      
 	    },
 	    {
+	    	field: "gff",
+	    	filter: true,
+	    	width: 700,
+	    	minWidth: 150,
+	    	cellClass: "grid-cell-centered",
+	    	hide: true,
+	    },
+	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
 	    	filter: 'agNumberColumnFilter',
@@ -137,7 +145,9 @@
 			//console.log("params : ", params);
 			
 			const jobid = params.data.jobid;
-			const refgenome_id = params.data.refgenome_id;
+			//const refgenome_id = params.data.refgenome_id;
+			const refgenome = params.data.refgenome;
+			const gff = params.data.gff;
 
 			// 클릭할때마다 target값을 바꿔서 항상 새창이 열리게 한다  
 			const random_number = Math.random().toString(36).substring(2,12);
@@ -151,6 +161,25 @@
 			objs.setAttribute('name', 'jobid'); // 객체이름
 			objs.setAttribute('value', jobid); //객체값
 			form.appendChild(objs);
+			
+			/*
+			const objs2 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs2.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs2.setAttribute('name', 'refgenome_id'); // 객체이름
+			objs2.setAttribute('value', refgenome_id); //객체값
+			form.appendChild(objs2);
+			*/
+			const objs2 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs2.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs2.setAttribute('name', 'refgenome'); // 객체이름
+			objs2.setAttribute('value', refgenome); //객체값
+			form.appendChild(objs2);
+			
+			const objs3 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs3.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs3.setAttribute('name', 'gff'); // 객체이름
+			objs3.setAttribute('value', gff); //객체값
+			form.appendChild(objs3);
 			
 			form.setAttribute('method', 'post'); //get,post 가능
 			form.setAttribute('action', "./vb_features.jsp"); //보내는 url

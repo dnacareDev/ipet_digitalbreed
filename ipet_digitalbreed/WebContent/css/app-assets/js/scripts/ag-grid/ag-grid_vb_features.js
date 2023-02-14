@@ -105,15 +105,27 @@
 	
 	var SnpEff_columnDefs = [
 		{ 
-			headerName: "Selection",
+			headerName: "",
 			field: "selection", 
-			width: 200, 
-			minWidth: 150, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
+			width: 200, 
+			//minWidth: 150, 
+			//editable: true, 
 			suppressMenu: true,
-			pinned: 'left'
+			pinned: 'left',
+			cellRenderer: (params) => {
+				if(params.value) {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`
+				} else {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bcbcbc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`;
+				}
+			},
 		},
 	    { 
 			headerName: "Chr",
@@ -130,6 +142,7 @@
 			width: 70, 
 			//minWidth: 70, 
 			cellClass: "",
+			cellStyle: { color: 'blue' }
 		},
 	    { 
 			headerName: "Impact",
@@ -188,6 +201,15 @@
 			if (params.column.colId === 'selection' ) {
 				const flag = nodeSelected(params.node.selected);
 				params.node.setSelected(flag);
+				
+				const rowIndex = params.node.rowIndex;
+				if(!params.value) {
+					SnpEff_gridOptions.api.getRowNode(rowIndex).data.selection = true;
+				} else {
+					SnpEff_gridOptions.api.getRowNode(rowIndex).data.selection = false;
+				}
+				
+				SnpEff_gridOptions.api.refreshCells(params);
 	        }
 			
 			if(params.column.colId === 'pos') {
@@ -214,18 +236,29 @@
 			headerName: "",
 			field: "selection", 
 			width: 120, 
-			minWidth: 120, 
+			//minWidth: 100, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
 			suppressMenu: true, 
-			pinned: 'left'
+			pinned: 'left',
+			cellRenderer: (params) => {
+				if(params.value) {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`
+				} else {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bcbcbc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`;
+				}
+			},
 		},
 	    { 
 			field: "Chr", 
 			filter: true, 
 			width: 240, 
-			minWidth: 160, 
+			//minWidth: 160, 
 		},
 	    { 
 			field: "Pos",
@@ -233,7 +266,8 @@
 			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 			cellClass: "",
 			width: 160, 
-			minWidth: 100, 
+			//minWidth: 100,
+			cellStyle: { color: 'blue' }
 		},
 	    { 
 			field: "P-value", 
@@ -241,7 +275,7 @@
 			valueFormatter: (params) => Number(params.value).toFixed(5),
 			cellClass: "",
 			width: 360, 
-			minWidth: 180, 
+			//minWidth: 180, 
 		},
 	    { 
 			field: "MAF", 
@@ -249,7 +283,7 @@
 			valueFormatter: (params) => Number(params.value).toFixed(5),
 			cellClass: "",
 			width: 360, 
-			minWidth: 180, 
+			//minWidth: 180, 
 		},
 	    { 
 			field: "Effect", 
@@ -257,7 +291,7 @@
 			valueFormatter: (params) => Number(params.value).toFixed(5),
 			cellClass: "",
 			width: 360, 
-			minWidth: 200, 
+			//minWidth: 200, 
 		},
 	];
 	var GWAS_gridOptions = {
@@ -287,6 +321,21 @@
 			if (params.column.colId === 'selection' ) {
 				const flag = nodeSelected(params.node.selected);
 				params.node.setSelected(flag);
+				
+				
+				const model_name = document.querySelector(`#GWAS_button_list .active`).dataset.model;
+				console.log(model_name);
+				
+				const GWAS_gridOptions = GWAS_gridOptions_model[model_name];
+				
+				const rowIndex = params.node.rowIndex;
+				if(!params.value) {
+					GWAS_gridOptions.api.getRowNode(rowIndex).data.selection = true;
+				} else {
+					GWAS_gridOptions.api.getRowNode(rowIndex).data.selection = false;
+				}
+				
+				GWAS_gridOptions.api.refreshCells(params);
 	        }
 			
 			if(params.column.colId === 'Pos') {
@@ -331,8 +380,27 @@
 	}
 	
 	var Selection_columnDefs = [
-		{ checkboxSelection: true, headerCheckboxSelectionFilteredOnly: true, headerCheckboxSelection: true, width: 50, },
-		{ field: "selection", maxWidth: 100, minWidth: 100, suppressMenu: true, },
+		{ 
+			headerName: "",
+			field: "selection", 
+			maxWidth: 100, 
+			minWidth: 100, 
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true, 
+			headerCheckboxSelection: true, 
+			suppressMenu: true,
+			cellRenderer: (params) => {
+				if(params.value) {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`
+				} else {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bcbcbc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`;
+				}
+			},
+		},
 	    { field: "Chr", filter: true, width: 60, minWidth: 60, },
 	    { field: "Pos", filter: 'agNumberColumnFilter', width: 70, minWidth: 70, },
 	    { field: "SnpEff", filter: "agTextColumnFilter",width: 80, minWidth: 80, },
@@ -526,7 +594,7 @@
   		
   		const SelectionList_gridTable = document.getElementById("SelectionList_Grid");
   		const SelectionList_Grid = new agGrid.Grid(SelectionList_gridTable, SelectionList_gridOptions);
-  		const SelectionList_rowData = [ { "selection": "star", "Chr": 1, "Pos": 40326, "SnpEff": "O", "GWAS": "X", "Marker Candidate": "X" } ];
+  		const SelectionList_rowData = [ { "selection": true, "Chr": 1, "Pos": 40326, "SnpEff": "O", "GWAS": "X", "Marker Candidate": "X" } ];
   		SelectionList_gridOptions.api.setRowData(SelectionList_rowData)
   		
   		

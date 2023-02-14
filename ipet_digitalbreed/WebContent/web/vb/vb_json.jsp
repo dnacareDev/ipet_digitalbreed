@@ -18,7 +18,7 @@
 
 		//String sql="select no, refgenome, filename, comment, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from vcfdata_info_t where status=1 and refgenome != '-' and creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by no DESC;";
 		//String sql="select no, refgenome, filename, comment, samplecnt, variablecnt, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from vcfdata_info_t where status=1 and refgenome != '-' and refgenome_id != 0 and creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by no DESC;";
-		String sql="select vcf.no, vcf.refgenome_id, ref.refgenome, vcf.filename, vcf.comment, vcf.samplecnt, vcf.variablecnt, vcf.jobid, DATE_FORMAT(vcf.cre_dt, '%Y-%m-%d') as cre_dt from vcfdata_info_t vcf inner join reference_genome_t ref on vcf.refgenome_id = ref.refgenome_id where vcf.status=1 and vcf.creuser='" +permissionUid+ "' and vcf.varietyid='" +varietyid+ "' order by no DESC;";
+		String sql="select vcf.no, vcf.refgenome_id, ref.refgenome, ref.gff, vcf.filename, vcf.comment, vcf.samplecnt, vcf.variablecnt, vcf.jobid, DATE_FORMAT(vcf.cre_dt, '%Y-%m-%d') as cre_dt from vcfdata_info_t vcf inner join reference_genome_t ref on vcf.refgenome_id = ref.refgenome_id where (vcf.status=1 or vcf.status=2 ) and vcf.creuser='" +permissionUid+ "' and vcf.varietyid='" +varietyid+ "' order by no DESC;";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
@@ -29,6 +29,7 @@
 			jsonObject.addProperty("comment", ipetdigitalconndb.rs.getString("comment"));
 			jsonObject.addProperty("refgenome_id", ipetdigitalconndb.rs.getInt("refgenome_id"));
 			jsonObject.addProperty("refgenome", ipetdigitalconndb.rs.getString("refgenome"));
+			jsonObject.addProperty("gff", ipetdigitalconndb.rs.getString("gff"));
 			jsonObject.addProperty("samplecnt", ipetdigitalconndb.rs.getString("samplecnt"));
 			jsonObject.addProperty("variablecnt", ipetdigitalconndb.rs.getString("variablecnt"));
 			jsonObject.addProperty("jobid", ipetdigitalconndb.rs.getString("jobid"));

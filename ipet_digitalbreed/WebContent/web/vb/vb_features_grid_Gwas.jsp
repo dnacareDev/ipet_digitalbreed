@@ -38,6 +38,7 @@
 		//if( lineArr[1].equals(chr) ) {
 		if( lineArr[1].toUpperCase().equals(chr.toUpperCase()) ) {
 			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("selection", false);
 			jsonObject.addProperty("SNP", lineArr[0]);
 			jsonObject.addProperty("Chr", lineArr[1]);
 			jsonObject.addProperty("Pos", lineArr[2]);

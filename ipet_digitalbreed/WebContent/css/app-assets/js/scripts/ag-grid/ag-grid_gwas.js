@@ -523,12 +523,37 @@
 	}
 
 	var columnDefs2 = [
-		{field: "SNP", width: 180, hide: true, },
-		{field: "Chr", width: 180, },
-		{field: "Pos", width: 120, },
-		{field: "P-value", width: 120, sortable: true, },
-		{field: "MAF", width: 120, },
-		{field: "Effect", width: 120, }
+		{
+			field: "SNP", 
+			width: 180, 
+			hide: true, 
+		},
+		{
+			field: "Chr", 
+			width: 180, 
+		},
+		{
+			field: "Pos", 
+			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+			width: 120, 
+		},
+		{
+			field: "P-value", 
+			valueFormatter: (params) => Number(params.value).toFixed(5),
+			width: 120, 
+			sortable: true, 
+			
+		},
+		{
+			field: "MAF", 
+			valueFormatter: (params) => Number(params.value).toFixed(5),
+			width: 120, 
+		},
+		{
+			field: "Effect", 
+			valueFormatter: (params) => Number(params.value).toFixed(5),
+			width: 120, 
+		}
 	]
 	
 	var gridOptions2 = {

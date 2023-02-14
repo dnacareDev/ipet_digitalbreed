@@ -18,6 +18,8 @@
 	
 	//System.out.println(path+jobid+"/"+jobid+"_snpeff.csv");
 	
+	//long beforeTime = System.currentTimeMillis();
+	
 	File file = new File(path+jobid+"/"+jobid+"_snpeff.csv");
 	BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 	
@@ -32,6 +34,7 @@
 		
 		if( lineArr[0].equals(chr) ) {
 			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("selection", false);
 			jsonObject.addProperty("chr", lineArr[0]);
 			jsonObject.addProperty("pos", lineArr[1]);
 			jsonObject.addProperty("impact", lineArr[2]);
@@ -41,6 +44,9 @@
 			jsonArray.add(jsonObject);
 		}
 	}
+	
+	//long afterTime = System.currentTimeMillis();
+	//System.out.println("process time : " + (afterTime - beforeTime) + "ms");
 	
 	out.print(jsonArray);
 	br.close();

@@ -57,9 +57,6 @@
 		ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
 	}catch(Exception e){
    		System.out.println(e);
-   	}finally { 
-   		ipetdigitalconndb.stmt.close();
-   		ipetdigitalconndb.conn.close();
    	}
 	
 	
@@ -72,9 +69,26 @@
 	System.out.println("========CSV to Json & excuteUpdate end========"); 
 	
 	System.out.println("========save chromosome list start========");
-	makeChrDataCsv(rootFolder, jobid, refgenome);
+	if(refgenome.equals("-")) {
+		System.out.println("Non-referenece. make chromosome list stopped");
+	} else {
+		makeChrDataCsv(rootFolder, jobid, refgenome);
+	}
 	System.out.println("========save chromosome list end========");
 
+	String updateVcfinfo2_sql="update vcfdata_info_t set status=2 where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
+	System.out.println(updateVcfinfo_sql);
+	
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
+	}catch(Exception e){
+   		System.out.println(e);
+   	}finally { 
+   		ipetdigitalconndb.stmt.close();
+   		ipetdigitalconndb.conn.close();
+   	}
+	
+	
 	/*
 	// CSV => 행렬변환된 CSV파일 생성
 	String csv_transpose = "Rscript " +script_path+ "genotype_sequence_bakground.R " +outputPath+" "+ jobid;
@@ -191,10 +205,10 @@
 		String path = rootFolder+"result/database/genotype_statistics/";
 		
 		//File fileRead = new File(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
-		File fileRead2 = new File(rootFolder+"uploads/reference_database/"+refgenome+"/len/"+refgenome+".len.csv");
+		File fileRead2 = new File(rootFolder+"uploads/reference_database/"+refgenome+"/len/len.csv");
 		File fileWrite = new File(path+"/"+jobid+"/"+jobid+"_chr_row_index_data.csv");
 		
-		System.out.println(rootFolder+"uploads/reference_database/"+refgenome+"/len/"+refgenome+".csv");
+		System.out.println(rootFolder+"uploads/reference_database/"+refgenome+"/len/len.csv");
 		
 		//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead), "UTF-8"));
 		BufferedReader br2 = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead2), "UTF-8"));

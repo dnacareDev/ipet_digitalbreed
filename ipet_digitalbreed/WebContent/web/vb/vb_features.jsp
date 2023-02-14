@@ -107,7 +107,7 @@
 	}
 	.expandSide {
 		width: 100%;
-		height: 770px;
+		height: 880px;
 		opacity: 1;
 		transition-delay: 20ms;
 	}
@@ -127,8 +127,15 @@
 		border-radius: 0.4285rem 0.4285rem 0 0;
 	}
 	
-	
-	.chromosomeStackDiv {
+	#chromosomeDiv, #chromosomeDetailedDiv {
+		  margin: 0px 5% auto; 
+		  padding:0px; 
+		  width:90%; 
+		  height: 20px; 
+		  display: flex; 
+		  justify-content: space-around;
+	}
+	.chromosomeStackDiv, .chromosomeDetailedStackDiv {
 		width: 1px;
 		height: 18px;
 		border-top: 1px solid black;
@@ -136,12 +143,13 @@
 		display: inline-block;
 		position: relative;
 	}
-	
-	.chromosomeStackDiv[data-order="0"] {
-		background-color: black;
+	.chromosomeStackDiv[data-order="0"], .chromosomeDetailedStackDiv[data-order="0"] {
+		border-left: 1px solid black;
+		z-index: 10;
 	}
-	.chromosomeStackDiv[data-order="1999"] {
-		background-color: black;
+	.chromosomeStackDiv[data-order="1999"], .chromosomeDetailedStackDiv[data-order="1999"] {
+		border-right: 1px solid black;
+		z-index: 10;
 	}
 	
 	
@@ -163,6 +171,9 @@
 	//System.out.println("UID : " + permissionUid);
 	
 	String linkedJobid = request.getParameter("jobid");
+	//String refgenome_id = request.getParameter("refgenome_id");
+	String refgenome = request.getParameter("refgenome");
+	String gff = request.getParameter("gff");
 	
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
@@ -190,32 +201,47 @@
 	                                	
 	                                	<!-- right side 고정버튼 -->
 	                                	<div style="position: absolute; top: 25px; right: -25px;">
-											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain();">Mapping</button>
+											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain();">Loci</button>
 										</div>
 										<div style="position: absolute; top: 105px; right: -25px;">
-											<button type="button" class="btn btn-danger sideButton" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain();">Sorting</button>
+											<button type="button" class="btn sideButton" style="color: #ffffff; background-color:#2da0ed;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain();">Cluster</button>
 										</div>
 										<!-- right side 고정버튼 -->
 	                                	
-	                                	<div class="row">
-	                                		<div style="width:20%; min-width:200px; margin-top:1.5rem; margin-left:10px; padding-left:13px;"> 
-												<select id='Chr_select' class='select2 form-select float-left' onChange="selectChr(this); show_SnpEff_Grid(); show_GWAS_Grid()">
-													<!--  
-													<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
-													-->
+	                                	<div class="row mt-2">
+	                                		<div style="width:20%; min-width:200px; margin-left:10px; padding-left:13px;"> 
+												<select id='Chr_select' class='select2 form-select float-left' onChange="clear_mark_all(); selectChr(this); show_SnpEff_Grid(); show_GWAS_Grid()">
 												</select>
 											</div>
-											<div style="width:20%; min-width:200px; margin-top:1.5rem; padding-left:14px;"> 
-												<input type="text" id="positionInput" class="form-control" placeholder="Select Position" readonly>
+											<div style="width:20%; min-width:200px; padding-left:14px;"> 
+												<input type="text" id="positionInput" class="form-control" placeholder="Position" readonly>
+											</div>
+											<div style="width:56%">
+												<div class="float-right">
+													<button type="button" class="btn-sm btn-secondary mb-1" style="margin-top:8px; margin-left:2px;"> &gt;&gt; </button>
+												</div>
+												<div class="float-right">
+													<button type="button" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;"> &gt; </button>
+												</div>
+												<div class="float-right">
+													<button type="button" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;"> &lt; </button>
+												</div>
+												<div class="float-right">
+													<button type="button" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;"> &lt;&lt; </button>
+												</div>
 											</div>
 	                                	</div>
-	                                	<div class="row" style="margin-top: 50px; margin-bottom:30px;">
-	                                		<div id="chromosomeDiv"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; display: flex; justify-content: space-around; ">
-	                                		</div>
+	                                	<div class="row" style="margin-top: 0px; margin-bottom:30px;">
+	                                		<fieldset class="border mt-1 pt-2 pl-2 pr-2 pb-1" style="width:96%; margin-left:23px; margin-right:23px;">
+	                                			<legend  class="w-auto">Reference</legend>
+		                                		<div id="chromosomeDiv"></div>
+	                                		</fieldset>
 	                                	</div>
-	                                	<div class="row" style="margin-bottom:150px;">
-	                                		<div id="chromosomeDiv2"  style="margin: 0px 10% auto; padding:0px; width:80%; height: 20px; border: 1px solid black;">
-	                                		</div>
+	                                	<div class="row">
+	                                		<fieldset class="border mt-1 pt-2 pl-2 pr-2" style="width:96%; margin-left:23px; margin-right:23px; padding-bottom:130px;">
+	                                			<legend  class="w-auto">Gene Model</legend>
+		                                		<div id="chromosomeDetailedDiv"></div>
+	                                		</fieldset>
 	                                	</div>
 	                                	<div class="row">
 				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:420px;"></div><br>
@@ -233,17 +259,29 @@
 												<div class='tab-content'>
 	  												<div role='tabpanel' class='tab-pane active pl-1' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 	  													<div class="row justify-content-between">
-		  													<div style="width:50%; padding-left:14px; display:hidden;"> 
-		  													<!--  
-																<select id='SnpEff_select' class='select2 form-select float-left'>
-																	<option data-chr="-1" disabled hidden selected>Select Chromosome</option>
-																</select>
-															-->
+		  													<div style="width:65%; margin-top:9px; padding-left:14px; "> 
+																<div class="form-check" style="margin-right:0.4rem; padding-left:1.2rem; display:inline-block;">
+												            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" checked />
+							                                        <label class="form-check form-check-label" for="high" style="margin-left:-16px; margin-top:1px;" >HIGH</label>
+												            	</div>
+												            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;" >
+												            		<input type="checkbox" class="form-check-input" id="moderate" data-impact="MODERATE" onclick="SnpEff_filter();" checked />
+							                                        <label class="form-check form-check-label" for="moderate" style="margin-left:-16px; margin-top:1px;" >MODERATE</label>
+												            	</div>
+												            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;">
+												            		<input type="checkbox" class="form-check-input" id="low" data-impact="LOW" onclick="SnpEff_filter();" checked />
+							                                        <label class="form-check form-check-label" for="low" style="margin-left:-16px; margin-top:1px;" >LOW</label>
+												            	</div>
+												            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;">
+												            		<input type="checkbox" class="form-check-input" id="modifier" data-impact="MODIFIER" onclick="SnpEff_filter();" checked />
+							                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
+												            	</div>
 															</div>
 															<div class="float-right">
 											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="SnpEff_mark();">표지</button>
 											            	</div>
 														</div>
+														<!--  
 														<div class="row mt-2" style="padding-left: 6px;">
 											            	<div class="form-check" style="margin-right:1vw;">
 											            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" checked />
@@ -262,6 +300,7 @@
 						                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
 											            	</div>
 									            		</div>
+									            		-->
 									            		<!--  
 									            		<div class="row mt-1" style="float:right;">
 									            			<div class="col-12">
@@ -269,8 +308,8 @@
 											            	</div>
 									            		</div>
 									            		-->
-									            		<div class="row col-12 mt-1 pl-0" style="margin-left:0px;">
-															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:600px; width:100%;"></div>
+									            		<div class="row col-12 pl-0" style="margin-left:0px;">
+															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:760px; width:100%;"></div>
 														</div>
 	  												</div>
 	  												<!-- GWAS pill -->
@@ -278,7 +317,7 @@
 	  													<div class="row mt-1 justify-content-between">
 		  													<div class="col-6">
 																<select id='GWAS_select' class='select2 form-select float-left' onchange='GWAS_select_change(this.options[this.selectedIndex]);'>
-																	<option data-chr="-1" disabled hidden selected>Select result</option>
+																	<option data-jobid="-1" disabled hidden selected>Select result</option>
 																</select>
 															</div>
 															<div class="float-right">
@@ -320,7 +359,7 @@
 	  													</div>
 	  													
 									            		<div class="row mt-1">
-	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:642px; width:100%; padding-left:14px; padding-right: 28px;"></div>
+	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:745px; width:100%; padding-left:14px; padding-right: 28px;"></div>
 	  													</div>
 	  												</div>
 	  												<!-- Selection pill -->
@@ -338,7 +377,7 @@
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1 pr-0">
-	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:604px; width:100%;'></div>
+	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:706px; width:100%;'></div>
 	  													</div>
 	  												</div>
 	  											</div>
@@ -355,24 +394,45 @@
 	  												<!-- UPGMA pill -->
 	  												<div role='tabpanel' class='tab-pane active pl-1' id='pill5' aria-expanded='true' aria-labelledby='base-pill1'>
 	  													<div class="row">
-		  													<div style="width:50%; padding-left:14px;"> 
+		  													<div style="width:47%; padding-left:14px;"> 
 																<select id='UPGMA_select' class='select2 form-select float-left' onchange='show_UPGMA_Grid(); getUpgmaStandardList();'>
-																	<option data-chr="-1" disabled hidden selected>Select Result</option>
+																	<option data-jobid="-1" disabled hidden selected>Select Result</option>
+																</select>
+															</div>
+															<div style="width:48%; padding-left:14px;"> 
+																<select id='Standard_select' class='select2 form-select float-left' onchange='sort_distanceMatrix_UPGMA();'>
+																	<option data-jobid="-1" disabled hidden selected>Sorting Standard</option>
 																</select>
 															</div>
 														</div>
 									            		<div class="row mt-1">
 									            			<div class="col-6 pr-0">
+									            				<!--  
 									            				<select id='Standard_select' class='select2 form-select float-left' onchange='sort_distanceMatrix_UPGMA();'>
-																	<option data-chr="-1" disabled hidden selected>Standard</option>
+																	<option data-jobid="-1" disabled hidden selected>Sorting Standard</option>
 																</select>
+																-->
 									            			</div>
+								            				<!-- 
+								            					정렬 초기화 용도. 기본값 = false
+								            					UPGMA 2개의 select 모두 변경시 data-reset="false"
+								            					Reset 버튼 클릭시 data-reset="true" & 정렬이 해제된 상태로 variant browser Grid 로드
+								            				-->
+								            				<!--  
 									            			<div class="col-6">
-											            		<button type="button" class="btn btn-light mb-1 float-right" style="margin-right:29px;" onclick="sort_vb_by_UPGMA();">정렬</button>
+											            		<button type="button" id="reset_UPGMA" class="btn btn-light mb-1 float-right" data-reset="true" style="margin-right:29px;" onclick="this.dataset.reset='true'; getVariantBrowserGrid();">Reset</button>
+											            	</div>
+											            	-->
+											            	<div class="col-3"></div>
+											            	<div class="col-3 mt-1 mr-1">
+											            		<div class="form-check form-check-secondary form-switch" style="display:inline;">
+					                                                <input type="checkbox" class="form-check-input" id="switch_sort_UPGMA" style="height: 1.5rem; width:3em;" onclick="isSorted_by_UPGMA(this.checked);" > 
+												            	</div>
+											            		<label class="form-check-label " for="switch_sort_UPGMA" style="margin-left: 18px; font-size: 16px; display:inline;">Sort</label>
 											            	</div>
 									            		</div>
-									            		<div class="row">
-															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:604px; width:93%; margin-left: 15px;"></div>
+									            		<div class="row mt-1">
+															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:710px; width:93%; margin-left: 15px;"></div>
 														</div>
 	  												</div>
 	  												<!-- STRUCTURE pill -->
@@ -483,19 +543,20 @@
 <script type="text/javascript">       
 
 	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
-	var linkedJobid = "<%=linkedJobid%>";
+	const linkedJobid = "<%=linkedJobid%>";
+	<%-- var refgenome_id = "<%=refgenome_id%>"; --%>
+	const refgenome = "<%=refgenome%>";
+	const gff = "<%=gff%>";
 
-	
-	//addChromosomeInfo();
 	
 	(function() {
 		console.time("IIFE")
 		appendChromosomeDiv();
+		appendChromosomeDetailedDiv();
 		console.timeEnd("IIFE")
 	})();
 	
 	document.addEventListener('DOMContentLoaded', function() {
-		
 		
 		getGwasSelectList();
 		getUpgmaSelectList();
@@ -508,7 +569,6 @@
 		console.time("make1000Div");
 		
 		const chromosomeDiv = document.getElementById('chromosomeDiv');
-		//chromosomeDiv.innerHTML = "";
 		
 		for(let i=0 ; i<=1999 ; i++) {
 			
@@ -516,7 +576,6 @@
 			child.classList.add('chromosomeStackDiv');
 			child.dataset.order = i;
 			child.dataset.selected = false;
-			
 			
 			chromosomeDiv.append(child);
 		}
@@ -552,16 +611,19 @@
 				
 				
 				e.composedPath()[1].querySelectorAll('[data-selected="true"]').forEach( (el) => {
-					el.style.backgroundColor = "#808000";
+					el.style.backgroundColor = "#bcbcbc";
 					el.dataset.selected = "false";
 				})
 				
+				const selectedDiv = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`);
+				selectedDiv.dataset.selected = 'true';
+				selectedDiv.style.backgroundColor = 'red';
+				//e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.selected = 'true';
+				//e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).style.backgroundColor = 'red';
 				
-				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.selected = 'true';
-				e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).style.backgroundColor = 'red';
-				//document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position;
 				document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');;
 				
+				getGeneModel(selectedDiv);
 				getVariantBrowserGrid();
 			})
 		})
@@ -636,10 +698,16 @@
 			//console.log(vcf_id_at_div);
 			//console.timeEnd("position div");
 			
-			colorPosition(position_ratio, position_at_div, vcf_id_at_div);
+			if(row_count != 0) {
+				colorPosition(position_ratio, position_at_div, vcf_id_at_div);
+
+				//variant browser 로드
+				getVariantBrowserGrid();
+			} else {
+				VariantBrowser_gridOptions.api.setColumnDefs([]);
+				VariantBrowser_gridOptions.api.setRowData([]);
+			}
 			
-			//variant browser 로드
-			getVariantBrowserGrid();
 			//console.timeEnd("selectOption");
 		})
 		
@@ -677,6 +745,126 @@
 		document.querySelectorAll('.chromosomeStackDiv[data-position]')[0].style.backgroundColor = 'red';
 		
 		//console.timeEnd("color");
+	}
+	
+	function appendChromosomeDetailedDiv() {
+		const chromosomeDiv = document.getElementById('chromosomeDetailedDiv');
+		
+		for(let i=0 ; i<=1999 ; i++) {
+			
+			const child = document.createElement('div');
+			child.classList.add('chromosomeDetailedStackDiv');
+			child.dataset.order = i;
+			child.dataset.selected = false;
+			
+			chromosomeDiv.append(child);
+		}
+		
+		//테스트용
+		const stackOrder_500 = document.querySelector(`.chromosomeDetailedStackDiv[data-order="1000"]`); 
+		stackOrder_500.style.backgroundColor = "red";
+		
+		const childDiv = document.createElement('div');
+		childDiv.dataset.geneModel_order = "500";
+		childDiv.style.position = "absolute";
+		childDiv.style.top = "30px";
+		childDiv.style.right = "-35px";
+		//childDiv.dataset.toggle = "popover";
+		//childDiv.dataset.content = "Popover Area";
+		/*
+		childDiv.innerHTML = `<svg width="81.760757" height="11.519"
+								viewBox="0 0 21.632545 3.047735" version="1.1" id="svg117"
+								xmlns="http://www.w3.org/2000/svg"
+								xmlns:svg="http://www.w3.org/2000/svg">
+					  			<g transform="translate(-0.89341089,-1.3147886)">
+							   		<path
+										style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+										d="m 3.0536216,1.3147886 v 3.047842 h 4.360107 v -3.047842 z"
+										/>
+							   		<path
+										style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+										d="m 9.4032916,1.3147886 v 3.047842 h 1.9895634 v -3.047842 z"
+										/>
+							   		<path
+										style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+										d="m 19.097122,1.3147886 v 3.047842 h 3.428822 v -3.047842 z"
+										/>
+							   		<path
+										style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.0026457px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+										d="M 22.356619,2.5847226 H 2.6594126 v 0.253987 H 22.356619 Z M 3.0112906,1.6534376 0.89473358,2.7117166 3.0112906,3.7699946 Z"
+										/>
+					  			</g>
+							</svg> 
+							`; 
+		*/
+		childDiv.innerHTML = setSVG(childDiv);
+							
+		stackOrder_500.appendChild(childDiv);
+		
+	}
+	
+	async function getGeneModel(selectedDiv) {
+		
+		const chr = selectedOption('Chr_select').dataset.chr;
+		const position = selectedDiv.dataset.position;
+		
+		const baseURL = window.location.href;
+		const url = new URL('./vb_features_getGffData.jsp', baseURL);
+		
+		const map_params = new Map();
+		map_params.set("jobid", linkedJobid);
+		map_params.set("chr", chr);
+		map_params.set("position", position);
+		map_params.set("refgenome", refgenome);
+		map_params.set("gff", gff);
+		
+		//fetch(url);
+		const data = await getFetchData(url, map_params);
+		
+	}
+	
+	async function getFetchData(url, map_params) {
+		
+		for(const [key, value] of map_params) {
+			url.searchParams.set(key, value);
+		}
+		
+		await fetch(url);
+	}
+	
+	function selectedOption(id) {
+		const selectEl = document.getElementById(id);
+		return selectEl[selectEl.selectedIndex];
+	}
+	
+	function setSVG(childDiv) {
+		
+		console.log(childDiv);
+		
+		return `<svg width="81.760757" height="11.519"
+					viewBox="0 0 21.632545 3.047735" version="1.1" id="svg117"
+					xmlns="http://www.w3.org/2000/svg"
+					xmlns:svg="http://www.w3.org/2000/svg">
+						<g transform="translate(-0.89341089,-1.3147886)">
+				   		<path
+							style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+							d="m 3.0536216,1.3147886 v 3.047842 h 4.360107 v -3.047842 z"
+							/>
+				   		<path
+							style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+							d="m 9.4032916,1.3147886 v 3.047842 h 1.9895634 v -3.047842 z"
+							/>
+				   		<path
+							style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+							d="m 19.097122,1.3147886 v 3.047842 h 3.428822 v -3.047842 z"
+							/>
+				   		<path
+							style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.0026457px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+							d="M 22.356619,2.5847226 H 2.6594126 v 0.253987 H 22.356619 Z M 3.0112906,1.6534376 0.89473358,2.7117166 3.0112906,3.7699946 Z"
+							/>
+						</g>
+				</svg> 
+				`;
 	}
 	
 	function getVariantBrowserGrid() {
@@ -786,11 +974,24 @@
     		VariantBrowser_gridOptions.api.setColumnDefs(VariantBrowser_columnDefs);
     		VariantBrowser_gridOptions.api.setRowData(data);
     		
+    		
+    		
     		//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
     		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
     		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb';
     		
+    		
+    		const isChecked = document.getElementById('switch_sort_UPGMA');
+    		// Sort switch가 켜져있다면 ID기준으로 정렬하여 재출력
+    		if(isChecked.checked) {
+       			sort_vb_by_UPGMA();
+       		} 
+    		
     		//console.timeEnd("showVB");
+    	})
+    	.catch((error) => {
+    		console.log(error);
+    		VariantBrowser_gridOptions.api.setRowData([]);
     	})
 	}
 	var base_order = ['A','T','G','C'];
@@ -858,16 +1059,15 @@
 		fetch(`./vb_features_grid_SnpEff.jsp?jobid=\${linkedJobid}&chr=\${chr}`)
 		.then((response) => response.json())
 		.then((data) => {
-			//console.log(data.split("\n"));
-			/*
-			const header_arr = ['Chr','Pos','Impact','Effect Classic','GeneID','Description'];
-			const body = data.split('\n');
-			*/
 			//console.log(data);
+			
 			SnpEff_gridOptions.api.setRowData(data);
 			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
 			
 			
+		})
+		.catch((error) => {
+			console.log(error);
 		})
 		
 		console.timeEnd("SnpEff_Grid");
@@ -878,13 +1078,7 @@
 		
 		console.time("snpMark");
 		
-		//snpMark 초기화
-		document.querySelectorAll(`[data-snpEff_order]`).forEach((El) => {
-			
-			El.remove();
-			
-			
-		})
+		clear_mark_snpEff();
 		
 		const chr_select = document.getElementById('Chr_select')
 		const length = chr_select[chr_select.selectedIndex].dataset.length 
@@ -924,6 +1118,13 @@
 			//mark.innerHTML = `<div data-snpEff_order=\${i} style="position: absolute; bottom: 15px; right: -3px;" ><svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg></div>`;
 		}
 		console.timeEnd("snpMark");
+	}
+	
+	function clear_mark_snpEff() {
+		// 선택되어있는 snpEff 표지를 모두 지움
+		document.querySelectorAll(`[data-snpEff_order]`).forEach((El) => {
+			El.remove();
+		})
 	}
 	
 	function SnpEff_filter() {
@@ -1012,14 +1213,17 @@
 			}
 			jQuery(`#GWAS_select_\${model[i]}`).select2({width: '35%'});
 			
-			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:561px; padding-right:28px;' ></div></div>`); 
+			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:664px; padding-right:28px;' ></div></div>`); 
 			
 			const GWAS_gridTable = document.getElementById(`GWAS_Grid_\${model[i]}`);
-			GWAS_gridOptions_model[`\${model[i]}`] = Object.assign({},GWAS_gridOptions);
+			GWAS_gridOptions_model[model[i]] = Object.assign({},GWAS_gridOptions);
 			
-			const GWAS_Grid = new agGrid.Grid(GWAS_gridTable, GWAS_gridOptions_model[`\${model[i]}`]);
-			GWAS_gridOptions_model[`\${model[i]}`].api.sizeColumnsToFit();
+			const GWAS_Grid = new agGrid.Grid(GWAS_gridTable, GWAS_gridOptions_model[model[i]]);
+			//GWAS_gridOptions_model[model[i]].api.setRowData([{}])
+			//GWAS_gridOptions_model[model[i]].api.sizeColumnsToFit();
 			
+			// data가 출력되기 전에는 display='none' & 아이콘 출력
+			GWAS_gridTable.style.display = 'none';
 		}
    		
    	}
@@ -1060,18 +1264,25 @@
 		.then((response) => response.json())
 		.then((data) => {
 			console.log(data);
-			GWAS_gridOptions_model[`\${model}`].api.setRowData(data);
+			GWAS_gridOptions_model[model].api.setRowData(data);
+			//GWAS_gridOptions_model[model].api.sizeColumnsToFit();
+			
+			const GWAS_gridTable = document.getElementById(`GWAS_Grid_\${model}`);
+			GWAS_gridTable.style.display = 'block';
+			
+			GWAS_gridOptions_model[model].columnApi.autoSizeAllColumns();
+			
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 
    	}
    	
    	function GWAS_mark() {
    		console.time("gwasMark");
-		//선택된 빨간색을 지움
-		document.querySelectorAll(`[data-GWAS_order]`).forEach((El) => {
-			El.remove();
-			
-		})
+		
+   		clear_mark_GWAS();
 		
 		const chr_select = document.getElementById('Chr_select')
 		const length = chr_select[chr_select.selectedIndex].dataset.length;
@@ -1118,6 +1329,19 @@
 		console.timeEnd("gwasMark");
    	}
    	
+   	function clear_mark_GWAS() {
+		//선택되어있는 표지를 모두 지움
+		document.querySelectorAll(`[data-GWAS_order]`).forEach((El) => {
+			El.remove();
+		})
+   	}
+   	
+   	function clear_mark_all() {
+   		clear_mark_snpEff();
+   		clear_mark_GWAS();
+   	}
+   	
+   	
    	function getUpgmaSelectList() {
    		fetch(`./vb_getSelectLists.jsp?command=UPGMA&jobid=\${linkedJobid}`)
    		.then((response) => response.json())
@@ -1141,6 +1365,8 @@
    			
    			UPGMA_gridOptions.api.setRowData(data);
    			UPGMA_gridOptions.api.sizeColumnsToFit();
+   			
+   			sort_vb_by_UPGMA();
    		});
    	}
    	
@@ -1198,10 +1424,38 @@
    		fetch(`./vb_features_sort_distanceMatrix_UPGMA.jsp?standard_id=\${standard_id}&upgma_jobid=\${upgma_jobid}`)
    		.then(() => {
    			show_UPGMA_Grid();
+   			
+   			sort_vb_by_UPGMA();
    		})
    	}
    	
+   	function isSorted_by_UPGMA(checked) {
+   		
+   		const UPGMA_select = document.getElementById('UPGMA_select');
+   		//const Standard_select = document.getElementById('Standard_select');
+   		
+   		//if(UPGMA_select[UPGMA_select.selectedIndex].dataset.jobid == '-1' || Standard_select[Standard_select.selectedIndex].dataset.jobid == '-1') {
+   		if(UPGMA_select[UPGMA_select.selectedIndex].dataset.jobid == '-1' ) {
+   			return;
+   		}
+   		
+   		console.log(checked);
+   		if(checked) {
+   			sort_vb_by_UPGMA();
+   		} else {
+   			getVariantBrowserGrid();
+   		}
+   	}
+   	
    	function sort_vb_by_UPGMA() {
+   		
+   		/*
+   		// Reset 비활성. UPGMA Grid id값에 맞춰 vb 정렬
+   		document.getElementById('reset_UPGMA').dataset.reset = "false";
+   		*/
+   		if(!document.getElementById('switch_sort_UPGMA').checked) {
+   			return;
+   		}
    		
    		console.time("sort_vb_by_UPGMA");
    		
@@ -1218,16 +1472,6 @@
    		//let updatedNodes = [VariantBrowser_gridOptions.api.getRowNode(0)];
    		let updatedNodesData = [VariantBrowser_gridOptions.api.getRowNode(0).data];
    		
-   		/*
-   		VariantBrowser_gridOptions.api.forEachNode((node) => {
-   			//console.log(node.data.id);
-   			for(let i=0 ; i<id_arr.length ; i++) {
-   				if(node.data.id == id_arr[i]) {
-   					updatedNodesData.push(node.data);
-   				}
-   			}
-   		})
-   		*/
    		for(let i=0 ; i<id_arr.length ; i++) {
    			VariantBrowser_gridOptions.api.forEachNode((node) => {
    				if(node.data.id == id_arr[i]) {
@@ -1246,19 +1490,25 @@
    		console.timeEnd("sort_vb_by_UPGMA");
    	}
    	
+   	function resetSort_UPGMA() {
+   		// UPGMA Reset 버튼
+   		document.getElementById('reset_UPGMA').dataset = "true";
+   	}
+   	
    	function resizeGrid() {
+   		
+				/* 
    		setTimeout( () => {
 			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
 			
-				/*
 			if(Object.keys(GWAS_gridOptions_model).length !== 0) {
 				for(const GWAS_gridOptions in GWAS_gridOptions_model) {
 					GWAS_gridOptions.columnApi.autoSizeAllColumns();
 				}
 			}
-				*/
 			
 		}, 200)
+				*/
    	}
    	
    	

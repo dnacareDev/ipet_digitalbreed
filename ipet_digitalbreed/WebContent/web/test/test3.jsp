@@ -64,9 +64,36 @@
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bcbcbc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
 			<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
 		</svg> 
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
 			<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-		</svg> 
+		</svg>
+
+
+
+		<svg width="81.760757" height="11.519"
+			viewBox="0 0 21.632545 3.047735" version="1.1" id="svg117"
+			xmlns="http://www.w3.org/2000/svg"
+			xmlns:svg="http://www.w3.org/2000/svg">
+  			<defs id="defs114" />
+  			<g transform="translate(-0.89341089,-1.3147886)">
+		   		<path
+					style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+					d="m 3.0536216,1.3147886 v 3.047842 h 4.360107 v -3.047842 z"
+					/>
+		   		<path
+					style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+					d="m 9.4032916,1.3147886 v 3.047842 h 1.9895634 v -3.047842 z"
+					/>
+		   		<path
+					style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+					d="m 19.097122,1.3147886 v 3.047842 h 3.428822 v -3.047842 z"
+					/>
+		   		<path
+					style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.0026457px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+					d="M 22.356619,2.5847226 H 2.6594126 v 0.253987 H 22.356619 Z M 3.0112906,1.6534376 0.89473358,2.7117166 3.0112906,3.7699946 Z"
+					/>
+  			</g>
+		</svg>
 	</div>
 
 	<!-- BEGIN: Vendor JS-->
