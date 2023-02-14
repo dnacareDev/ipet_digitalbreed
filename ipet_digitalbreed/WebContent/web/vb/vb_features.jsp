@@ -819,7 +819,92 @@
 		map_params.set("gff", gff);
 		
 		//fetch(url);
-		const data = await getFetchData(url, map_params);
+		const gene_model = await getFetchData(url, map_params);
+		
+		console.log("getGeneModel data : ", gene_model);
+		
+		
+		// 이전 표식을 삭제
+		document.querySelectorAll(`.chromosomeDetailedStackDiv[data-selected="true"]`).forEach((el) => {
+			el.dataset.selected = "false";
+			el.innerHTML = "";
+		})
+		
+		
+		// gene_model[0] : mRna | gene_model[1] : CDS
+		for(let i=0 ; i<gene_model[0].length ; i++) {
+			
+			const selected_position = Number(document.querySelector(`.chromosomeStackDiv[data-selected='true']`).dataset.position);
+			
+			const mRnaStart = Number(gene_model[0][i]['start']);
+			const mRnaEnd = Number(gene_model[0][i]['end']);
+			
+			const mRnaDivOrder = parseInt( ((mRnaEnd + mRnaStart)/2 - selected_position) / 50 ) + 1000;
+			
+			// 표시할 position을 선정
+			const selectedGeneModelDiv = document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${mRnaDivOrder}"]`);
+			selectedGeneModelDiv.dataset.selected = "true";
+
+			
+			const strand = gene_model[0][i]['strand'];
+			
+			
+			//const newDiv = document.createElement('div');
+			
+			function createSVG(width, strand) {
+				
+				const xmlns = "http://www.w3.org/2000/svg";
+				
+				const svg = document.createElementNS(xmlns, "svg");
+				//viewBox="0 0 21.632545 3.047735" 
+			    svg.setAttribute('style', 'border: 1px solid black; position: absolute; top: 35px;');
+			    svg.setAttribute('width', width);
+			    svg.setAttribute('height', '11');
+			    svg.setAttribute('viewBox', '0 0 21.632545 3.047735');
+			    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
+			    
+			    const g = document.createElementNS(xmlns, "g");
+			    g.setAttributeNS(null, 'transform', 'translate(-0.89,-1.31)');
+			    
+			    const path = document.createElementNS(xmlns, "path");
+			    path.style.fill = "#000000";
+			    path.style.stroke = "#000000";
+				path.setAttributeNS(null, "d", "M 22.356619,2.5847226 H 2.6594126 v 0.253987 H 22.356619 Z M 3.0112906,1.6534376 0.89473358,2.7117166 3.0112906,3.7699946 Z");			    
+			    
+				g.appendChild(path);
+				svg.appendChild(g);
+				
+			    return svg;
+				
+			}
+			
+			const svg = createSVG((mRnaEnd - mRnaStart) / 50, strand);
+			console.log(svg);
+			
+			//newDiv.appendChild(svg);
+			
+			//selectedDetailedDiv.innerHTML = newDiv;
+			selectedGeneModelDiv.appendChild(svg);
+			console.log(selectedGeneModelDiv);
+			
+			
+			
+			/*
+			const svg_CDS = new Array();
+			
+			for(let j=0 ; j<gene_model ; j++) {
+				const cdsStart = Number(gene_model[0][i]['start']);
+				const cdsEnd = Number(gene_model[0][i]['end']);
+				
+				
+				
+				if(mRnaStart <= cdsStart && cdsEnd <= mRnaEnd) {
+					
+				}
+			}
+			*/
+		}
+		
 		
 	}
 	
@@ -829,7 +914,7 @@
 			url.searchParams.set(key, value);
 		}
 		
-		await fetch(url);
+		return await fetch(url).then((response)=> response.json());
 	}
 	
 	function selectedOption(id) {

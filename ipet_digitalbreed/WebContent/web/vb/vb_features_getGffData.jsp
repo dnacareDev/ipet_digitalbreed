@@ -24,58 +24,63 @@
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String path = rootFolder + "/uploads/reference_database/" +refgenome+ "/gff/";
 	
-	File file = new File(path+gff+".gff");
+	//File file = new File(path+gff+".gff");
+	//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 	
-	System.out.println(path);
+	System.out.println("refgenome gff path : " + path);
 	//System.out.println(file.exists());
 
-	/*
-	BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-	
 	JsonArray result = new JsonArray();
 	JsonArray mRnaArray = new JsonArray();
 	JsonArray cdsArray = new JsonArray();
 	
-	String line;
-	while((line = br.readLine()) != null) {
-		
-		List<String> lineArr = Arrays.asList(line.split("\t"));
-		
-		String chrInGff = lineArr.get(0);
-		int start = Integer.parseInt(lineArr.get(3));
-		int end = Integer.parseInt(lineArr.get(4));
-		
-		if(chr.equals(chrInGff) && (position - 50000) <= start && end <= (position + 50000)) {
-			System.out.println(lineArr);
-		}
-		
-	}
-	br.close();
-	*/
 	
 	Stream<String> lines = Files.lines(Paths.get(path+gff+".gff"))
-								.filter((item)-> item.contains(chr) || (position - 50000) <= Integer.parseInt(item.split("\t")[3]) || Integer.parseInt(item.split("\t")[4]) <= (position + 50000) );
-								//.filter(t->t.contains(chr));
+								.filter((item) -> item.contains(chr));
 	
 	lines.forEach(line -> {
-		System.out.println(line);
-	})
+		//System.out.println(line);
+		String[] lineArr = line.split("\t");
+		if( !((position - 50000) <= Integer.parseInt(lineArr[3]) && Integer.parseInt(lineArr[4]) <= (position + 50000)) ) {
+			return;
+		}
+		
+		String[] header = {"chr","annotation", "feature", "start", "end", "score", "strand", "frame", "attribute"};
+		
+		//System.out.println(line);
+		if(lineArr[2].equals("mRNA")) {
+			//System.out.println(line);
+			
+			JsonObject jsonObject = new JsonObject();
+			for(int i=0 ; i<header.length ; i++) {
+				jsonObject.addProperty(header[i], lineArr[i]);
+			}
+			mRnaArray.add(jsonObject);
+			
+		} else if(lineArr[2].equals("CDS")) {
+			//System.out.println(line);
+			JsonObject jsonObject = new JsonObject();
+			for(int i=0 ; i<header.length ; i++) {
+				//jsonObject.addProperty(header[i], lineArr[i]);
+				if(i==3 || i==4){
+					jsonObject.addProperty(header[i], lineArr[i]);
+				}
+			}
+			cdsArray.add(jsonObject);
+		}
+		
+	});
+	
+
+	
+	result.add(mRnaArray);
+	result.add(cdsArray);
 				
-	/*
-	lines.forEach(line -> {
-        //System.out.println(line);
-        List<String> lineArr = Arrays.asList(line.split("\t"));
-        int start = Integer.parseInt(lineArr.get(3));
-		int end = Integer.parseInt(lineArr.get(4));
-        if((position - 50000) <= start && end <= (position + 50000)) {
-        	System.out.println(lineArr);
-        }
-    });
-	*/
 	
 	long afterTime = System.currentTimeMillis();
 	
-	System.out.println("time : " + (afterTime -  beforeTime) + "ms");
 	
-	//out.clear();
+	out.clear();
+	out.print(result);
+	System.out.println("time : " + (afterTime -  beforeTime) + "ms");
 %>

@@ -71,11 +71,10 @@
 
 
 		<svg width="81.760757" height="11.519"
-			viewBox="0 0 21.632545 3.047735" version="1.1" id="svg117"
+			viewBox="0 0 21.632545 3.047735" 
 			xmlns="http://www.w3.org/2000/svg"
 			xmlns:svg="http://www.w3.org/2000/svg">
-  			<defs id="defs114" />
-  			<g transform="translate(-0.89341089,-1.3147886)">
+  			<g transform="translate(-0.9,-1.3)">
 		   		<path
 					style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
 					d="m 3.0536216,1.3147886 v 3.047842 h 4.360107 v -3.047842 z"
