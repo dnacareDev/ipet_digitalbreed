@@ -20,7 +20,7 @@
 	if(myChoice == csvReadLine) {
 		csvReadLine(path, jobid);
 	} else if(myChoice == csvStream) {
-		csvStream(path, jobid);
+		csvStream(rootFolder, jobid);
 	}
 	
 	
@@ -62,9 +62,13 @@
 %>
 
 <%!
-	private void csvStream(String path, String jobid) {
+	private void csvStream(String rootFolder, String jobid) {
+		String path = rootFolder + "/uploads/reference_database/CsGojo-0_v1_HC/fasta/";
+
+		
 		System.out.println("==================================");
 		System.out.println("CSV file (Stream class)");
+		
 		
 		List<String> example = new ArrayList<>();
 		
@@ -72,22 +76,26 @@
 			long startMem = Runtime.getRuntime().freeMemory();
 			long beforeTime = System.currentTimeMillis();
 	
-			//File csvFile = new File(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
-			//BufferedReader br = new BufferedReader(new FileReader(csvFile));
 			
 			//Stream<String> lines = Files.lines(Paths.get(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv"));
 			//String specificLine = lines.skip(0).findFirst().get();
             //System.out.println(specificLine);
-			
+			/*
             Stream<String> lines = Files.lines(Paths.get(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv"))
             							.skip(5000)
             							.limit(5000);
-            //Stream<String> lines = Files.lines(Paths.get(path+"/"+jobid+"/"+jobid+"_snpeff.csv"));
-           
-            lines.forEach(line -> {
+           	*/
+           	//Stream<String> lines = Files.lines(Paths.get(path+"CsGojo-0_v1.LG1-9.fasta"))
+           	//							.filter(t -> t.contains(">"));
+           	Stream<String> lines = Files.lines(Paths.get(path+"../split/pep/pep.txt"));
+           	/* 
+           	lines.forEach(line -> {
 	                //System.out.println(line);
-	            });
-            
+	        });
+           	*/
+           	
+           	System.out.println(lines.count());
+           	
             long afterTime = System.currentTimeMillis();
 			
 			System.out.println("jobid : " +jobid+ ", time : " + (afterTime - beforeTime) + "ms");

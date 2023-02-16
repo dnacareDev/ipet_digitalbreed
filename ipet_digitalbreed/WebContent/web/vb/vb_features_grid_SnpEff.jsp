@@ -28,12 +28,15 @@
 	String line = br.readLine();
 	
 	out.clear();
+	int i=0;
 	while((line=br.readLine()) != null) {
+		i++;
 		
 		String[] lineArr = line.split(",");
 		
 		if( lineArr[0].equals(chr) ) {
 			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("row_id", i);
 			jsonObject.addProperty("selection", false);
 			jsonObject.addProperty("chr", lineArr[0]);
 			jsonObject.addProperty("pos", lineArr[1]);

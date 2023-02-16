@@ -30,7 +30,7 @@
 	System.out.println("refgenome gff path : " + path);
 	//System.out.println(file.exists());
 
-	JsonArray result = new JsonArray();
+	JsonObject result = new JsonObject();
 	JsonArray mRnaArray = new JsonArray();
 	JsonArray cdsArray = new JsonArray();
 	
@@ -64,6 +64,8 @@
 				//jsonObject.addProperty(header[i], lineArr[i]);
 				if(i==3 || i==4){
 					jsonObject.addProperty(header[i], lineArr[i]);
+				} else if (i==8) {
+					jsonObject.addProperty(header[i], lineArr[i]);
 				}
 			}
 			cdsArray.add(jsonObject);
@@ -71,12 +73,9 @@
 		
 	});
 	
-
-	
-	result.add(mRnaArray);
-	result.add(cdsArray);
+	result.add("mRNA", mRnaArray);
+	result.add("CDS", cdsArray);
 				
-	
 	long afterTime = System.currentTimeMillis();
 	
 	

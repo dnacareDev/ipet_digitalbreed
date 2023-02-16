@@ -93,6 +93,12 @@
 					/>
   			</g>
 		</svg>
+		<svg style="border:1px solid black; position: absolute; top: 37px;" width="28" height="11" xmlns:svg="http://www.w3.org/2000/svg">
+			<line style="stroke:#000000;stroke-width:1;" x1="4" y1="5" x2="20" y2="5"></line>
+			<polygon points="0,5 5,2 5,8" style="fill:#000000;" />
+			<polygon points="20,2 20,8 25,5" style="fill:#000000;" />
+		</svg>
+		<div id="test"></div>
 	</div>
 
 	<!-- BEGIN: Vendor JS-->
@@ -118,9 +124,24 @@
 
 <script type="text/javascript">
 	
+	const selectedDiv = document.getElementById('test');
 	
+	const xmlns = "http://www.w3.org/2000/svg";
 	
-	
+	const svg = document.createElementNS(xmlns, "svg");
+    svg.setAttribute('style', `border:1px solid black; position: absolute; top: 37px;`);
+    svg.setAttribute('width', '20');
+    svg.setAttribute('height', '11');
+    //svg.setAttribute('viewBox', '0 0 21.63 3.05');
+    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
+    
+    const line = document.createElementNS(xmlns, "line");
+    line.setAttribute('style', 'stroke:#000000;stroke-width:3;')
+	line.setAttributeNS(null, 'line', `x1='0', y1='5' x2='20' y2='5'`);
+    
+    svg.appendChild(line);
+    
+	selectedDiv.append(svg);
 </script>
 </body>
 </html>
