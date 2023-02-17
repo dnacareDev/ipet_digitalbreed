@@ -12,11 +12,11 @@
 	String gff = request.getParameter("gff");
 	
 	
-	System.out.println(jobid);
-	System.out.println(chr);
-	System.out.println(position);
-	System.out.println(refgenome);
-	System.out.println(gff);
+	//System.out.println(jobid);
+	//System.out.println(chr);
+	//System.out.println(position);
+	//System.out.println(refgenome);
+	//System.out.println(gff);
 	
 	
 	long beforeTime = System.currentTimeMillis();
@@ -81,5 +81,5 @@
 	
 	out.clear();
 	out.print(result);
-	System.out.println("time : " + (afterTime -  beforeTime) + "ms");
+	System.out.println("read .gff time : " + (afterTime -  beforeTime) + "ms");
 %>

@@ -53,6 +53,9 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/aggrid.css">
+    <!--  
+    <link rel="stylesheet" type="text/css" href="../../css/index_assets/css/icons.min.css">
+    -->
     <!-- END: Page CSS-->
 </head>
 <body>
@@ -93,12 +96,21 @@
 					/>
   			</g>
 		</svg>
-		<svg style="border:1px solid black; position: absolute; top: 37px;" width="28" height="11" xmlns:svg="http://www.w3.org/2000/svg">
-			<line style="stroke:#000000;stroke-width:1;" x1="4" y1="5" x2="20" y2="5"></line>
-			<polygon points="0,5 5,2 5,8" style="fill:#000000;" />
-			<polygon points="20,2 20,8 25,5" style="fill:#000000;" />
-		</svg>
-		<div id="test"></div>
+		<svg width="24" height="24" viewBox="0 0 24 24">
+	        <circle cx="12" cy="12" r="10" stroke="#b672f5" stroke-width="2" fill="none"></circle>
+	        <polyline points="7,11 11,15 17,8"
+  				style="fill:none;stroke:#b672f5;stroke-width:2" />
+	    </svg>
+	    <svg width="24" height="24" viewBox="0 0 24 24">
+	        <circle cx="12" cy="12" r="11" stroke="#bcbcbc" stroke-width="2" fill="none"></circle>
+	        <line x1="8" y1="8" x2="16" y2="16" style="stroke:#bcbcbc;stroke-width:2" />
+	        <line x1="8" y1="16" x2="16" y2="8" style="stroke:#bcbcbc;stroke-width:2" />
+	    </svg>
+		<div id="test">
+			<!--  
+			<i class="ri-home-line"></i> or <i class="ri-home-fill"></i>
+			--> 
+		</div>
 	</div>
 
 	<!-- BEGIN: Vendor JS-->

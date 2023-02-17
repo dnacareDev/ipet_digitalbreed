@@ -145,7 +145,7 @@
 	}
 	.chromosomeStackDiv[data-order="0"], .chromosomeDetailedStackDiv[data-order="0"] {
 		border-left: 1px solid black;
-		z-index: 10;
+		z-index: 2;
 	}
 	.chromosomeStackDiv[data-position] {
 		background-color: #bcbcbc;
@@ -153,20 +153,12 @@
 	.chromosomeStackDiv[data-selected="true"] {
 		background-color: red !important;
 		border: red !important;
-		z-index: 99;
+		z-index: 3;
 	}
 	.chromosomeStackDiv[data-order="1999"], .chromosomeDetailedStackDiv[data-order="1999"] {
 		border-right: 1px solid black;
-		z-index: 10;
+		z-index: 2;
 	}
-	/*
-	.popover-header {
-		background-color: #b5b5b5;
-	}
-	.popover.bs-popover-bottom .arrow:after {
-		border-bottom-color: #ababab;
-	}
-	*/
 	
 	#VariantBrowserGrid {
 		--ag-font-size: 12px !important;
@@ -215,10 +207,10 @@
 	                                	
 	                                	<!-- right side 고정버튼 -->
 	                                	<div style="position: absolute; top: 25px; right: -25px;">
-											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain();">Loci</button>
+											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain(); resizeGrid();">Loci</button>
 										</div>
 										<div style="position: absolute; top: 105px; right: -25px;">
-											<button type="button" class="btn sideButton" style="color: #ffffff; background-color:#2da0ed;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain();">Cluster</button>
+											<button type="button" class="btn sideButton" style="color: #ffffff; background-color:#2da0ed;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain(); resizeGrid();">Cluster</button>
 										</div>
 										<!-- right side 고정버튼 -->
 	                                	
@@ -511,7 +503,7 @@
     
 	<!-- Modal start-->
 	<div class="modal fade" id="geneInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  		<div class="modal-dialog">
+  		<div class="modal-dialog modal-dialog-scrollable modal-lg">
     		<div class="modal-content">
       			<div class="modal-header">
 	    		    <h1 class="modal-title fs-5" id="exampleModalLabel">Gene data</h1>
@@ -524,72 +516,87 @@
 	        			<h4 class="">Primary data</h4>
 	        			<div class="">
 	        				<label>Name</label>
-	        				<p></p>
+	        				<p id="pd_name"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>Position</label>
-	        				<p></p>
+	        				<p id="pd_position"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>Length</label>
-	        				<p></p>
+	        				<p id="pd_length"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>Start</label>
-	        				<p></p>
+	        				<p id="pd_start"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>End</label>
-	        				<p></p>
+	        				<p id="pd_end"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>Strand</label>
-	        				<p></p>
+	        				<p id="pd_strand"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>CDS</label>
-	        				<p></p>
+	        				<p id="pd_cds"></p>
 	        			</div>
 	        		</div>
 	        		<div class="">
 	        			<h4 class="">Attributes</h4>
 	        			<div class="">
 	        				<label>ID</label>
-	        				<p></p>
+	        				<p id="attributes_id"></p>
+	        			</div>
+	        			<div class="">
+	        				<label>parent</label>
+	        				<p id="attributes_parent"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>Description</label>
-	        				<p></p>
+	        				<p id="attributes_description"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>RefSeq</label>
-	        				<p></p>
+	        				<p id="attributes_refSeq"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>UniProt</label>
-	        				<p></p>
+	        				<p id="attributes_uniProt"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>Pfam</label>
-	        				<p></p>
+	        				<p id="attributes_pfam"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>TAIR</label>
-	        				<p></p>
+	        				<p id="attributes_tair"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>GO</label>
-	        				<p></p>
+	        				<p id="attributes_go"></p>
 	        			</div>
 	        			<div class="">
 	        				<label>KEGG</label>
-	        				<p></p>
+	        				<p id="attributes_kegg"></p>
 	        			</div>
 	        		</div>
+	        		<div class="form-group">
+					    <label for="gene_sequence" class="h4">Gene sequence</label>
+					    <textarea class="form-control " id="gene_sequence" rows="3"></textarea>
+					</div>
+	        		<div class="form-group">
+					    <label for="cds_sequence" class="h4">CDS sequence</label>
+					    <textarea class="form-control " id="cds_sequence" rows="3"></textarea>
+					</div>
+	        		<div class="form-group">
+					    <label for="protein_sequence" class="h4">Protein sequence</label>
+					    <textarea class="form-control " id="protein_sequence" rows="3"></textarea>
+					</div>
 	      		</div>
 	      		<div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary">Save changes</button>
 	      		</div>
 	    	</div>
 	  	</div>
@@ -661,6 +668,7 @@
 		await addChromosomeInfo();
   		document.getElementById("Chr_select").dispatchEvent(new Event("change"));
 		
+  		
 		getGwasSelectList();
 		getUpgmaSelectList();
 		
@@ -798,8 +806,10 @@
 			if(row_count != 0) {
 				colorPosition(position_ratio, position_at_div, vcf_id_at_div);
 
+				document.querySelector('[data-selected="true"]').dispatchEvent(new Event("click"));
+				
 				//variant browser 로드
-				getVariantBrowserGrid();
+				//getVariantBrowserGrid();
 			} else {
 				VariantBrowser_gridOptions.api.setColumnDefs([]);
 				VariantBrowser_gridOptions.api.setRowData([]);
@@ -857,47 +867,19 @@
 			chromosomeDiv.append(child);
 		}
 		
-		//테스트용
 		const stackOrder_500 = document.querySelector(`.chromosomeDetailedStackDiv[data-order="1000"]`); 
 		stackOrder_500.style.backgroundColor = "red";
 		
+		/*
+		//테스트용
 		const childDiv = document.createElement('div');
 		childDiv.dataset.geneModel_order = "500";
 		childDiv.style.position = "absolute";
 		childDiv.style.top = "30px";
 		childDiv.style.right = "-35px";
-		//childDiv.dataset.toggle = "popover";
-		//childDiv.dataset.content = "Popover Area";
-		/*
-		childDiv.innerHTML = `<svg width="81.760757" height="11.519"
-								viewBox="0 0 21.632545 3.047735" version="1.1" id="svg117"
-								xmlns="http://www.w3.org/2000/svg"
-								xmlns:svg="http://www.w3.org/2000/svg">
-					  			<g transform="translate(-0.89341089,-1.3147886)">
-							   		<path
-										style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
-										d="m 3.0536216,1.3147886 v 3.047842 h 4.360107 v -3.047842 z"
-										/>
-							   		<path
-										style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
-										d="m 9.4032916,1.3147886 v 3.047842 h 1.9895634 v -3.047842 z"
-										/>
-							   		<path
-										style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
-										d="m 19.097122,1.3147886 v 3.047842 h 3.428822 v -3.047842 z"
-										/>
-							   		<path
-										style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.0026457px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-										d="M 22.356619,2.5847226 H 2.6594126 v 0.253987 H 22.356619 Z M 3.0112906,1.6534376 0.89473358,2.7117166 3.0112906,3.7699946 Z"
-										/>
-					  			</g>
-							</svg> 
-							`; 
-		*/
 		childDiv.innerHTML = setSVG(childDiv);
-							
 		//stackOrder_500.appendChild(childDiv);
-		
+		*/
 	}
 	
 	async function getGeneModel(selectedDiv) {
@@ -945,13 +927,40 @@
 			
 			const mRNA_start = Number(gene_model['mRNA'][i]['start']);
 			const mRNA_end = Number(gene_model['mRNA'][i]['end']);
-			const mRNA_width = (mRNA_end - mRNA_start)/ 50;
 			
-			const mRnaDivOrder = parseInt( ((mRNA_end + mRNA_start)/2 - selected_position) / 50 ) + 1000;
+			const mRNA_start_div_order = parseInt(( mRNA_start - selected_position) / 50 ) + 1000;
+			
+			
+			// end-start 로는 픽셀이 제대로 맞지 않음. -> start, end position에 해당하는  각 divOrder x좌표의 차이를 width값으로 한다.
+			//const mRNA_width = (mRNA_end - mRNA_start)/ 50;
+			
+			
+			const getDivPosition = (position, selected_position) => {
+				const div_order = parseInt(( position - selected_position) / 50 ) + 1000;
+				const div_position = document.querySelector(`.chromosomeStackDiv[data-order="\${div_order}"]`).getBoundingClientRect().x;
+				return div_position;
+			}
+			
+			/*
+			const mRNA_start_div_order = parseInt(( mRNA_start - selected_position) / 50 ) + 1000;
+			const mRNA_start_div_position = document.querySelector(`.chromosomeStackDiv[data-order="\${mRNA_start_div_order}"]`).getBoundingClientRect().x;
+			
+			const mRNA_end_div_order = parseInt((mRNA_end - selected_position) / 50) + 1000;
+			const mRNA_end_div_position = document.querySelector(`.chromosomeStackDiv[data-order="\${mRNA_end_div_order}"]`).getBoundingClientRect().x;
+			const mRNA_width = mRNA_end_div_position - mRNA_start_div_position;
+			*/
+			
+			const mRNA_start_div_position = getDivPosition(mRNA_start, selected_position);
+			const mRNA_end_div_position = getDivPosition(mRNA_end, selected_position);
+			const mRNA_width = mRNA_end_div_position - mRNA_start_div_position;
 			
 			// 표시할 position을 선정
-			const selectedGeneModelDiv = document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${mRnaDivOrder}"]`);
+			const selectedGeneModelDiv = document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${mRNA_start_div_order}"]`);
 			selectedGeneModelDiv.dataset.selected = "true";
+			
+			
+			
+			
 			
 			const strand = gene_model['mRNA'][i]['strand'];
 			
@@ -971,75 +980,22 @@
 						break;
 					}
 				}
-				
-				/*
-				if(mRNA_id == CDS_parent) {
-					svg_CDS.push(gene_model['CDS'][j]);
-				}
-				*/
-				
 			}
 			
+			const row_SVG = (i) => i%4<=1 ? i%4 : 4-(i%4);
 			
-			function createSVG(mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS) {
-				
-				console.log(mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS);
-				
-				const xmlns = "http://www.w3.org/2000/svg";
-				
-				const svg = document.createElementNS(xmlns, "svg");
-			    //svg.setAttribute('style', `border:1px solid black; position: absolute; top: 37px; right:\${-width/2}`);
-			    svg.setAttribute('width', mRNA_width+9);
-			    svg.setAttribute('height', '20');
-			    //svg.setAttribute('viewBox', '0 0 21.63 3.05');
-			    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
-			    svg.setAttribute('onclick', "$('#geneInfoModal').modal('show')");
-			    
-			    for(const cds of svg_CDS) {
-			    	const cds_start_relative = (Number(cds.start) - mRNA_start) / 50;
-			    	const cds_width = (Number(cds.end) - Number(cds.start)) / 50;
-			    	const cds_end_relative = cds_start_relative + cds_width;
-			    	
-			    	const polygon_cds = document.createElementNS(xmlns, "polygon");
-			    	polygon_cds.setAttribute('style', 'fill:#e2b095');
-			    	polygon_cds.setAttributeNS(null, 'points', `\${cds_start_relative+4},0 \${cds_end_relative+4},0 \${cds_end_relative+4},18, \${cds_start_relative+4},18`);
-				    svg.append(polygon_cds);
-			    }
-			    
-			    
-			    const line = document.createElementNS(xmlns, "line");
-			    line.setAttribute('style', 'stroke:#000000;')
-			    line.setAttributeNS(null, 'x1', '4');
-			    line.setAttributeNS(null, 'y1', '8');
-			    line.setAttributeNS(null, 'x2', `\${mRNA_width+4}`);
-			    line.setAttributeNS(null, 'y2', '8');
-			    
-			    svg.appendChild(line);
-			    
-			    
-			    const polygon = document.createElementNS(xmlns, "polygon");
-			    polygon.setAttribute('style', 'fill:#000000');
-			    if(strand == '+') {
-			    	polygon.setAttributeNS(null, 'points', `\${mRNA_width+4},5 \${mRNA_width+4},11 \${mRNA_width+9},8`)
-			    } else if(strand == '-') {
-			    	polygon.setAttributeNS(null, 'points', '0,8 5,5 5,11')
-			    }
-			    
-			    svg.appendChild(polygon);
-			    return svg;
-				
-			}
+			//console.log(row_SVG(i));
 			
-			const svg = createSVG(mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS);
+			const svg = createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position);
 			//console.log(svg);
 			
 			//data-bs-toggle="modal" data-bs-target="#exampleModal"
 			
 			const childDiv = document.createElement('div');
-			childDiv.title = "Gene Info";
-			childDiv.dataset.mRNA_id = mRNA_id;
-			childDiv.dataset.bsToggle = "modal";
-			childDiv.dataset.bsTarget = "#geneInfoModal";
+			//childDiv.title = "Gene Info";
+			childDiv.dataset.id = mRNA_id;
+			//childDiv.dataset.end = mRNA_end;
+			//childDiv.dataset.row = SVG_row;
 			
 			childDiv.dataset.toggle = mRNA_id;
 			childDiv.dataset.html = "true";
@@ -1061,33 +1017,160 @@
 									
 			childDiv.dataset.content = popoverContent;
 			childDiv.style.position = 'absolute';
-			childDiv.style.top = '25px';
-			childDiv.style.right = (-(mRNA_width+4) / 2) + 'px';
+			//childDiv.style.top = '25px';
+			childDiv.style.top = (row_SVG(i)*25+25) + 'px';
+			//childDiv.style.top = `\${row_SVG*10+25}px`;
+			//childDiv.style.right = (-(mRNA_width+4) / 2) + 'px';
 			childDiv.appendChild(svg);
 			selectedGeneModelDiv.appendChild(childDiv);
 			$(`[data-toggle="\${mRNA_id}"]`).popover();
 			//selectedGeneModelDiv.appendChild(svg);
 			
-			
-			
 		}
+	}
+	
+	
+	
+	
+	function createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position) {
+		
+		//console.log(mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position);
+		
+		const xmlns = "http://www.w3.org/2000/svg";
+		
+		const svg = document.createElementNS(xmlns, "svg");
+	    //svg.setAttribute('style', `border:1px solid black; position: absolute; top: 37px; right:\${-width/2}`);
+	    svg.setAttribute('width', mRNA_width+9);
+	    svg.setAttribute('height', '20');
+	    //svg.setAttribute('viewBox', '0 0 21.63 3.05');
+	    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
+	    //svg.setAttribute('onclick', "$('#geneInfoModal').modal('show')");
+	    svg.setAttribute('onclick', "show_geneInfoModal();");
+	    
+	    
+	    for(const cds of svg_CDS) {
+	    	/*
+	    	const cds_start_relative = (Number(cds.start) - mRNA_start) / 50;
+	    	const cds_width = (Number(cds.end) - Number(cds.start)) / 50;
+	    	const cds_end_relative = cds_start_relative + cds_width;
+	    	*/
+	    	
+	    	const cds_start_relative = getDivPosition(Number(cds.start), selected_position) - getDivPosition(mRNA_start, selected_position);
+	    	const cds_end_relative = getDivPosition(Number(cds.end), selected_position) - getDivPosition(mRNA_start, selected_position);
+	    	const cds_width = cds_end_relative - cds_start_relative;
+	    	
+	    	const polygon_cds = document.createElementNS(xmlns, "polygon");
+	    	polygon_cds.setAttribute('style', 'fill:#e2b095');
+	    	polygon_cds.setAttributeNS(null, 'points', `\${cds_start_relative+4},0 \${cds_end_relative+4},0 \${cds_end_relative+4},18, \${cds_start_relative+4},18`);
+		    svg.append(polygon_cds);
+	    }
+	    
+	    
+	    const line = document.createElementNS(xmlns, "line");
+	    line.setAttribute('style', 'stroke:#000000;')
+	    line.setAttributeNS(null, 'x1', '4');
+	    line.setAttributeNS(null, 'y1', '8');
+	    line.setAttributeNS(null, 'x2', `\${mRNA_width+4}`);
+	    line.setAttributeNS(null, 'y2', '8');
+	    
+	    svg.appendChild(line);
+	    
+	    
+	    const polygon = document.createElementNS(xmlns, "polygon");
+	    polygon.setAttribute('style', 'fill:#000000');
+	    if(strand == '+') {
+	    	polygon.setAttributeNS(null, 'points', `\${mRNA_width+4},5 \${mRNA_width+4},11 \${mRNA_width+9},8`)
+	    } else if(strand == '-') {
+	    	polygon.setAttributeNS(null, 'points', '0,8 5,5 5,11')
+	    }
+	    
+	    svg.appendChild(polygon);
+	    
+	    svg.addEventListener('mouseenter', function(event) {
+	    	//console.log(event);
+	    	modifyGeneInfoModal(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS)
+	    });
+	    
+	    return svg;
+		
+	}
+	
+	function show_geneInfoModal() {
+		$('#geneInfoModal').modal('show');
+		
+		const mRNA_id = document.getElementById('attributes_id').innerText;
+		const mRNA_parent = document.getElementById('attributes_parent').innerText;
+		
+		setTimeout(() => {
+			fetch(`./vb_features_getSequence.jsp?command=gene&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
+			.then((response) => response.text())
+			.then((data) => {
+				//console.log(data.replaceAll("\r\n",""));
+				
+				
+				document.getElementById('gene_sequence').value = data.replaceAll("\r\n","");
+				
+			})
+			
+			fetch(`./vb_features_getSequence.jsp?command=cds&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
+			.then((response) => response.text())
+			.then((data) => {
+				document.getElementById('cds_sequence').value = data.replaceAll("\r\n","");
+			});
+			
+			fetch(`./vb_features_getSequence.jsp?command=protein&file_name=\${mRNA_parent}&refgenome=\${refgenome}`)
+			.then((response) => response.text())
+			.then((data) => {
+				document.getElementById('protein_sequence').value = data.replaceAll("\r\n","");
+			});
+			
+			
+		},50);
 		
 		
 	}
 	
-	async function getFetchData(url, map_params) {
+	function modifyGeneInfoModal(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS) {
 		
-		for(const [key, value] of map_params) {
-			url.searchParams.set(key, value);
+		const search_attribute = (text) => {
+			for(let i=0 ; i<mRNA_attribute.length ; i++) {
+				if(mRNA_attribute[i].includes(text)) {
+					return mRNA_attribute[i].substring(text.length+1, mRNA_attribute[i].length);
+				}
+			}
+			return "-";
 		}
 		
-		return await fetch(url).then((response)=> response.json());
+		const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		
+		//document.getElementById('pd_name').innerText() = ""
+		//document.getElementById('pd_name').innerText = mRNA_id();
+		document.getElementById('pd_name').innerText = search_attribute('ID');
+		document.getElementById('pd_position').innerText = thousands_separator(mRNA_start) +" - " + thousands_separator(mRNA_end);
+		document.getElementById('pd_length').innerText = thousands_separator(mRNA_end - mRNA_start)
+		document.getElementById('pd_start').innerText = thousands_separator(mRNA_start)
+		document.getElementById('pd_end').innerText = thousands_separator(mRNA_end);
+		document.getElementById('pd_strand').innerText = strand;
+		
+		let CDS_contents = ""
+		for(let i=0 ; i<svg_CDS.length ; i++) {
+			CDS_contents += `\${i+1} : \${thousands_separator(svg_CDS[i]['start'])} - \${thousands_separator(svg_CDS[i]['end'])}<br>`
+		}
+		document.getElementById('pd_cds').innerHTML = CDS_contents;
+		
+		document.getElementById('attributes_id').innerText = search_attribute('ID');
+		document.getElementById('attributes_parent').innerText = search_attribute('Parent');
+		document.getElementById('attributes_description').innerText = search_attribute('Description');
+		document.getElementById('attributes_refSeq').innerText = search_attribute('RefSeq');
+		document.getElementById('attributes_uniProt').innerText = search_attribute('UniProt');
+		document.getElementById('attributes_pfam').innerText = search_attribute('Pfam');
+		document.getElementById('attributes_tair').innerText = search_attribute('TAIR');
+		document.getElementById('attributes_go').innerText = search_attribute('GO');
+		document.getElementById('attributes_kegg').innerText = search_attribute('KEGG');
+		
 	}
 	
-	function selectedOption(id) {
-		const selectEl = document.getElementById(id);
-		return selectEl[selectEl.selectedIndex];
-	}
+	
 	
 	function setSVG(childDiv) {
 		
@@ -1445,7 +1528,7 @@
    		$("#GWAS_button_list").empty();
    		$("#GWAS_content_list").empty();
    		for(let i=0 ; i<model.length ; i++) {
-			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${model[i]}" data-toggle="pill" href="#GWAS_pill_\${model[i]}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} >\${model[i]}</a></li>`);
+			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${model[i]}" data-toggle="pill" href="#GWAS_pill_\${model[i]}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} onclick="resizeGrid();" >\${model[i]}</a></li>`);
 			$("#GWAS_content_list").append(`<div role='tabpanel' class='tab-pane' id='GWAS_pill_\${model[i]}' aria-expanded='true' aria-labelledby='base-pill1'>\${model[i]}</div>`)
 			
 			
@@ -1751,18 +1834,35 @@
    		
 				
    		setTimeout( () => {
-			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
+			SnpEff_gridOptions.columnApi.autoSizeAllColumns(true);
 			
 			if(Object.keys(GWAS_gridOptions_model).length !== 0) {
 				for(const GWAS_gridOptions in GWAS_gridOptions_model) {
-					GWAS_gridOptions.columnApi.autoSizeAllColumns();
+					GWAS_gridOptions_model[GWAS_gridOptions].columnApi.autoSizeAllColumns();
 				}
 			}
 			
-		}, 200)
+			SelectionList_gridOptions.columnApi.autoSizeAllColumns(false);
+			
+		}, 100)
 				
    	}
    	
+	async function getFetchData(url, map_params) {
+		
+		if(map_params.size !== 0) {
+			for(const [key, value] of map_params) {
+				url.searchParams.set(key, value);
+			}
+		}
+		
+		return await fetch(url).then((response)=> response.json());
+	}
+	
+	function selectedOption(id) {
+		const selectEl = document.getElementById(id);
+		return selectEl[selectEl.selectedIndex];
+	}
    	
 </script>
 

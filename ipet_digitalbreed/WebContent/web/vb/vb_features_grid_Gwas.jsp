@@ -30,7 +30,9 @@
 	String line = br.readLine();
 	//System.out.println(line);
 	out.clear();
+	int i=0;
 	while((line=br.readLine()) != null) {
+		i++;
 		
 		String[] lineArr = line.split(",");
 		//System.out.println(lineArr[1]);
@@ -38,6 +40,7 @@
 		//if( lineArr[1].equals(chr) ) {
 		if( lineArr[1].toUpperCase().equals(chr.toUpperCase()) ) {
 			JsonObject jsonObject = new JsonObject();
+			//jsonObject.addProperty("row_id", i);
 			jsonObject.addProperty("selection", false);
 			jsonObject.addProperty("SNP", lineArr[0]);
 			jsonObject.addProperty("Chr", lineArr[1]);

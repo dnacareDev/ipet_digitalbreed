@@ -109,8 +109,9 @@
 	
 	var SnpEff_columnDefs = [
 		{
+			headerName: "row_id(select link)",
 			field: "row_id",
-			//valueGetter: inverseRowCount,
+			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
 			hide: true,
 	    },
 		{ 
@@ -200,7 +201,8 @@
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
-		getRowId: (params) => params.data.row_id,
+		//getRowId: (params) => params.data.row_id,
+		//getRowId: (params) => params.data.row_id,
 		onCellClicked: (params) => {
 			//console.log(params);
 			
@@ -218,6 +220,18 @@
 				rowNode.setDataValue('selection', !selection_flag);
 				
 				// selection 탭에 추가
+				const selection_node = SelectionList_gridOptions.api.getRowNode(params.node.data.pos);
+				//const selection_row_id = params.node.data.chr + "_" + params.node.data.pos;
+				//const selection_node = SelectionList_gridOptions.api.getRowNode(selection_row_id);
+				if(!selection_node) {
+					SelectionList_gridOptions.api.applyTransaction({add: [{'row_id':selection_node, 'chr':params.node.data.chr, 'pos':params.node.data.pos, 'snpEff':true, 'gwas':false, 'markerCandidate':false}]})
+				} else {
+					selection_node.setDataValue('snpEff', !selection_flag);
+					if(!selection_node.data.snpEff && !selection_node.data.gwas && !selection_node.data.markerCandidate) {
+						SelectionList_gridOptions.api.applyTransaction({remove: [selection_node.data]});
+						//SelectionList_gridOptions.api.applyTransaction({remove: [{'row_id':selection_row_id}]});
+					}
+				}
 				
 	        }
 			
@@ -241,6 +255,12 @@
 	};
 	
 	var GWAS_columnDefs = [
+		{
+			headerName: "row_id(select link)",
+			field: "row_id",
+			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
+			hide: true,
+	    },
 		{ 
 			headerName: "",
 			field: "selection", 
@@ -337,6 +357,7 @@
 				
 				const GWAS_gridOptions = GWAS_gridOptions_model[model_name];
 				
+				/*
 				const rowIndex = params.node.rowIndex;
 				if(!params.value) {
 					GWAS_gridOptions.api.getRowNode(rowIndex).data.selection = true;
@@ -345,6 +366,26 @@
 				}
 				
 				GWAS_gridOptions.api.refreshCells(params);
+				*/
+				
+				// 즐겨찾기 on/off
+				const rowNode = GWAS_gridOptions.api.getRowNode(params.node.id);
+				const selection_flag = params.data.selection;
+				rowNode.setDataValue('selection', !selection_flag);
+				
+				// selection 탭에 추가
+				const selection_node = SelectionList_gridOptions.api.getRowNode(params.node.data.pos);
+				//const selection_row_id = params.node.data.chr + "_" + params.node.data.pos;
+				//const selection_node = SelectionList_gridOptions.api.getRowNode(selection_row_id);
+				if(!selection_node) {
+					SelectionList_gridOptions.api.applyTransaction({add: [{'row_id':selection_node, 'chr':params.node.data.chr, 'pos':params.node.data.pos, 'snpEff':false, 'gwas':true, 'markerCandidate':false}]})
+				} else {
+					selection_node.setDataValue('gwas', !selection_flag);
+					if(!selection_node.data.snpEff && !selection_node.data.gwas && !selection_node.data.markerCandidate) {
+						SelectionList_gridOptions.api.applyTransaction({remove: [selection_node.data]});
+						//SelectionList_gridOptions.api.applyTransaction({remove: [{'row_id':selection_row_id}]});
+					}
+				}
 	        }
 			
 			if(params.column.colId === 'Pos') {
@@ -389,6 +430,12 @@
 	}
 	
 	var Selection_columnDefs = [
+		{
+			headerName: "row_id(select link)",
+			field: "row_id",
+			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
+			hide: true,
+	    },
 		{ 
 			headerName: "",
 			field: "selection", 
@@ -397,6 +444,7 @@
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
 			suppressMenu: true,
+			/*
 			cellRenderer: (params) => {
 				if(params.value) {
 					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
@@ -408,12 +456,43 @@
 							</svg>`;
 				}
 			},
+			*/
 		},
-	    { field: "Chr", filter: true, width: 60, minWidth: 60, },
-	    { field: "Pos", filter: 'agNumberColumnFilter', width: 70, minWidth: 70, },
-	    { field: "SnpEff", filter: "agTextColumnFilter",width: 80, minWidth: 80, },
-	    { field: "GWAS", filter: 'agNumberColumnFilter', width: 120, minWidth: 120, },
-	    { field: "Marker Candidate", filter: 'agNumberColumnFilter', width: 120, minWidth: 100, },
+	    { 
+			headerName: "Chr", 
+			field: "chr", 
+			filter: true, 
+			width: 60, 
+			minWidth: 60, 
+		},
+	    { 
+			headerName: "Pos", 
+			field: "pos", 
+			filter: 'agNumberColumnFilter', 
+			width: 70, 
+			minWidth: 70, 
+		},
+	    { 
+			headerName: "SnpEff", 
+			field: "snpEff", 
+			filter: "agTextColumnFilter",
+			width: 80, 
+			minWidth: 80, 
+		},
+	    { 
+			headerName: "GWAS", 
+			field: "gwas", 
+			filter: 'agNumberColumnFilter', 
+			width: 120, 
+			minWidth: 120, 
+		},
+	    { 
+			headerName: "Marker Candidate", 
+			field: "markerCandidate", 
+			filter: 'agNumberColumnFilter', 
+			width: 120, 
+			minWidth: 100, 
+		},
 	];
 	var SelectionList_gridOptions = {
 			defaultColDef: { 
@@ -429,8 +508,14 @@
 			rowMultiSelectWithClick: true,
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift", 
-			animateRows: true, 
-			//onCellClicked: (params) =>	
+			animateRows: true,  
+			getRowId: (params) => params.data.pos,
+			//getRowId: (params) => params.data.row_id,
+			/*
+			onCellClicked: (params) =>	{
+				console.log(params);
+			},
+			*/
 	}
 	
 	var UPGMA_columnDefs = [
@@ -478,6 +563,7 @@
 			colResizeDefault: "shift", 
 			animateRows: true, 
 			//onCellClicked: (params) =>
+			
 	}
 	
 	
@@ -586,7 +672,7 @@
   		//const SelectionList_rowData = [ { "selection": true, "Chr": 1, "Pos": 40326, "SnpEff": "O", "GWAS": "X", "Marker Candidate": "X" } ];
   		const SelectionList_rowData = [];
   		SelectionList_gridOptions.api.setRowData(SelectionList_rowData)
-  		SelectionList_gridOptions.columnApi.autoSizeAllColumns();
+  		SelectionList_gridOptions.columnApi.autoSizeAllColumns(false);
   		
   		
   		const UPGMA_gridTable = document.getElementById("UPGMA_Grid");
