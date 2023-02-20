@@ -216,8 +216,12 @@
 	                                	
 	                                	<div class="row mt-2">
 	                                		<div style="width:20%; min-width:200px; margin-left:10px; padding-left:13px;"> 
-												<select id='Chr_select' class='select2 form-select float-left' onChange="clear_mark_all(); selectChr(this); show_SnpEff_Grid(); show_GWAS_Grid()">
+												<select id='Chr_select' class='select2 form-select float-left' onChange="clear_mark_all(); selectChr(this); show_SnpEff_Grid(); show_GWAS_Grid(); ">
 												</select>
+												<!--  
+												<select id='Chr_select' class='select2 form-select float-left' onChange="clear_mark_all(); selectChr(this); (async() => {await show_Selection_Grid(); show_SnpEff_Grid(); show_GWAS_Grid();})(); ">
+												</select>
+												-->
 											</div>
 											<div style="width:20%; min-width:200px; padding-left:14px;"> 
 												<input type="text" id="positionInput" class="form-control" placeholder="Position" readonly>
@@ -287,33 +291,6 @@
 											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="SnpEff_mark();">표지</button>
 											            	</div>
 														</div>
-														<!--  
-														<div class="row mt-2" style="padding-left: 6px;">
-											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="high" style="margin-left:-16px; margin-top:1px;" >HIGH</label>
-											            	</div>
-											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="moderate" data-impact="MODERATE" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="moderate" style="margin-left:-16px; margin-top:1px;" >MODERATE</label>
-											            	</div>
-											            	<div class="form-check" style="margin-right:1vw;">
-											            		<input type="checkbox" class="form-check-input" id="low" data-impact="LOW" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="low" style="margin-left:-16px; margin-top:1px;" >LOW</label>
-											            	</div>
-											            	<div class="form-check">
-											            		<input type="checkbox" class="form-check-input" id="modifier" data-impact="MODIFIER" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
-											            	</div>
-									            		</div>
-									            		-->
-									            		<!--  
-									            		<div class="row mt-1" style="float:right;">
-									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:15px;" onclick="filter_SnpEff();">표지</button>
-											            	</div>
-									            		</div>
-									            		-->
 									            		<div class="row col-12 pl-0" style="margin-left:0px;">
 															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:760px; width:100%;"></div>
 														</div>
@@ -330,13 +307,6 @@
 											            		<button type="button" class="btn btn-light float-right" style="margin-right:30px;" onclick="GWAS_mark();">표지</button>
 											            	</div>
 														</div>
-														<!--  
-									            		<div class="row mt-1">
-									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light float-right" style="margin-right:29px;" onclick="filter_SnpEff();">표지</button>
-											            	</div>
-									            		</div>
-									            		-->
 														<div class="row mt-1">
 															<div class="col-12">
 																<ul id='GWAS_button_list' class='nav nav-pills nav-active-bordered-pill'>
@@ -663,14 +633,20 @@
 		console.timeEnd("IIFE")
 	})();
 	
+
+	
 	document.addEventListener('DOMContentLoaded', async function() {
 		
-		await addChromosomeInfo();
-  		document.getElementById("Chr_select").dispatchEvent(new Event("change"));
+		await Promise.all([addChromosomeInfo(), show_Selection_Grid()]);
+		document.getElementById("Chr_select").dispatchEvent(new Event("change"));
 		
+		//await addChromosomeInfo();
+  		//document.getElementById("Chr_select").dispatchEvent(new Event("change"));
   		
+  		//await show_Selection_Grid();
 		getGwasSelectList();
 		getUpgmaSelectList();
+		
 		
 	})
 	
@@ -887,8 +863,9 @@
 		const chr = selectedOption('Chr_select').dataset.chr;
 		const position = selectedDiv.dataset.position;
 		
-		const baseURL = window.location.href;
-		const url = new URL('./vb_features_getGffData.jsp', baseURL);
+		//const baseURL = window.location.href;
+		//const url = new URL('./vb_features_getGffData.jsp', baseURL);
+		const url_string = './vb_features_getGffData.jsp'
 		
 		const map_params = new Map();
 		map_params.set("jobid", linkedJobid);
@@ -898,7 +875,7 @@
 		map_params.set("gff", gff);
 		
 		//fetch(url);
-		const gene_model = await getFetchData(url, map_params);
+		const gene_model = await getFetchData(url_string, map_params);
 		
 		console.log("getGeneModel data : ", gene_model);
 		
@@ -1384,7 +1361,6 @@
 	}
 	
 	function show_SnpEff_Grid() {
-		//const resultpath = '/ipet_digitalbreed/result/database/genotype_statistics/';
 		
 		console.time("SnpEff_Grid");
 		
@@ -1399,7 +1375,16 @@
 			SnpEff_gridOptions.api.setRowData(data);
 			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
 			
-			
+			SelectionList_gridOptions.api.forEachNode((selection_node) => {
+				const selection_row_id = selection_node.id;
+				const snpEff_node = SnpEff_gridOptions.api.getRowNode(selection_row_id);
+				
+				//console.log("snpEff_node : " , snpEff_node);
+				if(snpEff_node) {
+					const selection_snpEff_flag = selection_node.data.snpeff
+					snpEff_node.setDataValue('selection', selection_snpEff_flag);
+				}
+			})
 		})
 		.catch((error) => {
 			console.log(error);
@@ -1484,14 +1469,8 @@
 		
 		
 		
-		/*
-		const impact = SnpEff_gridOptions.api.getFilterInstance('impact');
-		impact.setModel({values: ['HIGH', 'LOW']});
-		impact.applyModel();
-		*/
 		SnpEff_gridOptions.api.setFilterModel(impactFilter);
 		SnpEff_gridOptions.api.onFilterChanged();
-		//SnpEff_gridOptions.api.deselectAll();
 		
 		// filtered-out이면 deselect
 		SnpEff_gridOptions.api.forEachNode((node) => {
@@ -1566,22 +1545,11 @@
    	//function show_GWAS_Grid (HTML_element) {
    	function show_GWAS_Grid() {
 		
-   		//console.log("onchange");
-   		/*
-   		console.log(HTML_element);
-		
-		const model = HTML_element.dataset.model;
-		const phenotype = HTML_element.options[HTML_element.selectedIndex].dataset.phenotype;
-   		const jobid = HTML_element.dataset.jobid;
-		*/
 		const model = document.querySelector('#GWAS_button_list .nav-link.active')?.dataset?.model;
 		const select_phenotype = document.getElementById(`GWAS_select_\${model}`);
 		const phenotype = select_phenotype?.options[select_phenotype.selectedIndex]?.dataset?.phenotype;
 		const jobid = select_phenotype?.dataset?.jobid;
 		
-		//console.log(model);
-		//console.log(phenotype);
-		//console.log(jobid); 
    		
 		if(!model || !phenotype || !jobid) {
 			//console.log("gwas 영역 생성안됨");
@@ -1606,6 +1574,20 @@
 			GWAS_gridTable.style.display = 'block';
 			
 			GWAS_gridOptions_model[model].columnApi.autoSizeAllColumns();
+			
+			
+			
+			SelectionList_gridOptions.api.forEachNode((selection_node) => {
+				const selection_row_id = selection_node.id;
+				const GWAS_node = GWAS_gridOptions_model[model].api.getRowNode(selection_row_id);
+				
+				//console.log("snpEff_node : " , snpEff_node);
+				if(GWAS_node) {
+					const selection_gwas_flag = selection_node.data.gwas
+					GWAS_node.setDataValue('selection', selection_gwas_flag);
+				}
+			})
+			
 			
 		})
 		.catch((error) => {
@@ -1674,6 +1656,22 @@
    	function clear_mark_all() {
    		clear_mark_snpEff();
    		clear_mark_GWAS();
+   	}
+   	
+   	
+   	async function show_Selection_Grid() {
+		//console.log("selection grid");   
+		
+		const url_string = './vb_features_grid_Selection.jsp';
+		
+		const map_params = new Map();
+		//map_params.set("chr", selectedOption("Chr_select").dataset.chr);
+		map_params.set("jobid", linkedJobid);
+		
+		const data = await getFetchData(url_string,map_params);
+		
+		console.log("selection : ", data);
+		SelectionList_gridOptions.api.setRowData(data);
    	}
    	
    	
@@ -1817,10 +1815,6 @@
    		
    		console.log(updatedNodesData);
    		
-   		/*
-   		VariantBrowser_gridOptions.api.applyTransaction({remove: updatedNodesData});
-   		VariantBrowser_gridOptions.api.applyTransaction({add: updatedNodesData});
-   		*/
    		VariantBrowser_gridOptions.api.setRowData(updatedNodesData);
    		console.timeEnd("sort_vb_by_UPGMA");
    	}
@@ -1848,7 +1842,10 @@
 				
    	}
    	
-	async function getFetchData(url, map_params) {
+	async function getFetchData(url_string, map_params) {
+		
+		const baseURL = window.location.href;
+		const url = new URL(url_string, baseURL);
 		
 		if(map_params.size !== 0) {
 			for(const [key, value] of map_params) {

@@ -40,11 +40,11 @@
 		//if( lineArr[1].equals(chr) ) {
 		if( lineArr[1].toUpperCase().equals(chr.toUpperCase()) ) {
 			JsonObject jsonObject = new JsonObject();
-			//jsonObject.addProperty("row_id", i);
+			jsonObject.addProperty("row_id", lineArr[1]+ "_" +lineArr[2]);
 			jsonObject.addProperty("selection", false);
 			jsonObject.addProperty("SNP", lineArr[0]);
-			jsonObject.addProperty("Chr", lineArr[1]);
-			jsonObject.addProperty("Pos", lineArr[2]);
+			jsonObject.addProperty("chr", lineArr[1]);
+			jsonObject.addProperty("pos", lineArr[2]);
 			jsonObject.addProperty("P-value", lineArr[3]);
 			jsonObject.addProperty("MAF", lineArr[4]);
 			jsonObject.addProperty("Nobs", lineArr[5]);

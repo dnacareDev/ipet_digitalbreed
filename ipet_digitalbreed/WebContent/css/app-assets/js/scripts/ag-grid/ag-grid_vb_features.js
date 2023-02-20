@@ -109,9 +109,8 @@
 	
 	var SnpEff_columnDefs = [
 		{
-			headerName: "row_id(select link)",
+			//headerName: "row_id(select link)",
 			field: "row_id",
-			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
 			hide: true,
 	    },
 		{ 
@@ -201,8 +200,8 @@
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
-		//getRowId: (params) => params.data.row_id,
-		//getRowId: (params) => params.data.row_id,
+		getRowId: (params) => params.data.row_id,
+		//getRowNodeId: (params) => SnpEff_gridOptions.api.getValue('row_id', params),
 		onCellClicked: (params) => {
 			//console.log(params);
 			
@@ -220,17 +219,38 @@
 				rowNode.setDataValue('selection', !selection_flag);
 				
 				// selection 탭에 추가
-				const selection_node = SelectionList_gridOptions.api.getRowNode(params.node.data.pos);
-				//const selection_row_id = params.node.data.chr + "_" + params.node.data.pos;
-				//const selection_node = SelectionList_gridOptions.api.getRowNode(selection_row_id);
+				const selection_row_id = params.node.data.row_id;
+				const selection_node = SelectionList_gridOptions.api.getRowNode(selection_row_id);
 				if(!selection_node) {
-					SelectionList_gridOptions.api.applyTransaction({add: [{'row_id':selection_node, 'chr':params.node.data.chr, 'pos':params.node.data.pos, 'snpEff':true, 'gwas':false, 'markerCandidate':false}]})
+					// db에 추가
+					const url_string = './vb_features_transaction_selection.jsp';
+					
+					const map_params = new Map();
+					map_params.set('command', 'add');
+					map_params.set('jobid', linkedJobid);
+					map_params.set("chr", selectedOption("Chr_select").dataset.chr);
+					map_params.set("pos", params.node.data.pos);
+					//map_params.set('vb_selection_id', params.data.vb_selection_id);
+					map_params.set('column', 'snpeff');
+					map_params.set('value', params.value);
+					
+					getFetchData(url_string, map_params);
+					
+					SelectionList_gridOptions.api.applyTransaction({add: [{'row_id':selection_row_id, 'chr':params.node.data.chr, 'pos':params.node.data.pos, 'snpeff':true, 'gwas':false, 'marker_candidate':false}]})
+					/*
+					(async() => { 
+						await getFetchData(url_string, map_params); 
+						SelectionList_gridOptions.api.refreshCells(); 
+					})();
+					 */
+					
 				} else {
-					selection_node.setDataValue('snpEff', !selection_flag);
-					if(!selection_node.data.snpEff && !selection_node.data.gwas && !selection_node.data.markerCandidate) {
+					selection_node.setDataValue('snpeff', !selection_flag);
+					/*
+					if(!selection_node.data.snpeff && !selection_node.data.gwas && !selection_node.data.marker_candidate) {
 						SelectionList_gridOptions.api.applyTransaction({remove: [selection_node.data]});
-						//SelectionList_gridOptions.api.applyTransaction({remove: [{'row_id':selection_row_id}]});
 					}
+					*/
 				}
 				
 	        }
@@ -247,11 +267,6 @@
 				document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
 			}
 		},
-		/*
-		onSelectionChanged: (params) => {
-			const selectedRows = SnpEff_gridOptions.api.getSelectedNodes();
-		}
-		*/
 	};
 	
 	var GWAS_columnDefs = [
@@ -259,7 +274,7 @@
 			headerName: "row_id(select link)",
 			field: "row_id",
 			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
-			hide: true,
+			//hide: true,
 	    },
 		{ 
 			headerName: "",
@@ -284,13 +299,15 @@
 			},
 		},
 	    { 
-			field: "Chr", 
+			headerName: "Chr",
+			field: "chr",
 			filter: true, 
 			width: 240, 
 			//minWidth: 160, 
 		},
 	    { 
-			field: "Pos",
+			headerName: "Pos",
+			field: "pos",
 			filter: 'agNumberColumnFilter', 
 			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 			cellClass: "",
@@ -340,6 +357,7 @@
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
+		getRowId: (params) => params.data.row_id,
 		onCellClicked: (params) => {
 			//console.log(params);
 			
@@ -351,40 +369,48 @@
 				const flag = nodeSelected(params.node.selected);
 				params.node.setSelected(flag);
 				
-				
-				const model_name = document.querySelector(`#GWAS_button_list .active`).dataset.model;
-				console.log(model_name);
-				
-				const GWAS_gridOptions = GWAS_gridOptions_model[model_name];
-				
+				// 즐겨찾기 on/off | GWAS에서는 모든 모델, phenotype의 selection을 공유함
 				/*
-				const rowIndex = params.node.rowIndex;
-				if(!params.value) {
-					GWAS_gridOptions.api.getRowNode(rowIndex).data.selection = true;
-				} else {
-					GWAS_gridOptions.api.getRowNode(rowIndex).data.selection = false;
+				const selection_flag = params.data.selection;
+				const rowNode = GWAS_gridOptions.api.getRowNode(params.node.id);
+				rowNode.setDataValue('selection', !selection_flag);
+				*/
+				const selection_flag = params.data.selection;
+				for(const model in GWAS_gridOptions_model) {
+					const rowNode = GWAS_gridOptions_model[model].api.getRowNode(params.node.id);
+					if(rowNode) {
+						rowNode.setDataValue('selection', !selection_flag);
+					}
 				}
 				
-				GWAS_gridOptions.api.refreshCells(params);
-				*/
-				
-				// 즐겨찾기 on/off
-				const rowNode = GWAS_gridOptions.api.getRowNode(params.node.id);
-				const selection_flag = params.data.selection;
-				rowNode.setDataValue('selection', !selection_flag);
-				
 				// selection 탭에 추가
-				const selection_node = SelectionList_gridOptions.api.getRowNode(params.node.data.pos);
-				//const selection_row_id = params.node.data.chr + "_" + params.node.data.pos;
-				//const selection_node = SelectionList_gridOptions.api.getRowNode(selection_row_id);
+				const selection_row_id = params.node.data.row_id;
+				const selection_node = SelectionList_gridOptions.api.getRowNode(selection_row_id);
 				if(!selection_node) {
-					SelectionList_gridOptions.api.applyTransaction({add: [{'row_id':selection_node, 'chr':params.node.data.chr, 'pos':params.node.data.pos, 'snpEff':false, 'gwas':true, 'markerCandidate':false}]})
+					
+					// db에 추가
+					const url_string = './vb_features_transaction_selection.jsp';
+					
+					const map_params = new Map();
+					map_params.set('command', 'add');
+					map_params.set('jobid', linkedJobid);
+					map_params.set("chr", selectedOption("Chr_select").dataset.chr);
+					map_params.set("pos", params.node.data.pos);
+					//map_params.set('vb_selection_id', params.data.vb_selection_id);
+					map_params.set('column', 'gwas');
+					map_params.set('value', params.value);
+					
+					getFetchData(url_string, map_params);
+					
+					SelectionList_gridOptions.api.applyTransaction({add: [{'row_id':selection_row_id, 'chr':params.node.data.chr, 'pos':params.node.data.pos, 'snpeff':false, 'gwas':true, 'marker_candidate':false}]})
 				} else {
 					selection_node.setDataValue('gwas', !selection_flag);
-					if(!selection_node.data.snpEff && !selection_node.data.gwas && !selection_node.data.markerCandidate) {
+					/*
+					if(!selection_node.data.snpeff && !selection_node.data.gwas && !selection_node.data.marker_candidate) {
 						SelectionList_gridOptions.api.applyTransaction({remove: [selection_node.data]});
 						//SelectionList_gridOptions.api.applyTransaction({remove: [{'row_id':selection_row_id}]});
 					}
+					*/
 				}
 	        }
 			
@@ -431,53 +457,40 @@
 	
 	var Selection_columnDefs = [
 		{
+			field: "vb_selection_id",
+			hide: true,
+		},
+		{
 			headerName: "row_id(select link)",
 			field: "row_id",
-			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
 			hide: true,
 	    },
-		{ 
-			headerName: "",
-			field: "selection", 
-			width: 100,
-			checkboxSelection: true, 
-			headerCheckboxSelectionFilteredOnly: true, 
-			headerCheckboxSelection: true, 
-			suppressMenu: true,
-			/*
-			cellRenderer: (params) => {
-				if(params.value) {
-					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-							</svg>`
-				} else {
-					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bcbcbc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-							</svg>`;
-				}
-			},
-			*/
-		},
 	    { 
 			headerName: "Chr", 
 			field: "chr", 
 			filter: true, 
-			width: 60, 
-			minWidth: 60, 
+			width: 100, 
+			maxWidth: 100, 
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true, 
+			headerCheckboxSelection: true, 
 		},
 	    { 
 			headerName: "Pos", 
 			field: "pos", 
 			filter: 'agNumberColumnFilter', 
+			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 			width: 70, 
 			minWidth: 70, 
+			cellStyle: { color: 'blue', cursor: 'pointer' },
 		},
 	    { 
 			headerName: "SnpEff", 
-			field: "snpEff", 
+			field: "snpeff", 
 			filter: "agTextColumnFilter",
 			width: 80, 
 			minWidth: 80, 
+			cellRenderer: param => flag_SVG(param.value),
 		},
 	    { 
 			headerName: "GWAS", 
@@ -485,13 +498,15 @@
 			filter: 'agNumberColumnFilter', 
 			width: 120, 
 			minWidth: 120, 
+			cellRenderer: param => flag_SVG(param.value),
 		},
 	    { 
 			headerName: "Marker Candidate", 
-			field: "markerCandidate", 
+			field: "marker_candidate", 
 			filter: 'agNumberColumnFilter', 
 			width: 120, 
 			minWidth: 100, 
+			cellRenderer: param => flag_SVG(param.value),
 		},
 	];
 	var SelectionList_gridOptions = {
@@ -500,6 +515,7 @@
 				sortable: true, 
 				resizable: true, 
 				suppressMenu: true, 
+				suppressMovable: true,
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], },
 			columnDefs: Selection_columnDefs, 
@@ -509,13 +525,111 @@
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift", 
 			animateRows: true,  
-			getRowId: (params) => params.data.pos,
-			//getRowId: (params) => params.data.row_id,
-			/*
-			onCellClicked: (params) =>	{
-				console.log(params);
+			getRowId: (params) => params.data.row_id,
+			onCellClicked: (params) => {
+				//console.log(params);
+				const clicked_column = params.column.colId;
+				
+				if (clicked_column === 'chr' ) {
+					return;
+				}
+				
+				if(params.column.colId === 'pos') {
+					const flag = nodeSelected(params.node.selected);
+					params.node.setSelected(flag);
+					
+					const chr_select = document.getElementById('Chr_select')
+					const length = chr_select[chr_select.selectedIndex].dataset.length;
+					
+					const position = params.data.pos;
+					
+					document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+					
+				}
+				
+				function nodeSelected(isSelected) {
+					return !isSelected;
+				}
+				
+				if (clicked_column === 'snpeff' || clicked_column === 'gwas' || clicked_column === 'marker_candidate') {
+					const flag = nodeSelected(params.node.selected);
+					params.node.setSelected(flag);
+					
+					// 즐겨찾기 on/off
+					const row_id = params.node.id;
+					const selection_node = SelectionList_gridOptions.api.getRowNode(row_id);
+					//const selection_flag = params.data.selection;
+					
+					const selection_flag = params.data[params.column.colId];
+					selection_node.setDataValue(clicked_column, !selection_flag);
+					
+					// true,false에 맞춰서 각 grid의 즐겨찾기 추가,해제
+					switch(clicked_column) {
+						case 'snpeff':
+							const snpEff_node = SnpEff_gridOptions.api.getRowNode(row_id);
+							snpEff_node.setDataValue('selection', !selection_flag);
+								
+							break;
+						case 'gwas':
+							
+							for(const model in GWAS_gridOptions_model) {
+								const GWAS_row_node = GWAS_gridOptions_model[model].api.getRowNode(row_id);
+								if(GWAS_row_node) {
+									GWAS_row_node.setDataValue('selection', !selection_flag);
+								}
+							}
+							
+							break;
+						case 'markercandidate':
+							break;
+					}
+					
+					/*
+					// 전부 false일 경우 data 삭제
+					if(!selection_node.data.snpeff && !selection_node.data.gwas && !selection_node.data.marker_candidate) {
+						//SelectionList_gridOptions.api.applyTransaction({remove: [selection_node.data]});
+						
+						SelectionList_gridOptions.api.applyTransaction({remove: [{'row_id': row_id}]});
+					}
+					*/
+					
+		        }
 			},
-			*/
+			onCellValueChanged: (params) => {
+				console.log(params);
+				
+				const node = params.node;
+				
+				// 전부 false면 delete, 아니면 update
+				const url_string = './vb_features_transaction_selection.jsp';
+				if(!node.data.snpeff && !node.data.gwas && !node.data.marker_candidate) {
+					//SelectionList_gridOptions.api.applyTransaction({remove: [selection_node.data]});
+					
+					// db에서 제거
+					const map_params = new Map();
+					map_params.set('command', 'delete');
+					map_params.set("chr", selectedOption("Chr_select").dataset.chr);
+					map_params.set("pos", params.node.data.pos);
+					map_params.set('jobid', linkedJobid);
+					map_params.set('vb_selection_id', params.data.vb_selection_id);
+					map_params.set('column', params.column.colId);
+					map_params.set('value', params.value);
+					
+					getFetchData(url_string, map_params);
+					
+					SelectionList_gridOptions.api.applyTransaction({remove: [{'row_id': params.node.id}]});
+				} else {
+					const map_params = new Map();
+					map_params.set('command', 'update');
+					map_params.set('jobid', linkedJobid);
+					map_params.set('vb_selection_id', params.data.vb_selection_id);
+					map_params.set('column', params.column.colId);
+					map_params.set('value', params.value);
+					
+					getFetchData(url_string, map_params);
+				}
+				
+			},
 	}
 	
 	var UPGMA_columnDefs = [
@@ -636,7 +750,25 @@
   		*/
 	}
 	
-	
+	function flag_SVG(flag) {
+		if(flag) {
+			return `
+					<svg width="24" height="28" viewBox="0 0 24 28">
+				        <circle cx="12" cy="12" r="10" stroke="#b672f5" stroke-width="2" fill="none"></circle>
+				        <polyline points="7,11 11,15 17,8"
+			  				style="fill:none;stroke:#b672f5;stroke-width:2" />
+				    </svg>
+					`;
+		} else {
+			return `
+					<svg width="24" height="28" viewBox="0 0 24 28">
+				        <circle cx="12" cy="12" r="11" stroke="#bcbcbc" stroke-width="2" fill="none"></circle>
+				        <line x1="8" y1="8" x2="16" y2="16" style="stroke:#bcbcbc;stroke-width:2" />
+				        <line x1="8" y1="16" x2="16" y2="8" style="stroke:#bcbcbc;stroke-width:2" />
+				    </svg>
+					`;
+		}
+	}
 	
 	
 	
@@ -672,14 +804,14 @@
   		//const SelectionList_rowData = [ { "selection": true, "Chr": 1, "Pos": 40326, "SnpEff": "O", "GWAS": "X", "Marker Candidate": "X" } ];
   		const SelectionList_rowData = [];
   		SelectionList_gridOptions.api.setRowData(SelectionList_rowData)
-  		SelectionList_gridOptions.columnApi.autoSizeAllColumns(false);
+  		SelectionList_gridOptions.columnApi.autoSizeAllColumns(true);
   		
   		
   		const UPGMA_gridTable = document.getElementById("UPGMA_Grid");
   		const UPGMA_Grid = new agGrid.Grid(UPGMA_gridTable, UPGMA_gridOptions);
   		//const UPGMA_rowData = [ { "ID": "sample9", "Population": "", "Similarity": "",} ];
-  		const UPGMA_rowData = [];
-  		UPGMA_gridOptions.api.setRowData(UPGMA_rowData)
+  		//const UPGMA_rowData = [];
+  		//UPGMA_gridOptions.api.setRowData(UPGMA_rowData)
   		
   		const STRUCTURE_gridTable = document.getElementById("STRUCTURE_Grid");
   		const STRUCTURE_Grid = new agGrid.Grid(STRUCTURE_gridTable, STRUCTURE_gridOptions);

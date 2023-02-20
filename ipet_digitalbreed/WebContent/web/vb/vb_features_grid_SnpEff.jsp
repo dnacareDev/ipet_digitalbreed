@@ -36,7 +36,7 @@
 		
 		if( lineArr[0].equals(chr) ) {
 			JsonObject jsonObject = new JsonObject();
-			//jsonObject.addProperty("row_id", i);
+			jsonObject.addProperty("row_id", lineArr[0]+ "_" +lineArr[1]);
 			jsonObject.addProperty("selection", false);
 			jsonObject.addProperty("chr", lineArr[0]);
 			jsonObject.addProperty("pos", lineArr[1]);

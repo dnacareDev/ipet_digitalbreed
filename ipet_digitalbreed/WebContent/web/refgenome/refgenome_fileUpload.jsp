@@ -63,7 +63,7 @@
 				File dir = new File(rootPath+fsl+savePath+fsl+name);
 				
 				// name == fasta || gff || cds || protein
-				jsonObj.addProperty(name+"FileName", fileName);
+				jsonObj.addProperty(name+"_filename", fileName);
 				
 				//System.out.println("dir: "+ dir);
 				
@@ -86,7 +86,8 @@
 	
 	System.out.println(jsonObj);
 	
-	String sql="insert into reference_genome_t(crop_name, refgenome, gff, author, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +permissionUid+ "', now());";
+	//String sql="insert into reference_genome_t(crop_name, refgenome, gff, author, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +permissionUid+ "', now());";
+	String sql="insert into reference_genome_t(crop_name, refgenome, gff, author, fasta_filename, gff_filename, cds_filename, protein_filename, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +jsonObj.get("fasta_filename").getAsString()+ "', '" +jsonObj.get("gff_filename").getAsString() +"', '" +jsonObj.get("cds_filename").getAsString()+ "', '" +jsonObj.get("protein_filename").getAsString()+ "', '" +permissionUid+ "', now());";
 	System.out.println(sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(sql);
