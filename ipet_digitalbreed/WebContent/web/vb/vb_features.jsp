@@ -241,14 +241,14 @@
 												</div>
 											</div>
 	                                	</div>
-	                                	<div class="row" style="margin-top: 0px; margin-bottom:30px;">
+	                                	<div class="row" style="margin-top: 0px; margin-bottom:0px;">
 	                                		<fieldset class="border mt-1 pt-2 pl-2 pr-2 pb-1" style="width:96%; margin-left:23px; margin-right:23px;">
 	                                			<legend  class="w-auto">Reference</legend>
 		                                		<div id="chromosomeDiv"></div>
 	                                		</fieldset>
 	                                	</div>
 	                                	<div class="row">
-	                                		<fieldset class="border mt-1 pt-2 pl-2 pr-2" style="width:96%; margin-left:23px; margin-right:23px; padding-bottom:130px;">
+	                                		<fieldset class="border mt-1 pt-2 pl-2 pr-2" style="width:96%; margin-left:23px; margin-right:23px; padding-bottom:85px;">
 	                                			<legend  class="w-auto">Gene Model</legend>
 		                                		<div id="chromosomeDetailedDiv"></div>
 	                                		</fieldset>

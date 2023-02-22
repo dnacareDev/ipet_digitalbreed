@@ -448,7 +448,7 @@ body {
     	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
     	for(let i=0 ; i<data.length ; i++) {
 			// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
+			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
 		}
     }
     
@@ -457,8 +457,8 @@ body {
 		$("#iframeLoading").modal('hide');
 	}
    	
-	function saveToVcf(filename, jobid) { 
-		if(!confirm("결과를 Gynotype DB에 저장하시겠습니까?")) {
+	function saveToVcf(filename, jobid, refgenome, refgenome_id) { 
+		if(!confirm("결과를 Genotype DB에 저장하시겠습니까?")) {
 			return;
 		}
 		
@@ -468,9 +468,10 @@ body {
 	   	//console.log(variety_id);
 	   	//console.log(filename);
 	   	//console.log(jobid);
+	   	console.log("saveToVcf refgenome :", refgenome );
 	   	
 	   	
-	   	fetch(`../../database/fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&variety_id=\${variety_id}`);
+	   	fetch(`../../database/fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&variety_id=\${variety_id}&refgenome=\${refgenome}&refgenome_id=\${refgenome_id}`);
 	   	
 	   	$("#iframeLoading").modal('show');
 	   	
@@ -518,6 +519,7 @@ body {
     	const select_vcf = document.getElementById('VcfSelect');
     	const jobid_vcf = select_vcf.options[select_vcf.selectedIndex].dataset.jobid;
     	const file_name = select_vcf.options[select_vcf.selectedIndex].dataset.filename;
+    	const refgenome_id = select_vcf.options[select_vcf.selectedIndex].dataset.refgenome_id;
     	
     	const jobid_qf = await fetch('../../getJobid.jsp')
     					.then((response) => response.text());
@@ -605,7 +607,8 @@ body {
     		data: {
     			"variety_id": variety_id,
     			"jobid_qf": jobid_qf,
-    			"file_name": file_name
+    			"file_name": file_name,
+    			"refgenome_id": refgenome_id,
     		},
     		sucess: function(result) {
     		}

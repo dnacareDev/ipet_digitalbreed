@@ -13,6 +13,7 @@
 	String varietyid = request.getParameter("variety_id");
 	String jobid_qf = request.getParameter("jobid_qf");
 	String filename = request.getParameter("file_name");
+	String refgenome_id = request.getParameter("refgenome_id");
 	
 	System.out.println("=========================================");
 	System.out.println("permissionUid : " + permissionUid);
@@ -45,8 +46,8 @@
 	}
 	
 	
-	String sql = "insert into genotype_filter_t (cropid, varietyid, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, creuser, cre_dt) ";
-	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', 'quality', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_qf+"','" +permissionUid+ "',now());";
+	String sql = "insert into genotype_filter_t (cropid, varietyid, refgenome_id, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, creuser, cre_dt) ";
+	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', " +refgenome_id+ ", 0, '"+filename+"', 'quality', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_qf+"','" +permissionUid+ "',now());";
 
 	
 	System.out.println("sql : " + sql);

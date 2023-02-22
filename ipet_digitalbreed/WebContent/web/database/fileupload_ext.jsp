@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="com.innorix.transfer.InnorixUpload" %>
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*,java.nio.file.*"%>
+<%@ page import="com.google.gson.JsonObject" %>
 <%@ page import="ipet_digitalbreed.*"%>    
 
 <%
@@ -28,7 +29,11 @@
 	String _orig_filename = request.getParameter("vcf_filename");
 	String comment = null;
 	String variety_id = request.getParameter("variety_id");
+	String refgenome = request.getParameter("refgenome");
+	String refgenome_id = request.getParameter("refgenome_id");
 
+	System.out.println("refgenome : " + refgenome);
+	
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -169,8 +174,8 @@
     		ipetdigitalconndb.conn.close();
     	}
 		*/
-		
-		String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
+		String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refgenome+ "', refgenome_id=" +refgenome_id+ ", samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
+		//String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
 		System.out.println(updateVcfinfo_sql);
 		
 		try{
@@ -179,11 +184,12 @@
 	   		System.out.println(e);
 	   		ipetdigitalconndb.stmt.close();
 	   		ipetdigitalconndb.conn.close();
-	   	}finally { 
+	   	}/*finally { 
 	   		ipetdigitalconndb.stmt.close();
 	   		ipetdigitalconndb.conn.close();
-	   	}
+	   	}*/
 		
+		/*
 		// CSV => JSON파일 생성
 		System.out.println("========CSV to Json start========");
 		CsvToJson csvToJson = new CsvToJson();
@@ -191,7 +197,6 @@
 		System.out.println("========CSV to Json end========");
 		
 
-		
 		// CSV => 행렬변환된 CSV파일 생성
 		String csv_transpose = "Rscript " +script_path+ "genotype_sequence_bakground.R " +outputPath+" "+ jobid;
 		
@@ -199,8 +204,292 @@
 		System.out.println("csv_transpose : " + csv_transpose);
 		runanalysistools.execute(csv_transpose, "cmd");
 		System.out.println("========CSV transpose end========");
+		*/
 		
+		// CSV => JSON 생성 & DB저장
+		System.out.println("========CSV to Json & excuteUpdate start========");
+		//CsvToJson csvToJson = new CsvToJson();
+		//csvToJson.getJson(outputPath, jobid, permissionUid);
+		makeJsonFromCsv(outputPath, jobid, permissionUid);
+		System.out.println("========CSV to Json & excuteUpdate end========"); 
+		
+		System.out.println("========save chromosome list start========");
+		if(refgenome.equals("-")) {
+			System.out.println("Non-referenece. make chromosome list stopped");
+		} else {
+			makeChrDataCsv(rootFolder, jobid, refgenome);
+		}
+		System.out.println("========save chromosome list end========");
+
+		String updateVcfinfo2_sql="update vcfdata_info_t set status=2 where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
+		System.out.println(updateVcfinfo_sql);
+		
+		try{
+			ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
+		}catch(Exception e){
+	   		System.out.println(e);
+	   	}finally { 
+	   		ipetdigitalconndb.stmt.close();
+	   		ipetdigitalconndb.conn.close();
+	   	}
 
 		
 //}
+%>
+
+
+
+<%! 
+	private void makeJsonFromCsv(String outputPath, String jobid, String permissionUid) throws SQLException {
+		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	
+		File excelFile = new File(outputPath+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
+		
+		System.out.println("file read and write start");
+		
+		try {
+			
+			BufferedReader br = new BufferedReader(new FileReader(excelFile), 524288);				// buffer 512kb
+			
+			String line = br.readLine();		// 첫줄
+			
+			List<String> columns = Arrays.asList(line.split(","));;
+			
+			
+			System.out.println("column size : " + columns.size());
+			
+			
+			//String insertSqlColumnPart = "insert into vcfviewer_t (jobid, row_index, contents, creuser) values ('";
+			String insertSqlColumnPart = "insert into vcfviewer_t (chr, position, jobid, row_index, contents, creuser) values ('";
+			StringBuilder insertSqlValuesPart = new StringBuilder();
+			
+			int count = 0;
+			line = br.readLine();		// 첫줄 스킵용
+			while (line != null) {
+				
+				count++;
+	
+				JsonObject obj = new JsonObject(); 
+	            List<String> chunks = Arrays.asList(line.split(","));
+	            //System.out.println(chunks.size());
+	            /*
+	            for(int i = -2; i < columns.size(); i++) {
+	            	if(i==-2) {
+	            		String chr = chunks.get(0).substring(0, chunks.get(0).lastIndexOf("_"));
+	            		//obj.addProperty("chr", chr);
+	            		insertSqlValuesPart.append(chr + "', ");
+	            	} else if(i==-1) {
+	            		String position = chunks.get(0).substring(chunks.get(0).lastIndexOf("_")+1, chunks.get(0).length());
+	            		//obj.addProperty("position", position);
+	            		insertSqlValuesPart.append(position + ", '");
+	            	} else {
+	            		obj.addProperty(columns.get(i), chunks.get(i));
+	            	}
+	            }
+	            */
+	            for(int i = 0; i < columns.size(); i++) {
+		        	if(i==0) {
+		        		String chr = chunks.get(0);
+		        		//obj.addProperty("chr", chr);
+		        		insertSqlValuesPart.append(chr + "', ");
+		        	} else if(i==1) {
+		        		String position = chunks.get(1);
+		        		//obj.addProperty("position", position);
+		        		insertSqlValuesPart.append(position + ", '");
+		        	} else {
+		        		obj.addProperty(columns.get(i), chunks.get(i));
+		        	}
+		        }
+	            //System.out.println(obj);
+	            
+	            
+	            // 파일 내용 insert
+	            insertSqlValuesPart.append(jobid+ "'," +count+ ",'" +obj.toString()+ "','" +permissionUid+ "')");
+	            
+	            line = br.readLine();
+	            if(line == null || count % 1000 == 0) {
+	            	System.out.println("1000 inserts executed & count passed - " + count);
+	            	//System.out.println(insertSqlColumnPart+insertSqlValuesPart);
+	            	//System.out.println("String length - " + (insertSqlColumnPart+insertSqlValuesPart).length() );
+	            	ipetdigitalconndb.stmt.executeUpdate(insertSqlColumnPart+insertSqlValuesPart);
+	            	//insertSqlValuesPart = "";
+	            	insertSqlValuesPart.setLength(0);
+	            } else {
+	            	//insertSqlValuesPart += ",('";
+	            	insertSqlValuesPart.append(",('");
+	            }
+	            
+	            
+			}
+			
+			br.close();
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+		} finally {
+			ipetdigitalconndb.stmt.close();
+			ipetdigitalconndb.conn.close();
+		}
+	}
+%>
+
+<%!
+	private void makeChrDataCsv(String rootFolder, String jobid, String refgenome) throws IOException, SQLException {
+		String path = rootFolder+"result/database/genotype_statistics/";
+		
+		//File fileRead = new File(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
+		File fileRead2 = new File(rootFolder+"uploads/reference_database/"+refgenome+"/len/len.csv");
+		File fileWrite = new File(path+"/"+jobid+"/"+jobid+"_chr_row_index_data.csv");
+		
+		System.out.println(rootFolder+"uploads/reference_database/"+refgenome+"/len/len.csv");
+		
+		//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead), "UTF-8"));
+		BufferedReader br2 = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead2), "UTF-8"));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileWrite), "UTF-8"));
+		
+		bw.write("chr,vcfId_at_firstRow,row_count,length");
+		bw.newLine();
+		
+		br2.readLine();
+		String line = br2.readLine();
+		
+		for(int i=0 ; true ; i++) {
+			//System.out.println(line);
+			
+			String[] line_arr = line.split(",");
+			String chr = line_arr[0];
+			String len = line_arr[1];
+			
+			String vcf_id = getVcfId(chr, jobid);
+			String row_count = getChrCount(chr, jobid);
+			
+			System.out.println(chr + "," + vcf_id + "," + row_count + "," + len);
+			bw.write(chr + "," + vcf_id + "," + row_count + "," + len);
+			if((line=br2.readLine()) != null) {
+				bw.newLine();
+			} else {
+				break;
+			}
+		}
+		
+		br2.close();
+		
+		bw.flush();
+		bw.close();
+		
+		/*
+		List<List<String>> chrList = new ArrayList<>();
+		
+		br.readLine();
+		String line = br.readLine();
+		
+		for(int i=1, chrListCount=0 ; true ; i++) {
+			//System.out.println(line);
+			String chr = line.substring(0, line.indexOf(","));
+			
+			if(i==1) {
+				String vcf_id = getVcfId(chr, jobid);
+
+				chrList.add( Arrays.asList(chr, vcf_id, "") );
+				bw.write( chr + "," + vcf_id + ",");
+				
+				System.out.println("chr : " + chr + " & vcf_id : " + vcf_id);
+				
+			}
+			
+			//System.out.println(chr);
+			if( !(chr.equals( chrList.get(chrListCount).get(0) )) ) {
+				
+				
+				if(chrListCount == 0) {
+					chrList.get(chrListCount).set(2, String.valueOf(i-1));
+					bw.write(String.valueOf(i-1));
+				} else {
+					chrList.get(chrListCount).set(2, String.valueOf(i));
+					bw.write(String.valueOf(i));
+				}
+				
+				chrListCount++;
+				bw.newLine();
+				
+				i=0;
+				//chrList.add( Arrays.asList(line.substring(0, line.indexOf("_")), String.valueOf(i), "") );
+			}
+			
+			
+			if( (line = br.readLine()) == null ) {
+				chrList.get(chrListCount).set(2, String.valueOf(i+1));
+				bw.write(String.valueOf(i+1));
+				break;
+			}
+		}
+		//System.out.println(chrList);
+		//System.out.println("end");
+		
+		br.close();
+		
+		bw.flush();
+		bw.close();
+		*/
+	}
+%>
+
+<%! 
+private String  getVcfId(String chr, String jobid) throws SQLException {
+	
+	
+	
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	try{
+		String sql = "select vcf_id from vcfviewer_t where chr='" +chr+ "' and jobid='"+jobid+"' limit 1;";
+		//System.out.println(sql);
+		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+		
+		ipetdigitalconndb.rs.next();
+		String vcf_id = ipetdigitalconndb.rs.getString("vcf_id");
+		//System.out.println(vcf_id);
+		return vcf_id;
+		
+	}catch(Exception e){
+		System.out.println("getVcfId error");
+   		System.out.println(e);
+		return "1";
+   	}finally { 
+   		ipetdigitalconndb.stmt.close();
+   		ipetdigitalconndb.conn.close();
+   	}
+
+} 
+%>
+
+<%! 
+private String getChrCount(String chr, String jobid) throws SQLException {
+	
+	
+	
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	try{
+		String sql = "select count(*) as count from vcfviewer_t where chr='" +chr+ "' and jobid='"+jobid+"' limit 1;";
+		//System.out.println(sql);
+		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+		
+		ipetdigitalconndb.rs.next();
+		String count = ipetdigitalconndb.rs.getString("count");
+		//System.out.println(vcf_id);
+		return count;
+		
+	}catch(Exception e){
+		System.out.println("getChrCount error");
+   		System.out.println(e);
+		return "1";
+   	}finally { 
+   		ipetdigitalconndb.stmt.close();
+   		ipetdigitalconndb.conn.close();
+   	}
+
+} 
 %>

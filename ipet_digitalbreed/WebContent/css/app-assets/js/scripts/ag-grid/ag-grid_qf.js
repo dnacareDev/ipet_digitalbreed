@@ -115,9 +115,12 @@
 	      width: 150,
 	      minWidth: 80,
 	      cellRenderer: function(params) {
+	    	  
+	    	  console.log(params);
+	    	  
 	    	  switch(params.value) {
 	    	  	case "0":
-	    	  		return `<span style='cursor:pointer;' onclick='saveToVcf("${params.data.filename}", "${params.data.jobid}")'><i class='feather icon-save'></i></span>`;
+	    	  		return `<span style='cursor:pointer;' onclick='const status=${Number(params.data.status)}; if(status==0){return alert("분석 중입니다.");} saveToVcf("${params.data.filename}", "${params.data.jobid}", "${params.data.refgenome}", "${params.data.refgenome_id}")'><i class='feather icon-save'></i></span>`;
 	    	  	case "1":
 	    	  		return `<span style='cursor:pointer;' onclick='moveToVcf("${params.data.jobid}")'><i class='feather icon-link-2'></i></span>`;
 	    	  }
@@ -158,6 +161,14 @@
 	      field: "jobid",
 	      hide: true
 	    },  
+	    {
+		      field: "refgenome_id",
+		      hide: true
+		},
+		{
+		      field: "refgenome",
+		      hide: true
+		},
 		{
 	      headerName: "uploadpath",
 	      field: "uploadpath",
