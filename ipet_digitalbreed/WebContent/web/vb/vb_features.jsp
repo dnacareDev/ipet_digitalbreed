@@ -162,6 +162,16 @@
 		z-index: 2;
 	}
 	
+	.chromosomeDetailedStackDiv[data-position] {
+		background-color: #bcbcbc;
+	}
+	
+	.chromosomeDetailedStackDiv[data-order="1000"] {
+		background-color: red !important;
+		border: red !important;
+		z-index: 3;
+	}
+	
 	#VariantBrowserGrid {
 		--ag-font-size: 12px !important;
 		--ag-cell-horizontal-padding: 0px !important;
@@ -1115,8 +1125,8 @@
 			chromosomeDiv.append(child);
 		}
 		
-		const stackOrder_500 = document.querySelector(`.chromosomeDetailedStackDiv[data-order="1000"]`); 
-		stackOrder_500.style.backgroundColor = "red";
+		//const stackOrder_500 = document.querySelector(`.chromosomeDetailedStackDiv[data-order="1000"]`); 
+		//stackOrder_500.style.backgroundColor = "red";
 		
 	}
 	
@@ -1127,9 +1137,21 @@
 		// range : position-50k ~ position+50k => 100k
 		
 		const gene_model_position_arr = chr_orders_arr.filter((item) => position-50000 < item.position && item.position<position+50000 )
+		const gene_model_order_arr = new Array();
 		
 		for(let i=0 ; i<gene_model_position_arr.length ; i++) {
-			console.log("order_arr : ", parseInt(((gene_model_position_arr[i].position - position) / 50) + 1000) );
+			const selected_order = parseInt(((gene_model_position_arr[i].position - position) / 50) + 1000);
+			console.log("order_arr : ", selected_order );
+			gene_model_order_arr.push(selected_order)
+			//console.log("index_arr : ", gene_model_position_arr[i].index);
+		}
+		
+		document.querySelectorAll(`.chromosomeDetailedStackDiv[data-position]`).forEach((node) => {
+			delete node.dataset.position;
+		});
+		
+		for(let i=0 ; i<gene_model_order_arr.length ; i++) {
+			document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).dataset.position = gene_model_position_arr[i].position;
 		}
 		
 		//debugger;
@@ -1176,7 +1198,8 @@
 			
 			//console.log("mRNA_id : ", mRNA_id);
 			
-			const selected_position = Number(document.querySelector(`.chromosomeStackDiv[data-selected='true']`).dataset.position);
+			//const selected_position = Number(document.querySelector(`.chromosomeStackDiv[data-selected='true']`).dataset.position);
+			const selected_position = position;
 			
 			const mRNA_start = Number(gene_model['mRNA'][i]['start']);
 			const mRNA_end = Number(gene_model['mRNA'][i]['end']);
