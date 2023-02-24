@@ -53,8 +53,9 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/aggrid.css">
-    <!--  
     <link rel="stylesheet" type="text/css" href="../../css/index_assets/css/icons.min.css">
+    <!--  
+    <link rel="stylesheet" type="text/css" href="../../css/index-assets/fonts/remixicon.woff2">
     -->
     <!-- END: Page CSS-->
 </head>
@@ -106,11 +107,32 @@
 	        <line x1="8" y1="8" x2="16" y2="16" style="stroke:#bcbcbc;stroke-width:2" />
 	        <line x1="8" y1="16" x2="16" y2="8" style="stroke:#bcbcbc;stroke-width:2" />
 	    </svg>
+	    
 		<div id="test">
-			<!--  
-			<i class="ri-home-line"></i> or <i class="ri-home-fill"></i>
-			--> 
+			<i class="mdi mdi-clipboard-text-search-outline"></i>
 		</div>
+		
+		<svg width="100" height="600"
+			viewBox="0 0 100 600" 
+			xmlns="http://www.w3.org/2000/svg"
+			xmlns:svg="http://www.w3.org/2000/svg">
+		   		<path
+					style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+					d="m 3.0536216,1.3147886 v 3.047842 h 4.360107 v -3.047842 z"
+					/>
+		   		<path
+					style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+					d="m 9.4032916,1.3147886 v 3.047842 h 1.9895634 v -3.047842 z"
+					/>
+		   		<path
+					style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
+					d="m 19.097122,1.3147886 v 3.047842 h 3.428822 v -3.047842 z"
+					/>
+		   		<path
+					style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.0026457px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+					d="M 22.356619,2.5847226 H 2.6594126 v 0.253987 H 22.356619 Z M 3.0112906,1.6534376 0.89473358,2.7117166 3.0112906,3.7699946 Z"
+					/>
+		</svg>
 	</div>
 
 	<!-- BEGIN: Vendor JS-->
@@ -136,10 +158,10 @@
 
 <script type="text/javascript">
 	
+	/*
 	const selectedDiv = document.getElementById('test');
 	
 	const xmlns = "http://www.w3.org/2000/svg";
-	
 	const svg = document.createElementNS(xmlns, "svg");
     svg.setAttribute('style', `border:1px solid black; position: absolute; top: 37px;`);
     svg.setAttribute('width', '20');
@@ -154,6 +176,7 @@
     svg.appendChild(line);
     
 	selectedDiv.append(svg);
+	*/
 </script>
 </body>
 </html>

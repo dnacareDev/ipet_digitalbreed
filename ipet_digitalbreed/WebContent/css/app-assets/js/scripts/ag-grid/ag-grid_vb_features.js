@@ -274,7 +274,7 @@
 			headerName: "row_id(select link)",
 			field: "row_id",
 			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
-			//hide: true,
+			hide: true,
 	    },
 		{ 
 			headerName: "",
@@ -414,14 +414,14 @@
 				}
 	        }
 			
-			if(params.column.colId === 'Pos') {
+			if(params.column.colId === 'pos') {
 				const flag = nodeSelected(params.node.selected);
 				params.node.setSelected(flag);
 				
 				const chr_select = document.getElementById('Chr_select')
 				const length = chr_select[chr_select.selectedIndex].dataset.length;
 				
-				const position = params.data['Pos'];
+				const position = params.data['pos'];
 				
 				document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
 			}
@@ -533,13 +533,21 @@
 				if (clicked_column === 'chr' ) {
 					return;
 				}
+
+				
 				
 				if(params.column.colId === 'pos') {
 					const flag = nodeSelected(params.node.selected);
 					params.node.setSelected(flag);
 					
-					const chr_select = document.getElementById('Chr_select')
-					const length = chr_select[chr_select.selectedIndex].dataset.length;
+					//const chr_select = document.getElementById('Chr_select')
+					//const length = chr_select[chr_select.selectedIndex].dataset.length;
+					const chr = selectedOption('Chr_select').dataset.chr;
+					const length = selectedOption('Chr_select').dataset.length;
+					
+					if(params.data.chr != chr) {
+						return;
+					}
 					
 					const position = params.data.pos;
 					
@@ -562,6 +570,15 @@
 					
 					const selection_flag = params.data[params.column.colId];
 					selection_node.setDataValue(clicked_column, !selection_flag);
+					
+					// 다른 염색체일 경우 다른 Grid에 영향X
+					const chr = selectedOption('Chr_select').dataset.chr;
+					
+					if(params.data.chr != chr) {
+						return;
+					}
+					
+					
 					
 					// true,false에 맞춰서 각 grid의 즐겨찾기 추가,해제
 					switch(clicked_column) {
@@ -608,7 +625,8 @@
 					// db에서 제거
 					const map_params = new Map();
 					map_params.set('command', 'delete');
-					map_params.set("chr", selectedOption("Chr_select").dataset.chr);
+					//map_params.set("chr", selectedOption("Chr_select").dataset.chr);
+					map_params.set("chr", params.node.data.chr);
 					map_params.set("pos", params.node.data.pos);
 					map_params.set('jobid', linkedJobid);
 					map_params.set('vb_selection_id', params.data.vb_selection_id);
@@ -737,17 +755,7 @@
 	}
 	
 	function filter_SnpEff() {
-		/*
-		const SnpEff_gridTable = document.getElementById("SnpEff_Grid");
-		
-		if(!SnpEff_gridTable.innerHTML) {
-			const SnpEff_Grid = new agGrid.Grid(SnpEff_gridTable, SnpEff_gridOptions);
-			SnpEff_gridOptions.api.setRowData(rowData);
-			SnpEff_gridOptions.api.sizeColumnsToFit();
-		}
-		
-  		//gridOptions.api.setRowData(rowData)
-  		*/
+
 	}
 	
 	function flag_SVG(flag) {
@@ -785,9 +793,6 @@
   	document.addEventListener('DOMContentLoaded', () => {
   		/*** DEFINED TABLE VARIABLE ***/
   		
-  		
-  		
-  		
   		const SnpEff_gridTable = document.getElementById("SnpEff_Grid");
   		const SnpEff_Grid = new agGrid.Grid(SnpEff_gridTable, SnpEff_gridOptions);
   		//const SnpEff_rowData = [];
@@ -810,8 +815,8 @@
   		const UPGMA_gridTable = document.getElementById("UPGMA_Grid");
   		const UPGMA_Grid = new agGrid.Grid(UPGMA_gridTable, UPGMA_gridOptions);
   		//const UPGMA_rowData = [ { "ID": "sample9", "Population": "", "Similarity": "",} ];
-  		//const UPGMA_rowData = [];
-  		//UPGMA_gridOptions.api.setRowData(UPGMA_rowData)
+  		const UPGMA_rowData = [];
+  		UPGMA_gridOptions.api.setRowData(UPGMA_rowData)
   		
   		const STRUCTURE_gridTable = document.getElementById("STRUCTURE_Grid");
   		const STRUCTURE_Grid = new agGrid.Grid(STRUCTURE_gridTable, STRUCTURE_gridOptions);
@@ -823,16 +828,6 @@
   		const Haplotype_rowData = [ { "ID": "sample1", "Haplotype": "Hap1",} ];
   		Haplotype_gridOptions.api.setRowData(Haplotype_rowData)
   		
-  		/*** GET TABLE DATA FROM URL ***/
-  		/*
-  		fetch("./vb_json.jsp?varietyid="+$( "#variety-select option:selected" ).val())
-  		.then((response) => response.json())
-  		.then((data) => {
-  			console.log(data);
-			gridOptions.api.setRowData(data);
-			gridOptions.api.sizeColumnsToFit();
-  		});
-  		*/
   	});
   	
   	
