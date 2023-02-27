@@ -71,6 +71,7 @@
 			    agColumnHeader: CustomHeader,
 			},
 			*/
+			rowDragManaged: true,
 			enableRangeSelection: false, 
 			suppressMultiRangeSelection: true,
 			animateRows: true, 
@@ -79,8 +80,6 @@
 		    postSortRows: (params) => {
 		    	const rowNodes = params.nodes;
 
-		    	//base_order
-		    	
 		    	//base_order
 		    	for (let i=0 ; i<rowNodes.length; i++) {
 		    		//if(rowNodes.)
@@ -264,7 +263,9 @@
 				
 				const position = params.data.pos;
 				
-				document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+				//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));
+				document.getElementById('positionInput').value = position;
+				document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 			}
 		},
 	};

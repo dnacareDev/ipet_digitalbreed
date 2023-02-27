@@ -192,6 +192,11 @@
 	//String refgenome_id = request.getParameter("refgenome_id");
 	String refgenome = request.getParameter("refgenome");
 	String gff = request.getParameter("gff");
+	String filename = request.getParameter("filename");
+	String fasta_filename = request.getParameter("fasta_filename");
+	String gff_filename = request.getParameter("gff_filename");
+	String cds_filename = request.getParameter("cds_filename");
+	String protein_filename = request.getParameter("protein_filename");
 	
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
@@ -236,7 +241,7 @@
 												-->
 											</div>
 											<div style="width:20%; min-width:200px; padding-left:14px;"> 
-												<input type="text" id="positionInput" class="form-control" placeholder="Position" readonly>
+												<input type="text" id="positionInput" class="form-control" placeholder="Position" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').replace(/\B(?=(\d{3})+(?!\d))/g, ',');" onkeyup="if(event.keyCode==13){this.blur();}" onblur="changeInputValue(Number(this.value.replaceAll(',','')));">
 											</div>
 											<div style="width:56%">
 												<div class="float-right">
@@ -304,10 +309,10 @@
 												            	</div>
 															</div>
 											            	<div class="float-right">
-											            		<button type="button" class="btn btn-outline-light mb-1" style="margin-right:7px;" onclick="clear_mark_snpEff();">Reset</button>
+											            		<button type="button" class="btn btn-outline-warning mb-1" style="margin-right:5px;" onclick="clear_mark_snpEff();">Reset</button>
 											            	</div>
 															<div class="float-right">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="SnpEff_mark();">표지</button>
+											            		<button type="button" class="btn btn-outline-success mb-1" style="margin-right:30px;" onclick="SnpEff_mark();">표지</button>
 											            	</div>
 														</div>
 									            		<div class="row col-12 pl-0" style="margin-left:0px;">
@@ -324,10 +329,10 @@
 															</div>
 															<div class="col-6 pr-0">
 																<div class="float-right">
-												            		<button type="button" class="btn btn-light float-right" style="margin-right:30px;" onclick="GWAS_mark();">표지</button>
+												            		<button type="button" class="btn btn-outline-success float-right" style="margin-right:30px;" onclick="GWAS_mark();">표지</button>
 												            	</div>
 																<div class="float-right">
-												            		<button type="button" class="btn btn-outline-light mb-1" style="margin-right:7px;" onclick="clear_mark_GWAS();">Reset</button>
+												            		<button type="button" class="btn btn-outline-warning mb-1" style="margin-right:7px;" onclick="clear_mark_GWAS();">Reset</button>
 												            	</div>
 											            	</div>
 														</div>
@@ -344,25 +349,21 @@
 																</div>
 															</div>
 														</div>
-														<div id="nonSelectGWAS" class="row mt-1" style="display:block; border-top: 1px solid black;">
-															<fieldset class="border pt-2 pl-2 pr-2 pb-1" style="width:60%; height:500px; margin:40px auto;">
-																<div class="col-12" style="margin-top:70px; display: flex; flex-direction: column; align-items: center;">
-																	<i class="ri-file-search-line" style=" font-size: 140px;"></i>
-																	<p style="margin-top:90px; font-size: 20px;">Please select a result</p>
-																</div>
-					                                		</fieldset>
+														<div id="nonSelectGWAS" class="row mt-1" style="display:block;">
+															<div class="col-12" style="display: flex; flex-direction: column; align-items: center;">
+																<i class="ri-file-search-line" style=" font-size: 355px;"></i>
+																<p style="margin-top:-25px; font-size: 30px;">Please select a result</p>
+															</div>
 														</div>
 														<div id="status404" class="row mt-1" style="display:none;">
-															<fieldset class="border pt-2 pl-2 pr-2 pb-1" style="width:80%; height:500px; margin:40px auto;">
-																<div class="col-12" style="margin-top:70px; display: flex; flex-direction: column; align-items: center;">
-																	<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-																		<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-																		<line x1="12" y1="9" x2="12" y2="13"></line>
-																		<line x1="12" y1="17" x2="12.01" y2="17"></line>
-																	</svg>
-																	<p style="margin-top:90px; font-size: 20px;">표현형과의 유사성을 찾을 수 없습니다.</p>
-																</div>
-					                                		</fieldset>
+															<div class="col-12" style="margin-top:70px; display: flex; flex-direction: column; align-items: center;">
+																<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+																	<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+																	<line x1="12" y1="9" x2="12" y2="13"></line>
+																	<line x1="12" y1="17" x2="12.01" y2="17"></line>
+																</svg>
+																<p style="margin-top:90px; font-size: 25px;">표현형과의 유사성을 찾을 수 없습니다.</p>
+															</div>
 														</div>
 	  												</div>
 	  												<!-- Marker pill -->
@@ -374,34 +375,31 @@
 																</select>
 															</div>
 									            			<div class="float-right">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:30px;" onclick="marker_mark();">표지</button>
+											            		<button type="button" class="btn btn-outline-success mb-1" style="margin-right:30px;" onclick="marker_mark();">표지</button>
 											            	</div>
 	  													</div>
 	  													
 									            		<div class="row mt-1">
 	  														<div id='Marker_Grid' class="ag-theme-alpine" style="height:745px; width:100%; padding-left:14px; padding-right: 28px;"></div>
 	  													</div>
-	  													<div class="float-right">
-										            		<button type="button" class="btn btn-outline-light mb-1" style="margin-right:30px;" onclick="clear_mark_marker();">Reset</button>
-										            	</div>
 	  												</div>
 	  												<!-- Selection pill -->
 	  												<div class='tab-pane pl-1' id='pill4' aria-labelledby='base-pill4'>
-	  													<div style="width:50%;"> 
-															<select id='SelectionList_select' class='select2 form-select float-left'>
-																<option data-chr="-1" disabled hidden selected>Select result</option>
-															</select>
-														</div>
-														<div class="row mt-1" style="float:right;">
+														<div class="row mt-1">
 									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="filter_SnpEff();">Flanking sequence</button>
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="alert('전송되었습니다.');">Primer Design</button>
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="selection_mark();">표지</button>
+									            				<!--  
+											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="flanking_sequence();">Flanking sequence</button>
+											            		-->
+											            		<button type="button" class="btn btn-light mb-1" style="margin-right:5px; float:left; background-color:#7367F0 !important; color:#FFFFFF;" onclick=" if(SelectionList_gridOptions.api.getSelectedNodes().length != 1) {return alert('position을 하나만 선택해주세요.')} $('#flankingSequenceModal').modal();">Sequence</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-left:5px; margin-right:auto; float:left; background-color:#7367F0 !important; color:#FFFFFF;" onclick="alert('전송되었습니다.');">Primer Design</button>
+											            		<button type="button" class="btn btn-outline-success mb-1" style="margin-left:5px; margin-right:15px; float:right;" onclick="selection_mark();">표지</button>
+											            		<button type="button" class="btn btn-outline-warning mb-1" style="margin-left:13px; margin-right:5px; float:right;" onclick="clear_mark_marker();">Reset</button>
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1 pr-0">
 	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:706px; width:100%;'></div>
 	  													</div>
+	  													
 	  												</div>
 	  											</div>
 		                                	</div>
@@ -522,15 +520,15 @@
 	<div class="modal fade" id="geneInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   		<div class="modal-dialog modal-dialog-scrollable modal-lg">
     		<div class="modal-content">
-      			<div class="modal-header">
-	    		    <h1 class="modal-title fs-5" id="exampleModalLabel">Gene data</h1>
+      			<div class="modal-header bg-warning white">
+	    		    <h4 class="modal-title fs-5" id="exampleModalLabel">Gene data</h4>
    				    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
       			</div>
 	      		<div class="modal-body">
 	        		<div>
-	        			<h3 class="mb-1">Primary data</h3>
+	        			<h4 class="mb-1">Primary data</h4>
 	        			<div>
 	        				<label class="h5 pl-0" style="margin-bottom:3px;">Name</label>
 	        				<p id="pd_name" style="margin-left:1px;"></p>
@@ -561,7 +559,7 @@
 	        			</div>
 	        		</div>
 	        		<div>
-	        			<h3 class="mb-1">Attributes</h3>
+	        			<h4 class="mb-1">Attributes</h4>
 	        			<div>
 	        				<label class="h5 pl-0" style="margin-bottom:3px;">ID</label>
 	        				<p id="attributes_id" style="margin-left:1px;"></p>
@@ -615,8 +613,35 @@
 					    <textarea class="form-control" id="protein_sequence" rows="3" data-label_text="Protein sequence"></textarea>
 					</div>
 	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	
+	
+		<div class="modal fade" id="flankingSequenceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-dialog-centered modal-sm">
+    		<div class="modal-content">
+      			<div class="modal-header bg-warning white">
+	    		    <h4 class="modal-title fs-5">Window Size</h4>
+   				    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+      			</div>
+	      		<div class="modal-body">
+	        		<div class="row">
+		        		<div class="col-5" style="margin:15px 0 15px auto;">
+						    <input class="form-control" id="flankingSequence" style="font-size:14px;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').replace(/\B(?=(\d{3})+(?!\d))/g, ',');" autocomplete="off" />
+						</div>
+						<div class="col-2 pl-0" style="margin:0 auto 0 0; font-size:14px; display: flex; align-items: center">
+						    bp
+						</div>
+	        		</div>
+	      		</div>
 	      		<div class="modal-footer">
+	      			<button type="button" class="btn btn-success" onclick="flanking_sequence();" >Extraction</button>
+	      			<!--  
 			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			        -->
 	      		</div>
 	    	</div>
 	  	</div>
@@ -675,7 +700,12 @@
 	<%-- var refgenome_id = "<%=refgenome_id%>"; --%>
 	const refgenome = "<%=refgenome%>";
 	const gff = "<%=gff%>";
-
+	const filename = "<%=filename%>";
+	const fasta_filename = "<%=fasta_filename%>";
+	const gff_filename = "<%=gff_filename%>";
+	const cds_filename = "<%=cds_filename%>";
+	const protein_filename = "<%=protein_filename%>";
+	
 	
 	const chr_orders_map = new Map();
 	const gene_model_position_map = new Map();
@@ -875,6 +905,88 @@
 		})
 		
 		
+		
+	}
+	
+	function changeInputValue(value) {
+		console.log(value);
+		
+		const chr = selectedOption('Chr_select').dataset.chr;
+		const length = Number(selectedOption('Chr_select').dataset.length);
+		
+		if( !(0 < value && value < length) ) {
+			return alert('염색체의 범위 내의 값을 입력해 주세요.');
+		}
+		
+		const chr_orders_arr = chr_orders_map.get(chr);
+		const below_index = chr_orders_arr.findLast((item) => item.position<=value)?.index;
+		const above_index = chr_orders_arr.find((item) => value<=item.position)?.index;
+		
+		let index = 0;
+		
+		if(above_index === undefined) {
+			index = below_index;
+		} else if(below_index === undefined) {
+			index = above_index;
+		} else {
+			const below_gap = value - chr_orders_arr[below_index].position;
+			const above_gap = chr_orders_arr[above_index].position - value;
+			index = below_gap <= above_gap ? chr_orders_arr[below_index].index : chr_orders_arr[above_index].index; 
+		}
+		
+		document.querySelector('.chromosomeStackDiv[data-selected="true"]').dataset.selected = "false";
+		
+		document.querySelector(`.chromosomeStackDiv[data-order="\${chr_orders_arr[index].order}"]`).dataset.selected = "true";
+		getVariantBrowserGrid(chr_orders_arr[index].vcf_id, chr_orders_arr[index].position);
+		colorGeneModelPosition(chr_orders_arr[index].position)
+		getGeneModel(chr_orders_arr[index].position);
+		
+		
+		
+		const currentId = document.getElementById('currentId');
+		currentId.dataset.index = index;
+		currentId.dataset.vcf_id = chr_orders_arr[index].vcf_id;
+		currentId.dataset.position = chr_orders_arr[index].position;
+		currentId.dataset.order = chr_orders_arr[index].order;
+		
+		
+		const before_index = index == 0 ? -1 : index - 1;
+		const after_index = index == chr_orders_arr.length-1 ? -1 : index + 1;
+		
+		
+		const chromosomeStackDiv_nodes = document.querySelectorAll('.chromosomeStackDiv[data-vcf_id]');
+		
+		const beforeOrder_index = chr_orders_arr.findLast(el => el.order < chr_orders_arr[index].order)?.index;
+		const beforeOrder_vcf_id = chr_orders_arr.findLast(el => el.order < chr_orders_arr[index].order)?.vcf_id;
+		const beforeOrder_order = chr_orders_arr.findLast(el => el.order < chr_orders_arr[index].order)?.order;
+		const afterOrder_index = chr_orders_arr.find(el => el.order > chr_orders_arr[index].order)?.index
+		const afterOrder_vcf_id = chr_orders_arr.find(el => el.order > chr_orders_arr[index].order)?.vcf_id;
+		const afterOrder_order = chr_orders_arr.find(el => el.order > chr_orders_arr[index].order)?.order; 
+		
+		//debugger;
+		
+		const beforeId = document.getElementById('beforeId');
+		const afterId = document.getElementById('afterId');
+		const beforeOrder = document.getElementById('beforeOrder');
+		const afterOrder = document.getElementById('afterOrder');
+		
+		beforeId.dataset.index = before_index;
+		beforeId.dataset.vcf_id = chr_orders_arr[before_index] ? chr_orders_arr[before_index]['vcf_id'] : -1;
+		beforeId.dataset.position = chr_orders_arr[before_index] ? chr_orders_arr[before_index]['position'] : -1;
+		beforeId.dataset.order = chr_orders_arr[before_index] ? chr_orders_arr[before_index]['order'] : -1;
+		
+		afterId.dataset.index = after_index;
+		afterId.dataset.vcf_id = chr_orders_arr[after_index] ? chr_orders_arr[after_index]['vcf_id'] : -1;
+		afterId.dataset.position = chr_orders_arr[after_index] ? chr_orders_arr[after_index]['position'] : -1;
+		afterId.dataset.order = chr_orders_arr[after_index] ? chr_orders_arr[after_index]['order'] : -1;
+		
+		beforeOrder.dataset.index = beforeOrder_order===undefined ? -1 : beforeOrder_index;
+		beforeOrder.dataset.vcf_id = beforeOrder_order===undefined ? -1 : beforeOrder_vcf_id;
+		beforeOrder.dataset.order = beforeOrder_order===undefined ? -1 : beforeOrder_order;
+		
+		afterOrder.dataset.index = afterOrder_order===undefined ? -1 : afterOrder_index;
+		afterOrder.dataset.vcf_id = afterOrder_order===undefined ? -1 : afterOrder_vcf_id;
+		afterOrder.dataset.order = afterOrder_order===undefined ? -1 : afterOrder_order;
 		
 	}
 	
@@ -1280,7 +1392,7 @@
 			for(let i=0 ; i<svg_CDS.length ; i++) {
 				popoverContent += `\${i+1} : \${svg_CDS[i]['start']} - \${svg_CDS[i]['end']}<br>`
 			}
-			popoverContent += `Attribute : \${gene_model['mRNA'][i]['attribute']}`;
+			//popoverContent += `Attribute : \${gene_model['mRNA'][i]['attribute']}`;
 									
 			childDiv.dataset.content = popoverContent;
 			childDiv.style.position = 'absolute';
@@ -1428,14 +1540,6 @@
 		document.getElementById('attributes_id').innerText = search_attribute('ID');
 		document.getElementById('attributes_parent').innerText = search_attribute('Parent');
 		document.getElementById('attributes_description').innerText = search_attribute('Description');
-		/*
-		document.getElementById('attributes_refSeq').innerText = search_attribute('RefSeq');
-		document.getElementById('attributes_uniProt').innerText = search_attribute('Uniprot');
-		document.getElementById('attributes_pfam').innerText = search_attribute('Pfam');
-		document.getElementById('attributes_tair').innerText = search_attribute('TAIR');
-		document.getElementById('attributes_go').innerText = search_attribute('GO');
-		document.getElementById('attributes_kegg').innerText = search_attribute('KEGG');
-		*/
 		
 		
 		const RefSeq = search_attribute('RefSeq').split(",");
@@ -1490,16 +1594,6 @@
 				attributes_kegg.innerHTML += `<a href="https://www.genome.jp/dbget-bin/www_bget?pathway+\${KEGG[i]}" target="_blank">\${KEGG[i]}, </a>`;
 			}
 		}
-		
-		
-		
-		//attributes_refSeq.innerHTML = `<a href="https://www.ncbi.nlm.nih.gov/gene/?term=\${search_attribute('RefSeq')}" target="_blank">\${search_attribute('RefSeq')}</a>`;
-		//attributes_uniProt.innerHTML =`<a href="https://www.uniprot.org/uniprotkb/\${search_attribute('Uniprot')}/entry" target="_blank">\${search_attribute('Uniprot')}</a>`;
-		//attributes_pfam.innerHTML = `<a href="https://www.ebi.ac.uk/interpro/entry/pfam/\${search_attribute('Pfam')}/" target="_blank">\${search_attribute('Pfam')}</a>`;
-		
-		//attributes_tair.innerHTML = `<a href="https://www.arabidopsis.org/servlets/TairObject?type=locus&name=\${TAIR.split('.')[0]}" target="_blank">\${TAIR}</a>`
-		//attributes_go.innerHTML = search_attribute('GO');
-		//attributes_kegg.innerHTML = search_attribute('KEGG');
 		
 	}
 	
@@ -1570,6 +1664,7 @@
     					field: columnKeys[i], 
     					width: 120,
     					sortable: false,
+    					rowDrag: true,
     					pinned: 'left',
     				}) 
     			} else {
@@ -1719,6 +1814,11 @@
 		resizeGrid();
 		
 	}
+	
+	function clear_mark_all() {
+   		clear_mark_snpEff();
+   		clear_mark_GWAS();
+   	}
 	
 	function show_SnpEff_Grid() {
 		
@@ -1968,29 +2068,6 @@
 
    	}
    	
-   	/*
-	function HTMLNotExist(model_name) {
-		const htmlElement = `
-							<div id="status404">
-								<div class="row mt-5">
-									<div class="col-12 d-flex justify-content-center">
-										<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-											<line x1="12" y1="9" x2="12" y2="13"></line>
-											<line x1="12" y1="17" x2="12.01" y2="17"></line>
-										</svg>
-									</div>
-								</div>
-								<div class="row mt-1 mb-5">
-									<div class="col-12 d-flex justify-content-center" style="font-size:20px; color:black;">
-										표현형과의 유사성을 찾을 수 없습니다.
-									</div>
-								</div>
-							</div>
-							`;
-		$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
-	}
-   	*/
    	
    	function GWAS_mark() {
    		console.time("gwasMark");
@@ -2049,11 +2126,40 @@
 		})
    	}
    	
-   	function clear_mark_all() {
-   		clear_mark_snpEff();
-   		clear_mark_GWAS();
-   	}
    	
+   	
+   	async function flanking_sequence() {
+   		/*
+   		const sequence = SelectionList_gridOptions.api.getSelectedNodes();
+   		
+   		if(sequence.length != 1) {
+   			return alert("position을 하나만 선택해주세요.")
+   		}
+   		*/
+   		
+   		const chr = selectedOption('Chr_select').dataset.chr;
+   		const position = sequence[0].data.pos;
+   		const flanking_sequence_jobid = await fetch('../getJobid.jsp').then((response)=>response.text());
+   		const flanking_sequence_size = document.getElementById('flankingSequence').value.replace(",","");
+   		
+		const url_string = './vb_features_flanking_sequence.jsp';
+		const map_params = new Map([
+			['chr', chr],
+			['position', position],
+			['flanking_sequence_jobid', flanking_sequence_jobid],
+			['flanking_sequence_size', flanking_sequence_size],
+			['vcf_jobid', linkedJobid],
+			['filename', filename],
+			['fasta_filename', fasta_filename],
+			//['gff_filename', gff_filename],
+			//['cds_filename', cds_filename],
+			//['protein_filename', protein_filename],
+		]);
+		
+		//debugger;
+		
+		getFetchData(url_string, map_params);
+   	}
    	
    	async function show_Selection_Grid() {
 		//console.log("selection grid");   

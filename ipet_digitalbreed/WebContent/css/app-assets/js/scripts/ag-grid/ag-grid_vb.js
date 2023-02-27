@@ -91,6 +91,22 @@
 	      field: "jobid",
 	      hide: true
 	    },  
+	    {
+	      field: "fasta_filename",
+	      hide: true
+	    },
+	    {
+	      field: "gff_filename",
+	      hide: true
+	    },
+	    {
+	      field: "cds_filename",
+	      hide: true
+	    },
+	    {
+	      field: "protein_filename",
+	      hide: true
+	    },
 	];
 	
 	function inverseRowCount(params) {
@@ -148,6 +164,11 @@
 			//const refgenome_id = params.data.refgenome_id;
 			const refgenome = params.data.refgenome;
 			const gff = params.data.gff;
+			const filename = params.data.filename;
+			const fasta_filename = params.data.fasta_filename;
+			const gff_filename = params.data.gff_filename;
+			const cds_filename = params.data.cds_filename;
+			const protein_filename = params.data.protein_filename;
 
 			// 클릭할때마다 target값을 바꿔서 항상 새창이 열리게 한다  
 			const random_number = Math.random().toString(36).substring(2,12);
@@ -162,13 +183,6 @@
 			objs.setAttribute('value', jobid); //객체값
 			form.appendChild(objs);
 			
-			/*
-			const objs2 = document.createElement('input'); // 값이 들어있는 녀석의 형식
-			objs2.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
-			objs2.setAttribute('name', 'refgenome_id'); // 객체이름
-			objs2.setAttribute('value', refgenome_id); //객체값
-			form.appendChild(objs2);
-			*/
 			const objs2 = document.createElement('input'); // 값이 들어있는 녀석의 형식
 			objs2.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
 			objs2.setAttribute('name', 'refgenome'); // 객체이름
@@ -181,11 +195,43 @@
 			objs3.setAttribute('value', gff); //객체값
 			form.appendChild(objs3);
 			
+			const objs4 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs4.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs4.setAttribute('name', 'filename'); // 객체이름
+			objs4.setAttribute('value', filename); //객체값
+			form.appendChild(objs4);
+			
+		    const objs5 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+		    objs5.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+		    objs5.setAttribute('name', 'fasta_filename'); // 객체이름
+		    objs5.setAttribute('value', fasta_filename); //객체값
+			form.appendChild(objs5);
+			
+			const objs6 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs6.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs6.setAttribute('name', 'gff_filename'); // 객체이름
+			objs6.setAttribute('value', gff_filename); //객체값
+			form.appendChild(objs6);
+			
+			const objs7 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs7.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs7.setAttribute('name', 'cds_filename'); // 객체이름
+			objs7.setAttribute('value', cds_filename); //객체값
+			form.appendChild(objs7);
+			
+			const objs8 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs8.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs8.setAttribute('name', 'protein_filename'); // 객체이름
+			objs8.setAttribute('value', protein_filename); //객체값
+			form.appendChild(objs8);
+			    
+			    
 			form.setAttribute('method', 'post'); //get,post 가능
 			form.setAttribute('action', "./vb_features.jsp"); //보내는 url
 			form.target = random_number;
 			document.body.appendChild(form);
 			form.submit();
+			form.remove();	// 새창에서 열기가 끝나면 form 삭제
 		}
 	};
 	
