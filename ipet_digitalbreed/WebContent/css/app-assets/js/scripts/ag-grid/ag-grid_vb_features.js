@@ -264,7 +264,7 @@
 				const position = params.data.pos;
 				
 				//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));
-				document.getElementById('positionInput').value = position;
+				document.getElementById('positionInput').value = position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 				document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 			}
 		},
@@ -424,7 +424,9 @@
 				
 				const position = params.data['pos'];
 				
-				document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+				//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+				document.getElementById('positionInput').value = position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 			}
 		},
 	}
@@ -552,7 +554,9 @@
 					
 					const position = params.data.pos;
 					
-					document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+					//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
+					document.getElementById('positionInput').value = position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 					
 				}
 				
