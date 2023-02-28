@@ -10,13 +10,80 @@
 	class CustomHeader {
 		// 미완성. header영역 작업은 일단 막아놓음
 	    init(agParams) {
+	    	
+	    	//console.log(agParams);
+	    	
 	    	this.agParams = agParams;
 	    	this.eGui = document.createElement('div');
 	    	this.eGui.style.display = "flex";
+	    	this.eGui.style.alignItems = "center";
 	    	this.eGui.style.justifyContent = "center";
-	    	this.eGui.innerHTML = `
-	    		<div class="customHeaderLabel" onclick="A_T_G_C_sort('${this.agParams.displayName.reapl}');">${this.agParams.displayName}</div>
-	    		`;
+	        this.eGui.innerHTML = `
+	            <div class="customHeaderMenuButton">
+	                <i class="fa ${this.agParams.menuIcon}"></i>
+	            </div>
+	            <div class="customHeaderLabel" style="writing-mode: vertical-lr;">${this.agParams.displayName}</div>
+	            <div class="customSortDownLabel inactive">
+	                <i class="fa fa-long-arrow-alt-down"></i>
+	            </div>
+	            <div class="customSortUpLabel inactive">
+	                <i class="fa fa-long-arrow-alt-up"></i>
+	            </div>
+	            <div class="customALabel inactive" style="display:none;" data-base="A">A</div>
+	            <div class="customTLabel inactive" style="display:none;" data-base="T">T</div>
+	            <div class="customGLabel inactive" style="display:none;" data-base="G">G</div>
+	            <div class="customCLabel inactive" style="display:none;" data-base="C">C</div>
+	        `;
+	        
+	        this.eSortcustomHeaderLabelButton = this.eGui.querySelector(".customHeaderLabel");
+	        this.eSortAButton = this.eGui.querySelector(".customALabel");
+	        this.eSortTButton = this.eGui.querySelector(".customTLabel");
+	        this.eSortGButton = this.eGui.querySelector(".customGLabel");
+	        this.eSortCButton = this.eGui.querySelector(".customCLabel");
+	        
+	        if (this.agParams.enableSorting) {
+	        	/*
+	            this.onSortChangedListener = this.onSortChanged.bind(this);
+	            this.agParams.column.addEventListener('sortChanged', this.onSortChangedListener);
+	            this.onSortChanged();
+	            */
+	        	this.eSortcustomHeaderLabelButton.addEventListener('click', () => {
+	        		
+	        		if(this.eGui.querySelector('.active') === null || this.eGui.querySelector('.active') === undefined) {
+	        			
+	        			this.eSortAButton.classList.replace('inactive', 'active');
+	        			this.eSortAButton.style.display = 'block';
+	        		} else {
+	        			const base = this.eGui.querySelector('.active').innerText;
+	        			const next_base = ATGC_sort(base);
+	        			//console.log("next base : ", next_base);
+	        			
+	        			if(next_base === null) {
+	        				this.eSortCButton.classList.replace('active', 'inactive');
+		        			this.eSortCButton.style.display = 'none';
+	        			} else {
+	        				this[`eSort${base}Button`].style.display = 'none';
+		        			this[`eSort${base}Button`].classList.replace('active', 'inactive');
+		        			
+		        			this[`eSort${next_base}Button`].style.display = 'block';
+		        			this[`eSort${next_base}Button`].classList.replace('inactive', 'active');
+	        			}
+	        			
+	        			
+	        		}
+	        		
+	        	});
+	        	
+	        	this.eSortAButton.addEventListener('click', () => {
+	        		const base = ATGC_sort('A');
+	        		this.eSortTButton.style.display = 'block';
+	        	});
+	        } else {
+	            this.eGui.removeChild(this.eSortAButton);
+	            this.eGui.removeChild(this.eSortTButton);
+	            this.eGui.removeChild(this.eSortGButton);
+	            this.eGui.removeChild(this.eSortCButton);
+	        }
 	
 	    }
 	
@@ -24,6 +91,22 @@
 	    	return this.eGui;
 	    }
 	
+	}
+	
+	function ATGC_sort(base) {
+		//console.log(base);
+		
+		switch(base) {
+			case 'A':
+				return 'T';
+			case 'T':
+				return 'G';
+			case 'G':
+				return 'C';
+			case 'C':
+				return null;
+		}
+		
 	}
 
 	class CustomTooltip {
@@ -66,11 +149,11 @@
 			columnDefs: VariantBrowser_columnDefs, 
 			rowHeight: 35, 
 			headerHeight: 100,
-			/*
+			
 			components: {
 			    agColumnHeader: CustomHeader,
 			},
-			*/
+			
 			rowDragManaged: true,
 			enableRangeSelection: false, 
 			suppressMultiRangeSelection: true,

@@ -77,9 +77,11 @@
 	}
 	
 	/************************ AG-Grid 헤더 수직 & borderline **************************/
+	/*
 	#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text {
 	    writing-mode: vertical-lr; /* vertical text */
 	}
+	*/
 	
 	#VariantBrowserGrid .ag-header-cell, #VariantBrowserGrid .ag-header-group-cell, #VariantBrowserGrid .ag-cell {
 	    border-right: 1px solid #dde2eb !important;
@@ -1741,9 +1743,12 @@
     		
     		
     		//'Position' 컬럼을 검색 => 해당 컬럼은 수평처리
-    		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
-    		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb';
+    		//Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text'))
+    		//.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb';
     		
+    		// headerComponent 설정 시 'Id'컬럼 수평처리
+    		Array.prototype.slice.call(document.querySelectorAll('#VariantBrowserGrid .customHeaderLabel'))
+    		.filter((el) => el.textContent === 'Id')[0].style.writingMode = 'horizontal-tb';
     		
     		const isChecked = document.getElementById('switch_sort_UPGMA');
     		// Sort switch가 켜져있다면 ID기준으로 정렬하여 재출력
