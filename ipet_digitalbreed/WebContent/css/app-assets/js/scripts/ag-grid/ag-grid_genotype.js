@@ -228,6 +228,7 @@
     paginationPageSize: 20,
     pivotPanelShow: "always",
     colResizeDefault: "shift",
+    suppressDragLeaveHidesColumns: true,
     animateRows: true,
     //suppressHorizontalScroll: true,
     serverSideInfiniteScroll: true,
@@ -347,6 +348,7 @@
 	    maxBlocksInCache: 10,
 	    
 	    headerHeight: 120,
+	    suppressDragLeaveHidesColumns: true,
 	    animateRows: true,
 	    suppressFieldDotNotation: true,
 	    tooltipShowDelay: 0,

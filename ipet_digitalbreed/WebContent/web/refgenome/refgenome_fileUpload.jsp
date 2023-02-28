@@ -31,14 +31,14 @@
 	Part part;
 	while ((part=mp.readNextPart()) != null) {
 		String name = part.getName();
-		System.out.println(name);
+		//System.out.println(name);
 		
 		// parameters
 		if(part.isParam()) {
 			ParamPart paramPart = (ParamPart) part;
 			String value = paramPart.getStringValue();
 			
-			//System.out.println("param: name=" + name + ", value=" + value);
+			System.out.println("param: name=" + name + ", value=" + value);
 			
 			if(name.equals("refgenomeParam")) {
 				savePath = value;
@@ -84,11 +84,11 @@
 	}
 		
 	
-	System.out.println(jsonObj);
-	
+	//System.out.println(jsonObj);
 	//String sql="insert into reference_genome_t(crop_name, refgenome, gff, author, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +permissionUid+ "', now());";
-	String sql="insert into reference_genome_t(crop_name, refgenome, gff, author, fasta_filename, gff_filename, cds_filename, protein_filename, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +jsonObj.get("fasta_filename").getAsString()+ "', '" +jsonObj.get("gff_filename").getAsString() +"', '" +jsonObj.get("cds_filename").getAsString()+ "', '" +jsonObj.get("protein_filename").getAsString()+ "', '" +permissionUid+ "', now());";
+	String sql="insert into reference_genome_t(cropid, varietyid, crop_name, refgenome, gff, author, fasta_filename, gff_filename, cds_filename, protein_filename, creuser, cre_dt) values( (select cropid from variety_t where varietyid='"+jsonObj.get("variety_id").getAsString()+"'), '"  +jsonObj.get("variety_id").getAsString()+ "', '"  +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +jsonObj.get("fasta_filename").getAsString()+ "', '" +jsonObj.get("gff_filename").getAsString() +"', '" +jsonObj.get("cds_filename").getAsString()+ "', '" +jsonObj.get("protein_filename").getAsString()+ "', '" +permissionUid+ "', now());";
 	System.out.println(sql);
+	
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(sql);
 	}catch(Exception e){

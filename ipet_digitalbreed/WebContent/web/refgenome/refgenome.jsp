@@ -183,7 +183,7 @@ body {
                     </button>
                 </div>
                 <div class="modal-body">
-					<form class="form" id="uploadForm" enctype="multipart/form-data">
+					<form class="form" id="uploadForm" enctype="multipart/form-data" method="post">
 					    <div class="form-body">
 					        <div class="row">
 					        	<fieldset class="border w-100 m-1">
@@ -194,7 +194,28 @@ body {
 												작목
 											</div>
 											<div class="col-8">
-							                	<input type="text" id="cropParam" class="form-control" name="cropParam" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+							                	<select class=" form-control select2"  id="variety-select" name="variety_id" onchange="javascript:refresh();">                                                   
+                                                    <%
+	                                                	try{
+	                                                		int selected_cnt=0;
+	                                                		String selected_flag=null;
+	
+	                                                		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
+	                                                		while (ipetdigitalconndb.rs.next()) { 	
+	                                                			if(selected_cnt==0) {selected_flag = "selected";};   
+	                                                			out.println("<option value='"+ipetdigitalconndb.rs.getString("varietyid")+"' "+ selected_flag +">"+ipetdigitalconndb.rs.getString("cropname")+"("+ipetdigitalconndb.rs.getString("varietyname")+")"+"</option>");
+	                                                			selected_cnt++;
+	                                                			selected_flag="";
+	                                                		}
+	                                                	}catch(Exception e){
+	                                                		System.out.println(e);
+	                                                	}finally { 
+	                                                   		ipetdigitalconndb.stmt.close();
+	                                                   		ipetdigitalconndb.rs.close();
+	                                                   		ipetdigitalconndb.conn.close();
+	                                                   	}
+                                                    %>       
+                                                 </select>   						                     
 											</div>
 										</div>
 										<div class="row mt-1">
@@ -384,6 +405,10 @@ body {
    	
     function FileUpload() {
     	
+    	//const variety_id = $("#variety-select :selected").val();
+    	const crop_name = $("#variety-select :selected").text();
+    	//debugger;
+    	
     	const refgenomeParam = document.getElementById('refgenomeParam').value;
     	const gffParam = document.getElementById('gffParam').value;
     	
@@ -403,15 +428,25 @@ body {
     	}
     	
     	const form = document.getElementById('uploadForm');
-    	const formData = new FormData(form);
-    	
     	/*
+    	const objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+		objs.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+		objs.setAttribute('name', 'variety_id'); // 객체이름
+		objs.setAttribute('value', variety_id); //객체값
+		form.appendChild(objs);
+    	*/
+    	const formData = new FormData(form);
+    	formData.append('cropParam', crop_name);
+    	
+    	
     	for(let key of formData.keys()) {				// key목록을 읽은다음 그에 해당하는 get(key)=value 값을 함께 나열
     		console.log(key, ":", formData.get(key));
     	}
-    	*/
+    	
     	
     	console.log("not returned");
+    	
+    	//debugger;
     	
     	fetch('./refgenome_fileUpload.jsp', {
     		method:'POST',

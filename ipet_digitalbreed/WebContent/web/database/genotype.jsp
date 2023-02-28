@@ -393,6 +393,9 @@ body {
         	fetch(`./genotype_getRefGenome.jsp?varietyid=\${varietyid}`)
         	.then((response) => response.json())
         	.then((data) => {
+        		
+        		//console.log("refgenome data : ", data);
+        		
         		const selectEl = document.getElementById("refGenomeSelect");
         		
         		for(let i=0 ; i<data.length ; i++) {

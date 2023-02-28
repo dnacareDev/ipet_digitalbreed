@@ -225,6 +225,7 @@
 		paginationPageSize: 20,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
+		suppressDragLeaveHidesColumns: true,
 		animateRows: true,
 		serverSideInfiniteScroll: true,
 		cellClass: "grid-cell-centered",

@@ -1287,7 +1287,7 @@
 		//fetch(url);
 		const gene_model = await getFetchData(url_string, map_params);
 		
-		console.log("getGeneModel data : ", gene_model);
+		//console.log("getGeneModel data : ", gene_model);
 		
 		
 		// 이전 표식을 삭제
@@ -1408,9 +1408,6 @@
 		}
 	}
 	
-	
-	
-	
 	function createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position) {
 		
 		//console.log(mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position);
@@ -1421,7 +1418,7 @@
 	    //svg.setAttribute('style', `border:1px solid black; position: absolute; top: 37px; right:\${-width/2}`);
 	    svg.setAttribute('width', mRNA_width+9);
 	    svg.setAttribute('height', '20');
-	    //svg.setAttribute('viewBox', '0 0 21.63 3.05');
+	    //svg.setAttribute('viewBox', `0 0 \${mRNA_width+8} 16`);
 	    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
 	    //svg.setAttribute('onclick', "$('#geneInfoModal').modal('show')");
 	    svg.setAttribute('onclick', "show_geneInfoModal();");
@@ -2379,7 +2376,12 @@
    		
 				
    		setTimeout( () => {
-			SnpEff_gridOptions.columnApi.autoSizeAllColumns(true);
+			
+   			const position = Number(document.getElementById('currentId').dataset.position);
+			getGeneModel(position);
+   			
+			
+   			SnpEff_gridOptions.columnApi.autoSizeAllColumns(true);
 			
 			if(Object.keys(GWAS_gridOptions_model).length !== 0) {
 				for(const GWAS_gridOptions in GWAS_gridOptions_model) {
@@ -2390,7 +2392,6 @@
 			SelectionList_gridOptions.columnApi.autoSizeAllColumns(false);
 			
 		}, 100)
-				
    	}
    	
 	async function getFetchData(url_string, map_params) {
@@ -2411,7 +2412,11 @@
 		const selectEl = document.getElementById(id);
 		return selectEl[selectEl.selectedIndex];
 	}
-   	
+	
+	
+	
+	window.onresize = resizeGrid;
+		
 </script>
 
 </body>

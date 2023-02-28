@@ -168,6 +168,7 @@
 		paginationPageSize: 20,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
+		suppressDragLeaveHidesColumns: true,
 		animateRows: true,
 		serverSideInfiniteScroll: true,
 		defaultCsvExportParams:{
@@ -341,6 +342,7 @@
 
   	const gridOptions2 = {
 	  	columnDefs: columnDefs2,
+	  	suppressDragLeaveHidesColumns: true,
 	  	animateRows: true,
 	  	suppressHorizontalScroll: true
   	}

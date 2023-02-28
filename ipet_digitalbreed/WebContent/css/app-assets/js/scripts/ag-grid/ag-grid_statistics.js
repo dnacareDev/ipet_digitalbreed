@@ -145,6 +145,7 @@
 		paginationPageSize: 6,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
+		suppressDragLeaveHidesColumns: true,
 		animateRows: true,
 		//suppressHorizontalScroll: true,
 		serverSideInfiniteScroll: true,

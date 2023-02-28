@@ -149,6 +149,7 @@
 		paginationPageSize: 20,
 		pivotPanelShow: "always",
 		colResizeDefault: "shift",
+		suppressDragLeaveHidesColumns: true,
 		animateRows: true,
 		defaultCsvExportParams:{
 			columnKeys:["no","status","cre_dt"]
