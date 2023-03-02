@@ -397,6 +397,7 @@ body {
         		//console.log("refgenome data : ", data);
         		
         		const selectEl = document.getElementById("refGenomeSelect");
+        		selectEl.innerHTML = '<option></option><option>Non-reference</option>';
         		
         		for(let i=0 ; i<data.length ; i++) {
 	        		const objOption = document.createElement("option");

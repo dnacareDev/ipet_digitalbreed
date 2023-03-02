@@ -15,6 +15,7 @@
 	    	
 	    	this.agParams = agParams;
 	    	this.eGui = document.createElement('div');
+	    	//this.eGui.classList.add('atgc_sort');
 	    	this.eGui.style.display = "flex";
 	    	this.eGui.style.alignItems = "center";
 	    	this.eGui.style.justifyContent = "center";
@@ -23,12 +24,6 @@
 	                <i class="fa ${this.agParams.menuIcon}"></i>
 	            </div>
 	            <div class="customHeaderLabel" style="writing-mode: vertical-lr;">${this.agParams.displayName}</div>
-	            <div class="customSortDownLabel inactive">
-	                <i class="fa fa-long-arrow-alt-down"></i>
-	            </div>
-	            <div class="customSortUpLabel inactive">
-	                <i class="fa fa-long-arrow-alt-up"></i>
-	            </div>
 	            <div class="customALabel inactive" style="display:none;" data-base="A">A</div>
 	            <div class="customTLabel inactive" style="display:none;" data-base="T">T</div>
 	            <div class="customGLabel inactive" style="display:none;" data-base="G">G</div>
@@ -347,7 +342,7 @@
 				const position = params.data.pos;
 				
 				//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));
-				document.getElementById('positionInput').value = position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 				document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 			}
 		},
@@ -508,7 +503,7 @@
 				const position = params.data['pos'];
 				
 				//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
-				document.getElementById('positionInput').value = position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 				document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 			}
 		},
@@ -638,7 +633,7 @@
 					const position = params.data.pos;
 					
 					//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
-					document.getElementById('positionInput').value = position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 					document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 					
 				}

@@ -620,7 +620,7 @@
 	</div>
 	
 	
-		<div class="modal fade" id="flankingSequenceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="flankingSequenceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   		<div class="modal-dialog modal-dialog-centered modal-sm">
     		<div class="modal-content">
       			<div class="modal-header bg-warning white">
@@ -644,6 +644,22 @@
 	      			<!--  
 			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 			        -->
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	
+	<div class="modal fade" id="flankingSequenceSizeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-dialog-centered">
+    		<div class="modal-content">
+	      		<div class="modal-body">
+	        		<div class="col-12" style="margin:15px auto;">
+					    <textarea rows="20" class="form-control" id="sequenceSize" style="font-size:14px;"></textarea>
+					</div>
+	      		</div>
+	      		<div class="modal-footer">
+	      			<button type="button" class="btn btn-outline-dark" onclick="copyToClipboard('sequenceSize')" >Copy to Clipboard</button>
+	      			<button type="button" id="sequenceDownload" class="btn btn-success" onclick="downloadFlankingSequenceCSV(this.dataset.jobid)" >Download</button>
 	      		</div>
 	    	</div>
 	  	</div>
@@ -726,7 +742,11 @@
 		
 		const label_text = document.getElementById(`\${id}`).dataset.label_text;
 		
-		alert(`\${label_text} copied!`);
+		if(label_text === undefined || label_text === null) {
+			alert('sequence copied!')
+		} else {
+			alert(`\${label_text} copied!`);
+		}
 		/*
 		if (window.getSelection) {
 			window.getSelection().removeAllRanges();
@@ -857,7 +877,6 @@
 		//console.log(vcf_id);
 		//console.log(row_count);
 		//console.log(chr);
-		
 		
 		fetch(`./vb_features_positionListFromChr.jsp?vcf_id=\${vcf_id}&row_count=\${row_count}&chr=\${chr}&jobid=\${linkedJobid}`)
 		.then((response) => response.json())
@@ -2131,13 +2150,13 @@
    	
    	
    	async function flanking_sequence() {
-   		/*
+   		
    		const sequence = SelectionList_gridOptions.api.getSelectedNodes();
    		
    		if(sequence.length != 1) {
    			return alert("position을 하나만 선택해주세요.")
    		}
-   		*/
+   		
    		
    		const chr = selectedOption('Chr_select').dataset.chr;
    		const position = sequence[0].data.pos;
@@ -2151,6 +2170,7 @@
 			['flanking_sequence_jobid', flanking_sequence_jobid],
 			['flanking_sequence_size', flanking_sequence_size],
 			['vcf_jobid', linkedJobid],
+			['refgenome', refgenome],
 			['filename', filename],
 			['fasta_filename', fasta_filename],
 			//['gff_filename', gff_filename],
@@ -2159,8 +2179,28 @@
 		]);
 		
 		//debugger;
+		$('#flankingSequenceModal').modal('hide'); 
+		document.getElementById('sequenceSize').value = "";
+		$('#flankingSequenceSizeModal').modal('show');
+		const data = await getFetchTextData(url_string, map_params);
+		console.log(data);
 		
-		getFetchData(url_string, map_params);
+		const data_arr = data.split(',');
+			
+		document.getElementById('sequenceSize').value = '>'+ data_arr[0] +'\n'+ data_arr[2]; 
+		
+		$('#sequenceDownload').attr('data-jobid', flanking_sequence_jobid);
+   	}
+   	
+   	function downloadFlankingSequenceCSV(jobid) {
+   		//console.log(jobid);
+   		
+   		const anchorElement = document.createElement('a');
+   	  	document.body.appendChild(anchorElement);
+   	  	anchorElement.download = 'flanking_sequence.csv'; // a tag에 download 속성을 줘서 클릭할 때 다운로드가 일어날 수 있도록 하기
+   	  	anchorElement.href = `/ipet_digitalbreed/result/variants_browser/flanking/\${jobid}/\${jobid}_for_flnking.csv`; // href에 url 달아주기
+   	  	anchorElement.click(); 
+   	  	document.body.removeChild(anchorElement); 
    	}
    	
    	async function show_Selection_Grid() {
@@ -2411,6 +2451,20 @@
 		}
 		
 		return await fetch(url).then((response)=> response.json()).catch((error) => console.log("non-json response fetch"));
+	}
+	
+	async function getFetchTextData(url_string, map_params) {
+		
+		const baseURL = window.location.href;
+		const url = new URL(url_string, baseURL);
+		
+		if(map_params.size !== 0) {
+			for(const [key, value] of map_params) {
+				url.searchParams.set(key, value);
+			}
+		}
+		
+		return await fetch(url).then((response)=> response.text()).catch((error) => console.log("non-text response fetch"));
 	}
 	
 	function selectedOption(id) {

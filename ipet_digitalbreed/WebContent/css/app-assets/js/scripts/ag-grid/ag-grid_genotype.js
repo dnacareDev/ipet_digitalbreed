@@ -37,6 +37,7 @@
 	    .simpleHttpRequest({ url: "../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 	    .then(function(data) {
 	      gridOptions.api.setRowData(data);
+	      getRefGenome();
 	    });
 	}
 
