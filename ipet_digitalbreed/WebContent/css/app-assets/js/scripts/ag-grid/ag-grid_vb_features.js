@@ -8,26 +8,24 @@
 ==========================================================================================*/
 
 	class CustomHeader {
-		// 미완성. header영역 작업은 일단 막아놓음
 	    init(agParams) {
 	    	
 	    	//console.log(agParams);
 	    	
 	    	this.agParams = agParams;
 	    	this.eGui = document.createElement('div');
-	    	//this.eGui.classList.add('atgc_sort');
+	    	
 	    	this.eGui.style.display = "flex";
 	    	this.eGui.style.alignItems = "center";
 	    	this.eGui.style.justifyContent = "center";
+	    	this.eGui.dataset.pos = this.agParams.displayName.replaceAll(",","");
+	    	this.eGui.dataset.count = "0";
 	        this.eGui.innerHTML = `
-	            <div class="customHeaderMenuButton">
-	                <i class="fa ${this.agParams.menuIcon}"></i>
-	            </div>
 	            <div class="customHeaderLabel" style="writing-mode: vertical-lr;">${this.agParams.displayName}</div>
-	            <div class="customALabel inactive" style="display:none;" data-base="A">A</div>
-	            <div class="customTLabel inactive" style="display:none;" data-base="T">T</div>
-	            <div class="customGLabel inactive" style="display:none;" data-base="G">G</div>
-	            <div class="customCLabel inactive" style="display:none;" data-base="C">C</div>
+	            <div class="customLabel customALabel" style="display:none;" data-base="A">A</div>
+	            <div class="customLabel customTLabel" style="display:none;" data-base="T">T</div>
+	            <div class="customLabel customGLabel" style="display:none;" data-base="G">G</div>
+	            <div class="customLabel customCLabel" style="display:none;" data-base="C">C</div>
 	        `;
 	        
 	        this.eSortcustomHeaderLabelButton = this.eGui.querySelector(".customHeaderLabel");
@@ -37,41 +35,71 @@
 	        this.eSortCButton = this.eGui.querySelector(".customCLabel");
 	        
 	        if (this.agParams.enableSorting) {
-	        	/*
-	            this.onSortChangedListener = this.onSortChanged.bind(this);
-	            this.agParams.column.addEventListener('sortChanged', this.onSortChangedListener);
-	            this.onSortChanged();
-	            */
-	        	this.eSortcustomHeaderLabelButton.addEventListener('click', () => {
+	        	
+	        	this.eGui.addEventListener('click', () => {
 	        		
-	        		if(this.eGui.querySelector('.active') === null || this.eGui.querySelector('.active') === undefined) {
+	        		const pos = this.eGui.dataset.pos;
+	        		
+	        		document.querySelectorAll(`[data-pos]:not([data-pos="${pos}"]`).forEach((node) => {
+	        			//console.log(node);
+	        			node.dataset.count = "0";
+	        			node.querySelectorAll('.customLabel').forEach((subNode) => {
+	        				subNode.style.display = 'none';
+	        			})
+	        		});
+	        		
+	        		if(this.eGui.dataset.base_arr === undefined || this.eGui.dataset.base_arr === null) {
+	        			const base_arr = new Array();
 	        			
-	        			this.eSortAButton.classList.replace('inactive', 'active');
-	        			this.eSortAButton.style.display = 'block';
-	        		} else {
-	        			const base = this.eGui.querySelector('.active').innerText;
-	        			const next_base = ATGC_sort(base);
-	        			//console.log("next base : ", next_base);
+	        			VariantBrowser_gridOptions.api.forEachNode((node) => {
+	        				//console.log(node.data[this.eGui.dataset.pos]);
+	        				const base = node.data[this.eGui.dataset.pos];
+	        				if(!base_arr.includes(base) && (base == 'A' || base == 'T' || base == 'G' || base == 'C') ) {
+	        					base_arr.push(base);
+	        				}
+	        				
+	        			})
+	        			base_arr.sort(function(a,b){
+	        				switch(a) {
+		        				case 'A': a = 1; break;
+		        				case 'T': a = 2; break;
+		        				case 'G': a = 3; break;
+		        				case 'C': a = 4; break;
+	        				}
+	        				switch(b) {
+		        				case 'A': b = 1; break;
+		        				case 'T': b = 2; break;
+		        				case 'G': b = 3; break;
+		        				case 'C': b = 4; break;
+	        				}
+	        				return a > b ? 1 : -1;
+	        			})
 	        			
-	        			if(next_base === null) {
-	        				this.eSortCButton.classList.replace('active', 'inactive');
-		        			this.eSortCButton.style.display = 'none';
-	        			} else {
-	        				this[`eSort${base}Button`].style.display = 'none';
-		        			this[`eSort${base}Button`].classList.replace('active', 'inactive');
-		        			
-		        			this[`eSort${next_base}Button`].style.display = 'block';
-		        			this[`eSort${next_base}Button`].classList.replace('inactive', 'active');
-	        			}
-	        			
-	        			
+	        			base_arr.push('N')
+	        			this.eGui.dataset.base_arr = base_arr;
 	        		}
 	        		
-	        	});
-	        	
-	        	this.eSortAButton.addEventListener('click', () => {
-	        		const base = ATGC_sort('A');
-	        		this.eSortTButton.style.display = 'block';
+	        		const base_arr = this.eGui.dataset.base_arr.split(",");
+	        		const count = Number(this.eGui.dataset.count);
+	        		
+	        		console.log(base_arr[count%base_arr.length]);
+	        		
+	        		this.eGui.querySelectorAll('.customLabel').forEach((node) => {
+	        			node.style.display = 'none';
+	        		});
+	        		
+	        		
+	        		base_sort_order = base_arr[count%base_arr.length];
+	        		
+	        		if(base_arr[count%base_arr.length] == 'N'){
+	        			this.agParams.setSort('', event.shiftKey);
+	        		} else {
+	        			this.eGui.querySelector(`.custom${base_arr[count%base_arr.length]}Label`).style.display = 'block';
+	        			this.agParams.setSort('desc', event.shiftKey);
+	        		}
+	        		
+	        		
+	        		this.eGui.dataset.count = Number(this.eGui.dataset.count) + 1;
 	        	});
 	        } else {
 	            this.eGui.removeChild(this.eSortAButton);
@@ -79,31 +107,15 @@
 	            this.eGui.removeChild(this.eSortGButton);
 	            this.eGui.removeChild(this.eSortCButton);
 	        }
-	
+	        
 	    }
-	
+	    
 	    getGui() {
 	    	return this.eGui;
 	    }
 	
 	}
 	
-	function ATGC_sort(base) {
-		//console.log(base);
-		
-		switch(base) {
-			case 'A':
-				return 'T';
-			case 'T':
-				return 'G';
-			case 'G':
-				return 'C';
-			case 'C':
-				return null;
-		}
-		
-	}
-
 	class CustomTooltip {
 		init(params) {
 			const eGui = (this.eGui = document.createElement('div'));
@@ -164,11 +176,12 @@
 		    	}
 		    	
 		    	//[A,T,G,C] => [T,G,C,A] 형태로 정렬버튼을 누를때마다 순환
-		    	
+		    	/*
 		    	if(base_switch) {
 		    		const spliced = base_order.shift();
 		    		base_order.push(spliced);
 		    	}
+		    	*/
 		    	
 		        // 첫번째 Row인 id=reference는 고정
 		        for (let i=0, nextInsertPos=0 ; i<rowNodes.length; i++) {

@@ -59,10 +59,11 @@
 			
 			String fileName = filePart.getFileName();
 			if(fileName != null) {
-				System.out.println("file: name=" + name + ", filename=" +fileName+ ", path=" +rootPath+savePath);
+				//System.out.println("file: name=" + name + ", filename=" +fileName+ ", path=" +rootPath+savePath);
+				System.out.println("file: name=" + name + ", filename=" +fileName);
 				File dir = new File(rootPath+fsl+savePath+fsl+name);
 				
-				// name == fasta || gff || cds || protein
+				// name == fasta || gff || cds || protein || annotation
 				jsonObj.addProperty(name+"_filename", fileName);
 				
 				//System.out.println("dir: "+ dir);
@@ -84,9 +85,10 @@
 	}
 		
 	
-	//System.out.println(jsonObj);
+	System.out.println(jsonObj);
 	//String sql="insert into reference_genome_t(crop_name, refgenome, gff, author, creuser, cre_dt) values('" +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +permissionUid+ "', now());";
-	String sql="insert into reference_genome_t(cropid, varietyid, crop_name, refgenome, gff, author, fasta_filename, gff_filename, cds_filename, protein_filename, creuser, cre_dt) values( (select cropid from variety_t where varietyid='"+jsonObj.get("variety_id").getAsString()+"'), '"  +jsonObj.get("variety_id").getAsString()+ "', '"  +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +jsonObj.get("fasta_filename").getAsString()+ "', '" +jsonObj.get("gff_filename").getAsString() +"', '" +jsonObj.get("cds_filename").getAsString()+ "', '" +jsonObj.get("protein_filename").getAsString()+ "', '" +permissionUid+ "', now());";
+	String sql="insert into reference_genome_t(cropid, varietyid, crop_name, refgenome, gff, author, fasta_filename, gff_filename, gene_filename, annotation_filename, cds_filename, protein_filename, creuser, cre_dt)"; 
+	sql += "values( (select cropid from variety_t where varietyid='"+jsonObj.get("variety_id").getAsString()+"'), '"  +jsonObj.get("variety_id").getAsString()+ "', '"  +jsonObj.get("cropParam").getAsString()+ "', '" +jsonObj.get("refgenomeParam").getAsString()+ "', '" +jsonObj.get("gffParam").getAsString()+ "', '" +jsonObj.get("authorParam").getAsString()+ "', '" +jsonObj.get("fasta_filename").getAsString()+ "', '" +jsonObj.get("gff_filename").getAsString() +"', '" +jsonObj.get("gff_filename").getAsString() +"', '" +jsonObj.get("annotation_filename").getAsString() +"', '"  +jsonObj.get("cds_filename").getAsString()+ "', '" +jsonObj.get("protein_filename").getAsString()+ "', '" +permissionUid+ "', now());";
 	System.out.println(sql);
 	
 	try{
@@ -121,7 +123,7 @@
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();
 
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
-	String refgenomeScript = "Rscript " +script_path+ "reference_database_final.R " +rootPath+fsl+savePath+fsl+ " " +jsonObj.get("fastaFileName")+ " " +jsonObj.get("cdsFileName")+ " " +jsonObj.get("proteinFileName");
+	String refgenomeScript = "Rscript " +script_path+ "reference_database_final.R " +rootPath+fsl+savePath+fsl+ " " +jsonObj.get("fasta_filename")+ " " +jsonObj.get("cds_filename")+ " " +jsonObj.get("protein_filename") + " " + jsonObj.get("gff_filename") + " " + jsonObj.get("gene_filename");
 	
 	System.out.println("=========================================");
 	System.out.println("Gwasgapit parameter : " + refgenomeScript);

@@ -125,10 +125,9 @@ body {
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1 float-right">
-                                            <%-- 
+                                        <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
                                             <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
-                                                <select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
+                                                <select class="select2-bg form-control" id="variety-select-grid" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
                                                     <%
 	                                                	try{
 	                                                		int selected_cnt=0;
@@ -143,15 +142,10 @@ body {
 	                                                		}
 	                                                	}catch(Exception e){
 	                                                		System.out.println(e);
-	                                                	}finally { 
-	                                                   		ipetdigitalconndb.stmt.close();
-	                                                   		ipetdigitalconndb.rs.close();
-	                                                   		ipetdigitalconndb.conn.close();
-	                                                   	}
+	                                                	}
                                                     %>       
                                                      </select>                                          
                                             </div>
-                                            --%>           
                                             <div class="ag-btns d-flex flex-wrap">                                            
                                                 <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0 " id="filter-text-box" placeholder="Search...." />
                                             </div>
@@ -256,7 +250,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/fasta/CsGojo-0_v1.LG1-9.fasta" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a> 
+											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.fasta" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a> 
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -268,7 +262,19 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/gff/CsGojo-0_v1_HC.gff3" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.gff" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+										</div>
+						            </div>
+						            <div class="form-label-group input-group col-12">
+										<div class="col-4" style="margin-top:5px;">
+											Gene sequence
+										</div>
+										<div class="custom-file col-8">
+										    <input type="file" class="custom-file-input" id="gene" name="gene">
+										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+										</div>
+										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
+											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.gene.fasta" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -280,7 +286,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/cds/CsGojo-0_v1_HC.cds" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.cds.fasta" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						            <div class="form-label-group input-group col-12">
@@ -292,7 +298,19 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/CsGojo-0_v1_HC/protein/CsGojo-0_v1_HC.pep" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.pep.fasta" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+										</div>
+						            </div>
+						            <div class="form-label-group input-group col-12">
+										<div class="col-4" style="margin-top:5px;">
+											Annotaion
+										</div>
+										<div class="custom-file col-8">
+										    <input type="file" class="custom-file-input" id="annotation" name="annotation">
+										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+										</div>
+										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
+											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.annotation.txt" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						        </fieldset>
@@ -394,13 +412,16 @@ body {
     }
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-   		resetPCA();
+   		resetForm();
     });    
    	
-    function resetPCA() {
-    	document.getElementById('uploadPcaForm').reset();
-    	vcfFileList();
-    	box.removeAllFiles();
+    function resetForm() {
+    	document.getElementById('uploadForm').reset();
+    	document.getElementById('variety-select').selectedIndex = 0;
+    	document.getElementById('variety-select').dispatchEvent(new Event("change"));
+    	document.querySelectorAll('label.custom-file-label').forEach( (node) => {
+    		node.innerText='Choose file';
+    	})
     }
    	
     function FileUpload() {

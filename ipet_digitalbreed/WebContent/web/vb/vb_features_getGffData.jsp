@@ -9,15 +9,16 @@
 	String chr = request.getParameter("chr");
 	int position = Integer.parseInt(request.getParameter("position"));
 	String refgenome = request.getParameter("refgenome");
-	String gff = request.getParameter("gff");
+	//String gff = request.getParameter("gff");
+	String gff = request.getParameter("gff_filename");
 	
-	
-	//System.out.println(jobid);
-	//System.out.println(chr);
-	//System.out.println(position);
-	//System.out.println(refgenome);
-	//System.out.println(gff);
-	
+	/*
+	System.out.println(jobid);
+	System.out.println(chr);
+	System.out.println(position);
+	System.out.println(refgenome);
+	System.out.println(gff);
+	*/
 	
 	long beforeTime = System.currentTimeMillis();
 	
@@ -34,12 +35,12 @@
 	JsonArray mRnaArray = new JsonArray();
 	JsonArray cdsArray = new JsonArray();
 	
+	System.out.println(Paths.get(path+gff));
 	
-	Stream<String> lines = Files.lines(Paths.get(path+gff+".gff"))
+	Stream<String> lines = Files.lines(Paths.get(path+gff))
 								.filter((item) -> item.contains(chr));
 	
 	lines.forEach(line -> {
-		//System.out.println(line);
 		String[] lineArr = line.split("\t");
 		if( !((position - 50000) <= Integer.parseInt(lineArr[3]) && Integer.parseInt(lineArr[4]) <= (position + 50000)) ) {
 			return;

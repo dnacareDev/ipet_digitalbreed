@@ -132,13 +132,14 @@
 	}
 	
 	#chromosomeDiv, #chromosomeDetailedDiv {
-		  margin: 0px 5% auto; 
-		  padding:0px; 
-		  width:90%; 
-		  height: 20px; 
-		  display: flex; 
-		  justify-content: space-around;
+		margin: 0px 5% auto; 
+		padding:0px; 
+		width:90%; 
+		height: 20px; 
+		display: flex; 
+		justify-content: space-between;
 	}
+	
 	.chromosomeStackDiv, .chromosomeDetailedStackDiv {
 		width: 1px;
 		height: 18px;
@@ -153,10 +154,11 @@
 	}
 	.chromosomeStackDiv[data-position] {
 		background-color: #bcbcbc;
+		/*border-left: 1px solid #bcbcbc;*/
 	}
 	.chromosomeStackDiv[data-selected="true"] {
-		background-color: red !important;
-		border: red !important;
+		/* background-color: red !important;*/
+		border-left: 1px solid red !important;
 		z-index: 3;
 	}
 	.chromosomeStackDiv[data-order="1999"], .chromosomeDetailedStackDiv[data-order="1999"] {
@@ -172,6 +174,33 @@
 		background-color: red !important;
 		border: red !important;
 		z-index: 3;
+	}
+	
+	#chromosomeScaleBarDiv {
+		margin: 3px 5% auto;
+		padding: 0px; 
+		width: 90%; 
+		height: 10px; 
+		display: flex; 
+		justify-content: space-between;
+		
+	}
+	
+	.chromosomeScaleBarStackDiv {
+		width: 1px;
+		height: 5px;
+		/*border-bottom: 1px solid black;*/
+		display: inline-block;
+	}
+	
+	.chromosomeScaleBarStackDiv[data-order="0"], .chromosomeScaleBarStackDiv[data-order="99"], .chromosomeScaleBarStackDiv[data-order="199"], .chromosomeScaleBarStackDiv[data-order="299"],
+	.chromosomeScaleBarStackDiv[data-order="399"], .chromosomeScaleBarStackDiv[data-order="499"], .chromosomeScaleBarStackDiv[data-order="599"], .chromosomeScaleBarStackDiv[data-order="699"],
+	.chromosomeScaleBarStackDiv[data-order="799"], .chromosomeScaleBarStackDiv[data-order="899"], .chromosomeScaleBarStackDiv[data-order="999"], .chromosomeScaleBarStackDiv[data-order="1099"],
+	.chromosomeScaleBarStackDiv[data-order="1199"], .chromosomeScaleBarStackDiv[data-order="1299"], .chromosomeScaleBarStackDiv[data-order="1399"], .chromosomeScaleBarStackDiv[data-order="1499"], 
+	.chromosomeScaleBarStackDiv[data-order="1599"], .chromosomeScaleBarStackDiv[data-order="1699"], .chromosomeScaleBarStackDiv[data-order="1799"], .chromosomeScaleBarStackDiv[data-order="1899"],
+	.chromosomeScaleBarStackDiv[data-order="1999"] {
+		position: relative;
+		background-color: #bcbcbc;
 	}
 	
 	#VariantBrowserGrid {
@@ -210,9 +239,46 @@
 		<jsp:param name="menu_active" value="vb"/>
 	</jsp:include>
 	--%>
-
+	<!-- Header -->
+    <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu navbar-fixed navbar-shadow navbar-brand-center">
+        <div class="navbar-wrapper">
+            <div class="navbar-container content">
+                <div class="navbar-collapse" id="navbar-mobile">
+                    <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
+                    	<div style="width:20%; min-width:200px; margin-left:10px; padding-left:13px; font-family: 'SDSamliphopangche_Outline'"> 
+							<select id='Chr_select' class='select2 form-select float-left'  onChange="clear_mark_all(); selectChr(this); show_SnpEff_Grid(); show_GWAS_Grid(); ">
+							</select>
+						</div>
+						<div style="width:20%; min-width:250px; padding-left:14px;"> 
+							<input type="text" id="positionInput" class="form-control" style="width:180px; display:inline; font-family: 'SDSamliphopangche_Outline';" placeholder="Position" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').replace(/\B(?=(\d{3})+(?!\d))/g, ',');" onkeyup="if(event.keyCode==13){this.blur();}" onblur="changeInputValue(Number(this.value.replaceAll(',','')));">
+							<span style="margin-left:3px;">bp</span>
+						</div>
+                    </div>
+					<div>
+						<div class="float-right">
+							<button type="button" id="afterOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px; margin-left:2px;" onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> &gt;&gt; </button>
+						</div>
+						<div class="float-right">
+							<button type="button" id="afterId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="nextPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &gt; </button>
+						</div>
+						<!-- current button: 현재 위치정보 저장용도 -->
+						<div class="float-right" style="display:none;">
+							<button type="button" id="currentId" ></button>
+						</div>
+						<div class="float-right">
+							<button type="button" id="beforeId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &lt; </button>
+						</div>
+						<div class="float-right">
+							<button type="button" id="beforeOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousOrder(this.dataset.vcf_id, this.dataset.order);"> &lt;&lt; </button>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+	
     <!-- BEGIN: Content-->
-    <div class="app-content content" style="padding-top: 0px;">
+    <div class="app-content content" style="padding-top: 30px;">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
             <div class="content-body">
@@ -231,43 +297,12 @@
 										<div style="position: absolute; top: 105px; right: -25px;">
 											<button type="button" class="btn sideButton" style="color: #ffffff; background-color:#2da0ed;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain(); resizeGrid();">Cluster</button>
 										</div>
-										<!-- right side 고정버튼 -->
-	                                	
-	                                	<div class="row mt-2">
-	                                		<div style="width:20%; min-width:200px; margin-left:10px; padding-left:13px;"> 
-												<select id='Chr_select' class='select2 form-select float-left' onChange="clear_mark_all(); selectChr(this); show_SnpEff_Grid(); show_GWAS_Grid(); ">
-												</select>
-												<!--  
-												<select id='Chr_select' class='select2 form-select float-left' onChange="clear_mark_all(); selectChr(this); (async() => {await show_Selection_Grid(); show_SnpEff_Grid(); show_GWAS_Grid();})(); ">
-												</select>
-												-->
-											</div>
-											<div style="width:20%; min-width:200px; padding-left:14px;"> 
-												<input type="text" id="positionInput" class="form-control" placeholder="Position" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').replace(/\B(?=(\d{3})+(?!\d))/g, ',');" onkeyup="if(event.keyCode==13){this.blur();}" onblur="changeInputValue(Number(this.value.replaceAll(',','')));">
-											</div>
-											<div style="width:56%">
-												<div class="float-right">
-													<button type="button" id="afterOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px; margin-left:2px;" onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> &gt;&gt; </button>
-												</div>
-												<div class="float-right">
-													<button type="button" id="afterId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="nextPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &gt; </button>
-												</div>
-												<!-- current button: 현재 위치정보 저장용도 -->
-												<div class="float-right" style="display:none;">
-													<button type="button" id="currentId" ></button>
-												</div>
-												<div class="float-right">
-													<button type="button" id="beforeId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &lt; </button>
-												</div>
-												<div class="float-right">
-													<button type="button" id="beforeOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousOrder(this.dataset.vcf_id, this.dataset.order);"> &lt;&lt; </button>
-												</div>
-											</div>
-	                                	</div>
 	                                	<div class="row" style="margin-top: 0px; margin-bottom:0px;">
-	                                		<fieldset class="border mt-1 pt-2 pl-2 pr-2 pb-1" style="width:96%; margin-left:23px; margin-right:23px;">
+	                                		<fieldset class="border pt-2 pl-2 pr-2 pb-1 pb-3" style="width:96%; margin-left:23px; margin-right:23px;">
 	                                			<legend  class="w-auto">Reference</legend>
 		                                		<div id="chromosomeDiv"></div>
+		                                		<div id="chromosomeScaleBarDiv">
+		                                		</div>
 	                                		</fieldset>
 	                                	</div>
 	                                	<div class="row">
@@ -395,7 +430,7 @@
 											            		<button type="button" class="btn btn-light mb-1" style="margin-right:5px; float:left; background-color:#7367F0 !important; color:#FFFFFF;" onclick=" if(SelectionList_gridOptions.api.getSelectedNodes().length != 1) {return alert('position을 하나만 선택해주세요.')} $('#flankingSequenceModal').modal();">Sequence</button>
 											            		<button type="button" class="btn btn-light mb-1" style="margin-left:5px; margin-right:auto; float:left; background-color:#7367F0 !important; color:#FFFFFF;" onclick="alert('전송되었습니다.');">Primer Design</button>
 											            		<button type="button" class="btn btn-outline-success mb-1" style="margin-left:5px; margin-right:15px; float:right;" onclick="selection_mark();">표지</button>
-											            		<button type="button" class="btn btn-outline-warning mb-1" style="margin-left:13px; margin-right:5px; float:right;" onclick="clear_mark_marker();">Reset</button>
+											            		<button type="button" class="btn btn-outline-warning mb-1" style="margin-left:13px; margin-right:5px; float:right;" onclick="clear_mark_all();">Reset</button>
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1 pr-0">
@@ -731,8 +766,9 @@
 	(function() {
 		console.time("IIFE")
 		appendChromosomeDiv();
+		appendChromosomeScaleBarDiv();
 		appendChromosomeDetailedDiv();
-		$('[data-toggle="popover"]').popover();
+		//$('[data-toggle="popover"]').popover();
 		console.timeEnd("IIFE")
 	})();
 	
@@ -758,11 +794,7 @@
 	
 	document.addEventListener('DOMContentLoaded', async function() {
 		
-		//await addChromosomeInfo();
-  		//document.getElementById("Chr_select").dispatchEvent(new Event("change"));
-
   		await Promise.all([addChromosomeInfo(), show_Selection_Grid()]);
-		//document.getElementById("Chr_select").dispatchEvent(new Event("change"));
 		document.getElementById("Chr_select").dispatchEvent(new Event("change"));
 		
 		getGwasSelectList();
@@ -774,7 +806,7 @@
 	// 1000등분하여 div상에 출력
 	function appendChromosomeDiv() {
 		
-		console.time("make1000Div");
+		console.time("make2000Div");
 		
 		const chromosomeDiv = document.getElementById('chromosomeDiv');
 		
@@ -789,9 +821,7 @@
 		}
 		
 		
-		
-		
-		console.timeEnd("make1000Div");
+		console.timeEnd("make2000Div");
 	}
 	
 	// 각각의 chrmosomeStackDiv에 클릭이벤트 추가
@@ -832,12 +862,71 @@
 			
 			const position = selectedDiv.dataset.position;
 			//getGeneModel(selectedDiv);
-			getGeneModel(position);
 			colorGeneModelPosition(Number(position));
+			getGeneModel(position);
 			getVariantBrowserGrid();
 		})
 	})
 	
+	function appendChromosomeScaleBarDiv() {
+		const chromosomeDiv = document.getElementById('chromosomeScaleBarDiv');
+		
+		for(let i=0 ; i<=1999 ; i++) {
+			
+			const child = document.createElement('div');
+			child.classList.add('chromosomeScaleBarStackDiv');
+			child.dataset.order = i;
+			//child.dataset.selected = false;
+			
+			chromosomeDiv.append(child);
+		}
+		
+		
+		// 0, 1999 번째 stackDiv에 숫자 출력
+		//const nodes = document.querySelectorAll('.chromosomeStackDiv');
+		const nodes = document.querySelectorAll('.chromosomeScaleBarStackDiv');
+		
+		function create_SVG_specificOrderStackDiv(order_id, left, width) {
+			const childDiv = document.createElement('div');
+			childDiv.style.position = "absolute";
+			childDiv.style.top = "3px";
+			childDiv.style.left = "-7px";
+			
+			const xmlns = "http://www.w3.org/2000/svg";
+			const svg = document.createElementNS(xmlns, "svg");
+			svg.setAttribute('id', order_id);
+			svg.setAttribute('width', width);
+		    svg.setAttribute('height', '20');
+		    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
+			
+		    const svg_text = document.createElementNS(xmlns, "text");
+		    svg_text.setAttributeNS(null, 'fill', '#000000');
+		    svg_text.setAttributeNS(null, 'font-size', '0.8rem');
+		    svg_text.setAttributeNS(null, 'x', '5');
+		    svg_text.setAttributeNS(null, 'y', '50%');
+		    svg_text.setAttributeNS(null, 'dominant-baseline', 'middle');
+
+		    const text_node = document.createTextNode('0');
+		    
+		    svg_text.appendChild(text_node);
+		    svg.appendChild(svg_text);
+		    childDiv.appendChild(svg);
+		    
+		    return childDiv;
+		}
+		
+		
+		for(let i=0 ; i<11 ; i++) {
+			const childDiv = create_SVG_specificOrderStackDiv(`scaleBarDiv_\${i}`, '-15', '100');
+			
+			if(i==0) {
+				nodes[0].appendChild(childDiv);
+			} else {
+				nodes[(i*200)-1].appendChild(childDiv);
+			}
+		}
+		
+	}
 	
 	
 	// 염색체 드롭박스에 option 추가
@@ -877,6 +966,20 @@
 		//console.log(vcf_id);
 		//console.log(row_count);
 		//console.log(chr);
+		
+		// #chromosomeLastStackDiv에 length값 입력
+		const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		
+		for(let i=1 ; i<=10 ; i++) {
+			const division_length = parseInt(Number(length) * i / 10)
+			document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = thousands_separator(division_length);
+			for(let j=0, left=0; j<thousands_separator(length).length ; j++) {
+				left = isNaN(thousands_separator(division_length)[j]) ? left-2 : left-4; 
+				if(j==length.toString().length -1) {
+					document.querySelector(`.chromosomeScaleBarStackDiv[data-order="\${(i*200)-1}"]>div`).style.left = left + "px";
+				}
+			}
+		}
 		
 		fetch(`./vb_features_positionListFromChr.jsp?vcf_id=\${vcf_id}&row_count=\${row_count}&chr=\${chr}&jobid=\${linkedJobid}`)
 		.then((response) => response.json())
@@ -1257,10 +1360,6 @@
 			
 			chromosomeDiv.append(child);
 		}
-		
-		//const stackOrder_500 = document.querySelector(`.chromosomeDetailedStackDiv[data-order="1000"]`); 
-		//stackOrder_500.style.backgroundColor = "red";
-		
 	}
 	
 	function colorGeneModelPosition(position) {
@@ -1269,22 +1368,35 @@
 		
 		// range : position-50k ~ position+50k => 100k
 		
-		const gene_model_position_arr = chr_orders_arr.filter((item) => position-50000 < item.position && item.position<position+50000 )
+		const gene_model_position_arr = chr_orders_arr.filter((item) => position-50000 < item.position && item.position<position+50000 );
 		const gene_model_order_arr = new Array();
 		
 		for(let i=0 ; i<gene_model_position_arr.length ; i++) {
 			const selected_order = parseInt(((gene_model_position_arr[i].position - position) / 50) + 1000);
-			console.log("order_arr : ", selected_order );
+			//console.log("order_arr : ", selected_order );
 			gene_model_order_arr.push(selected_order)
 			//console.log("index_arr : ", gene_model_position_arr[i].index);
 		}
 		
 		document.querySelectorAll(`.chromosomeDetailedStackDiv[data-position]`).forEach((node) => {
 			delete node.dataset.position;
+			node.innerHTML = "";
 		});
 		
 		for(let i=0 ; i<gene_model_order_arr.length ; i++) {
 			document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).dataset.position = gene_model_position_arr[i].position;
+			
+			const color = gene_model_order_arr[i]==1000 ? 'red' : '#bcbcbc';
+			
+			document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).innerHTML = `
+				<div style="position:absolute; top:17px;">
+					<svg width="1" height="88" xmlns:svg="http://www.w3.org/2000/svg">
+						//<polygon style="fill:#bcbcbc" points="0,0 1,0 1,200 0,200"></polygon>
+						<polygon style="fill:\${color}" points="0,0 1,0 1,200 0,200"></polygon>
+					</svg>
+				</div>
+				`;
+				
 		}
 		
 		//debugger;
@@ -1303,7 +1415,9 @@
 		map_params.set("chr", chr);
 		map_params.set("position", position);
 		map_params.set("refgenome", refgenome);
-		map_params.set("gff", gff);
+		//map_params.set("gff", gff);
+		map_params.set("gff_filename", gff_filename);
+		
 		
 		//fetch(url);
 		const gene_model = await getFetchData(url_string, map_params);
@@ -1331,7 +1445,6 @@
 			
 			//console.log("mRNA_id : ", mRNA_id);
 			
-			//const selected_position = Number(document.querySelector(`.chromosomeStackDiv[data-selected='true']`).dataset.position);
 			const selected_position = position;
 			
 			const mRNA_start = Number(gene_model['mRNA'][i]['start']);
@@ -1357,9 +1470,6 @@
 			// 표시할 position을 선정
 			const selectedGeneModelDiv = document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${mRNA_start_div_order}"]`);
 			selectedGeneModelDiv.dataset.selected = "true";
-			
-			
-			
 			
 			
 			const strand = gene_model['mRNA'][i]['strand'];
@@ -1389,13 +1499,8 @@
 			const svg = createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position);
 			//console.log(svg);
 			
-			//data-bs-toggle="modal" data-bs-target="#exampleModal"
-			
 			const childDiv = document.createElement('div');
-			//childDiv.title = "Gene Info";
 			childDiv.dataset.id = mRNA_id;
-			//childDiv.dataset.end = mRNA_end;
-			//childDiv.dataset.row = SVG_row;
 			
 			childDiv.dataset.toggle = mRNA_id;
 			childDiv.dataset.html = "true";
@@ -1424,8 +1529,6 @@
 			childDiv.appendChild(svg);
 			selectedGeneModelDiv.appendChild(childDiv);
 			$(`[data-toggle="\${mRNA_id}"]`).popover();
-			//selectedGeneModelDiv.appendChild(svg);
-			
 		}
 	}
 	
@@ -1436,12 +1539,10 @@
 		const xmlns = "http://www.w3.org/2000/svg";
 		
 		const svg = document.createElementNS(xmlns, "svg");
-	    //svg.setAttribute('style', `border:1px solid black; position: absolute; top: 37px; right:\${-width/2}`);
 	    svg.setAttribute('width', mRNA_width+9);
 	    svg.setAttribute('height', '20');
 	    //svg.setAttribute('viewBox', `0 0 \${mRNA_width+8} 16`);
 	    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
-	    //svg.setAttribute('onclick', "$('#geneInfoModal').modal('show')");
 	    svg.setAttribute('onclick', "show_geneInfoModal();");
 	    
 	    
@@ -1515,7 +1616,8 @@
 				document.getElementById('cds_sequence').value = data.replaceAll("\r\n","");
 			});
 			
-			fetch(`./vb_features_getSequence.jsp?command=protein&file_name=\${mRNA_parent}&refgenome=\${refgenome}`)
+			//fetch(`./vb_features_getSequence.jsp?command=protein&file_name=\${mRNA_parent}&refgenome=\${refgenome}`)
+			fetch(`./vb_features_getSequence.jsp?command=protein&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
 			.then((response) => response.text())
 			.then((data) => {
 				document.getElementById('protein_sequence').value = data.replaceAll("\r\n","");
@@ -1696,51 +1798,33 @@
     					
     		            comparator: (valueA, valueB, nodeA, nodeB, isDescending) => {
     		                
+    		            	const sort_map = new Map();
+    		            	sort_map.set('A', ['A','T','G','C'])
+    		            	sort_map.set('T', ['T','G','C','A'])
+    		            	sort_map.set('G', ['G','C','A','T'])
+    		            	sort_map.set('C', ['C','A','T','G'])
+    		            	
     		            	switch(valueA) {
-    		            		case base_order[0]:
-    		            			valueA = 4;
-    		            			break;
-    		            		case base_order[1]:
-    		            			valueA = 3;
-    		            			break;
-    		            		case base_order[2]:
-    		            			valueA = 2;
-    		            			break;
-    		            		case base_order[3]:
-    		            			valueA = 1;
-    		            			break;
-    		            		default:
-    		            			valueA = 0;
+    		            		case sort_map.get(base_sort_order)[0]: valueA = 4; break;
+    		            		case sort_map.get(base_sort_order)[1]: valueA = 3; break;
+    		            		case sort_map.get(base_sort_order)[2]: valueA = 2; break;
+    		            		case sort_map.get(base_sort_order)[3]: valueA = 1; break;
+    		            		default: valueA = 0;
     		            	}
     		            	
     		            	switch(valueB) {
-			            		case base_order[0]:
-			            			valueB = 4;
-			            			break;
-			            		case base_order[1]:
-			            			valueB = 3;
-			            			break;
-			            		case base_order[2]:
-			            			valueB = 2;
-			            			break;
-			            		case base_order[3]:
-			            			valueB = 1;
-			            			break;
-			            		default:
-    		            			valueB = 0;
+			            		case sort_map.get(base_sort_order)[0]: valueB = 4; break;
+			            		case sort_map.get(base_sort_order)[1]: valueB = 3; break;
+			            		case sort_map.get(base_sort_order)[2]: valueB = 2; break;
+			            		case sort_map.get(base_sort_order)[3]: valueB = 1; break;
+			            		default: valueB = 0;
 			            	}
     		            	
-    		            	if(base_switch) {
-    		            		base_switch = false;
-   		            			const spliced = base_order.shift();
-    		            		base_order.push(spliced);
-    		            		setTimeout(() => {
-	    		            		base_switch = true;
-    		            		}, 200);
+    		            	if (valueA == valueB) {
+    		            		return 0;
+    		            	} else {
+    		            		return (valueA > valueB) ? 1 : -1
     		            	}
-    		            	
-    		            	if (valueA == valueB) return 0;
-    		                return (valueA > valueB) ? 1 : -1;
     		            },
     		            
     					tooltipField: columnKeys[i], 
@@ -1782,8 +1866,7 @@
     		VariantBrowser_gridOptions.api.setRowData([]);
     	})
 	}
-	var base_order = ['A','T','G','C'];
-	var base_switch = true;
+	var base_sort_order = '';
    	
 	function expandAndCollapseMain() {
 		
@@ -1898,7 +1981,6 @@
 			//console.log(mark_pos);
 			//console.log(parseInt(mark_pos * 1000 / length));
 			
-			//const mark = document.querySelector(`.chromosomeStackDiv[data-position="\${marked_SnpEff[i].pos}"]`);
 			const mark = document.querySelector(`.chromosomeStackDiv[data-order="\${parseInt(mark_pos * 2000 / length)}"]`);
 			//console.log(mark);
 			
@@ -1907,17 +1989,23 @@
 			if(!document.querySelector(`[data-snpeff_order="\${mark_data_order}"]`)){
 				const childDiv = document.createElement('div');
 				childDiv.dataset.snpeff_order = mark_data_order;
+				childDiv.dataset.toggle="popover";
+				childDiv.dataset.placement = "top";
+				childDiv.dataset.trigger = "hover";
+				childDiv.dataset.content = mark_pos;
 				childDiv.style.position = "absolute";
 				childDiv.style.bottom = "13px";
 				childDiv.style.right = "-3px";
-				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg>`;
+				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" ></svg>`;
 				
 				mark.appendChild(childDiv);
+				
 			}
 			
 			
 			//mark.innerHTML = `<div data-snpEff_order=\${i} style="position: absolute; bottom: 15px; right: -3px;" ><svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg></div>`;
 		}
+		$('[data-toggle="popover"]').popover();
 		console.timeEnd("snpMark");
 	}
 	
@@ -2125,6 +2213,10 @@
 			if(!document.querySelector(`[data-gwas_order="\${mark_data_order}"]`)){
 				const childDiv = document.createElement('div');
 				childDiv.dataset.gwas_order = mark_data_order;
+				childDiv.dataset.toggle="popover";
+				childDiv.dataset.placement = "top";
+				childDiv.dataset.trigger = "hover";
+				childDiv.dataset.content = mark_pos;
 				childDiv.style.position = "absolute";
 				childDiv.style.bottom = "19px";
 				childDiv.style.right = "-3px";
@@ -2137,6 +2229,7 @@
 			
 			//mark.innerHTML = `<div data-GWAS_order=\${i} style="position: absolute; bottom: 25px; right: -3px;" ><svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#2cb637;" /></svg></div>`;
 		}
+		$('[data-toggle="popover"]').popover();
 		console.timeEnd("gwasMark");
    	}
    	
@@ -2472,7 +2565,7 @@
 		return selectEl[selectEl.selectedIndex];
 	}
 	
-	
+	const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	
 	window.onresize = resizeGrid;
 		
