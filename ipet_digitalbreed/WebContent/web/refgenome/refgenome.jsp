@@ -310,7 +310,7 @@ body {
 										    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 										</div>
 										<div class="col-1 btn-sm btn-light" style="width:80%; margin-left:5px; padding-left:5px; float:right; ">
-											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.annotation.txt" download><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
+											<a href="/ipet_digitalbreed/uploads/reference_database/EXAMPLE/EXP.annotation.txt" download="EXP.annotation.txt"><div class="feather icon-download" style="font-size:20px; margin-left: 3px;"></div></a>
 										</div>
 						            </div>
 						        </fieldset>
