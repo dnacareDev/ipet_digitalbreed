@@ -127,7 +127,7 @@ body {
                                     <div class="col-12">
                                         <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
                                             <div class="dropdown sort-dropdown mb-1 mb-sm-0">                                                
-                                                <select class="select2-bg form-control" id="variety-select-grid" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
+                                                <select class="select2-bg form-control" id="variety-select" onchange="javascript:refresh();" data-bgcolor="success" data-bgcolor-variation="lighten-3" data-text-color="white">                                                   
                                                     <%
 	                                                	try{
 	                                                		int selected_cnt=0;
@@ -188,7 +188,7 @@ body {
 												작목
 											</div>
 											<div class="col-8">
-							                	<select class=" form-control select2"  id="variety-select" name="variety_id" onchange="javascript:refresh();">                                                   
+							                	<select class=" form-control select2"  id="variety-select-modal" name="variety_id" onchange="javascript:refresh();">                                                   
                                                     <%
 	                                                	try{
 	                                                		int selected_cnt=0;
@@ -417,8 +417,8 @@ body {
    	
     function resetForm() {
     	document.getElementById('uploadForm').reset();
-    	document.getElementById('variety-select').selectedIndex = 0;
-    	document.getElementById('variety-select').dispatchEvent(new Event("change"));
+    	document.getElementById('variety-select-modal').selectedIndex = 0;
+    	document.getElementById('variety-select-modal').dispatchEvent(new Event("change"));
     	document.querySelectorAll('label.custom-file-label').forEach( (node) => {
     		node.innerText='Choose file';
     	})
@@ -427,7 +427,7 @@ body {
     function FileUpload() {
     	
     	//const variety_id = $("#variety-select :selected").val();
-    	const crop_name = $("#variety-select :selected").text();
+    	const crop_name = $("#variety-select-modal :selected").text();
     	//debugger;
     	
     	const refgenomeParam = document.getElementById('refgenomeParam').value;

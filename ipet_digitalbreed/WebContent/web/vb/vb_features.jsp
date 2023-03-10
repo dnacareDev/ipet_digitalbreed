@@ -255,23 +255,37 @@
 							<span style="margin-left:3px;">bp</span>
 						</div>
                     </div>
-					<div>
-						<div class="float-right">
-							<button type="button" id="afterOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px; margin-left:2px;" onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> &gt;&gt; </button>
-						</div>
-						<div class="float-right">
-							<button type="button" id="afterId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="nextPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &gt; </button>
-						</div>
-						<!-- current button: 현재 위치정보 저장용도 -->
-						<div class="float-right" style="display:none;">
-							<button type="button" id="currentId" ></button>
-						</div>
-						<div class="float-right">
-							<button type="button" id="beforeId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &lt; </button>
-						</div>
-						<div class="float-right">
+					<div class="btn-group" role="group" aria-label="Basic example">
+						<button type="button" id="beforeOrder" class="btn btn-sm" style="margin:8px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Display 기준 왼쪽 변이로 이동합니다." onclick="previousOrder(this.dataset.vcf_id, this.dataset.order);">
+							<i class="bx bx-rewind"></i>
+						</button>
+						<button type="button" id="beforeId" class="btn btn-sm" style="margin:8px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Position 기준 왼쪽 변이로 이동합니다." onclick="previousPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);">
+							<i class="bx bx-skip-previous"></i>
+						</button>
+						<button type="button" id="currentId" style="display:none;"></button>
+						<button type="button" id="afterId" class="btn btn-sm" style="margin:8px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Position 기준 오른쪽 변이로 이동합니다." onclick="nextPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);">
+							<i class="bx bx-skip-next"></i>
+						</button>
+						<button type="button" id="afterOrder" class="btn btn-sm" style="margin:8px 15px 8px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Display 기준 오른쪽 변이로 이동합니다." onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> 
+							<i class="bx bx-fast-forward"></i> 
+						</button>
+						<!--  
+						<div>
 							<button type="button" id="beforeOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousOrder(this.dataset.vcf_id, this.dataset.order);"> &lt;&lt; </button>
 						</div>
+						<div>
+							<button type="button" id="beforeId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &lt; </button>
+						</div>
+						<div style="display:none;">
+							<button type="button" id="currentId" ></button>
+						</div>
+						<div>
+							<button type="button" id="afterId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="nextPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &gt; </button>
+						</div>
+						<div>
+							<button type="button" id="afterOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px; margin-left:2px;" onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> &gt;&gt; </button>
+						</div>
+						-->
 					</div>
                 </div>
             </div>
@@ -388,8 +402,13 @@
 															</div>
 														</div>
 														<div id="nonSelectGWAS" class="row mt-1" style="display:block;">
+															<!--  
 															<div class="col-12" style="display: flex; flex-direction: column; align-items: center;">
 																<i class="ri-file-search-line" style=" font-size: 355px;"></i>
+																<p style="margin-top:-25px; font-size: 30px;">Please select a result</p>
+															</div>
+															-->
+															<div class="col-12" style="height:500px; display: flex; align-items: center; justify-content: center;">
 																<p style="margin-top:-25px; font-size: 30px;">Please select a result</p>
 															</div>
 														</div>
@@ -690,7 +709,7 @@
     		<div class="modal-content">
 	      		<div class="modal-body">
 	        		<div class="col-12" style="margin:15px auto;">
-					    <textarea rows="20" class="form-control" id="sequenceSize" style="font-size:14px;"></textarea>
+					    <textarea rows="20" class="form-control" id="sequenceSize" style="font-size:14px;" readonly></textarea>
 					</div>
 	      		</div>
 	      		<div class="modal-footer">
@@ -698,6 +717,13 @@
 	      			<button type="button" id="sequenceDownload" class="btn btn-success" onclick="downloadFlankingSequenceCSV(this.dataset.jobid)" >Download</button>
 	      		</div>
 	    	</div>
+	  	</div>
+	</div>
+	
+	<div class="modal" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
+			<div><strong>Loading...</strong></div>
 	  	</div>
 	</div>
 	<!-- Modal end-->
@@ -770,7 +796,7 @@
 		appendChromosomeDiv();
 		appendChromosomeScaleBarDiv();
 		appendChromosomeDetailedDiv();
-		//$('[data-toggle="popover"]').popover();
+		$('[data-toggle="popover"]').popover();
 		console.timeEnd("IIFE")
 	})();
 	
@@ -918,13 +944,13 @@
 		}
 		
 		
-		for(let i=0 ; i<11 ; i++) {
+		for(let i=0 ; i<=5 ; i++) {
 			const childDiv = create_SVG_specificOrderStackDiv(`scaleBarDiv_\${i}`, '-15', '100');
 			
 			if(i==0) {
 				nodes[0].appendChild(childDiv);
 			} else {
-				nodes[(i*200)-1].appendChild(childDiv);
+				nodes[(i*400)-1].appendChild(childDiv);
 			}
 		}
 		
@@ -972,13 +998,13 @@
 		// #chromosomeLastStackDiv에 length값 입력
 		const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		
-		for(let i=1 ; i<=10 ; i++) {
+		for(let i=1 ; i<=5 ; i++) {
 			const division_length = parseInt(Number(length) * i / 10)
 			document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = thousands_separator(division_length);
 			for(let j=0, left=0; j<thousands_separator(length).length ; j++) {
 				left = isNaN(thousands_separator(division_length)[j]) ? left-2 : left-4; 
 				if(j==length.toString().length -1) {
-					document.querySelector(`.chromosomeScaleBarStackDiv[data-order="\${(i*200)-1}"]>div`).style.left = left + "px";
+					document.querySelector(`.chromosomeScaleBarStackDiv[data-order="\${(i*400)-1}"]>div`).style.left = left + "px";
 				}
 			}
 		}
@@ -1067,7 +1093,7 @@
 		colorGeneModelPosition(chr_orders_arr[index].position)
 		getGeneModel(chr_orders_arr[index].position);
 		
-		
+		document.getElementById('positionInput').value = thousands_separator(chr_orders_arr[index].position);
 		
 		const currentId = document.getElementById('currentId');
 		currentId.dataset.index = index;
@@ -1510,15 +1536,15 @@
 			childDiv.dataset.trigger = "hover";
 			
 			let popoverContent = `
-									Current Position : \${selected_position}<br>
-									Start : \${mRNA_start}<br>
-									End : \${mRNA_end}<br>
+									Current Position : \${thousands_separator(selected_position)}<br>
+									Start : \${thousands_separator(mRNA_start)}<br>
+									End : \${thousands_separator(mRNA_end)}<br>
 									Strand : \${strand}<br>
 									CDS : <br>
 									`;
 			
 			for(let i=0 ; i<svg_CDS.length ; i++) {
-				popoverContent += `\${i+1} : \${svg_CDS[i]['start']} - \${svg_CDS[i]['end']}<br>`
+				popoverContent += `\${i+1} : \${thousands_separator(svg_CDS[i]['start'])} - \${thousands_separator(svg_CDS[i]['end'])}<br>`
 			}
 			//popoverContent += `Attribute : \${gene_model['mRNA'][i]['attribute']}`;
 									
@@ -1642,6 +1668,8 @@
 			return "-";
 		}
 		
+		
+		
 		const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		
 		//document.getElementById('pd_name').innerText() = ""
@@ -1666,10 +1694,34 @@
 		const url_string = './vb_features_getAnnotationData.jsp'
 			
 		const map_params = new Map();
+		//map_params.set("mRNA_id", search_attribute('ID'));
+		map_params.set("mRNA_id", document.getElementById('pd_name').innerText);
 		map_params.set("refgenome", refgenome);
 		map_params.set("annotation_filename", annotation_filename);
 		
-		const description = getFetchTextData();
+		const description = await getFetchData(url_string, map_params);
+		const attributes = description['attributes'];
+		
+		//debugger;
+		
+		const search_description = (text) => {
+			for(let i=0 ; i<attributes.length ; i++) {
+				if(attributes[i].includes(text)) {
+					return attributes[i].substring(text.length+1, attributes[i].length);
+				}
+			}
+			return "-";
+		}
+		
+		
+		document.getElementById('attributes_description').innerText = search_description('Description');
+		
+		const RefSeq = search_description('RefSeq').split(",");
+		const Uniprot = search_description('Uniprot').split(",");
+		const Pfam = search_description('Pfam').split(",");
+		const TAIR = search_description('TAIR').split(",");
+		const GO = search_description('GO').split(",");
+		const KEGG = search_description('KEGG').split(",");
 		
 		/*
 		document.getElementById('attributes_description').innerText = search_attribute('Description');
@@ -2005,7 +2057,8 @@
 				childDiv.dataset.toggle="popover";
 				childDiv.dataset.placement = "top";
 				childDiv.dataset.trigger = "hover";
-				childDiv.dataset.content = mark_pos;
+				//childDiv.dataset.content = mark_pos;
+				childDiv.dataset.content = thousands_separator(mark_pos);
 				childDiv.style.position = "absolute";
 				childDiv.style.bottom = "13px";
 				childDiv.style.right = "-3px";
@@ -2229,7 +2282,8 @@
 				childDiv.dataset.toggle="popover";
 				childDiv.dataset.placement = "top";
 				childDiv.dataset.trigger = "hover";
-				childDiv.dataset.content = mark_pos;
+				//childDiv.dataset.content = mark_pos;
+				childDiv.dataset.content = thousands_separator(mark_pos);
 				childDiv.style.position = "absolute";
 				childDiv.style.bottom = "19px";
 				childDiv.style.right = "-3px";
@@ -2346,6 +2400,10 @@
    			if(!document.querySelector(`[data-snpeff_order="\${mark_data_order}"]`)){
 	   			const childDiv = document.createElement('div');
 				childDiv.dataset.snpeff_order = mark_data_order;
+				childDiv.dataset.toggle="popover";
+				childDiv.dataset.placement = "top";
+				childDiv.dataset.trigger = "hover";
+				childDiv.dataset.content = thousands_separator(mark_pos);
 				childDiv.style.position = "absolute";
 				childDiv.style.bottom = "13px";
 				childDiv.style.right = "-3px";
@@ -2372,7 +2430,7 @@
 			}
    		}
    		
-   		
+   		$('[data-toggle="popover"]').popover();
    	}
    	
    	function getUpgmaSelectList() {
@@ -2544,6 +2602,10 @@
 			
 		}, 100)
    	}
+   	
+   	$("#flankingSequenceModal").on('hidden.bs.modal', function(e) {
+   		document.getElementById('flankingSequence').value = "";
+   	});
    	
 	async function getFetchData(url_string, map_params) {
 		

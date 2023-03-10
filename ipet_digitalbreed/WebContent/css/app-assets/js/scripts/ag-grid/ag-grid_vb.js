@@ -107,6 +107,10 @@
 	      field: "protein_filename",
 	      hide: true
 	    },
+	    {
+	      field: "annotation_filename",
+	      hide: true
+	    },
 	];
 	
 	function inverseRowCount(params) {
@@ -170,6 +174,7 @@
 			const gff_filename = params.data.gff_filename;
 			const cds_filename = params.data.cds_filename;
 			const protein_filename = params.data.protein_filename;
+			const annotation_filename = params.data.annotation_filename;
 
 			// 클릭할때마다 target값을 바꿔서 항상 새창이 열리게 한다  
 			const random_number = Math.random().toString(36).substring(2,12);
@@ -225,6 +230,12 @@
 			objs8.setAttribute('name', 'protein_filename'); // 객체이름
 			objs8.setAttribute('value', protein_filename); //객체값
 			form.appendChild(objs8);
+			
+			const objs9 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+			objs9.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
+			objs9.setAttribute('name', 'annotation_filename'); // 객체이름
+			objs9.setAttribute('value', annotation_filename); //객체값
+			form.appendChild(objs9);
 			    
 			    
 			form.setAttribute('method', 'post'); //get,post 가능

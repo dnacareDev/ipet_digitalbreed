@@ -16,8 +16,8 @@
 
 	try{
 
-		//String sql="select refgenome_id, crop_name, reference, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' order by refgenome_id DESC;";
-		String sql="select refgenome_id, crop_name, refgenome, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' order by refgenome_id DESC;";
+		//String sql="select refgenome_id, crop_name, refgenome, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' order by refgenome_id DESC;";
+		String sql="select refgenome_id, crop_name, refgenome, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by refgenome_id DESC;";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
