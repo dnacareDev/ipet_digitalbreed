@@ -28,6 +28,7 @@
 			jsonObject.addProperty("refgenome_id", ipetdigitalconndb.rs.getString("refgenome_id"));
 			jsonObject.addProperty("refgenome", ipetdigitalconndb.rs.getString("refgenome"));
 			jsonObject.addProperty("gff", ipetdigitalconndb.rs.getString("gff"));
+			jsonObject.addProperty("annotation_filename", ipetdigitalconndb.rs.getString("annotation_filename"));
 			
 			jsonArray.add(jsonObject);
 		}

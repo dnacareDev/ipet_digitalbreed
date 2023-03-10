@@ -262,13 +262,19 @@
 		{
 			checkboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true
+			headerCheckboxSelection: true,
+			minWidth: 50,
+			maxWidth: 50,
 		},
 		{
 			field: "chromosome",
 			suppressMenu: true,
 			cellClass: "grid-cell-centered",      
-			
+			width: 350,
+	    },
+	    {
+	    	field: "length",
+	    	hide: true,
 	    },
 	];
 	
@@ -281,7 +287,7 @@
 				suppressMenu: true,
 				suppressMovable: true,
 			},
-			columnDefs: columnDefs,
+			columnDefs: selectChromosome_ColumnDefs,
 			rowHeight: 35,
 			rowSelection: "multiple",
 			suppressMultiRangeSelection: true,
@@ -295,7 +301,8 @@
 	
 	const regionByChromosome_columnDefs = [
 		{
-			field: "delete",
+			field: "del",
+			width: 80,
 			/*
 			cellRenderer: (params) => {
 			}
@@ -304,13 +311,73 @@
 	    {
 			headerName: "Start pos.",
 			field: "start_pos",
-			
+			width: 120,
 	    },
 	    {
 	    	headerName: "End pos.",
 			field: "end_pos",
+			width: 120,
 	    },
 	];
+	
+	const regionByChromosome_gridOptions = {
+			defaultColDef: {
+				editable: false, 
+			    sortable: true,
+				resizable: true,
+				cellClass: "grid-cell-centered",
+				suppressMenu: true,
+				suppressMovable: true,
+			},
+			columnDefs: regionByChromosome_columnDefs,
+			rowHeight: 35,
+			rowSelection: "multiple",
+			suppressMultiRangeSelection: true,
+			suppressDragLeaveHidesColumns: true,
+			colResizeDefault: "shift",
+			animateRows: true,
+			onCellClicked: params => {
+				
+			}
+	}
+	
+	const sampleNameGrid_columnDefs = [
+		{
+			checkboxSelection: true,
+			headerCheckboxSelectionFilteredOnly: true,
+			headerCheckboxSelection: true,
+			minWidth: 50,
+			maxWidth: 50,
+		},
+		{
+			headerName: "Sample Name",
+			field: "sample",
+			suppressMenu: true,
+			cellClass: "grid-cell-centered",      
+			width: 650,
+	    },
+	];
+	
+	const sampleNameGrid_gridOptions = {
+			defaultColDef: {
+				editable: false, 
+			    sortable: true,
+				resizable: true,
+				cellClass: "grid-cell-centered",
+				suppressMenu: true,
+				suppressMovable: true,
+			},
+			columnDefs: sampleNameGrid_columnDefs,
+			rowHeight: 35,
+			rowSelection: "multiple",
+			suppressMultiRangeSelection: true,
+			suppressDragLeaveHidesColumns: true,
+			colResizeDefault: "shift",
+			animateRows: true,
+			onCellClicked: params => {
+				
+			}
+	}
 	
 	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
 	document.addEventListener('click', function(event) {
@@ -394,6 +461,21 @@
 				});	
 			}
   		})
+  		
+  		const selectChromosomeGrid = document.getElementById('selectChromosomeGrid')
+  		new agGrid.Grid(selectChromosomeGrid, selectChromosome_gridOptions);
+  		selectChromosome_gridOptions.api.setRowData([]);
+  		//selectChromosome_gridOptions.columnApi.autoSizeColumns();
+  		
+  		const regionByChromosomeGrid = document.getElementById('regionByChromosomeGrid');
+  		new agGrid.Grid(regionByChromosomeGrid, regionByChromosome_gridOptions);
+  		regionByChromosome_gridOptions.api.setRowData([]);
+  		regionByChromosome_gridOptions.columnApi.autoSizeAllColumns(false);
+  		
+  		const sampleNameGrid = document.getElementById('sampleNameGrid');
+  		new agGrid.Grid(sampleNameGrid, sampleNameGrid_gridOptions);
+  		sampleNameGrid_gridOptions.api.setRowData([]);
+  		//sampleNameGrid_gridOptions.columnApi.autoSizeAllColumns(true);
 	})	
 	  	
 
@@ -430,5 +512,8 @@
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
+		selectChromosome_gridOptions.api.sizeColumnsToFit();
+    	regionByChromosome_gridOptions.api.sizeColumnsToFit();
+    	sampleNameGrid_gridOptions.api.sizeColumnsToFit();
 	});
   

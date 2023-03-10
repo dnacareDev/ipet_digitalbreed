@@ -13,25 +13,36 @@
 	//String comment = request.getParameter("comment");
 	String varietyid = request.getParameter("varietyid");
 	String refgenome = request.getParameter("refgenome");
+	String annotation_filename = request.getParameter("annotation_filename");
+	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String savePath = rootFolder+"uploads/database/db_input/";
 	String outputPath = rootFolder+"result/database/genotype_statistics/";
+	String refgenomePath = rootFolder+"uploads/reference_database/"+refgenome+"/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";	
 	
 	
 	String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 	String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 	String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
-	//String vcf_parsing = java_cmd_path+" " + "/data/apache-tomcat-9.0.64/webapps/"+db_outputPath+jobid+"/ "+ jobid +" " + permissionUid+ " &";		
+	String snp_eff = "Rscript "+ script_path+"genotype_snpeff.R "+savePath+jobid+"/ "+outputPath+" "+ jobid +" " + _orig_filename +" "+ refgenomePath +" "+ refgenome +" "+ annotation_filename;
 	
-	System.out.println(genotype_sequence);
 	
 	System.out.println("========genotype_sequence========");
+	System.out.println(genotype_sequence);
 	runanalysistools.execute(genotype_sequence, "cmd");
 	System.out.println("========genotype_statistics========");
+	System.out.println(genotype_statistics);
 	runanalysistools.execute(genotype_statistics, "cmd");
 	System.out.println("========vcf_statistcs========");
+	System.out.println(vcf_statistcs);
 	runanalysistools.execute(vcf_statistcs, "cmd");
+	
+	if(!annotation_filename.equals("null")) {
+		System.out.println("========snp_eff========");
+		System.out.println(snp_eff);
+		runanalysistools.execute(snp_eff, "cmd");
+	}
 	
 	FileReader fileReader = new FileReader(outputPath+jobid+"/"+jobid+"_vcf_statistics.csv");
 	BufferedReader bufferedReader = new BufferedReader(fileReader);

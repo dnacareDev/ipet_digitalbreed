@@ -54,7 +54,11 @@
 			
 			JsonObject jsonObject = new JsonObject();
 			for(int i=0 ; i<header.length ; i++) {
-				jsonObject.addProperty(header[i], lineArr[i]);
+				if(i==3 || i==4){
+					jsonObject.addProperty(header[i], Integer.parseInt(lineArr[i]));
+				} else {
+					jsonObject.addProperty(header[i], lineArr[i]);
+				}
 			}
 			mRnaArray.add(jsonObject);
 			
@@ -64,10 +68,10 @@
 			for(int i=0 ; i<header.length ; i++) {
 				//jsonObject.addProperty(header[i], lineArr[i]);
 				if(i==3 || i==4){
+					jsonObject.addProperty(header[i], Integer.parseInt(lineArr[i]));
+				}  else if (i==8) {
 					jsonObject.addProperty(header[i], lineArr[i]);
-				} else if (i==8) {
-					jsonObject.addProperty(header[i], lineArr[i]);
-				}
+				} 
 			}
 			cdsArray.add(jsonObject);
 		}

@@ -144,6 +144,9 @@ body {
 			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
 											<button class="btn btn-danger mr-1 mb-1" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
 											<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
+											<!--  
+											<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="saveData()"><i class="feather icon-save"></i> Save</button>
+											-->
 											<!-- <button class="btn btn-info mr-1 mb-1"  style="float: right;" onclick="ajaxFileUpload()"><i class="feather icon-upload"></i> Upload</button> -->
 											<button class="btn btn-info dropdown-toggle mr-1" type="button" style="float: right;" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">

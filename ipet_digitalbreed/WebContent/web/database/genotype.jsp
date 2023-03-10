@@ -317,10 +317,12 @@ body {
 				const comment = p.postData.comment;
 				const varietyid = p.postData.varietyid;
 				const refgenome = p.postData.refgenome;
+				const annotation_filename = p.postData.annotation_filename;
 				
 				
 				//파일 업로드 이후의 작업들을 모두 여기에 몰아넣음
-				afterUpload(jobid, filename, comment, varietyid, refgenome);
+				//afterUpload(jobid, filename, comment, varietyid, refgenome);
+				afterUpload(jobid, filename, comment, varietyid, refgenome, annotation_filename);
 				
             });
         };
@@ -337,17 +339,10 @@ body {
 		        				.then((response) => response.text())
 		        				.then((data) => data);
         	
-        	
-        	//const jobid = "20221214133523"			// csv 1.4GB
-        	//const jobid = "20221214112940";			// csv 500MB
-        	//const jobid = "20221130123347";		// csv 250MB
-        	//const jobid = "20221130134541";		// csv 1.8MB
-        	//const jobid = "20221212151125";		// csv 150MB
-        	//console.log("await jobid : ", jobid);
-        	
         	const selectEl = document.getElementById("refGenomeSelect");
         	const refgenome = selectEl.options[selectEl.selectedIndex].dataset.refgenome;
         	const refgenome_id = selectEl.options[selectEl.selectedIndex].dataset.refgenome_id;
+        	const annotation_filename = selectEl.options[selectEl.selectedIndex].dataset.annotation_filename;
         	
         	
 			var postObj = new Object();
@@ -363,19 +358,23 @@ body {
 				postObj.refgenome_id = refgenome_id;
 			}
 			
+			postObj.annotation_filename = (annotation_filename === undefined || annotation_filename == null) ? "null" : annotation_filename;
+			
 			box.setPostData(postObj);
 			box.upload();
         }   
         
-        function afterUpload(jobid, filename, comment, varietyid, refgenome) {
+        function afterUpload(jobid, filename, comment, varietyid, refgenome, annotation_filename) {
         	
         	const data = {
         			"jobid": jobid,
         			"filename": filename,
         			"comment": comment,
         			"varietyid": varietyid,
-        			"refgenome": refgenome
+        			"refgenome": refgenome,
+        			"annotation_filename": annotation_filename,
         	}
+        	
         	
         	$.ajax({
         		url: "./genotype_after_upload_process.jsp",
@@ -404,6 +403,7 @@ body {
 	        		objOption.dataset.refgenome_id = data[i]['refgenome_id'];
 	        		objOption.dataset.refgenome = data[i]['refgenome'];
 	        		objOption.dataset.gff = data[i]['gff'];
+	        		objOption.dataset.annotation_filename = data[i]['annotation_filename'];
 	        		objOption.text = "" + data[i]['refgenome'] + " (" + data[i]['gff'] + ")";
 	        		selectEl.options.add(objOption);
         		}

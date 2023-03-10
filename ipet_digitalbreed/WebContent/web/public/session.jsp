@@ -14,9 +14,11 @@
 	String userpassword = request.getParameter("user-password");
 	
 	String validresult=null;
+	//String user_type = null;
 
 	try{		
-		String sql = "select count(*) as resultcnt from user_t where uid='"+username+"' and pw='"+userpassword+"';";	
+		String sql = "select count(*) as resultcnt from user_t where uid='"+username+"' and pw='"+userpassword+"';";
+		//String sql = "select count(*) as resultcnt, user_type from user_t where uid='"+username+"' and pw='"+userpassword+"';";	
 		System.out.println(sql);
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);		    	    	    
 
@@ -33,6 +35,7 @@
 	  	 else{
 	  		permissionUid = username;
 	  		session.setAttribute("permissionUid", permissionUid);
+	  		//session.setAttribute("user_type", user_type);
 	  		
 	  		//response.sendRedirect("/ipet_digitalbreed/web/mainboard.jsp");
 	  		response.sendRedirect("/ipet_digitalbreed/web/index.jsp");

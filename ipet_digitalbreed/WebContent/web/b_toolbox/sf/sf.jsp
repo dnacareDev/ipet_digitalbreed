@@ -235,7 +235,7 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title" id="myModalLabel5">Subset Filter New analysis</h4>
@@ -248,46 +248,48 @@ body {
 					    <div class="form-body">
 					    	<div class="row">
 					            <div class="col-md-12 col-12 mt-1">
-					            	<div class="form-label-group" >
-					                    <select class="select2 form-select" id="VcfSelect">
+					            	<div class="form-label-group mb-1" >
+					                    <select class="select2 form-select" id="VcfSelect" onchange="getSubsetOfRegionsAndSamples();">
 					                    </select>
 					                </div>
 					            </div>
 					    	</div>
 					        <div class="row">
-					            <fieldset class="border w-100 m-1">
+					            <fieldset class="border w-100 ml-1 mr-1">
 						        <legend class="w-auto ml-1 mr-1">Select specific regions</legend>
-						            <div class="col-md-12 col-12">
-					            		<div class="row" style="display:flex; justify-content:space-evenly;">
-							            	<div class="form-check pl-1">
-							            		<input type="radio" class="form-check-input" id="user_select" name="selectRegion" />
+						            <div class="col-12">
+					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
+							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            		<input type="radio" class="form-check-input" id="user_select" name="selectRegion" checked/>
 		                                        <label class="form-check-label" for="user_select" style="margin-left:4px;" >User select</label>
 							            	</div>
-							            	<div class="form-check">
+							            	<div class="form-check col-12 col-lg-3 pl-1">
 							            		<input type="radio" class="form-check-input" id="bed_file_upload" name="selectRegion" />
 		                                        <label class="form-check-label" for="bed_file_upload" style="margin-left:4px;" >BED file upload</label>
 		                                        <i class="ri-question-line"></i>
 							            	</div>
-							            	<div class="form-check">
+							            	<div class="form-check col-12 col-lg-3 pl-1">
 							            		<input type="radio" class="form-check-input" id="pos_file_upload" name="selectRegion" />
 		                                        <label class="form-check-label" for="pos_file_upload" style="margin-left:4px;" >Pos. file upload</label>
 		                                        <i class="ri-question-line"></i> 
 							            	</div>
 					            		</div>
 						            </div>
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-						            	<div class="row" style="display:flex; justify-content:space-evenly;">
-					            			<div class="col-6">
-												<div>Select chromosome</div>
-												<div id="selectChromosomeGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:220px;"></div>
+						            <div class="col-12 mt-1 mb-1">
+						            	<div class="row" style="display:flex; justify-content:space-between;">
+					            			<div class="col-12 col-lg-6">
+												<div class="col-12 mb-2 p-0">Select chromosome</div>
+												<div id="selectChromosomeGrid" class="ag-theme-alpine mb-2" style="margin: 0px auto; width: 98%; height:220px;"></div>
 											</div>
-					            			<div class="col-6">
-					            				<span>Region by chromosome</span>
-					            				<span><button type="button" class="btn btn-sm btn-warning" style="float: right;" onclick="addPosition();">
-					            						<i class="feather icon-plus-square" style="font-size:12px;"> Add</i>
-					            					</button>
-					            				</span>
-					            				<div id="regionByChromosomeGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:220px;"></div>
+					            			<div class="col-12 col-lg-6">
+					            				<div class="col-12 mb-2 p-0">
+						            				<span>Region by chromosome</span>
+						            				<span><button type="button" class="btn btn-sm btn-warning" style="float: right; display:flex; justify-content:center;" onclick="addPosition();">
+						            						<i class="feather icon-plus-square" style="font-size:12px;"> Add</i>
+						            					</button>
+						            				</span>
+					            				</div>
+					            				<div id="regionByChromosomeGrid" class="ag-theme-alpine mb-2" style="margin: 0px auto; width: 98%; height:220px;"></div>
 					            			</div>
 					            		</div>
 						            </div>
@@ -295,12 +297,12 @@ body {
 						        <fieldset class="border w-100 m-1">
 						        <legend class="w-auto ml-1 mr-1">Select a subset of sample</legend>
 						            <div class="col-md-12 col-12">
-					            		<div class="row" style="display:flex; justify-content:space-evenly;">
-							            	<div class="form-check pl-1">
-							            		<input type="radio" class="form-check-input" id="userSelect" name="selectSubSetOfSample" />
+					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
+							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            		<input type="radio" class="form-check-input" id="userSelect" name="selectSubSetOfSample" checked />
 		                                        <label class="form-check-label" for="user_select" style="margin-left:4px;" >User Select</label>
 							            	</div>
-							            	<div class="form-check">
+							            	<div class="form-check col-12 col-lg-6 pl-1">
 							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" />
 		                                        <label class="form-check-label" for="bed_file_upload" style="margin-left:4px;" >Sample name file uploadBED File Upload</label>
 		                                        <i class="ri-question-line"></i>
@@ -310,7 +312,7 @@ body {
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
 					            			<div class="col-12">
-												<div id="SampleNameGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:220px;"></div>
+												<div id="sampleNameGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:220px;"></div>
 											</div>
 					            		</div>
 						            </div>
@@ -384,6 +386,8 @@ body {
 
 	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
 	var linkedJobid = "<%=linkedJobid%>";
+	
+	const vcf_map = new Map();
 
    	$(document).ready(function(){
    		vcfFileList();
@@ -463,9 +467,28 @@ body {
 		form.submit();
 	}
 	
-   	$('#backdrop').on('hidden.bs.modal', function (e) {
-   		resetQF();
-    });    
+	async function getSubsetOfRegionsAndSamples() {
+		
+		const jobid = selectedOption('VcfSelect').dataset.jobid;
+		
+		//vcf_map
+		if( vcf_map.get(jobid) !== null && vcf_map.get(jobid) !== undefined) {
+			return;
+		}
+		
+		const url_string = './sf_getSubsetOfRegionsAndSamples.jsp';
+		const map_params = new Map();
+		map_params.set("jobid", jobid);
+		
+		const information = await getFetchData(url_string, map_params);
+		//vcf_map.set(jobid, await getFetchData(url_string, map_params));
+		
+		//debugger;
+		selectChromosome_gridOptions.api.setRowData(information.chr);
+		sampleNameGrid_gridOptions.api.setRowData(information.sample);
+	}
+	
+	   
    	
 	function resetQF() {
 		document.getElementById('uploadForm').reset();
@@ -582,11 +605,37 @@ body {
    			$("#backdrop").modal("hide");
    			}
    		, 1000);
-    	
     }
     
-
-
+    $('#backdrop').on('shown.bs.modal', function (e) {
+    	selectChromosome_gridOptions.api.sizeColumnsToFit();
+    	regionByChromosome_gridOptions.api.sizeColumnsToFit();
+    	sampleNameGrid_gridOptions.api.sizeColumnsToFit();
+    });
+	
+   	$('#backdrop').on('hidden.bs.modal', function (e) {
+   		resetQF();
+    }); 
+    
+   	
+	async function getFetchData(url_string, map_params) {
+		
+		const baseURL = window.location.href;
+		const url = new URL(url_string, baseURL);
+		
+		if(map_params.size !== 0) {
+			for(const [key, value] of map_params) {
+				url.searchParams.set(key, value);
+			}
+		}
+		
+		return await fetch(url).then((response)=> response.json()).catch((error) => console.log("non-json response fetch"));
+	}
+	
+	function selectedOption(id) {
+		const selectEl = document.getElementById(id);
+		return selectEl[selectEl.selectedIndex];
+	}
        
 </script>
 

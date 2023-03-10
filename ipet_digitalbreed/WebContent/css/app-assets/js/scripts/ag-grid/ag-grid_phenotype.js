@@ -475,9 +475,30 @@
 					});						             	   	 	
 					$('#backdrop').modal({ show: true });				
 			}
-		}  	
-		    
+		},  	
+		onCellValueChanged: (params) => {
+			//console.log(params);
+			if(params.column.getId().includes('key')){
+				
+				const changed_values_map = new Map();
+				changed_values_map.set('varietyid', params.data.varietyid);
+				changed_values_map.set('sampleno', params.data.selectfiles);
+				changed_values_map.set('seq', Number(params.column.getId().split("_")[0]) + 1);
+				changed_values_map.set('value', params.newValue);
+				
+				for(let i=0 ; i<changed_values_arr.length ; i++) {
+					if(changed_values_arr[i].get('varietyid') == params.data.varietyid && changed_values_arr[i].get('sampleno') == params.data.selectfiles && changed_values_arr[i].get('seq') == Number(params.column.getId().split("_")[0]) + 1) {
+						changed_values_arr[i].set('value', params.newValue);
+						return;
+					}
+				}
+				
+				changed_values_arr.push(changed_values_map);
+			}
+		}  
 	  };
+	  
+	  var changed_values_arr = [];
 
 	function replaceClass(id, oldClass, newClass) {
 	    var elem = $(`#${id}`);
@@ -554,6 +575,20 @@
 	columnDefs.push({ field:fieldp, headerName: headerNamep, width: "120",  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
 	gridOptions.api.setColumnDefs(columnDefs);
   }
+  
+  function getFetchData(url_string, map_params) {
+		
+		const baseURL = window.location.href;
+		const url = new URL(url_string, baseURL);
+		
+		if(map_params.size !== 0) {
+			for(const [key, value] of map_params) {
+				url.searchParams.set(key, value);
+			}
+		}
+		
+		fetch(url)
+  }
 
   function addnewrow() {
 		var newRows = [{                
@@ -592,6 +627,45 @@
 			    }
 		});			
   }
+  
+  	function saveData() {
+  		//changed_values_arr
+  		if(changed_values_arr.length == 0) {
+  			return alert('변경된 데이터가 적어도 하나 있어야 합니다.');
+  		}
+  		
+  		if(!confirm('변경된 데이터를 저장하시겠습니까?')) {
+  			return;
+  		}
+  		
+  		for(let i=0 ; i<changed_values_arr.length ; i++) {
+  			getFetchData('./phenotype_saveData.jsp', changed_values_arr[i]);
+  		}
+  		
+  		changed_values_arr = [];
+  		
+  		setTimeout(function() {
+  			alert('저장되었습니다.');
+  			refresh();
+  		},200);
+  		
+  		/*
+  		const promises = [];
+  		for(let i=0 ; i<changed_values_arr.length ; i++) {
+  			
+  			const promise = () => getFetchData('./phenotype_saveData.jsp', changed_values_arr[`${i}`]);
+  			promises.push(promise);
+  		}
+  		
+  		promises.push(()=>{setTimeout(function(){console.log('promise!')},200)});
+  		
+  		
+  		console.log(promises); 
+  		Promise.all(promises.map(promise => promise())).then(console.log("promise all"));
+  		*/
+  		
+  		
+  	}
 
    		 
   $(".ag-grid-filter").on("keyup", function() {

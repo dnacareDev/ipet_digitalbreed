@@ -228,6 +228,7 @@
 	String gff_filename = request.getParameter("gff_filename");
 	String cds_filename = request.getParameter("cds_filename");
 	String protein_filename = request.getParameter("protein_filename");
+	String annotation_filename = request.getParameter("annotation_filename");
 	
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
@@ -758,6 +759,7 @@
 	const gff_filename = "<%=gff_filename%>";
 	const cds_filename = "<%=cds_filename%>";
 	const protein_filename = "<%=protein_filename%>";
+	const annotation_filename = "<%=annotation_filename%>";
 	
 	
 	const chr_orders_map = new Map();
@@ -1422,7 +1424,7 @@
 		//fetch(url);
 		const gene_model = await getFetchData(url_string, map_params);
 		
-		//console.log("getGeneModel data : ", gene_model);
+		console.log("getGeneModel data : ", gene_model);
 		
 		
 		// 이전 표식을 삭제
@@ -1629,7 +1631,7 @@
 		
 	}
 	
-	function modifyGeneInfoModal(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS) {
+	async function modifyGeneInfoModal(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS) {
 		
 		const search_attribute = (text) => {
 			for(let i=0 ; i<mRNA_attribute.length ; i++) {
@@ -1659,8 +1661,18 @@
 		
 		document.getElementById('attributes_id').innerText = search_attribute('ID');
 		document.getElementById('attributes_parent').innerText = search_attribute('Parent');
-		document.getElementById('attributes_description').innerText = search_attribute('Description');
 		
+		
+		const url_string = './vb_features_getAnnotationData.jsp'
+			
+		const map_params = new Map();
+		map_params.set("refgenome", refgenome);
+		map_params.set("annotation_filename", annotation_filename);
+		
+		const description = getFetchTextData();
+		
+		/*
+		document.getElementById('attributes_description').innerText = search_attribute('Description');
 		
 		const RefSeq = search_attribute('RefSeq').split(",");
 		const Uniprot = search_attribute('Uniprot').split(",");
@@ -1668,7 +1680,8 @@
 		const TAIR = search_attribute('TAIR').split(",");
 		const GO = search_attribute('GO').split(",");
 		const KEGG = search_attribute('KEGG').split(",");
-
+		*/
+		
 		const attributes_refSeq = document.getElementById('attributes_refSeq');
 		const attributes_uniProt = document.getElementById('attributes_uniProt');
 		const attributes_pfam = document.getElementById('attributes_pfam');
