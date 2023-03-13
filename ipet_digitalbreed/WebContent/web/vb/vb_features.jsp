@@ -148,22 +148,20 @@
 		display: inline-block;
 		position: relative;
 	}
-	.chromosomeStackDiv[data-order="0"], .chromosomeDetailedStackDiv[data-order="0"] {
-		border-left: 1px solid black;
-		z-index: 2;
-	}
 	.chromosomeStackDiv[data-position] {
 		background-color: #bcbcbc;
-		/*border-left: 1px solid #bcbcbc;*/
 	}
-	.chromosomeStackDiv[data-selected="true"] {
-		/* background-color: red !important;*/
-		border-left: 1px solid red !important;
-		z-index: 3;
+	.chromosomeStackDiv[data-order="0"], .chromosomeDetailedStackDiv[data-order="0"] {
+		background-color: black;
+		z-index: 2;
 	}
 	.chromosomeStackDiv[data-order="1999"], .chromosomeDetailedStackDiv[data-order="1999"] {
-		border-right: 1px solid black;
+		background-color: black;
 		z-index: 2;
+	}
+	.chromosomeStackDiv[data-selected="true"] {
+		 background-color: red !important;
+		z-index: 3;
 	}
 	
 	.chromosomeDetailedStackDiv[data-position] {
@@ -175,6 +173,18 @@
 		border: red !important;
 		z-index: 3;
 	}
+	
+	
+	/*
+	@media(max-width: 762px) {
+		.verticalLtrMedia762 {
+			transform: rotate(0.25turn);
+			transform-origin: 24%;
+			top: 15px;
+		}
+	}
+	*/
+	
 	
 	#chromosomeScaleBarDiv {
 		margin: 3px 5% auto;
@@ -414,11 +424,13 @@
 														</div>
 														<div id="status404" class="row mt-1" style="display:none;">
 															<div class="col-12" style="margin-top:70px; display: flex; flex-direction: column; align-items: center;">
+																<!--  
 																<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 																	<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
 																	<line x1="12" y1="9" x2="12" y2="13"></line>
 																	<line x1="12" y1="17" x2="12.01" y2="17"></line>
 																</svg>
+																-->
 																<p style="margin-top:90px; font-size: 25px;">표현형과의 유사성을 찾을 수 없습니다.</p>
 															</div>
 														</div>
@@ -916,9 +928,11 @@
 		
 		function create_SVG_specificOrderStackDiv(order_id, left, width) {
 			const childDiv = document.createElement('div');
+			childDiv.classList.add("verticalLtrMedia762");
 			childDiv.style.position = "absolute";
 			childDiv.style.top = "3px";
 			childDiv.style.left = "-7px";
+			//childDiv.style.height = "80px";
 			
 			const xmlns = "http://www.w3.org/2000/svg";
 			const svg = document.createElementNS(xmlns, "svg");
@@ -999,7 +1013,7 @@
 		const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		
 		for(let i=1 ; i<=5 ; i++) {
-			const division_length = parseInt(Number(length) * i / 10)
+			const division_length = parseInt(Number(length) * i / 5)
 			document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = thousands_separator(division_length);
 			for(let j=0, left=0; j<thousands_separator(length).length ; j++) {
 				left = isNaN(thousands_separator(division_length)[j]) ? left-2 : left-4; 
@@ -1628,7 +1642,8 @@
 		const mRNA_parent = document.getElementById('attributes_parent').innerText;
 		
 		setTimeout(() => {
-			fetch(`./vb_features_getSequence.jsp?command=gene&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
+			fetch(`./vb_features_getSequence.jsp?command=gene&file_name=\${mRNA_parent}&refgenome=\${refgenome}`)
+			//fetch(`./vb_features_getSequence.jsp?command=gene&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
 			.then((response) => response.text())
 			.then((data) => {
 				//console.log(data.replaceAll("\r\n",""));

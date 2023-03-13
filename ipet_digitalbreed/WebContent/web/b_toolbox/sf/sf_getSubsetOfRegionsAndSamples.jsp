@@ -40,8 +40,6 @@
 		
 		result.add("chr", jsonArray);
 		br.close();
-		
-		
 	} catch (IOException e) {
 		e.printStackTrace();
 	} 

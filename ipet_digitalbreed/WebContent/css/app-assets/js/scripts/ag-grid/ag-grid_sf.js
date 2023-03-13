@@ -290,12 +290,30 @@
 			columnDefs: selectChromosome_ColumnDefs,
 			rowHeight: 35,
 			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
 			suppressMultiRangeSelection: true,
 			suppressDragLeaveHidesColumns: true,
 			colResizeDefault: "shift",
 			animateRows: true,
+			getRowId: params => params.data.chromosome,
 			onCellClicked: params => {
-				
+				if(params.colDef.field == 'chromosome') {
+					
+					document.getElementById('addPosition').dataset.chromosome = params.data.chromosome;
+					document.getElementById('addPosition').dataset.length = params.data.length;
+					
+					if(chr_regions.get(params.data.chromosome) === undefined) {
+							
+						chr_regions.set(params.data.chromosome, [
+							//[1, params.data.length]
+							{'chromosome': params.data.chromosome, 'start_pos': 1, 'end_pos': params.data.length}
+						]);
+						//regionByChromosome_gridOptions.api.applyTransaction({'add': [{'start_pos': 1, 'end_pos': params.data.length}]});
+					} 
+					
+					regionByChromosome_gridOptions.api.setRowData(chr_regions.get(params.data.chromosome));
+					
+				}
 			}
 	}
 	
@@ -303,26 +321,33 @@
 		{
 			field: "del",
 			width: 80,
-			/*
+			editable: false,
 			cellRenderer: (params) => {
+				//debugger;
+				return `<i class='ri-delete-bin-line'></i>`
 			}
-			*/
 		},
+		{
+	    	field: "chromosome",
+	    	hide: true,
+	    },
 	    {
 			headerName: "Start pos.",
 			field: "start_pos",
+			valueFormatter: params => thousands_separator(params.value),
 			width: 120,
 	    },
 	    {
 	    	headerName: "End pos.",
 			field: "end_pos",
+			valueFormatter: params => thousands_separator(params.value),
 			width: 120,
 	    },
 	];
 	
 	const regionByChromosome_gridOptions = {
 			defaultColDef: {
-				editable: false, 
+				editable: true, 
 			    sortable: true,
 				resizable: true,
 				cellClass: "grid-cell-centered",
@@ -336,9 +361,34 @@
 			suppressDragLeaveHidesColumns: true,
 			colResizeDefault: "shift",
 			animateRows: true,
+			undoRedoCellEditing: true,
+			undoRedoCellEditingLimit: 1,
 			onCellClicked: params => {
 				
-			}
+			},
+			onCellEditingStopped: params => {
+				//debugger;
+				
+				const oldValue = Number(params.oldValue);
+				const newValue = Number(params.newValue);
+				const length = document.getElementById('addPosition').dataset.length
+				
+				if(isNaN(newValue) || length < newValue || newValue < 1 ) {
+					alert(`1부터 ${length}까지의 숫자만 입력할 수 있습니다.`);
+					return regionByChromosome_gridOptions.api.undoCellEditing();
+					
+				}
+				
+				if(params.colDef.field == 'start_pos' && Number(params.data.end_pos) < newValue) {
+					alert('end position보다 큰 값은 입력할 수 없습니다.');
+					return regionByChromosome_gridOptions.api.undoCellEditing();
+				}
+				
+				if(params.colDef.field == 'end_pos' && newValue < Number(params.data.start_pos)) {
+					alert('start position보다 작은 값은 입력할 수 없습니다.');
+					return regionByChromosome_gridOptions.api.undoCellEditing();
+				}
+			},
 	}
 	
 	const sampleNameGrid_columnDefs = [
@@ -375,7 +425,12 @@
 			colResizeDefault: "shift",
 			animateRows: true,
 			onCellClicked: params => {
-				
+				/*
+				debugger;
+				if(!!params.node.selected) {
+					sample_map.set(params.)
+				}
+				*/
 			}
 	}
 	

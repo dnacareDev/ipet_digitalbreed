@@ -249,7 +249,7 @@ body {
 					    	<div class="row">
 					            <div class="col-md-12 col-12 mt-1">
 					            	<div class="form-label-group mb-1" >
-					                    <select class="select2 form-select" id="VcfSelect" onchange="getSubsetOfRegionsAndSamples();">
+					                    <select class="select2 form-select" id="VcfSelect" onchange="onChangeVcf();">
 					                    </select>
 					                </div>
 					            </div>
@@ -260,17 +260,17 @@ body {
 						            <div class="col-12">
 					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="user_select" name="selectRegion" checked/>
-		                                        <label class="form-check-label" for="user_select" style="margin-left:4px;" >User select</label>
+							            		<input type="radio" class="form-check-input" id="userSelect" name="selectRegion" checked/>
+		                                        <label class="form-check-label" for="userSelect" style="margin-left:4px;" >User select</label>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="bed_file_upload" name="selectRegion" />
-		                                        <label class="form-check-label" for="bed_file_upload" style="margin-left:4px;" >BED file upload</label>
+							            		<input type="radio" class="form-check-input" id="bedFileUpload" name="selectRegion" />
+		                                        <label class="form-check-label" for="bedFileUpload" style="margin-left:4px;" >BED file upload</label>
 		                                        <i class="ri-question-line"></i>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="pos_file_upload" name="selectRegion" />
-		                                        <label class="form-check-label" for="pos_file_upload" style="margin-left:4px;" >Pos. file upload</label>
+							            		<input type="radio" class="form-check-input" id="posFileUpload" name="selectRegion" />
+		                                        <label class="form-check-label" for="posFileUpload" style="margin-left:4px;" >Pos. file upload</label>
 		                                        <i class="ri-question-line"></i> 
 							            	</div>
 					            		</div>
@@ -284,7 +284,7 @@ body {
 					            			<div class="col-12 col-lg-6">
 					            				<div class="col-12 mb-2 p-0">
 						            				<span>Region by chromosome</span>
-						            				<span><button type="button" class="btn btn-sm btn-warning" style="float: right; display:flex; justify-content:center;" onclick="addPosition();">
+						            				<span><button type="button" id="addPosition" class="btn btn-sm btn-warning" style="float: right; display:flex; justify-content:center;" onclick="addPositionToRegion(this.dataset.chromosome, this.dataset.length);">
 						            						<i class="feather icon-plus-square" style="font-size:12px;"> Add</i>
 						            					</button>
 						            				</span>
@@ -299,12 +299,12 @@ body {
 						            <div class="col-md-12 col-12">
 					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="userSelect" name="selectSubSetOfSample" checked />
-		                                        <label class="form-check-label" for="user_select" style="margin-left:4px;" >User Select</label>
+							            		<input type="radio" class="form-check-input" id="userSelectSample" name="selectSubSetOfSample" checked />
+		                                        <label class="form-check-label" for="userSelectSample" style="margin-left:4px;" >User Select</label>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-6 pl-1">
 							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" />
-		                                        <label class="form-check-label" for="bed_file_upload" style="margin-left:4px;" >Sample name file uploadBED File Upload</label>
+		                                        <label class="form-check-label" for="sampleNameFileUpload" style="margin-left:4px;" >Sample name file uploadBED File Upload</label>
 		                                        <i class="ri-question-line"></i>
 							            	</div>
 					            		</div>
@@ -388,6 +388,8 @@ body {
 	var linkedJobid = "<%=linkedJobid%>";
 	
 	const vcf_map = new Map();
+	const chr_regions = new Map();
+	//const sample_map = new Map();
 
    	$(document).ready(function(){
    		vcfFileList();
@@ -467,12 +469,17 @@ body {
 		form.submit();
 	}
 	
-	async function getSubsetOfRegionsAndSamples() {
+	async function onChangeVcf() {
+
+		chr_regions.clear();
+		//sample_map.clear();
 		
 		const jobid = selectedOption('VcfSelect').dataset.jobid;
 		
 		//vcf_map
-		if( vcf_map.get(jobid) !== null && vcf_map.get(jobid) !== undefined) {
+		if( vcf_map.get(jobid) !== null && vcf_map.get(jobid) !== undefined ) {
+			selectChromosome_gridOptions.api.setRowData(vcf_map.get(jobid)?.chr);
+			sampleNameGrid_gridOptions.api.setRowData(vcf_map.get(jobid)?.sample);
 			return;
 		}
 		
@@ -480,15 +487,25 @@ body {
 		const map_params = new Map();
 		map_params.set("jobid", jobid);
 		
-		const information = await getFetchData(url_string, map_params);
-		//vcf_map.set(jobid, await getFetchData(url_string, map_params));
+		const vcf_information = await getFetchData(url_string, map_params);
+		vcf_map.set(jobid, vcf_information);
 		
 		//debugger;
-		selectChromosome_gridOptions.api.setRowData(information.chr);
-		sampleNameGrid_gridOptions.api.setRowData(information.sample);
+		selectChromosome_gridOptions.api.setRowData(vcf_information.chr);
+		regionByChromosome_gridOptions.api.setRowData();
+		sampleNameGrid_gridOptions.api.setRowData(vcf_information.sample);
 	}
 	
-	   
+	function addPositionToRegion(chromosome, length) {
+		if(chromosome === null || chromosome === undefined) {
+			return;
+		}
+		
+		chr_regions.get(chromosome).push({'chromosome': chromosome, 'start_pos': 1, 'end_pos': length});
+		regionByChromosome_gridOptions.api.applyTransaction({'add': [{'chromosome': chromosome, 'start_pos': 1, 'end_pos': length}]});
+		
+		//console.log(chromosome);
+	}
    	
 	function resetQF() {
 		document.getElementById('uploadForm').reset();
@@ -506,9 +523,28 @@ body {
     	const file_name = select_vcf.options[select_vcf.selectedIndex].dataset.filename;
     	const refgenome_id = select_vcf.options[select_vcf.selectedIndex].dataset.refgenome_id;
     	
-    	const jobid_qf = await fetch('../../getJobid.jsp')
+    	const jobid_sf = await fetch('../../getJobid.jsp')
     					.then((response) => response.text());
     	
+    	
+    	const region_select = document.querySelector(`input[name='selectRegion']:checked`).id;
+    	const sample_select = document.querySelector(`input[name='selectSubSetOfSample']:checked`).id;
+    	
+    	//const region = chr_regions;
+    	const region = JSON.parse(JSON.stringify(Arrays.from(chr_regions.entries()));
+    	
+    	const sample_arr = new Array();
+    	sampleNameGrid_gridOptions.api.forEachNode((node) => {
+    		sample_arr.push(node.data.sample);
+    	})
+    	
+    	const data = {
+    		"region": region,
+    		"sample_arr": sample_arr,
+    	}
+    	
+    	//debugger;
+    	/*
     	const snp_checked = document.getElementById('variant_snp').checked;
     	const indel_checked = document.getElementById('variant_indel').checked;
     	const allelic_bi_checked = document.getElementById('allelic_bi').checked;
@@ -518,6 +554,7 @@ body {
     	const minGQ = document.getElementById('minGQ').value;
     	//thin input이 빈칸이면 false로 판단(사용 체크해제해도 값을 비우므로 false)
     	let thin = document.getElementById('thin').value;
+    	*/
     	
     	if(jobid_vcf == -1) {
     		alert("VCF 파일을 선택하세요");
@@ -529,75 +566,15 @@ body {
     		return;
     	}
     	
-    	if(!minDP) {
-    		alert("MinDP를 입력하세요");
-    		return;
-    	}
     	
-    	if(!minGQ) {
-    		alert("MinGQ를 입력하세요");
-    		return;
-    	}
-    	
-    	// thin이 빈값이면 0으로 간주
-    	if(!thin) {
-    		thin = 0;
-    	}
- 
-    	// snp체크 = 1, indel체크 = 2, 둘다체크 = 0
-    	let variant_type;
-    	if(snp_checked && indel_checked) {
-    		variant_type = 0;
-    	} else if(snp_checked && !indel_checked) {
-    		variant_type = 1;
-    	} else if(!snp_checked && indel_checked) {
-    		variant_type = 2;
-    	}
-    	
-    	// Bi-allelic체크 = 1, 체크x = 0
-    	let allelic_type;
-    	if(allelic_bi_checked) {
-    		allelic_type = 1;
-    	} else {
-    		allelic_type = 0;
-    	}
-    	
-    	/*
-    	const data = {
-    			"jobid_vcf": jobid_vcf, "jobid_qf": jobid_qf, "variant_type": variant_type, "file_name":file_name,
-    			"allelic_type": allelic_type, "missing": missing, "maf": maf,
-    			"minDP": minDP, "minGQ": minGQ, "thin": thin
-    	}
-    	console.log(data);
-    	*/
-    	
-    	
-    	$.ajax({
-    		url: './qf_analysis.jsp',
-    		method: 'POST',
-    		data: {
-    			"jobid_vcf": jobid_vcf, "jobid_qf": jobid_qf, "variant_type": variant_type, "file_name":file_name,
-    			"allelic_type": allelic_type, "missing": missing, "maf": maf,
-    			"minDP": minDP, "minGQ": minGQ, "thin": thin
+    	fetch(`./sf_analysis.jsp`, {
+    		method: "POST",
+    		headers: {
+    			"Content-Type": "application/json",
     		},
-    		success: function(result) {
-    			console.log("success");
-    		}
+    		body: JSON.stringify(data)
     	})
     	
-    	
-    	$.ajax({
-    		url: './qf_insertSql.jsp',
-    		method: 'POST',
-    		data: {
-    			"variety_id": variety_id,
-    			"jobid_qf": jobid_qf,
-    			"file_name": file_name,
-    			"refgenome_id": refgenome_id,
-    		},
-    		sucess: function(result) {
-    		}
-    	})
     	
     	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
    		setTimeout( function () {
@@ -636,6 +613,8 @@ body {
 		const selectEl = document.getElementById(id);
 		return selectEl[selectEl.selectedIndex];
 	}
+	
+	const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
        
 </script>
 

@@ -28,7 +28,7 @@
 	//File file = new File(path+gff+".gff");
 	//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 	
-	//System.out.println("refgenome gff path : " + path);
+	System.out.println("refgenome gff path : " + path);
 	//System.out.println(file.exists());
 
 	JsonObject result = new JsonObject();

@@ -78,6 +78,10 @@
                                     </li>
                                     <li class="<%if(menu_active.equals("mini")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/mini/mini.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Minimal marker</a>
                                     </li>
+                                    <%-- 
+                                    <li class="<%if(menu_active.equals("mabc")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/mabc/mabc.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>MABC Transformation</a>
+                                    </li>
+                                    --%>
                                 </ul>
                             </li>
 							<li class="<%if(menu_active.equals("pheno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/pheno.jsp" data-i18n="Chat"><i class="feather icon-sliders"></i>Phenotype Analyses</a></li>
