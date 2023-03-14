@@ -306,7 +306,8 @@
 							
 						chr_regions.set(params.data.chromosome, [
 							//[1, params.data.length]
-							{'chromosome': params.data.chromosome, 'start_pos': 1, 'end_pos': params.data.length}
+							//{'chromosome': params.data.chromosome, 'start_pos': 1, 'end_pos': params.data.length}
+							{'start_pos': 1, 'end_pos': params.data.length}
 						]);
 						//regionByChromosome_gridOptions.api.applyTransaction({'add': [{'start_pos': 1, 'end_pos': params.data.length}]});
 					} 
@@ -371,6 +372,7 @@
 				
 				const oldValue = Number(params.oldValue);
 				const newValue = Number(params.newValue);
+				const chromosome = document.getElementById('addPosition').dataset.chromosome;
 				const length = document.getElementById('addPosition').dataset.length
 				
 				if(isNaN(newValue) || length < newValue || newValue < 1 ) {
@@ -388,7 +390,18 @@
 					alert('start position보다 작은 값은 입력할 수 없습니다.');
 					return regionByChromosome_gridOptions.api.undoCellEditing();
 				}
+				
+				//chr_regions.get(chromosome).push({'start_pos': 1, 'end_pos': params.data.length});
+				//chr_regions.get(chromosome)[params.colDef.field] = newValue;
+				
+				
 			},
+			/*
+			onCellValueChanged: params => {
+				console.log("changed");
+				console.log(params);
+			}
+			*/
 	}
 	
 	const sampleNameGrid_columnDefs = [

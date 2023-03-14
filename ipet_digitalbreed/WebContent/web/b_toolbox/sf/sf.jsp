@@ -167,22 +167,6 @@ body {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                    	<!--  
-                                    	<i class='feather icon-database'></i>
-                                    	-->
-                                    	<%-- 
-	                                    	String  drive;
-	                                    	double  totalSize, freeSize, useSize;        
-	
-	                                    	File[] roots = File.listRoots();
-	                                    	totalSize = roots[0].getTotalSpace() / Math.pow(1024, 3);
-	                                    	useSize = roots[0].getUsableSpace() / Math.pow(1024, 3);
-	                                    	freeSize = totalSize - useSize;
-	
-	                                    	out.println(String.format("%.2f",freeSize) + " GB Remained");
-                                    	--%>
-                                    </div>
                                 </div>
                                   
                             </div>
@@ -299,11 +283,11 @@ body {
 						            <div class="col-md-12 col-12">
 					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="userSelectSample" name="selectSubSetOfSample" checked />
+							            		<input type="radio" class="form-check-input" id="userSelectSample" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='block'; document.getElementById('fileControl').style.display='none';" checked />
 		                                        <label class="form-check-label" for="userSelectSample" style="margin-left:4px;" >User Select</label>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-6 pl-1">
-							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" />
+							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='none'; document.getElementById('fileControl').style.display='block';" />
 		                                        <label class="form-check-label" for="sampleNameFileUpload" style="margin-left:4px;" >Sample name file uploadBED File Upload</label>
 		                                        <i class="ri-question-line"></i>
 							            	</div>
@@ -313,6 +297,7 @@ body {
 						            	<div class="row">
 					            			<div class="col-12">
 												<div id="sampleNameGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:220px;"></div>
+												<div id="fileControl" style="display:none; margin: 0px auto; border: 1px solid #48BAE4;"></div>
 											</div>
 					            		</div>
 						            </div>
@@ -389,12 +374,57 @@ body {
 	
 	const vcf_map = new Map();
 	const chr_regions = new Map();
-	//const sample_map = new Map();
 
    	$(document).ready(function(){
    		vcfFileList();
    		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
    	});
+   	
+   	var sample_box = new Object();
+    window.onload = function() {
+        // 파일전송 컨트롤 생성
+        sample_box = innorix.create({
+            el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
+            height          : 150,
+            width			: '99%',
+            maxFileCount   : 1,  
+            allowExtension: ["csv"],
+			addDuplicateFile : false,
+            agent: false, // true = Agent 설치, false = html5 모드 사용                    
+            uploadUrl: './fileuploader.jsp' // 업로드 URL
+        });
+
+        sample_box.on("addFileError", function(p) {
+            alert("하나의 VCF 파일만 업로드 할 수 있습니다")
+        }),
+
+        // 업로드 완료 이벤트
+        sample_box.on('uploadComplete', function (p) {
+        	
+        	console.log("p : ", p);
+        	//console.log("filename : ", p.files[0].file.name);
+
+			document.getElementById('uploadvcfform').reset();
+		    box.removeAllFiles();
+			$('#backdrop').modal('hide');
+			jQuery('#vcf_status').html('');
+			$('html').scrollTop(0);
+			refresh();
+			
+			
+			
+			const jobid = p.postData.jobid;
+			const filename = p.files[0].file.name;
+			const comment = p.postData.comment;
+			const varietyid = p.postData.varietyid;
+			const refgenome = p.postData.refgenome;
+			const annotation_filename = p.postData.annotation_filename;
+			
+			
+			//afterUpload(jobid, filename, comment, varietyid, refgenome, annotation_filename);
+			
+        });
+    };
 
    	function vcfFileList() {
    		$.ajax(
@@ -501,16 +531,24 @@ body {
 			return;
 		}
 		
-		chr_regions.get(chromosome).push({'chromosome': chromosome, 'start_pos': 1, 'end_pos': length});
-		regionByChromosome_gridOptions.api.applyTransaction({'add': [{'chromosome': chromosome, 'start_pos': 1, 'end_pos': length}]});
+		//chr_regions.get(chromosome).push({'chromosome': chromosome, 'start_pos': 1, 'end_pos': length});
+		//regionByChromosome_gridOptions.api.applyTransaction({'add': [{'chromosome': chromosome, 'start_pos': 1, 'end_pos': length}]});
+		chr_regions.get(chromosome).push({'start_pos': 1, 'end_pos': length});
+		regionByChromosome_gridOptions.api.setRowData(chr_regions.get(chromosome));
 		
 		//console.log(chromosome);
 	}
    	
 	function resetQF() {
-		document.getElementById('uploadForm').reset();
+		//document.getElementById('uploadForm').reset();
 		
-		document.getElementById("thin").style.display = "none";
+		document.getElementById('userSelect').checked = true;
+		document.getElementById('userSelectSample').checked = true;
+		
+		selectChromosome_gridOptions.api.setRowData();
+    	regionByChromosome_gridOptions.api.setRowData();
+    	sampleNameGrid_gridOptions.api.setRowData();
+		
 		vcfFileList();
 	}
    	
@@ -530,8 +568,17 @@ body {
     	const region_select = document.querySelector(`input[name='selectRegion']:checked`).id;
     	const sample_select = document.querySelector(`input[name='selectSubSetOfSample']:checked`).id;
     	
+    	
+    	selectChromosome_gridOptions.api.forEachNode((node) => {
+    		console.log("node", node);
+    		if(node.selected == false) {
+    			chr_regions.delete(node.data.chromosome);
+    		}
+    		//debugger;
+    	})
+    	
     	//const region = chr_regions;
-    	const region = JSON.parse(JSON.stringify(Arrays.from(chr_regions.entries()));
+    	const region = JSON.parse(JSON.stringify( Array.from(chr_regions.entries()) ));
     	
     	const sample_arr = new Array();
     	sampleNameGrid_gridOptions.api.forEachNode((node) => {
@@ -539,6 +586,9 @@ body {
     	})
     	
     	const data = {
+    		"jobid_vcf": jobid_vcf,
+    		"file_name": file_name,
+    		"jobid_sf": jobid_sf,
     		"region": region,
     		"sample_arr": sample_arr,
     	}
@@ -560,12 +610,6 @@ body {
     		alert("VCF 파일을 선택하세요");
     		return;
     	}
-    	
-    	if(!snp_checked && !indel_checked) {
-    		alert("Variant Type을 한 개 이상 선택해 주세요");
-    		return;
-    	}
-    	
     	
     	fetch(`./sf_analysis.jsp`, {
     		method: "POST",

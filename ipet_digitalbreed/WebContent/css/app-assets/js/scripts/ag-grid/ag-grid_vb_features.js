@@ -151,6 +151,7 @@
 				suppressMenu: true, 
 				suppressMovable: true,
 				cellClass: "grid-cell-centered", 
+				//headerClass: "grid-header-red",
 				menuTabs: ['filterMenuTab'], 
 			},
 			columnDefs: VariantBrowser_columnDefs, 
@@ -169,19 +170,6 @@
 		    tooltipHideDelay: 20000,
 		    postSortRows: (params) => {
 		    	const rowNodes = params.nodes;
-
-		    	//base_order
-		    	for (let i=0 ; i<rowNodes.length; i++) {
-		    		//if(rowNodes.)
-		    	}
-		    	
-		    	//[A,T,G,C] => [T,G,C,A] 형태로 정렬버튼을 누를때마다 순환
-		    	/*
-		    	if(base_switch) {
-		    		const spliced = base_order.shift();
-		    		base_order.push(spliced);
-		    	}
-		    	*/
 		    	
 		        // 첫번째 Row인 id=reference는 고정
 		        for (let i=0, nextInsertPos=0 ; i<rowNodes.length; i++) {

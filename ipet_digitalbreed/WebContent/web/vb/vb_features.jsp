@@ -79,9 +79,29 @@
 	/************************ AG-Grid 헤더 수직 & borderline **************************/
 	/*
 	#VariantBrowserGrid .ag-header-cell-label .ag-header-cell-text {
-	    writing-mode: vertical-lr; /* vertical text */
+	    writing-mode: vertical-lr;
 	}
 	*/
+	
+	.grid-header-red {
+		/*background-color: red;*/
+		/*animation: blink 1s 5;*/
+		animation-name: blink;
+		animation-duration: 1s;
+		animation-iteration-count: 5;
+	}
+	
+	@-webkit-keyframes blink {
+  		0%, 49% {
+    		/*background-color: #eedac2;*/
+    		color: red;
+  		}
+	  	50%, 100% {
+	    	/*background-color: #e50000;*/
+	    	color: black;
+		}
+		
+	}
 	
 	#VariantBrowserGrid .ag-header-cell, #VariantBrowserGrid .ag-header-group-cell, #VariantBrowserGrid .ag-cell {
 	    border-right: 1px solid #dde2eb !important;
@@ -331,12 +351,15 @@
 	                                		</fieldset>
 	                                	</div>
 	                                	<div class="row">
-	                                		<fieldset class="border mt-1 pt-2 pl-2 pr-2" style="width:96%; margin-left:23px; margin-right:23px; padding-bottom:85px;">
+	                                		<fieldset class="border mt-1 mb-2 pt-2 pl-2 pr-2" style="width:96%; margin-left:23px; margin-right:23px; padding-bottom:85px;">
 	                                			<legend  class="w-auto">Gene Model</legend>
 		                                		<div id="chromosomeDetailedDiv"></div>
 	                                		</fieldset>
 	                                	</div>
-	                                	<div class="row">
+	                                	<div class="row" style="position:relative;">
+	                                		<div style="position:absolute; top:-21px; margin: 0px 23px; width: 96%;">
+	                                			<svg width= "100%" height= "35" xmlns:svg="http://www.w3.org/2000/svg"></svg>
+	                                		</div>
 				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:495px;"></div><br>
 	                                	</div>
 	                                </div>
@@ -1434,7 +1457,7 @@
 				<div style="position:absolute; top:17px;">
 					<svg width="1" height="88" xmlns:svg="http://www.w3.org/2000/svg">
 						//<polygon style="fill:#bcbcbc" points="0,0 1,0 1,200 0,200"></polygon>
-						<polygon style="fill:\${color}" points="0,0 1,0 1,200 0,200"></polygon>
+						<polygon style="fill:\${color}" points="0,0 1,0 1,88 0,88"></polygon>
 					</svg>
 				</div>
 				`;
@@ -1829,6 +1852,9 @@
 				`;
 	}
 	
+	function drawLineBetweenGeneModelAndBrowser(selected_detailed_stack_divs, selected_column_divs) {
+	}
+	
 	function getVariantBrowserGrid(
 			vcf_id = document.querySelector('.chromosomeStackDiv[data-selected="true"]').dataset.vcf_id, 
 			position = document.querySelector('.chromosomeStackDiv[data-selected="true"]').dataset.position) {
@@ -1868,6 +1894,59 @@
     					pinned: 'left',
     				}) 
     			} else {
+    				const column = {
+   						headerName: columnKeys[i].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+       					field: columnKeys[i], 
+       					//headerClass: "ag-right-aligned-header",
+       					width: 30,
+       					sortable: true,
+       					sortingOrder: ['desc', null],
+       					
+       		            comparator: (valueA, valueB, nodeA, nodeB, isDescending) => {
+       		                
+       		            	const sort_map = new Map();
+       		            	sort_map.set('A', ['A','T','G','C'])
+       		            	sort_map.set('T', ['T','G','C','A'])
+       		            	sort_map.set('G', ['G','C','A','T'])
+       		            	sort_map.set('C', ['C','A','T','G'])
+       		            	
+       		            	switch(valueA) {
+       		            		case sort_map.get(base_sort_order)[0]: valueA = 4; break;
+       		            		case sort_map.get(base_sort_order)[1]: valueA = 3; break;
+       		            		case sort_map.get(base_sort_order)[2]: valueA = 2; break;
+       		            		case sort_map.get(base_sort_order)[3]: valueA = 1; break;
+       		            		default: valueA = 0;
+       		            	}
+       		            	
+       		            	switch(valueB) {
+   			            		case sort_map.get(base_sort_order)[0]: valueB = 4; break;
+   			            		case sort_map.get(base_sort_order)[1]: valueB = 3; break;
+   			            		case sort_map.get(base_sort_order)[2]: valueB = 2; break;
+   			            		case sort_map.get(base_sort_order)[3]: valueB = 1; break;
+   			            		default: valueB = 0;
+   			            	}
+       		            	
+       		            	if (valueA == valueB) {
+       		            		return 0;
+       		            	} else {
+       		            		return (valueA > valueB) ? 1 : -1
+       		            	}
+       		            },
+       		            
+       					tooltipField: columnKeys[i], 
+       					tooltipComponent: CustomTooltip, 
+       					cellStyle: cellStyle,	
+    				}
+    				
+    				if(columnKeys[i] == position) {
+    					column['headerClass'] = "grid-header-red";
+    				}
+    				
+    				VariantBrowser_columnDefs.push(column);
+    				
+    			}
+    			
+    			/* else {
     				VariantBrowser_columnDefs.push({
     					headerName: columnKeys[i].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
     					field: columnKeys[i], 
@@ -1911,7 +1990,7 @@
     					tooltipComponent: CustomTooltip, 
     					cellStyle: cellStyle,
     				}) 
-    			}
+    			} */
     		}
     		
     		
@@ -1940,6 +2019,30 @@
        		} 
     		
     		console.timeEnd("Variant_Browser");
+    		
+    		
+   			// model과 browser 사이에 선 긋기
+   			const selected_detailed_stack_divs = document.querySelectorAll('.chromosomeDetailedStackDiv[data-position]');
+   			const selected_column_divs = document.querySelectorAll(`#VariantBrowserGrid [col-id="\${Number(position)}"]`);
+       		drawLineBetweenGeneModelAndBrowser(selected_detailed_stack_divs, selected_column_divs);
+       		
+       		
+       		/*
+   			const svg = document.querySelector('.chromosomeDetailedStackDiv[data-order="1000"] svg');
+       		const selected_column_div = document.querySelector(`#VariantBrowserGrid [col-id="\${Number(position)}"]`)
+       		const start_x = svg.getBoundingClientRect().x
+       		const start_y = svg.getBoundingClientRect().y
+       		const end_x = selected_column_div.getBoundingClientRect().x;
+       		const end_y = selected_column_div.getBoundingClientRect().y;
+       		
+       		const xmlns = "http://www.w3.org/2000/svg";
+       		const polygon = document.createElementNS(xmlns, "polygon");
+       		polygon.setAttribute('style', 'fill:#0073E5;')
+       		polygon.setAttributeNS(null, 'points', '0,0 1,0 30,30 25,30');
+       	    svg.appendChild(polygon);
+       		*/
+    		
+    		
     	})
     	.catch((error) => {
     		console.log(error);
