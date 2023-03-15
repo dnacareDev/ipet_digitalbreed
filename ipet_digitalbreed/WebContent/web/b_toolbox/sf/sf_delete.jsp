@@ -15,7 +15,7 @@
 	
 	String[] deleteitems = request.getParameterValues("params[]");
 	
-	//System.out.println(Arrays.toString(deleteitems));
+	System.out.println(Arrays.toString(deleteitems));
 	
 	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Subset Filter', 'Delete " +deleteitems.length;
 	if(deleteitems.length > 1) {

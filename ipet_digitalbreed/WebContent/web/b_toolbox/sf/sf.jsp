@@ -373,7 +373,8 @@ body {
 	var linkedJobid = "<%=linkedJobid%>";
 	
 	const vcf_map = new Map();
-	const chr_regions = new Map();
+	//const chr_regions = new Map();
+	const chr_regions = {};
 
    	$(document).ready(function(){
    		vcfFileList();
@@ -501,7 +502,10 @@ body {
 	
 	async function onChangeVcf() {
 
-		chr_regions.clear();
+		//chr_regions.clear();
+		for (const prop of Object.getOwnPropertyNames(chr_regions)) {
+			delete chr_regions[prop];
+		}
 		//sample_map.clear();
 		
 		const jobid = selectedOption('VcfSelect').dataset.jobid;
@@ -531,10 +535,9 @@ body {
 			return;
 		}
 		
-		//chr_regions.get(chromosome).push({'chromosome': chromosome, 'start_pos': 1, 'end_pos': length});
-		//regionByChromosome_gridOptions.api.applyTransaction({'add': [{'chromosome': chromosome, 'start_pos': 1, 'end_pos': length}]});
-		chr_regions.get(chromosome).push({'start_pos': 1, 'end_pos': length});
-		regionByChromosome_gridOptions.api.setRowData(chr_regions.get(chromosome));
+		//chr_regions.get(chromosome).push({'start_pos': 1, 'end_pos': length});
+		chr_regions[chromosome].push({'start_pos': '1', 'end_pos': length.toString()});
+		regionByChromosome_gridOptions.api.setRowData(chr_regions[chromosome]);
 		
 		//console.log(chromosome);
 	}
@@ -572,39 +575,34 @@ body {
     	selectChromosome_gridOptions.api.forEachNode((node) => {
     		console.log("node", node);
     		if(node.selected == false) {
-    			chr_regions.delete(node.data.chromosome);
+    			//chr_regions.delete(node.data.chromosome);
+    			delete chr_regions[node.data.chromosome];
     		}
     		//debugger;
     	})
     	
     	//const region = chr_regions;
-    	const region = JSON.parse(JSON.stringify( Array.from(chr_regions.entries()) ));
+    	//const region = JSON.parse(JSON.stringify( Array.from(chr_regions.entries()) ));
+    	const region = JSON.parse(JSON.stringify(chr_regions));
     	
     	const sample_arr = new Array();
     	sampleNameGrid_gridOptions.api.forEachNode((node) => {
-    		sample_arr.push(node.data.sample);
+    		if(node.selected == true) {
+	    		sample_arr.push(node.data.sample);
+    		}
     	})
     	
     	const data = {
+    		"variety_id": variety_id,
+    		"refgenome_id": refgenome_id,
     		"jobid_vcf": jobid_vcf,
-    		"file_name": file_name,
     		"jobid_sf": jobid_sf,
+    		"file_name": file_name,
     		"region": region,
     		"sample_arr": sample_arr,
     	}
     	
     	//debugger;
-    	/*
-    	const snp_checked = document.getElementById('variant_snp').checked;
-    	const indel_checked = document.getElementById('variant_indel').checked;
-    	const allelic_bi_checked = document.getElementById('allelic_bi').checked;
-    	const missing = document.getElementById('missing-number').value;
-    	const maf = document.getElementById('maf-number').value;
-    	const minDP = document.getElementById('minDP').value;
-    	const minGQ = document.getElementById('minGQ').value;
-    	//thin input이 빈칸이면 false로 판단(사용 체크해제해도 값을 비우므로 false)
-    	let thin = document.getElementById('thin').value;
-    	*/
     	
     	if(jobid_vcf == -1) {
     		alert("VCF 파일을 선택하세요");
@@ -626,6 +624,7 @@ body {
    			$("#backdrop").modal("hide");
    			}
    		, 1000);
+    	
     }
     
     $('#backdrop').on('shown.bs.modal', function (e) {

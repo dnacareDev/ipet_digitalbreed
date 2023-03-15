@@ -32,9 +32,6 @@
 	System.out.println("===========================================");
 	
 	
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-	
-	
 	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Quality Filter', 'New analysis', now());";
 	//System.out.println(log_sql);
 	try{

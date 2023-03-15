@@ -84,11 +84,13 @@
 	*/
 	
 	.grid-header-red {
-		/*background-color: red;*/
+		color: red;
 		/*animation: blink 1s 5;*/
+		/*
 		animation-name: blink;
 		animation-duration: 1s;
 		animation-iteration-count: 5;
+		*/
 	}
 	
 	@-webkit-keyframes blink {
@@ -358,14 +360,14 @@
 	                                	</div>
 	                                	<div class="row" style="position:relative;">
 	                                		<div style="position:absolute; top:-21px; margin: 0px 23px; width: 96%;">
-	                                			<svg width= "100%" height= "35" xmlns:svg="http://www.w3.org/2000/svg"></svg>
+	                                			<svg id="connection" width="100%" height="35" xmlns:svg="http://www.w3.org/2000/svg"></svg>
 	                                		</div>
 				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:495px;"></div><br>
 	                                	</div>
 	                                </div>
 	                                <div id="sideRow" class="expandAndCollapse small" style="border-left: 1px solid black;">
 		                                <div class="row">
-		                                	<div id="side1"  class="expandAndCollapse small">
+		                                	<div id="side1" class="expandAndCollapse small">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' onclick="resizeGrid();" aria-expanded='true'>SnpEff</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' onclick="resizeGrid();" aria-expanded='false'>GWAS</a></li>
@@ -1416,7 +1418,8 @@
 	function appendChromosomeDetailedDiv() {
 		const chromosomeDiv = document.getElementById('chromosomeDetailedDiv');
 		
-		for(let i=0 ; i<=1999 ; i++) {
+		//for(let i=0 ; i<=1999 ; i++) {
+		for(let i=-1 ; i<=2000 ; i++) {
 			
 			const child = document.createElement('div');
 			child.classList.add('chromosomeDetailedStackDiv');
@@ -1455,15 +1458,30 @@
 			
 			document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).innerHTML = `
 				<div style="position:absolute; top:17px;">
-					<svg width="1" height="88" xmlns:svg="http://www.w3.org/2000/svg">
-						//<polygon style="fill:#bcbcbc" points="0,0 1,0 1,200 0,200"></polygon>
-						<polygon style="fill:\${color}" points="0,0 1,0 1,88 0,88"></polygon>
+					<svg width="1" height="89" xmlns:svg="http://www.w3.org/2000/svg">
+						<polygon style="fill:\${color}" points="0,0 1,0 1,89 0,89"></polygon>
 					</svg>
 				</div>
 				`;
 				
 		}
 		
+		//data-order=-1, 2000에 포지션 입력
+		document.querySelector(`.chromosomeDetailedStackDiv[data-order="-1"]`).innerHTML = `
+			<div style="position:absolute; left:-50px; bottom:15px;">
+				<svg width="100" height="20" xmlns:svg="http://www.w3.org/2000/svg">
+				<text fill="#000000" font-size="0.8rem" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle">\${position - 50000}</text>
+				</svg>
+			</div>
+			`
+		document.querySelector(`.chromosomeDetailedStackDiv[data-order="2000"]`).innerHTML = `
+			<div style="position:absolute; left:-50px; bottom:15px;">
+				<svg width="100" height="20" xmlns:svg="http://www.w3.org/2000/svg">
+				<text fill="#000000" font-size="0.8rem" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle">\${position + 50000}</text>
+				</svg>
+			</div>
+			`
+			
 		//debugger;
 	}
 	
@@ -1852,7 +1870,66 @@
 				`;
 	}
 	
-	function drawLineBetweenGeneModelAndBrowser(selected_detailed_stack_divs, selected_column_divs) {
+	//function drawLineBetweenGeneModelAndBrowser(position) {
+	function drawLineBetweenGeneModelAndBrowser() {
+		
+		
+		const selected_stack_div_arr = new Array();
+		document.querySelectorAll('.chromosomeDetailedStackDiv[data-position]').forEach((node) => {
+			//selected_stack_div_arr.push(node.dataset.position);
+			selected_stack_div_arr.push({
+				'position': node.dataset.position,
+				'div_bottom': node.firstElementChild.getBoundingClientRect().bottom,
+				'div_left': node.firstElementChild.getBoundingClientRect().left,
+			});
+		})
+		
+		for(let i=0 ; i<selected_stack_div_arr.length ; i++) {
+			const node = document.querySelector(`#VariantBrowserGrid [col-id="\${selected_stack_div_arr[i]['position']}"]`);
+			selected_stack_div_arr[i]['column_top'] = node.getBoundingClientRect().top;
+			selected_stack_div_arr[i]['column_center'] = (node.getBoundingClientRect().left + node.getBoundingClientRect().right) / 2 ;
+		}
+		
+		
+		
+		const svg = document.getElementById('connection');
+		svg.innerHTML = '';
+		const svg_x = svg.getBoundingClientRect().x;
+		for(let i=0 ; i<selected_stack_div_arr.length ; i++) {
+			const start_x = selected_stack_div_arr[i]['column_center'];
+       		const end_x = selected_stack_div_arr[i]['div_left'];
+       		
+       		const xmlns = "http://www.w3.org/2000/svg";
+       		const polyline = document.createElementNS(xmlns, "polyline");
+       		//polygon.setAttribute('style', 'fill:#0073E5;')
+       		polyline.setAttributeNS(null, 'stroke-width', 1);
+       		polyline.setAttributeNS(null, 'fill', 'none');
+       		if(selected_stack_div_arr[i].position == document.querySelector(`.chromosomeDetailedStackDiv[data-order="1000"]`).dataset.position) {
+       			polyline.setAttributeNS(null, 'stroke', 'red');
+       		} else {
+       			polyline.setAttributeNS(null, 'stroke', '#bcbcbc');
+       		}
+       		//polyline.setAttributeNS(null, 'stroke', '#bcbcbc');
+       		polyline.setAttributeNS(null, 'points', `\${start_x - svg_x},34 \${end_x - svg_x},0 `);
+       	    svg.appendChild(polyline);
+		}
+		
+		//debugger;
+		
+		/*
+		selected_detailed_stack_divs.forEach((node, i) => {
+			if(position == node.dataset.position) {
+				console.log("div ", position, node.dataset.position);
+			}
+		});
+		
+		selected_column_divs.forEach((node, j) => {
+			
+			if(position == node.getAttribute('col-id')) {
+				console.log("col ", position, node.getAttribute('col-id'));
+			}
+		});
+		*/
 	}
 	
 	function getVariantBrowserGrid(
@@ -2021,10 +2098,11 @@
     		console.timeEnd("Variant_Browser");
     		
     		
+   			
+   			
    			// model과 browser 사이에 선 긋기
-   			const selected_detailed_stack_divs = document.querySelectorAll('.chromosomeDetailedStackDiv[data-position]');
-   			const selected_column_divs = document.querySelectorAll(`#VariantBrowserGrid [col-id="\${Number(position)}"]`);
-       		drawLineBetweenGeneModelAndBrowser(selected_detailed_stack_divs, selected_column_divs);
+       		//drawLineBetweenGeneModelAndBrowser(position);
+   			drawLineBetweenGeneModelAndBrowser();
        		
        		
        		/*

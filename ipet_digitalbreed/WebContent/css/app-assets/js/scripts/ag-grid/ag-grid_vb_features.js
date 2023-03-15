@@ -181,6 +181,14 @@
 		        }
 		        //console.log(rowNodes);
 		    },
+		    onBodyScroll: (params) => {
+		    	if(params.direction == 'horizontal') {
+		    		drawLineBetweenGeneModelAndBrowser();
+		    	}
+		    },
+		    onGridSizeChanged: (params) => {
+		    	drawLineBetweenGeneModelAndBrowser();
+		    }
 			//onCellClicked: (params) =>
 	};
 

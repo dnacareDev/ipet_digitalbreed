@@ -43,7 +43,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../web/b_toolbox/qf/qf_delete.jsp",
+		    url:"../../../web/b_toolbox/sf/sf_delete.jsp",
 		    type:"POST",
 		    //data:{'params':deleteitems},
 		    data:{'params':deleteitems, 'varietyid':varietyid},
@@ -290,31 +290,38 @@
 			columnDefs: selectChromosome_ColumnDefs,
 			rowHeight: 35,
 			rowSelection: "multiple",
-			rowMultiSelectWithClick: true,
+			//rowMultiSelectWithClick: true,
+			suppressRowClickSelection: true,
 			suppressMultiRangeSelection: true,
 			suppressDragLeaveHidesColumns: true,
 			colResizeDefault: "shift",
 			animateRows: true,
 			getRowId: params => params.data.chromosome,
+			
 			onCellClicked: params => {
-				if(params.colDef.field == 'chromosome') {
 					
 					document.getElementById('addPosition').dataset.chromosome = params.data.chromosome;
 					document.getElementById('addPosition').dataset.length = params.data.length;
 					
-					if(chr_regions.get(params.data.chromosome) === undefined) {
-							
-						chr_regions.set(params.data.chromosome, [
-							//[1, params.data.length]
-							//{'chromosome': params.data.chromosome, 'start_pos': 1, 'end_pos': params.data.length}
-							{'start_pos': 1, 'end_pos': params.data.length}
-						]);
-						//regionByChromosome_gridOptions.api.applyTransaction({'add': [{'start_pos': 1, 'end_pos': params.data.length}]});
-					} 
+					if(chr_regions[params.data.chromosome] === undefined) {
+						chr_regions[params.data.chromosome] = [{'start_pos': 1, 'end_pos': params.data.length}];
+					}
 					
-					regionByChromosome_gridOptions.api.setRowData(chr_regions.get(params.data.chromosome));
+					//regionByChromosome_gridOptions.api.setRowData(chr_regions.get(params.data.chromosome));
+					regionByChromosome_gridOptions.api.setRowData(chr_regions[params.data.chromosome]);
 					
+			},
+			onRowSelected: params => {
+				document.getElementById('addPosition').dataset.chromosome = params.data.chromosome;
+				document.getElementById('addPosition').dataset.length = params.data.length;
+				
+				if(chr_regions[params.data.chromosome] === undefined) {
+					chr_regions[params.data.chromosome] = [{'start_pos': 1, 'end_pos': params.data.length}];
 				}
+				
+				//regionByChromosome_gridOptions.api.setRowData(chr_regions.get(params.data.chromosome));
+				regionByChromosome_gridOptions.api.setRowData(chr_regions[params.data.chromosome]);
+				//debugger;
 			}
 	}
 	
@@ -433,6 +440,7 @@
 			columnDefs: sampleNameGrid_columnDefs,
 			rowHeight: 35,
 			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
 			suppressMultiRangeSelection: true,
 			suppressDragLeaveHidesColumns: true,
 			colResizeDefault: "shift",
