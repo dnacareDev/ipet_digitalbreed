@@ -2272,7 +2272,7 @@
 				childDiv.style.right = "-3px";
 				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" ></svg>`;
 				childDiv.addEventListener("click", (e) => {
-					console.log("triangle")
+					changeInputValue(mark_pos);
 				})
 				
 				mark.appendChild(childDiv);
@@ -2493,12 +2493,14 @@
 				childDiv.dataset.toggle="popover";
 				childDiv.dataset.placement = "top";
 				childDiv.dataset.trigger = "hover";
-				//childDiv.dataset.content = mark_pos;
 				childDiv.dataset.content = thousands_separator(mark_pos);
 				childDiv.style.position = "absolute";
 				childDiv.style.bottom = "19px";
 				childDiv.style.right = "-3px";
 				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#2cb637;" /></svg>`;
+				childDiv.addEventListener("click", (e) => {
+					changeInputValue(mark_pos);
+				});
 				
 				mark.appendChild(childDiv);
 			}
@@ -2620,6 +2622,9 @@
 				childDiv.style.bottom = "13px";
 				childDiv.style.right = "-3px";
 				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" /></svg>`;
+				childDiv.addEventListener("click", (e) => {
+					changeInputValue(mark_pos);
+				});
 				
 				mark.appendChild(childDiv);
    			}
@@ -2633,10 +2638,17 @@
 			if(!document.querySelector(`[data-gwas_order="\${mark_data_order}"]`)){
 				const childDiv = document.createElement('div');
 				childDiv.dataset.gwas_order = mark_data_order;
+				childDiv.dataset.toggle="popover";
+				childDiv.dataset.placement = "top";
+				childDiv.dataset.trigger = "hover";
+				childDiv.dataset.content = thousands_separator(mark_pos);
 				childDiv.style.position = "absolute";
 				childDiv.style.bottom = "19px";
 				childDiv.style.right = "-3px";
 				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#2cb637;" /></svg>`;
+				childDiv.addEventListener("click", (e) => {
+					changeInputValue(mark_pos);
+				});
 				
 				mark.appendChild(childDiv);
 			}
