@@ -34,7 +34,7 @@
 		
 	
 		//String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+45)+" and vcf_id>="+(vcf_id)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
-		String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+23)+" and vcf_id>"+(vcf_id-23)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
+		String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+28)+" and vcf_id>"+(vcf_id-18)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		

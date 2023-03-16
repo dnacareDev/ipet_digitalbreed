@@ -19,7 +19,7 @@
 
 	try {
 		String sql = "select vcf_id, position from vcfviewer_t where vcf_id>=" +vcf_id+ " and vcf_id<=" +(vcf_id + row_count)+ " and chr='" +chr+"' and jobid='" +jobid+ "';";
-		//System.out.println(sql);
+		System.out.println(sql);
 		
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		

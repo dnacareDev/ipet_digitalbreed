@@ -43,7 +43,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../web/b_toolbox/qf/qf_delete.jsp",
+		    url:"../../../web/b_toolbox/vfm/vfm_delete.jsp",
 		    type:"POST",
 		    //data:{'params':deleteitems},
 		    data:{'params':deleteitems, 'varietyid':varietyid},
@@ -259,6 +259,163 @@
 	};
 	
 	
+	const vcf_columnDefs = [
+		{
+			checkboxSelection: true,
+			headerCheckboxSelectionFilteredOnly: true,
+			headerCheckboxSelection: true,
+		},
+		{
+			headerName: "순번",
+			field: "displayno",
+			maxWidth: 100,
+			minWidth: 100,	
+			suppressMenu: true,
+			hide:true,
+	    },
+	    {
+	    	headerName: "실제순번",
+	    	field: "selectfiles",
+	    	hide: true,	
+	    },
+	    {
+	    	headerName: "분석상태",
+	    	field: "status",
+	    	suppressMenu: true,
+	    	maxWidth: 90,
+	    	minWidth: 90,
+	    	cellClass: "grid-cell-centered",      
+	    	cellRenderer: function(params) {
+	    		//console.log("params : ", params.value);
+	    		switch(Number(params.value)) {
+					case 0: 
+						return "<span title='분석 중'><i class='feather icon-loader'></i></span>";
+					case 1:
+						return "<span title='분석 완료'><i class='feather icon-check-circle'></i></span>";
+					case 2:
+						return "<span title='분석 실패'><i class='feather icon-x-circle'></i></span>";
+	    		}
+	    	},
+	    	hide:true,
+	    },
+	    {
+	    	headerName: "VCF 파일명",
+	    	field: "filename",
+	    	filter: "agTextColumnFilter",
+	    	width: 500,
+	    	minWidth:150,
+	    	/*
+	    	cellRenderer: function(params){
+	    		return params.value+"<a href='/ipet_digitalbreed/"+params.data.uploadpath+params.data.jobid + "/" + params.value + "' download>&nbsp;&nbsp;<i class='feather icon-download'></i></a>";
+	    	}
+	    	*/
+	    },
+	    {
+	    	headerName: "상세내용",
+	    	field: "comment",
+	    	filter: "agTextColumnFilter",
+	    	cellClass: "ag-header-cell-label",
+	    	width: 470,
+	    	minWidth:110,
+	    	cellStyle: {'cursor': 'pointer'},
+	    	hide:true,
+	    },
+	    {
+	    	headerName: "작물",
+	    	field: "cropid",
+	    	width: 180,
+	    	hide: true
+	    },
+	    {
+	    	headerName: "참조유전체",
+	    	field: "refgenome",
+	    	filter: "agTextColumnFilter",
+	    	width: 275,
+	    	minWidth: 120,
+	    },
+	    {
+	    	headerName: "샘플수",
+	    	field: "samplecnt",
+	    	valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+	    	filter: 'agNumberColumnFilter',
+	    	width: 120,
+	    	minWidth: 100,
+	    },
+	    {
+	    	headerName: "변이수",
+	    	field: "variablecnt",
+	    	valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+	    	filter: 'agNumberColumnFilter',
+	    	width: 120,
+	    	minWidth: 100,
+	    },
+	    {
+	        headerName: "등록일자",
+	        field: "cre_dt",
+	        filter: 'agDateColumnFilter',
+	        filterParams: {
+	        	comparator: comparator
+	        },
+	        width: 120,
+	        minWidth: 110,
+	        hide:true,
+	    },
+		{
+	    	headerName: "jobid",
+	    	field: "jobid",
+	    	hide: true
+	    },  
+		{
+	    	headerName: "uploadpath",
+	    	field: "uploadpath",
+	    	hide: true
+	    },  
+		{
+	    	headerName: "resultpath",
+	    	field: "resultpath",
+	    	hide: true
+	    }        
+	];
+	
+	const vcf_gridOptions = {
+			defaultColDef: {
+				editable: true, 
+			    sortable: true,
+				resizable: true,
+				cellClass: "grid-cell-centered",
+				suppressMenu: true,
+				suppressMovable: true,
+			},
+			columnDefs: vcf_columnDefs,
+			rowHeight: 35,
+			rowSelection: "multiple",
+			suppressMultiRangeSelection: true,
+			suppressDragLeaveHidesColumns: true,
+			colResizeDefault: "shift",
+			animateRows: true,
+	}
+	
+	function comparator(filterLocalDateAtMidnight, cellValue) {
+  		if (cellValue == null) {
+  			return 0;
+  		}
+	
+	    var dateParts = cellValue.split('-');
+	    var year = Number(dateParts[0]);
+	    var month = Number(dateParts[1]) - 1;
+	    var day = Number(dateParts[2]);
+	    var cellDate = new Date(year, month, day);
+    
+	    if (cellDate < filterLocalDateAtMidnight) {
+	        return -1;
+	    } else if (cellDate > filterLocalDateAtMidnight) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+	}
+	
+	
 	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
 	document.addEventListener('click', function(event) {
 		//console.log(event.target.id);
@@ -340,6 +497,18 @@
 					}
 				});	
 			}
+  		})
+  		
+  		fetch("../../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val() )
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log(data);
+  			
+  			const gridTable = document.getElementById("VcfGrid");
+  			const myGrid = new agGrid.Grid(gridTable, vcf_gridOptions);
+  			
+  			vcf_gridOptions.api.setRowData(data);
+  			//vcf_gridOptions.columnApi.autoSizeAllColumns(false);
   		})
 	})	
 	  	

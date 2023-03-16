@@ -359,9 +359,11 @@
 	                                		</fieldset>
 	                                	</div>
 	                                	<div class="row" style="position:relative;">
-	                                		<div style="position:absolute; top:-21px; margin: 0px 23px; width: 96%;">
+	                                		<div style="position:absolute; bottom:-14px; margin: 0px 23px; width: 96%;">
 	                                			<svg id="connection" width="100%" height="35" xmlns:svg="http://www.w3.org/2000/svg"></svg>
 	                                		</div>
+	                                	</div>
+	                                	<div class="row">
 				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:495px;"></div><br>
 	                                	</div>
 	                                </div>
@@ -893,6 +895,10 @@
 	document.querySelectorAll('.chromosomeStackDiv').forEach(El => {
 		El.addEventListener('click', (e) => {
 			
+			if(e.composedPath()[0].classList[0] != 'chromosomeStackDiv') {
+				return;
+			}
+			
 			const clickedOrder = e.composedPath()[0].dataset.order
 			let closestPositionedOrder = 2000;
 			let gap = 2000;
@@ -1275,6 +1281,8 @@
 		
 		getVariantBrowserGrid(vcf_id, position);
 		
+		changeInputValue(position);
+		/*
 		const chr = selectedOption('Chr_select').dataset.chr;
 		const chr_orders_arr = chr_orders_map.get(chr);
 		
@@ -1321,6 +1329,7 @@
 		
 		colorGeneModelPosition(chr_orders_arr[Number(index)].position)
 		getGeneModel(chr_orders_arr[Number(index)].position);
+		*/
 	}
 	
 	function nextPosition(index, vcf_id, position, order) {
@@ -1329,6 +1338,9 @@
 			return alert("더이상 이동할 수 없습니다.");
 		}
 		
+		changeInputValue(position);
+		
+		/*
 		getVariantBrowserGrid(vcf_id, position);
 		
 		
@@ -1377,6 +1389,7 @@
 		
 		colorGeneModelPosition(chr_orders_arr[Number(index)].position)
 		getGeneModel(chr_orders_arr[Number(index)].position);
+		*/
 	}
 	
 	function nextOrder(vcf_id, order) {
@@ -1451,10 +1464,12 @@
 			node.innerHTML = "";
 		});
 		
+		
 		for(let i=0 ; i<gene_model_order_arr.length ; i++) {
 			document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).dataset.position = gene_model_position_arr[i].position;
 			
 			const color = gene_model_order_arr[i]==1000 ? 'red' : '#bcbcbc';
+			
 			
 			document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).innerHTML = `
 				<div style="position:absolute; top:17px;">
@@ -1463,27 +1478,77 @@
 					</svg>
 				</div>
 				`;
+			
 				
 		}
 		
-		//data-order=-1, 2000에 포지션 입력
+		
+		// data-order=-1, 2000에 포지션 입력
+		const leftside = (position-50000)<0 ? 0 : position-50000;
 		document.querySelector(`.chromosomeDetailedStackDiv[data-order="-1"]`).innerHTML = `
 			<div style="position:absolute; left:-50px; bottom:15px;">
 				<svg width="100" height="20" xmlns:svg="http://www.w3.org/2000/svg">
-				<text fill="#000000" font-size="0.8rem" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle">\${position - 50000}</text>
+				<text fill="#000000" font-size="0.8rem" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle">\${thousands_separator(leftside)}</text>
 				</svg>
 			</div>
-			`
+			`;
+		
+		const rightside = (position+50000) > Number($("#Chr_select :selected").attr('data-length')) ? Number($("#Chr_select :selected").attr('data-length')) : position+50000;
 		document.querySelector(`.chromosomeDetailedStackDiv[data-order="2000"]`).innerHTML = `
 			<div style="position:absolute; left:-50px; bottom:15px;">
 				<svg width="100" height="20" xmlns:svg="http://www.w3.org/2000/svg">
-				<text fill="#000000" font-size="0.8rem" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle">\${position + 50000}</text>
+				<text fill="#000000" font-size="0.8rem" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle">\${thousands_separator(rightside)}</text>
 				</svg>
 			</div>
 			`
 			
 		//debugger;
 	}
+	
+	// 각각의 chrmosomeStackDiv에 클릭이벤트 추가
+	document.querySelectorAll('.chromosomeDetailedStackDiv').forEach(El => {
+		El.addEventListener('click', (e) => {
+			
+			if(e.composedPath()[0].classList[0] != 'chromosomeDetailedStackDiv') {
+				return;
+			}
+			
+			const clickedOrder = e.composedPath()[0].dataset.order
+			let closestPositionedOrder = 2000;
+			let gap = 2000;
+			
+			//console.log(clickedOrder);
+			
+			e.composedPath()[1].querySelectorAll('[data-position]').forEach( (el) => {
+				const order = el.dataset.order;
+				if(Math.abs( Number(order) - Number(clickedOrder) ) < gap ) {
+					gap = Math.abs( Number(order) - Number(clickedOrder) );
+					closestPositionedOrder = Number(order);
+				} 
+			})
+			
+			const selectedDiv = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`);
+			selectedDiv.dataset.selected = 'true';
+			
+			
+			const input_value = Number(e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position);
+			
+			//document.getElementById('positionInput').value = e.composedPath()[1].querySelector(`[data-order='\${closestPositionedOrder}']`).dataset.position.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			
+			changeInputValue(input_value);
+			
+			/*
+			// 버튼 클릭시 이동값을 dataset에 저장
+			setPositionMoveControl();
+			
+			const position = selectedDiv.dataset.position;
+			//getGeneModel(selectedDiv);
+			colorGeneModelPosition(Number(position));
+			getGeneModel(position);
+			getVariantBrowserGrid();
+			*/
+		})
+	})
 	
 	//async function getGeneModel(selectedDiv) {
 	async function getGeneModel(position) {
@@ -1838,49 +1903,17 @@
 		
 	}
 	
-	
-	
-	function setSVG(childDiv) {
-		
-		console.log(childDiv);
-		
-		return `<svg width="81.760757" height="11.519"
-					viewBox="0 0 21.632545 3.047735" version="1.1" id="svg117"
-					xmlns="http://www.w3.org/2000/svg"
-					xmlns:svg="http://www.w3.org/2000/svg">
-						<g transform="translate(-0.89341089,-1.3147886)">
-				   		<path
-							style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
-							d="m 3.0536216,1.3147886 v 3.047842 h 4.360107 v -3.047842 z"
-							/>
-				   		<path
-							style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
-							d="m 9.4032916,1.3147886 v 3.047842 h 1.9895634 v -3.047842 z"
-							/>
-				   		<path
-							style="fill:#c4bd97;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583"
-							d="m 19.097122,1.3147886 v 3.047842 h 3.428822 v -3.047842 z"
-							/>
-				   		<path
-							style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.0026457px;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-							d="M 22.356619,2.5847226 H 2.6594126 v 0.253987 H 22.356619 Z M 3.0112906,1.6534376 0.89473358,2.7117166 3.0112906,3.7699946 Z"
-							/>
-						</g>
-				</svg> 
-				`;
-	}
-	
 	//function drawLineBetweenGeneModelAndBrowser(position) {
 	function drawLineBetweenGeneModelAndBrowser() {
 		
-		
+		/*
 		const selected_stack_div_arr = new Array();
 		document.querySelectorAll('.chromosomeDetailedStackDiv[data-position]').forEach((node) => {
 			//selected_stack_div_arr.push(node.dataset.position);
 			selected_stack_div_arr.push({
 				'position': node.dataset.position,
-				'div_bottom': node.firstElementChild.getBoundingClientRect().bottom,
-				'div_left': node.firstElementChild.getBoundingClientRect().left,
+				'div_bottom': node.getBoundingClientRect().bottom,
+				'div_left': node.getBoundingClientRect().left,
 			});
 		})
 		
@@ -1889,9 +1922,47 @@
 			selected_stack_div_arr[i]['column_top'] = node.getBoundingClientRect().top;
 			selected_stack_div_arr[i]['column_center'] = (node.getBoundingClientRect().left + node.getBoundingClientRect().right) / 2 ;
 		}
+		*/
+		
+		const position = Number(document.getElementById('positionInput').value.replaceAll(",",""));
+		
+		const chr = selectedOption('Chr_select').dataset.chr;
+		const chr_orders_arr = chr_orders_map.get(chr);
+		
+		const gene_model_position_arr = chr_orders_arr.filter((item) => position-50000 < item.position && item.position<position+50000 );
+		const gene_model_order_arr = new Array();
+		
+		for(let i=0 ; i<gene_model_position_arr.length ; i++) {
+			const selected_order = parseInt(((gene_model_position_arr[i].position - position) / 50) + 1000);
+			gene_model_order_arr.push(selected_order)
+		}
+		
+		const svg = document.getElementById('connection');
+		svg.innerHTML = '';
+		const svg_x = svg.getBoundingClientRect().x;
+		for(let i=0 ; i<gene_model_position_arr.length ; i++) {
+			const col_rect = document.querySelector(`#VariantBrowserGrid div.ag-header-cell.ag-header-cell-sortable[col-id="\${gene_model_position_arr[i]['position']}"]`).getBoundingClientRect();
+			
+			const start_x = (col_rect.left + col_rect.right) / 2;   
+       		const end_x = document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).getBoundingClientRect().x;
+       		
+       		const xmlns = "http://www.w3.org/2000/svg";
+       		const polyline = document.createElementNS(xmlns, "polyline");
+       		//polygon.setAttribute('style', 'fill:#0073E5;')
+       		polyline.setAttributeNS(null, 'stroke-width', 1);
+       		polyline.setAttributeNS(null, 'fill', 'none');
+       		polyline.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+       		if(gene_model_position_arr[i]['position'] == Number(document.querySelector(`#VariantBrowserGrid div.ag-header-cell.ag-header-cell-sortable.grid-header-red`).getAttribute('col-id'))) {
+       			polyline.setAttributeNS(null, 'stroke', 'red');
+       		} else {
+       			polyline.setAttributeNS(null, 'stroke', '#bcbcbc');
+       		}
+       		polyline.setAttributeNS(null, 'points', `\${start_x - svg_x},34 \${end_x - svg_x},0`);
+       	    svg.appendChild(polyline);
+		}
 		
 		
-		
+		/*
 		const svg = document.getElementById('connection');
 		svg.innerHTML = '';
 		const svg_x = svg.getBoundingClientRect().x;
@@ -1904,32 +1975,19 @@
        		//polygon.setAttribute('style', 'fill:#0073E5;')
        		polyline.setAttributeNS(null, 'stroke-width', 1);
        		polyline.setAttributeNS(null, 'fill', 'none');
-       		if(selected_stack_div_arr[i].position == document.querySelector(`.chromosomeDetailedStackDiv[data-order="1000"]`).dataset.position) {
+       		polyline.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+       		if(selected_stack_div_arr[i].position == Number(document.querySelector(`#VariantBrowserGrid div.ag-header-cell.ag-header-cell-sortable.grid-header-red`).getAttribute('col-id'))) {
        			polyline.setAttributeNS(null, 'stroke', 'red');
        		} else {
        			polyline.setAttributeNS(null, 'stroke', '#bcbcbc');
        		}
-       		//polyline.setAttributeNS(null, 'stroke', '#bcbcbc');
-       		polyline.setAttributeNS(null, 'points', `\${start_x - svg_x},34 \${end_x - svg_x},0 `);
+       		polyline.setAttributeNS(null, 'points', `\${start_x - svg_x},34 \${end_x - svg_x},0`);
        	    svg.appendChild(polyline);
 		}
+		*/
 		
 		//debugger;
 		
-		/*
-		selected_detailed_stack_divs.forEach((node, i) => {
-			if(position == node.dataset.position) {
-				console.log("div ", position, node.dataset.position);
-			}
-		});
-		
-		selected_column_divs.forEach((node, j) => {
-			
-			if(position == node.getAttribute('col-id')) {
-				console.log("col ", position, node.getAttribute('col-id'));
-			}
-		});
-		*/
 	}
 	
 	function getVariantBrowserGrid(
@@ -2022,52 +2080,6 @@
     				VariantBrowser_columnDefs.push(column);
     				
     			}
-    			
-    			/* else {
-    				VariantBrowser_columnDefs.push({
-    					headerName: columnKeys[i].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    					field: columnKeys[i], 
-    					//headerClass: "ag-right-aligned-header",
-    					width: 30,
-    					sortable: true,
-    					sortingOrder: ['desc', null],
-    					
-    		            comparator: (valueA, valueB, nodeA, nodeB, isDescending) => {
-    		                
-    		            	const sort_map = new Map();
-    		            	sort_map.set('A', ['A','T','G','C'])
-    		            	sort_map.set('T', ['T','G','C','A'])
-    		            	sort_map.set('G', ['G','C','A','T'])
-    		            	sort_map.set('C', ['C','A','T','G'])
-    		            	
-    		            	switch(valueA) {
-    		            		case sort_map.get(base_sort_order)[0]: valueA = 4; break;
-    		            		case sort_map.get(base_sort_order)[1]: valueA = 3; break;
-    		            		case sort_map.get(base_sort_order)[2]: valueA = 2; break;
-    		            		case sort_map.get(base_sort_order)[3]: valueA = 1; break;
-    		            		default: valueA = 0;
-    		            	}
-    		            	
-    		            	switch(valueB) {
-			            		case sort_map.get(base_sort_order)[0]: valueB = 4; break;
-			            		case sort_map.get(base_sort_order)[1]: valueB = 3; break;
-			            		case sort_map.get(base_sort_order)[2]: valueB = 2; break;
-			            		case sort_map.get(base_sort_order)[3]: valueB = 1; break;
-			            		default: valueB = 0;
-			            	}
-    		            	
-    		            	if (valueA == valueB) {
-    		            		return 0;
-    		            	} else {
-    		            		return (valueA > valueB) ? 1 : -1
-    		            	}
-    		            },
-    		            
-    					tooltipField: columnKeys[i], 
-    					tooltipComponent: CustomTooltip, 
-    					cellStyle: cellStyle,
-    				}) 
-    			} */
     		}
     		
     		
@@ -2259,6 +2271,9 @@
 				childDiv.style.bottom = "13px";
 				childDiv.style.right = "-3px";
 				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#0073E5;" ></svg>`;
+				childDiv.addEventListener("click", (e) => {
+					console.log("triangle")
+				})
 				
 				mark.appendChild(childDiv);
 				
@@ -2514,7 +2529,8 @@
    		}
    		
    		
-   		const chr = selectedOption('Chr_select').dataset.chr;
+   		//const chr = selectedOption('Chr_select').dataset.chr;
+   		const chr = sequence[0].data.chr;
    		const position = sequence[0].data.pos;
    		const flanking_sequence_jobid = await fetch('../getJobid.jsp').then((response)=>response.text());
    		const flanking_sequence_size = document.getElementById('flankingSequence').value.replace(",","");

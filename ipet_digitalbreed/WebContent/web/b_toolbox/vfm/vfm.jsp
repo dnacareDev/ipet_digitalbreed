@@ -234,10 +234,10 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">Quality Filter New analysis</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Merge New analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -246,112 +246,47 @@ body {
 					<form class="form" id="uploadForm">
 					    <div class="form-body">
 					        <div class="row">
-					            <fieldset class="border w-100 m-1 pt-1">
-						        <legend class="w-auto ml-1 mr-1">Quality Filter</legend>
+					            <fieldset class="border w-100 ml-1 mr-1">
+						        <legend class="w-auto ml-1 mr-1">Options</legend>
+						            <div class="col-12">
+					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
+							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            		<input type="radio" class="form-check-input" id="analysisModalRadio1" name="analysisModalRadioType1" checked/>
+		                                        <label class="form-check-label" for="analysisModalRadio1" style="margin-left:4px;" >Concatenate</label>
+		                                        <i class="ri-question-line"></i>
+							            	</div>
+							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            		<input type="radio" class="form-check-input" id="analysisModalRadio2" name="analysisModalRadioType1" />
+		                                        <label class="form-check-label" for="analysisModalRadio2" style="margin-left:4px;" >Merge</label>
+		                                        <i class="ri-question-line"></i>
+							            	</div>
+					            		</div>
+					            		<div class="row pl-2 pr-2 mt-1" style="display:flex; column-gap:10px;">
+							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            		<input type="checkbox" class="form-check-input" id="analysisModalCheckbox1"/>
+		                                        <label class="form-check-label" for="analysisModalCheckbox1" style="margin-left:4px;" >Allow duplicate samples</label>
+							            	</div>
+							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            		<input type="checkbox" class="form-check-input" id="analysisModalCheckbox2" />
+		                                        <label class="form-check-label" for="analysisModalCheckbox2" style="margin-left:4px;" >Missing to Ref genotype</label>
+							            	</div>
+					            		</div>
+						            </div>
+						        </fieldset>
+						        <fieldset class="border w-100 m-1">
+						        <legend class="w-auto ml-1 mr-1">Select a subset of sample</legend>
 						            <div class="col-md-12 col-12">
-						            	<div class="form-label-group" >
-						                    <select class="select2 form-select" id="VcfSelect">
-						                    </select>
-						                </div>
-						            </div>
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-					            		<div class="row">
-							            	<div class="col-4">Variant Type</div>
-							            	<div class="form-check col-3">
-							            		<input type="checkbox" class="form-check-input" id="variant_snp" />
-		                                        <label class="form-check form-check-label" for="variant_snp" style="margin-left:-16px;" >SNP</label>
-							            	</div>
-							            	<div class="form-check col-3">
-							            		<input type="checkbox" class="form-check-input" id="variant_indel" />
-		                                        <label class="form-check-label" for="variant_indel" style="margin-left:6px;" >INDEL</label>
-							            	</div>
+					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
+							            	Move to the right
 					            		</div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
-							            	<div class="col-4">Allelic Type</div>
-							            	<div class="form-check col-3">
-							            		<input type="checkbox" class="form-check-input" id="allelic_bi" />
-		                                        <label class="form-check-label" for="allelic_bi" style="margin-left:6px;">Bi-allelic</label>
-							            	</div>
+					            			<div class="col-12">
+												<div id="VcfGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:220px;"></div>
+											</div>
 					            		</div>
 						            </div>
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-						            	<div class="row">
-						            		<div class="col-4" style="margin-top:8px;">Missing (%)</div>
-						            		<div class="col-5" style="margin-top:8px;">
-						            			<div class="row">
-						            				<div class="col-1 min-range-max" onclick="document.getElementById('missing-range').value = 0; document.getElementById('missing-number').value = 0;">0</div>
-							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
-								            			<input type="range" class="form-range" id="missing-range" min="0" max="100" value="50" step="1" oninput="document.getElementById('missing-number').value = this.value" />
-							            			</div>
-						            				<div class="col-1 min-range-max" onclick="document.getElementById('missing-range').value = 100; document.getElementById('missing-number').value = 100">100</div>
-						            			</div>
-						            		</div>
-						            		<div class="col-3">
-						            			<input type="text" class="form-control" id="missing-number" autocomplete="off" value="50" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>100)this.value=100; document.getElementById('missing-range').value = this.value;" />
-						            		</div>
-						            	</div>
-						            </div>
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-						            	<div class="row">
-											<div class="col-4" style="margin-top:8px;">MAF </div>
-	                                        <div class="col-5" style="margin-top:8px;">
-	                                        	<div class="row">
-	                                        		<div class="col-1 min-range-max" onclick="document.getElementById('maf-range').value = 0; document.getElementById('maf-number').value = 0;">0</div>
-	                                        		<div class="col-8" style="margin-right:-3px; padding-left:3px; padding-right:0px;">
-			                                        	<input type="range" class="form-range" id="maf-range" min="0" max="0.5" value="0.25" step="0.01" oninput="document.getElementById('maf-number').value = this.value" />
-	                                        		</div>
-	                                        		<div class="col-1 min-range-max" onclick="document.getElementById('maf-range').value = 0.5; document.getElementById('maf-number').value = 0.5;"> 0.5</div>
-	                                        	</div>
-	                                        </div>
-	                                        <div class="col-3">
-						            			<input type="text" class="form-control" id="maf-number" autocomplete="off" value="0.25" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('maf-range').value = this.value;" />
-						            		</div>
-	                                    </div>
-						            </div>
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-						            	<div class="row">
-											<div class="col-4" style="margin-top:2%">MinDP</div>
-											<div class="col-8">
-												<input type="number" class="form-control" id="minDP" value="10" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-											</div>
-										</div>
-						            </div>
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-						            	<div class="row">
-											<div class="col-4" style="margin-top:2%">MinGQ</div>
-											<div class="col-8">
-												<input type="number" class="form-control" id="minGQ" value="90" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-											</div>
-										</div>
-						            </div>
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-						            	<div class="row">
-											<div class="col-4" style="margin-top:5px;">Thin</div>
-											<div class="form-check col-3">
-							            		<input type="checkbox" class="form-check-input" id="useThin" style="margin-top:9px; margin-left:-11px;" onclick="if(this.checked){document.getElementById('thin').style.display = 'block'}else{document.getElementById('thin').style.display ='none'; document.getElementById('thin').value='';}" />
-		                                        <label for="useThin"  style="margin-top:9px; margin-left:12px;">사용</label>
-							            	</div>
-											<div class="col-5">
-												<input class="form-control" type="text" id="thin" placeholder="(unit : bp)" style="display:none;" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-											</div>
-										</div>
-						            </div>
-						            <!--  
-						            <div class="col-md-12 col-12 mt-1 mb-1">
-						            	<div class="row mb-1">
-							            	<div class="col-4" style="margin-top:5px;">CMPlot</div>
-							            	<div class="form-check col-3">
-							            		<input type="checkbox" class="form-check-input" id="CMPlot_use" style="margin-top:9px; margin-left:-11px;" value="CMPlot_without_condition" checked/>
-		                                        <label for="CMPlot_use"  style="margin-top:9px; margin-left:12px;">사용</label>
-							            	</div>
-							            	<div class="col-5">
-							            		<input class="form-control" type="text" id="CMPlot" name="variant_type" placeholder="(unit : mb)">
-							            	</div>
-					            		</div>
-						            </div>
-						            -->
 						        </fieldset>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="Execute();">Run</button>
@@ -424,7 +359,7 @@ body {
 	var linkedJobid = "<%=linkedJobid%>";
 
    	$(document).ready(function(){
-   		vcfFileList();
+   		//vcfFileList();
    		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
    	});
 
@@ -623,7 +558,9 @@ body {
     	
     }
     
-
+	$("#backdrop").on('shown.bs.modal', function() {
+		vcf_gridOptions.api.sizeColumnsToFit();
+	});
 
        
 </script>

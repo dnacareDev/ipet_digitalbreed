@@ -20,7 +20,7 @@
 	
 		//String sql = "select * from variant_browser_selection where jobid='"+jobid+"' and chr='"+chr+ "';";
 		String sql = "select * from variant_browser_selection where jobid='"+jobid+"' order by chr, pos;";
-		System.out.println(sql);
+		//System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 		
 		while(ipetdigitalconndb.rs.next()) {

@@ -36,6 +36,8 @@
 	  		permissionUid = username;
 	  		session.setAttribute("permissionUid", permissionUid);
 	  		//session.setAttribute("user_type", user_type);
+	  		// 세션 60분 유지
+	  		session.setMaxInactiveInterval(60*60);
 	  		
 	  		//response.sendRedirect("/ipet_digitalbreed/web/mainboard.jsp");
 	  		response.sendRedirect("/ipet_digitalbreed/web/index.jsp");
