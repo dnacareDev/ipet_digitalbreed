@@ -158,22 +158,6 @@
 			ipetdigitalconndb.conn.close();
 		}
 		
-		/*
-		String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','"+refseq+"','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','"+samplecnt+"','"+variablecnt+"','','','','','"+jobid+"','"+permissionUid+"',now());";	
-		System.out.println("insertVcfinfo_sql : " + insertVcfinfo_sql);
-		
-		try{
-			ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);
-		}catch(Exception e){
-    		System.out.println(e);
-    		ipetdigitalconndb.stmt.close();
-    		ipetdigitalconndb.conn.close();
-    	}finally { 
-			System.out.println("vcf file upload Success");
-    		ipetdigitalconndb.stmt.close();
-    		ipetdigitalconndb.conn.close();
-    	}
-		*/
 		String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refgenome+ "', refgenome_id=" +refgenome_id+ ", samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
 		//String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
 		System.out.println(updateVcfinfo_sql);
@@ -184,27 +168,7 @@
 	   		System.out.println(e);
 	   		ipetdigitalconndb.stmt.close();
 	   		ipetdigitalconndb.conn.close();
-	   	}/*finally { 
-	   		ipetdigitalconndb.stmt.close();
-	   		ipetdigitalconndb.conn.close();
-	   	}*/
-		
-		/*
-		// CSV => JSON파일 생성
-		System.out.println("========CSV to Json start========");
-		CsvToJson csvToJson = new CsvToJson();
-		csvToJson.getJson(outputPath, jobid, permissionUid);
-		System.out.println("========CSV to Json end========");
-		
-
-		// CSV => 행렬변환된 CSV파일 생성
-		String csv_transpose = "Rscript " +script_path+ "genotype_sequence_bakground.R " +outputPath+" "+ jobid;
-		
-		System.out.println("========CSV transpose start========");
-		System.out.println("csv_transpose : " + csv_transpose);
-		runanalysistools.execute(csv_transpose, "cmd");
-		System.out.println("========CSV transpose end========");
-		*/
+	   	}
 		
 		// CSV => JSON 생성 & DB저장
 		System.out.println("========CSV to Json & excuteUpdate start========");

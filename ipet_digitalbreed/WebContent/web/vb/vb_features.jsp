@@ -170,32 +170,19 @@
 		display: inline-block;
 		position: relative;
 	}
-	.chromosomeStackDiv[data-position] {
+	.chromosomeStackDiv[data-position], .chromosomeDetailedStackDiv[data-position] {
 		background-color: #bcbcbc;
 	}
-	.chromosomeStackDiv[data-order="0"], .chromosomeDetailedStackDiv[data-order="0"] {
-		background-color: black;
-		z-index: 2;
-	}
+	.chromosomeStackDiv[data-order="0"], .chromosomeDetailedStackDiv[data-order="0"],
 	.chromosomeStackDiv[data-order="1999"], .chromosomeDetailedStackDiv[data-order="1999"] {
 		background-color: black;
 		z-index: 2;
 	}
-	.chromosomeStackDiv[data-selected="true"] {
+	.chromosomeStackDiv[data-selected="true"],
+	.chromosomeDetailedStackDiv[data-order="1000"] {
 		 background-color: red !important;
 		z-index: 3;
 	}
-	
-	.chromosomeDetailedStackDiv[data-position] {
-		background-color: #bcbcbc;
-	}
-	
-	.chromosomeDetailedStackDiv[data-order="1000"] {
-		background-color: red !important;
-		border: red !important;
-		z-index: 3;
-	}
-	
 	
 	/*
 	@media(max-width: 762px) {
@@ -298,26 +285,11 @@
 						<button type="button" id="afterId" class="btn btn-sm" style="margin:8px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Position 기준 오른쪽 변이로 이동합니다." onclick="nextPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);">
 							<i class="bx bx-skip-next"></i>
 						</button>
-						<button type="button" id="afterOrder" class="btn btn-sm" style="margin:8px 15px 8px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Display 기준 오른쪽 변이로 이동합니다." onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> 
+						<button type="button" id="afterOrder" class="btn btn-sm" style="margin:8px 15px 8px 0; border-radius:0 5px 5px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Display 기준 오른쪽 변이로 이동합니다." onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> 
 							<i class="bx bx-fast-forward"></i> 
 						</button>
-						<!--  
-						<div>
-							<button type="button" id="beforeOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousOrder(this.dataset.vcf_id, this.dataset.order);"> &lt;&lt; </button>
-						</div>
-						<div>
-							<button type="button" id="beforeId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="previousPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &lt; </button>
-						</div>
-						<div style="display:none;">
-							<button type="button" id="currentId" ></button>
-						</div>
-						<div>
-							<button type="button" id="afterId" class="btn-sm btn-secondary mb-1" style="margin-top:8px;margin-left:2px;" onclick="nextPosition(this.dataset.index, this.dataset.vcf_id, this.dataset.position, this.dataset.order);"> &gt; </button>
-						</div>
-						<div>
-							<button type="button" id="afterOrder" class="btn-sm btn-secondary mb-1" style="margin-top:8px; margin-left:2px;" onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> &gt;&gt; </button>
-						</div>
-						-->
+						<button type="button" id="loci" class="btn btn-outline-success" style="width:105px; margin:8px 0 8px 0; border-radius:0;" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain(); resizeGrid();">Loci</button>
+						<button type="button" id="cluster" class="btn" style="margin:8px 0 8px 0; color: #2da0ed; background-color:#ffffff; border:1px solid #2da0ed; border-radius:0;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain(); resizeGrid();">Cluster</button>
 					</div>
                 </div>
             </div>
@@ -327,7 +299,15 @@
     <!-- BEGIN: Content-->
     <div class="app-content content" style="padding-top: 30px;">
         <div class="content-overlay"></div>
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="position:relative;">
+        	<!--  
+        	<div style="position: absolute; top: 50px; right: -25px;">
+				<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain(); resizeGrid();">Loci</button>
+			</div>
+			<div style="position: absolute; top: 130px; right: -25px;">
+				<button type="button" class="btn sideButton" style="color: #ffffff; background-color:#2da0ed;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain(); resizeGrid();">Cluster</button>
+			</div>
+			-->
             <div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
@@ -336,14 +316,15 @@
                             <div class="card-body pt-0 pb-0">
                                 <div class="row justify-content-between">
 	                                <div id="main" class="expandAndCollapse expandMain" style="position: relative;">
-	                                	
 	                                	<!-- right side 고정버튼 -->
+	                                	<!--  
 	                                	<div style="position: absolute; top: 25px; right: -25px;">
 											<button type="button" class="btn btn-success sideButton" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain(); resizeGrid();">Loci</button>
 										</div>
 										<div style="position: absolute; top: 105px; right: -25px;">
 											<button type="button" class="btn sideButton" style="color: #ffffff; background-color:#2da0ed;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain(); resizeGrid();">Cluster</button>
 										</div>
+										-->
 	                                	<div class="row" style="margin-top: 0px; margin-bottom:0px;">
 	                                		<fieldset class="border pt-2 pl-2 pr-2 pb-1 pb-3" style="width:96%; margin-left:23px; margin-right:23px;">
 	                                			<legend  class="w-auto">Reference</legend>
@@ -367,7 +348,7 @@
 				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:495px;"></div><br>
 	                                	</div>
 	                                </div>
-	                                <div id="sideRow" class="expandAndCollapse small" style="border-left: 1px solid black;">
+	                                <div id="sideRow" class="expandAndCollapse small" style="border-left: 1px solid #E9E9E9;">
 		                                <div class="row">
 		                                	<div id="side1" class="expandAndCollapse small">
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
@@ -446,7 +427,7 @@
 															</div>
 															-->
 															<div class="col-12" style="height:500px; display: flex; align-items: center; justify-content: center;">
-																<p style="margin-top:-25px; font-size: 30px;">Please select a result</p>
+																<p style="margin-top:80px; font-size: 30px;">Please select a result</p>
 															</div>
 														</div>
 														<div id="status404" class="row mt-1" style="display:none;">
@@ -458,7 +439,7 @@
 																	<line x1="12" y1="17" x2="12.01" y2="17"></line>
 																</svg>
 																-->
-																<p style="margin-top:90px; font-size: 25px;">표현형과의 유사성을 찾을 수 없습니다.</p>
+																<p style="margin-top:170px; font-size: 25px;">표현형과의 유사성을 찾을 수 없습니다.</p>
 															</div>
 														</div>
 	  												</div>
@@ -744,11 +725,20 @@
 	</div>
 	
 	<div class="modal fade" id="flankingSequenceSizeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  		<div class="modal-dialog modal-dialog-centered">
+  		<div class="modal-dialog modal-dialog-centered modal-lg">
     		<div class="modal-content">
+    			<div class="modal-header bg-warning white">
+                    <h4 class="modal-title" id="myModalLabel5">Sequence</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 	      		<div class="modal-body">
 	        		<div class="col-12" style="margin:15px auto;">
-					    <textarea rows="20" class="form-control" id="sequenceSize" style="font-size:14px;" readonly></textarea>
+					    <!--    
+					    <textarea rows="20" class="form-control" style="font-size:14px;" readonly></textarea>
+					    -->
+					    <div class="form-control" id="sequenceSize" style="height: 200px; font-size:14px; word-break:break-all; overflow: scroll;" readonly></div>
 					</div>
 	      		</div>
 	      		<div class="modal-footer">
@@ -840,7 +830,33 @@
 	})();
 	
 	function copyToClipboard(id) {
-		document.querySelector(`#\${id}`).select(); 
+		
+		
+		if(id == 'sequenceSize') {
+			const textarea = document.createElement("textarea");
+			textarea.textContent = document.querySelector(`#\${id}`).innerText;
+			document.body.appendChild(textarea);
+			textarea.focus();
+			textarea.select();
+			document.execCommand('copy');
+			document.body.removeChild(textarea);
+		} else {
+			document.querySelector(`#\${id}`).select(); 
+			document.execCommand('copy');
+		}
+		
+		
+		
+		const label_text = document.getElementById(`\${id}`).dataset.label_text;
+		
+		if(label_text === undefined || label_text === null) {
+			alert('sequence copied!')
+		} else {
+			alert(`\${label_text} copied!`);
+		}
+		
+		/*
+		document.querySelector(`#\${id}`).innerText.select(); 
 		document.execCommand('copy');
 		
 		const label_text = document.getElementById(`\${id}`).dataset.label_text;
@@ -850,6 +866,7 @@
 		} else {
 			alert(`\${label_text} copied!`);
 		}
+		*/
 		/*
 		if (window.getSelection) {
 			window.getSelection().removeAllRanges();
@@ -1941,7 +1958,12 @@
 		svg.innerHTML = '';
 		const svg_x = svg.getBoundingClientRect().x;
 		for(let i=0 ; i<gene_model_position_arr.length ; i++) {
-			const col_rect = document.querySelector(`#VariantBrowserGrid div.ag-header-cell.ag-header-cell-sortable[col-id="\${gene_model_position_arr[i]['position']}"]`).getBoundingClientRect();
+			//const col_rect = document.querySelector(`#VariantBrowserGrid div.ag-header-cell.ag-header-cell-sortable[col-id="\${gene_model_position_arr[i]['position']}"]`).getBoundingClientRect();
+			const col_rect = document.querySelector(`#VariantBrowserGrid div.ag-header-cell.ag-header-cell-sortable[col-id="\${gene_model_position_arr[i]['position']}"]`)?.getBoundingClientRect();
+			
+			if(col_rect === undefined || col_rect === null) {
+				continue;
+			}
 			
 			const start_x = (col_rect.left + col_rect.right) / 2;   
        		const end_x = document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).getBoundingClientRect().x;
@@ -2166,25 +2188,46 @@
 		
 		const side1 = document.getElementById('side1');
 		const side2 = document.getElementById('side2');
-		
 
+		const loci = document.getElementById('loci');
+		const cluster = document.getElementById('cluster');
+		
+		/*
+		loci.classList.replace('btn-success','btn-outline-success')
+		
+		cluster.style.color = '#2da0ed';
+		cluster.style.backgroundColor = '#FFFFFF';
+		cluster.style.border = '1px solid #2da0ed';
+		*/
+		
 		if(text == 'side1') {
 			
 			side2.classList.replace('expandSide', 'small');
+			cluster.style.color = '#2da0ed';
+			cluster.style.backgroundColor = '#FFFFFF';
+			
 			if(side1.classList.contains('expandSide')) {
 				side1.classList.replace('expandSide', 'small');
+				loci.classList.replace('btn-success','btn-outline-success')
 			} else {
 				side1.classList.replace('small', 'expandSide');
+				loci.classList.replace('btn-outline-success','btn-success')
 			}
 			
 		} else if(text == 'side2') {
 			
 			if(side2.classList.contains('expandSide')) {
 				side2.classList.replace('expandSide', 'small');
+				cluster.style.color = '#2da0ed';
+				cluster.style.backgroundColor = '#FFFFFF';
 			} else {
 				side2.classList.replace('small', 'expandSide');
+				cluster.style.color = '#FFFFFF';
+				cluster.style.backgroundColor = '#2da0ed';
 			}
 			side1.classList.replace('expandSide', 'small');
+			side1.classList.replace('expandSide', 'small');
+			loci.classList.replace('btn-success','btn-outline-success')
 			
 		}
 		
@@ -2530,8 +2573,8 @@
    			return alert("position을 하나만 선택해주세요.")
    		}
    		
+   		$("#loading").modal('show');
    		
-   		//const chr = selectedOption('Chr_select').dataset.chr;
    		const chr = sequence[0].data.chr;
    		const position = sequence[0].data.pos;
    		const flanking_sequence_jobid = await fetch('../getJobid.jsp').then((response)=>response.text());
@@ -2547,23 +2590,31 @@
 			['refgenome', refgenome],
 			['filename', filename],
 			['fasta_filename', fasta_filename],
-			//['gff_filename', gff_filename],
-			//['cds_filename', cds_filename],
-			//['protein_filename', protein_filename],
 		]);
 		
 		//debugger;
 		$('#flankingSequenceModal').modal('hide'); 
-		document.getElementById('sequenceSize').value = "";
+		document.getElementById('sequenceSize').innerHTML = "";
 		$('#flankingSequenceSizeModal').modal('show');
 		const data = await getFetchTextData(url_string, map_params);
-		console.log(data);
+		//console.log(data);
 		
 		const data_arr = data.split(',');
-			
-		document.getElementById('sequenceSize').value = '>'+ data_arr[0] +'\n'+ data_arr[2]; 
+		
+		document.getElementById('sequenceSize').innerHTML = data.includes("null") ? `>\${data_arr[0]}<br>${data_arr[2]}` : `>\${data_arr[0]}<br>\${data_arr[2].replaceAll(/\[([^)]+)\]/g,'<span style="color:red;">[$1]</span>')}`; 
+		
+		/*
+		if(data.includes("null")) {
+			document.getElementById('sequenceSize').innerHTML = `>\${data_arr[0]}<br>${data_arr[2]}`; 
+		} else {
+			document.getElementById('sequenceSize').innerHTML = `>\${data_arr[0]}<br>\${data_arr[2].replaceAll(/\[([^)]+)\]/g,'<span style="color:red;">[$1]</span>')}`;
+		}
+		*/
+		
+		$("#loading").modal('hide');
 		
 		$('#sequenceDownload').attr('data-jobid', flanking_sequence_jobid);
+		
    	}
    	
    	function downloadFlankingSequenceCSV(jobid) {

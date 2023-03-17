@@ -148,6 +148,13 @@
     	minWidth: 120,
     },
     {
+    	headerName: "Gff",
+    	field: "gff",
+    	filter: "agTextColumnFilter",
+    	width: 275,
+    	minWidth: 120,
+    },
+    {
     	headerName: "샘플수",
     	field: "samplecnt",
     	valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),

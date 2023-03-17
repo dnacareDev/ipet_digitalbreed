@@ -6,6 +6,8 @@
 
 <%
 	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
 	String jobid_vcf = request.getParameter("jobid_vcf");
