@@ -193,6 +193,29 @@
 	};
 
 	
+	
+	class snpEffDescriptionTooltip {
+		init(params) {
+			const eGui = (this.eGui = document.createElement('div'));
+			const color = params.color || 'white';
+			const data = params.api.getDisplayedRowAtIndex(params.rowIndex).data;
+	
+			eGui.classList.add('custom-tooltip');
+			//@ts-ignore
+			eGui.style['background-color'] = color;
+			eGui.style['border'] = "1px solid #AAE6E6";
+			eGui.innerHTML = `
+	            <p style="margin:10px;">
+	                <span class"name">${params.value}</span>
+	            </p>
+	        `;
+		}
+		
+		getGui() {
+		    return this.eGui;
+		}
+	}
+	
 	var SnpEff_columnDefs = [
 		{
 			//headerName: "row_id(select link)",
@@ -210,6 +233,8 @@
 			//editable: true, 
 			suppressMenu: true,
 			pinned: 'left',
+			tooltipShowDelay: 0,
+		    tooltipHideDelay: 20000,
 			cellRenderer: (params) => {
 				if(params.value) {
 					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
@@ -270,6 +295,9 @@
 			filter: "agTextColumnFilter",
 			cellClass: "",
 			suppressMenu: false,
+			tooltipField: "description",
+			tooltipComponent: snpEffDescriptionTooltip,
+			tooltipComponentParams: { color: '#f8f8f8' },
 			width: 350, 
 			minWidth: 160, 
 		},
@@ -291,8 +319,9 @@
 		pivotPanelShow: "always", 
 		colResizeDefault: "shift", 
 		animateRows: true, 
+		tooltipShowDelay: 0,
+	    tooltipHideDelay: 20000,
 		getRowId: (params) => params.data.row_id,
-		//getRowNodeId: (params) => SnpEff_gridOptions.api.getValue('row_id', params),
 		onCellClicked: (params) => {
 			//console.log(params);
 			
@@ -564,8 +593,8 @@
 			headerName: "Chr", 
 			field: "chr", 
 			filter: true, 
-			width: 100, 
-			maxWidth: 100, 
+			width: 110, 
+			maxWidth: 110, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 

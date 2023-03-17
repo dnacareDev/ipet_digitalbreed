@@ -288,8 +288,8 @@
 						<button type="button" id="afterOrder" class="btn btn-sm" style="margin:8px 15px 8px 0; border-radius:0 5px 5px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Display 기준 오른쪽 변이로 이동합니다." onclick="nextOrder(this.dataset.vcf_id, this.dataset.order);"> 
 							<i class="bx bx-fast-forward"></i> 
 						</button>
-						<button type="button" id="loci" class="btn btn-outline-success" style="width:105px; margin:8px 0 8px 0; border-radius:0;" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain(); resizeGrid();">Loci</button>
-						<button type="button" id="cluster" class="btn" style="margin:8px 0 8px 0; color: #2da0ed; background-color:#ffffff; border:1px solid #2da0ed; border-radius:0;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain(); resizeGrid();">Cluster</button>
+						<button type="button" id="loci" class="btn btn-outline-success" style="width:145px; margin:8px 0 8px 0; border-radius:0;" onclick="expandAndCollapseSide('side1'); expandAndCollapseMain(); resizeGrid();">Loci Info</button>
+						<button type="button" id="cluster" class="btn" style="width:145px; margin:8px 0 8px -1px; color: #2da0ed; background-color:#ffffff; border:1px solid #2da0ed; border-radius:0;" onclick="expandAndCollapseSide('side2'); expandAndCollapseMain(); resizeGrid();">Cluster Info</button>
 					</div>
                 </div>
             </div>
@@ -854,26 +854,6 @@
 		} else {
 			alert(`\${label_text} copied!`);
 		}
-		
-		/*
-		document.querySelector(`#\${id}`).innerText.select(); 
-		document.execCommand('copy');
-		
-		const label_text = document.getElementById(`\${id}`).dataset.label_text;
-		
-		if(label_text === undefined || label_text === null) {
-			alert('sequence copied!')
-		} else {
-			alert(`\${label_text} copied!`);
-		}
-		*/
-		/*
-		if (window.getSelection) {
-			window.getSelection().removeAllRanges();
-		} else if (document.selection) {
-			document.selection.empty();
-		}
-		*/
 	}
 	
 	document.addEventListener('DOMContentLoaded', async function() {
@@ -976,10 +956,10 @@
 		
 		function create_SVG_specificOrderStackDiv(order_id, left, width) {
 			const childDiv = document.createElement('div');
-			childDiv.classList.add("verticalLtrMedia762");
+			//childDiv.classList.add("verticalLtrMedia762");
 			childDiv.style.position = "absolute";
 			childDiv.style.top = "3px";
-			childDiv.style.left = "-7px";
+			childDiv.style.left = "-49px";
 			//childDiv.style.height = "80px";
 			
 			const xmlns = "http://www.w3.org/2000/svg";
@@ -992,9 +972,11 @@
 		    const svg_text = document.createElementNS(xmlns, "text");
 		    svg_text.setAttributeNS(null, 'fill', '#000000');
 		    svg_text.setAttributeNS(null, 'font-size', '0.8rem');
-		    svg_text.setAttributeNS(null, 'x', '5');
+		    //svg_text.setAttributeNS(null, 'x', '5');
+		    svg_text.setAttributeNS(null, 'x', '50%');
 		    svg_text.setAttributeNS(null, 'y', '50%');
 		    svg_text.setAttributeNS(null, 'dominant-baseline', 'middle');
+		    svg_text.setAttributeNS(null, 'text-anchor', 'middle');
 
 		    const text_node = document.createTextNode('0');
 		    
@@ -1006,13 +988,13 @@
 		}
 		
 		
-		for(let i=0 ; i<=5 ; i++) {
+		for(let i=0 ; i<=10 ; i++) {
 			const childDiv = create_SVG_specificOrderStackDiv(`scaleBarDiv_\${i}`, '-15', '100');
 			
 			if(i==0) {
 				nodes[0].appendChild(childDiv);
 			} else {
-				nodes[(i*400)-1].appendChild(childDiv);
+				nodes[(i*200)-1].appendChild(childDiv);
 			}
 		}
 		
@@ -1060,16 +1042,21 @@
 		// #chromosomeLastStackDiv에 length값 입력
 		const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		
-		for(let i=1 ; i<=5 ; i++) {
-			const division_length = parseInt(Number(length) * i / 5)
-			document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = thousands_separator(division_length);
+		
+		for(let i=1 ; i<=10 ; i++) {
+			const division_length = parseInt(Number(length) * i / 10)
+			//document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = thousands_separator(division_length);
+			document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = parseInt(division_length / 1000000 ) + 'Mbp'
+			/*
 			for(let j=0, left=0; j<thousands_separator(length).length ; j++) {
 				left = isNaN(thousands_separator(division_length)[j]) ? left-2 : left-4; 
 				if(j==length.toString().length -1) {
 					document.querySelector(`.chromosomeScaleBarStackDiv[data-order="\${(i*400)-1}"]>div`).style.left = left + "px";
 				}
 			}
+			*/
 		}
+		
 		
 		fetch(`./vb_features_positionListFromChr.jsp?vcf_id=\${vcf_id}&row_count=\${row_count}&chr=\${chr}&jobid=\${linkedJobid}`)
 		.then((response) => response.json())
@@ -1679,11 +1666,9 @@
 									Strand : \${strand}<br>
 									CDS : <br>
 									`;
-			
 			for(let i=0 ; i<svg_CDS.length ; i++) {
 				popoverContent += `\${i+1} : \${thousands_separator(svg_CDS[i]['start'])} - \${thousands_separator(svg_CDS[i]['end'])}<br>`
 			}
-			//popoverContent += `Attribute : \${gene_model['mRNA'][i]['attribute']}`;
 									
 			childDiv.dataset.content = popoverContent;
 			childDiv.style.position = 'absolute';
@@ -1820,6 +1805,7 @@
 		document.getElementById('pd_strand').innerText = strand;
 		
 		let CDS_contents = ""
+		
 		for(let i=0 ; i<svg_CDS.length ; i++) {
 			CDS_contents += `\${i+1} : \${thousands_separator(svg_CDS[i]['start'])} - \${thousands_separator(svg_CDS[i]['end'])}<br>`
 		}
@@ -2191,14 +2177,6 @@
 
 		const loci = document.getElementById('loci');
 		const cluster = document.getElementById('cluster');
-		
-		/*
-		loci.classList.replace('btn-success','btn-outline-success')
-		
-		cluster.style.color = '#2da0ed';
-		cluster.style.backgroundColor = '#FFFFFF';
-		cluster.style.border = '1px solid #2da0ed';
-		*/
 		
 		if(text == 'side1') {
 			
