@@ -1478,7 +1478,7 @@
 			document.querySelector(`.chromosomeDetailedStackDiv[data-order="\${gene_model_order_arr[i]}"]`).innerHTML = `
 				<div style="position:absolute; top:17px;">
 					<svg width="1" height="89" xmlns:svg="http://www.w3.org/2000/svg">
-						<polygon style="fill:\${color}" points="0,0 1,0 1,89 0,89"></polygon>
+						<polygon style="fill:\${color}" fill-opacity="0.4" points="0,0 1,0 1,89 0,89"></polygon>
 					</svg>
 				</div>
 				`;

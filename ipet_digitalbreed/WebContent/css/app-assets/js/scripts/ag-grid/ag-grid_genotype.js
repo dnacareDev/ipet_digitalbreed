@@ -229,6 +229,7 @@
 	},
     columnDefs: columnDefs,
     rowHeight: 35,
+    headerHeight: 100,
     enableRangeSelection: true,
 	suppressMultiRangeSelection: true,
     rowSelection: "multiple",
@@ -442,7 +443,7 @@
 			} else {
 				columnDefs2.push({
 					field: header[i], 
-					width: 50, 
+					width: 30, 
 					menuTabs: [], 
 					tooltipField: header[i], 
 					tooltipComponent: CustomTooltip, 

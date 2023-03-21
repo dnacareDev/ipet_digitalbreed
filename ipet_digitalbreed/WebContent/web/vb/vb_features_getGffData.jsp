@@ -12,13 +12,13 @@
 	//String gff = request.getParameter("gff");
 	String gff = request.getParameter("gff_filename");
 	
-	/*
+	
 	System.out.println(jobid);
 	System.out.println(chr);
 	System.out.println(position);
 	System.out.println(refgenome);
 	System.out.println(gff);
-	*/
+	
 	
 	long beforeTime = System.currentTimeMillis();
 	
@@ -41,6 +41,7 @@
 								.filter((item) -> item.contains(chr));
 	
 	lines.forEach(line -> {
+		//System.out.println(line);
 		String[] lineArr = line.split("\t");
 		if( !((position - 50000) <= Integer.parseInt(lineArr[3]) && Integer.parseInt(lineArr[4]) <= (position + 50000)) ) {
 			return;
@@ -50,7 +51,7 @@
 		
 		//System.out.println(line);
 		if(lineArr[2].equals("mRNA")) {
-			//System.out.println(line);
+			System.out.println(line);
 			
 			JsonObject jsonObject = new JsonObject();
 			for(int i=0 ; i<header.length ; i++) {

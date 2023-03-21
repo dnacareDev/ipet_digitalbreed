@@ -16,21 +16,23 @@
 
 	try{
 
-		//String sql="select refgenome_id, crop_name, refgenome, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' order by refgenome_id DESC;";
-		String sql="select refgenome_id, crop_name, refgenome, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by refgenome_id DESC;";
-		//System.out.println(sql);
+		//String sql="select refgenome_id, crop_name, refgenome, gff, author, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by refgenome_id DESC;";
+		String sql="select *, DATE_FORMAT(cre_dt, '%Y-%m-%d') as cre_dt from reference_genome_t where creuser='" +permissionUid+ "' and varietyid='" +varietyid+ "' order by refgenome_id DESC;";
+		System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
 			
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("refgenome_id", ipetdigitalconndb.rs.getInt("refgenome_id"));
 			jsonObject.addProperty("crop_name", ipetdigitalconndb.rs.getString("crop_name"));
-			//jsonObject.addProperty("reference", ipetdigitalconndb.rs.getString("reference"));
 			jsonObject.addProperty("refgenome", ipetdigitalconndb.rs.getString("refgenome"));
 			jsonObject.addProperty("gff", ipetdigitalconndb.rs.getString("gff"));
-			//jsonObject.addProperty("anno", ipetdigitalconndb.rs.getString("anno"));
-			//jsonObject.addProperty("length", ipetdigitalconndb.rs.getString("length"));
 			jsonObject.addProperty("author", ipetdigitalconndb.rs.getString("author"));
+			jsonObject.addProperty("fasta_filename", ipetdigitalconndb.rs.getString("fasta_filename"));
+			jsonObject.addProperty("gff_filename", ipetdigitalconndb.rs.getString("gff_filename"));
+			jsonObject.addProperty("gene_filename", ipetdigitalconndb.rs.getString("gene_filename"));
+			jsonObject.addProperty("cds_filename", ipetdigitalconndb.rs.getString("cds_filename"));
+			jsonObject.addProperty("annotation_filename", ipetdigitalconndb.rs.getString("annotation_filename"));
 			jsonObject.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt"));
 			
 			jsonArray.add(jsonObject);
