@@ -118,6 +118,7 @@
 			direct_input(direct_input, jsonObject);
 			break;
 		case "File_Upload":
+			//savePath = "/ipet_digitalbreed/uploads/primer_design/"+jobid_pd+"/";
 			savePath = "/ipet_digitalbreed/uploads/primer_design/"+jobid_pd+"/";
 			String file_upload = "Rscript " +script_path+script +" 3 "+ outputPath +" "+ jobid_pd +" "+ ref_fasta_path +" "+ Length_Min +" "+ Length_Max +" "+ GCcontent_Min +" "+ GCcontent_Max +" "+ TM_Min +" "+ TM_Max +" "+ Size_Min +" "+ Size_Max +" "+ savePath +" "+ filename;
 			file_upload(file_upload, jsonObject);

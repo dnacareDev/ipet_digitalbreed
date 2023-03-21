@@ -188,9 +188,41 @@
 						alert("분석 중입니다.");
 						break;
 					case 1:
-						//console.log('jobid : ', params.data.jobid);
+						console.log('jobid : ', params.data.jobid);
 						//console.log('resultpath : ', params.data.resultpath);
 						//console.log("model : ", params.data.model)
+						
+						$("#Loading").modal('show');
+						
+						document.getElementById('vcf_status').style.display = "block";
+						
+						fetch(`${params.data.resultpath+"/"+params.data.jobid+"/Potential_KASP_primers.tsv"}`)
+						.then((response)=>response.blob())
+						.then((file)=> {
+							//console.log(data);
+							var reader = new FileReader();
+						    reader.onload = function(){
+						        var fileData = reader.result;
+						        var wb = XLSX.read(fileData, {type : 'binary', FS:'\t'});
+						        
+						        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+						        console.log("rowObj : ", rowObj);
+						        //console.log(csv_to_grid);
+						        
+						        gridOptions2.api.setRowData(rowObj);
+						        gridOptions2.columnApi.autoSizeAllColumns();
+						        
+						        $("#Loading").modal('hide');
+						    };
+						    reader.readAsBinaryString(file);
+							
+							
+							
+							
+							
+							
+						})
+						
 						
 						break;
 					case 2:
@@ -249,56 +281,53 @@
 	}
 	
 	
-	
-
-	function showPlot(value) {
-		
-		const model_name = $('#model_name').val();
-		const resultpath = $('#resultpath').val();
-		const jobid_param = $('#jobid_param').val();
-		
-		//console.log(`iframe#${model_name}`);
-		//console.log(resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
-
-		
-		
-		$("#iframeLoading").modal('show');
-		$(`iframe#${model_name}`).attr('src', resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
-		
-	}
 
 	var columnDefs2 = [
 		{
-			field: "SNP", 
-			width: 180, 
-			hide: true, 
+			headerName: "체크",
+			maxWidth: 100,
+			minWidth: 100,
+			checkboxSelection: true,
+			headerCheckboxSelectionFilteredOnly: true,
+			headerCheckboxSelection: true
+	    },
+		{
+			headerName: "ID", 
+			field: 'index'
 		},
 		{
-			field: "Chr", 
-			width: 180, 
+			headerName: "seq",
+			field: "primer_seq",
 		},
 		{
-			field: "Pos", 
-			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-			width: 120, 
+			field: "product_size", 
 		},
 		{
-			field: "P-value", 
-			valueFormatter: (params) => Number(params.value).toFixed(5),
-			width: 120, 
-			sortable: true, 
-			
+			field: "any", 
 		},
 		{
-			field: "MAF", 
-			valueFormatter: (params) => Number(params.value).toFixed(5),
-			width: 120, 
+			field: "3'", 
 		},
 		{
-			field: "Effect", 
-			valueFormatter: (params) => Number(params.value).toFixed(5),
-			width: 120, 
-		}
+			field: "end_stability", 
+		},
+		{
+			field: "hairpin", 
+		},
+		{
+			field: "penalty", 
+		},
+		{
+			field: "compl_any", 
+		},
+		{
+			field: "compl_end", 
+		},
+		{
+			headerName: "matched",
+			field: "matched_chromosomes",
+			//valueGetter: params => params.data.matched_chromosomes.split(";").length -1;
+		},
 	]
 	
 	var gridOptions2 = {
@@ -319,36 +348,7 @@
 			//suppressHorizontalScroll: true,
 	}
 	
-	var columnDefsTraitName = [
-		{ 	
-			headerName:'특성', 
-			field: "traitname",
-			menuTabs: ["filterMenuTab"], 
-			width: 420, 
-			checkboxSelection: true, 
-			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true,
-			cellClass: "grid-cell-centered", 
-		},
-		{
-			field: "traitname_key",
-			hide:true
-		}
-	];
-	var gridOptionsTraitName = {
-			defaultColDef: {
-				editable: false, 
-			    sortable: true,
-			    filter: true,
-			},
-			columnDefs: columnDefsTraitName,
-			rowHeight: 35,
-			rowSelection: "multiple",
-			rowMultiSelectWithClick: true,
-			suppressMultiRangeSelection: true,
-			animateRows: true,
-			suppressHorizontalScroll: true,
-	}
+
 	
 	//var modelGrid = [];
 	function showGrid(value) {
@@ -465,6 +465,8 @@
   		
   		const EnzymeGrid = new agGrid.Grid(document.getElementById('RestrictionEnzymeGrid'), enzyme_gridOptions);
   		enzyme_gridOptions.api.setRowData();
+  		
+  		const resultGrid = new agGrid.Grid(document.getElementById('resultGrid'), gridOptions2);
   	});
 
 	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/

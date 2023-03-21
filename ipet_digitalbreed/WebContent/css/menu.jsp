@@ -66,6 +66,10 @@
                                     </li>
                                     <li class="<%if(menu_active.equals("anno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Annotation</a>
                                     </li>
+                                    <li class="<%if(menu_active.equals("idiogram")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Idiogram</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("structure")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Structure</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Form Elements"><i class="feather icon-monitor"></i>Genotype Analyses</a>
@@ -84,7 +88,32 @@
                                     --%>
                                 </ul>
                             </li>
-							<li class="<%if(menu_active.equals("pheno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/pheno.jsp" data-i18n="Chat"><i class="feather icon-sliders"></i>Phenotype Analyses</a></li>
+							<li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Chat"><i class="feather icon-sliders"></i>Phenotype Analyses</a>
+								<ul class="dropdown-menu">
+									<li class="<%if(menu_active.equals("mean")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/mean/mean.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Mean</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("standard_deviation")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/standard_deviation/standard_deviation.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Standard deviation</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("heritability")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/heritability/heritability.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Heritability</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("anova")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/anova/anova.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>ANOVA</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("t-test")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/t-test/t-test.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>T-test</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("phenotypic_selection")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/phenotypic_selection/phenotypic_selection.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Phenotypic selection</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("box-plot")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/box-plot/box-plot.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Box-plot</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("correlation_analysis")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/correlation_analysis/correlation_analysis.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Correlation analysis</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("phenotype_pca")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/phenotype_pca/phenotype_pca.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>PCA</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("iqr")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/iqr/iqr.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>IQR</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("regression")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/regression/regression.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Regression</a>
+                                    </li>
+								</ul>
+							</li>
                             
                         </ul>
                     </li>

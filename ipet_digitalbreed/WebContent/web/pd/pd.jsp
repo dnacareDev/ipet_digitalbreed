@@ -182,6 +182,54 @@
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
+                    <div id="vcf_status" class="card" style="display:none">
+                    	<div class='card-content'>
+							<div class='card-body'>
+								<div class='row'>
+									<div class='col-12'>
+										<ul class='nav nav-pills nav-active-bordered-pill'>
+											<li class='nav-item'><a class='nav-link active' id='qf_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Marker Info </a></li>
+										</ul>
+										<div class='tab-content'>
+											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+												<div class="row">
+													<div class="col-2 text-center">Product Size</div>
+													<div class="col-2 text-center">any</div>
+													<div class="col-2 text-center">Hairpin</div>
+													<div class="col-2 text-center">Penalty</div>
+													<div class="col-2 text-center">End stability</div>
+													<div class="col-2 text-center"></div>
+												</div>
+												<div class="row p-1">
+													<div class="col-2">
+														<input class="form-control">
+													</div>
+													<div class="col-2">
+														<input class="form-control">
+													</div>
+													<div class="col-2">
+														<input class="form-control">
+													</div>
+													<div class="col-2">
+														<input class="form-control">
+													</div>
+													<div class="col-2">
+														<input class="form-control">
+													</div>
+													<div class="col-2 d-flex justify-content-center">
+														<button type="button" class="btn btn-primary">적용</button>
+													</div>
+												</div>
+												<div id="resultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+											</div>
+										</div>
+									</div>
+								</div>
+								<input type='hidden' id='jobid'>
+								<input type='hidden' id='resultpath'>
+							</div>
+						</div>
+                    </div>
                 </section>
                 <!-- // Basic example section end -->
             </div>
@@ -352,7 +400,7 @@
         </div>
     </div>
     
-   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+   	<div class="modal" id="Loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
 			<div><strong>Loading PD Result...</strong></div>
@@ -379,9 +427,7 @@
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
     <script src="../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
-    <!-- 
     <script src="../../css/app-assets/js/scripts/sheetjs/xlsx.full.min.js"></script>
-    -->    
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
@@ -517,8 +563,9 @@
 	    box.on('uploadComplete', function (p) {
 			
 	    	//console.log(p);
-	    	//p.postData['vcf_filename'] = p.files[0]['clientFileName'];
-	    	p.postData['filename'] = 'primer_test.vcf';
+	    	p.postData['vcf_filename'] = p.files[0]['clientFileName'];
+	    	//p.postData['filename'] = 'primer_test.vcf';
+	    	//p.postData['fasta_filename'] = p.files[0]['clientFileName'];
 	    	
 	    	fetch(`./pd_analysis.jsp`, {
 				method: "POST",
