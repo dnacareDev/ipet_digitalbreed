@@ -1007,7 +1007,10 @@
 		await fetch(`./vb_features_chrDataList.jsp?jobid=\${linkedJobid}`)
 			.then((response) => response.json())
 			.then((data) => {
-				//console.log(data);
+				console.log(data);
+				
+				// chr 목록 정렬
+				data.sort((a,b) => a.chr>b.chr ? 1 : (a.chr<b.chr ? -1 : 0));
 				
 				const chrSelectEl = document.getElementById("Chr_select");
 				for(let i=0 ; i<data.length ; i++) {

@@ -10,7 +10,8 @@
 
 	//String jobid = "20230202163316";		// 6.14MB
 	//String jobid = "20230203131925";		// 97.4MB
-	String jobid = "20221221115015";		// 1.38GB
+	//String jobid = "20221221115015";		// 1.38GB
+	String jobid = "20230322094220";		// GWAS
 	
 	int csvReadLine = 0;
 	int csvStream = 1;
@@ -63,7 +64,8 @@
 
 <%!
 	private void csvStream(String rootFolder, String jobid) {
-		String path = rootFolder + "/uploads/reference_database/CsGojo-0_v1_HC/fasta/";
+		//String path = rootFolder + "/uploads/reference_database/CsGojo-0_v1_HC/fasta/";
+		String path = rootFolder + "/result/GWAS/";
 
 		
 		System.out.println("==================================");
@@ -80,21 +82,30 @@
 			//Stream<String> lines = Files.lines(Paths.get(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv"));
 			//String specificLine = lines.skip(0).findFirst().get();
             //System.out.println(specificLine);
-			/*
+			
+            /*
             Stream<String> lines = Files.lines(Paths.get(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv"))
             							.skip(5000)
             							.limit(5000);
            	*/
-           	//Stream<String> lines = Files.lines(Paths.get(path+"CsGojo-0_v1.LG1-9.fasta"))
-           	//							.filter(t -> t.contains(">"));
-           	Stream<String> lines = Files.lines(Paths.get(path+"../split/pep/pep.txt"));
-           	/* 
-           	lines.forEach(line -> {
-	                //System.out.println(line);
-	        });
-           	*/
+           	Stream<String> lines = Files.lines(Paths.get(path+"/"+jobid+"/GAPIT.Association.GWAS_Results.MLM.Yield.csv"))
+										//.skip(5000)
+										.limit(50);
            	
-           	System.out.println(lines.count());
+           	/*
+           	Stream<String> lines = Files.lines(Paths.get(path+"CsGojo-0_v1.LG1-9.fasta"))
+           								.filter(t -> t.contains(">"));
+           	*/
+
+           	//Stream<String> lines = Files.lines(Paths.get(path+"../split/pep/pep.txt"));
+           	
+           	
+           	lines.forEach(line -> {
+	                System.out.println(line);
+	        });
+           	
+           
+           	//System.out.println(lines.count());
            	
             long afterTime = System.currentTimeMillis();
 			

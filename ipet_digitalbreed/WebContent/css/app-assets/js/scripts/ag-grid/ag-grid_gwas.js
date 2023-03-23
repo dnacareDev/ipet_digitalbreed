@@ -636,19 +636,25 @@
 		.then((file) => {
 			var reader = new FileReader();
 		    reader.onload = function(){
-		        var fileData = reader.result;
+		    	
+		    	var fileData = reader.result;
 		        var wb = XLSX.read(fileData, {type : 'binary'});
-		        
 		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 		        //console.log("rowObj : ", rowObj);
-		        //console.log(csv_to_grid);
 		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
 		        gridOptions2.api.setRowData(rowObj);
-		        //gridOptions2.api.sizeColumnsToFit();
-		        //console.log(document.querySelector(`#grid_${model_name}`));
-		        
 		        gridOptions2.columnApi.autoSizeAllColumns();
 		        
+		        /*
+		    	// stream으로 바꿔야 함
+		    	var fileData = reader.result;
+		    	var wb = XLSX.read(fileData, {type : 'binary', dense: true});
+		        var rowObj = XLSX.stream.to_json(wb.Sheets[wb.SheetNames[0]]);
+		        
+		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
+		        gridOptions2.api.setRowData(rowObj);
+		        gridOptions2.columnApi.autoSizeAllColumns();
+		    	*/
 		    };
 		    reader.readAsBinaryString(file);
 		});

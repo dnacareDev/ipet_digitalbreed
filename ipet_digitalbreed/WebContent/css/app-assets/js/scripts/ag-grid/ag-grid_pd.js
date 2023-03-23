@@ -7,6 +7,30 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+
+	class CheckboxRenderer {
+	    init(params) {
+	        // create the cell
+	        this.eGui = document.createElement('div');
+	        //this.eGui.innerHTML = params.node.rowIndex % 3 == 0 ? `<input type="checkbox" class="checkbox" />` : ``;
+	        this.eGui.innerHTML = params.node.rowIndex % 3 == 0 ? `<span class="ag-icon ag-icon-checkbox-unchecked" style="background-color:#2196f3;></span>` : ``;
+	        this.eGui.addEventListener('click', () => {
+	    	    const checkboxSpan = this.eGui.querySelector('span');
+	    	    if (checkboxSpan.classList.contains('ag-icon-checkbox-unchecked')) {
+	    	        checkboxSpan.classList.remove('ag-icon-checkbox-unchecked');
+	    	        checkboxSpan.classList.add('ag-icon-checkbox-checked');
+	    	    } else {
+	    	        checkboxSpan.classList.remove('ag-icon-checkbox-checked');
+	    	        checkboxSpan.classList.add('ag-icon-checkbox-unchecked');
+	    	    }
+	       });
+	   }
+	
+	   getGui() {
+	       return this.eGui;
+	   }
+	}
+
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
@@ -188,18 +212,28 @@
 						alert("분석 중입니다.");
 						break;
 					case 1:
-						console.log('jobid : ', params.data.jobid);
-						//console.log('resultpath : ', params.data.resultpath);
-						//console.log("model : ", params.data.model)
-						
-						$("#Loading").modal('show');
+						//$("#Loading").modal('show');
 						
 						document.getElementById('vcf_status').style.display = "block";
+						$("html").animate({ scrollTop: $(document).height() }, 1000);
 						
-						fetch(`${params.data.resultpath+"/"+params.data.jobid+"/Potential_KASP_primers.tsv"}`)
-						.then((response)=>response.blob())
+						fetch(`${params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_primer_design.csv"}`)
+						.then((response)=> {
+							if(!response.ok) {
+								gridOptions2.api.setRowData();
+						        //gridOptions2.columnApi.autoSizeAllColumns();
+								gridOptions2.api.sizeColumnsToFit();
+								throw new Error('primer_design CSV file does not exist');
+							} else {
+								return response.blob()
+							}
+						})
 						.then((file)=> {
 							//console.log(data);
+							columnDefs2[0]['cellClassRules'] = params.data.marker_category == 'KASP' ? {'cell-span': "rowIndex % 3 === 0"} : {'cell-span': "rowIndex % 2 === 0"};
+							gridOptions2.api.setColumnDefs(columnDefs2);
+							gridOptions2.api.setRowData();
+							
 							var reader = new FileReader();
 						    reader.onload = function(){
 						        var fileData = reader.result;
@@ -208,20 +242,27 @@
 						        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 						        console.log("rowObj : ", rowObj);
 						        //console.log(csv_to_grid);
-						        
 						        gridOptions2.api.setRowData(rowObj);
+						        
+						        columnDefs2[1]['minWidth'] = 0;
+						        columnDefs2[2]['minWidth'] = 0;
+						        gridOptions2.api.setColumnDefs(columnDefs2);
 						        gridOptions2.columnApi.autoSizeAllColumns();
 						        
-						        $("#Loading").modal('hide');
+						        const width_id = gridOptions2.columnApi.getColumn("ID").actualWidth
+						        const width_seq = gridOptions2.columnApi.getColumn("seq").actualWidth
+						        
+						        
+						        columnDefs2[1]['minWidth'] = width_id;
+						        columnDefs2[2]['minWidth'] = width_seq;
+						        gridOptions2.api.setColumnDefs(columnDefs2);
+						        gridOptions2.api.sizeColumnsToFit();
+						        
+						        //$("#Loading").modal('hide');
 						    };
 						    reader.readAsBinaryString(file);
-							
-							
-							
-							
-							
-							
 						})
+						
 						
 						
 						break;
@@ -234,168 +275,178 @@
 		}
 	};
 
-	
-	const enzyme_columnDefs = [
-		{
-			field:'n'
-		},
-		{
-			field:'enzyme'
-		},
-		{
-			field:'size'
-		},
-		{
-			field:'price'
-		},
-		{
-			field:'price_for_1000u'
-		},
-		{
-			field:'recognition_sequence'
-		},
-		{
-			field:'seq'
-		},
-	];
-
-	var enzyme_gridOptions = {
-			defaultColDef: {
-				editable: false, 
-			    sortable: true,
-				resizable: true,
-				//menuTabs: ['filterMenuTab'],
-				suppressMenu: true,
-				cellClass: "grid-cell-centered",
-			},
-			columnDefs: enzyme_columnDefs,
-			rowHeight: 35,
-			rowSelection: "multiple",
-			enableRangeSelection: true,
-			suppressMultiRangeSelection: true,
-			suppressDragLeaveHidesColumns: true,
-			//pagination: true,
-			//paginationPageSize: 20,
-			colResizeDefault: "shift",
-			animateRows: true,
-	}
-	
-	
-
 	var columnDefs2 = [
 		{
-			headerName: "체크",
-			maxWidth: 100,
-			minWidth: 100,
-			checkboxSelection: true,
+			headerName: '',
+			field: 'checkbox',
+			maxWidth: 50,
+			minWidth: 50,
+			//checkboxSelection: (params) => params.node.rowIndex % 3 == 0 ? true : false,
+			//checkboxSelection: (params) => gridOptions.api.getSelectedRows()[0]['marker_category'] == 'KASP' ? (params.node.rowIndex % 3 == 0 ? true : false) : (params.node.rowIndex % 2 == 0 ? true : false),
+			checkboxSelection: (params) => gridOptions.api.getSelectedRows()[0]['marker_category'] == 'KASP' ? !!(params.node.rowIndex % 3 == 0) : !!(params.node.rowIndex % 2 == 0),
 			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true
+			headerCheckboxSelection: true,
+			//rowSpan: (params) => params.node.rowIndex % 3 == 0 ? 3 : 0,
+			rowSpan: (params) => gridOptions.api.getSelectedRows()[0]['marker_category'] == 'KASP' ? (params.node.rowIndex % 3 == 0 ? 3 : 0) : (params.node.rowIndex % 2 == 0 ? 2 : 0),
+			//rowSpan: (params) => gridOptions.api.getSelectedRows()[0]['marker_category'] == 'KASP' ? !!(params.node.rowIndex % 3 == 0) : !!(params.node.rowIndex % 2 == 0),
+			/*
+			cellClassRules: {
+			      'cell-span': "rowIndex % 3 === 0",
+			},
+			*/
+			/*
+			cellClassRules: {
+			      'cell-span': ` ${gridOptions.api?.getSelectedRows()?.[0]['marker_category']} == 'KASP' && rowIndex % 3 == 0 || ${gridOptions.api?.getSelectedRows()?.[0]['marker_category']} != 'KASP' && rowIndex % 2 == 0`,
+			},
+			*/
 	    },
 		{
 			headerName: "ID", 
-			field: 'index'
+			field: 'ID',
+			suppressMenu: true, 
 		},
 		{
 			headerName: "seq",
-			field: "primer_seq",
+			field: "seq",
+			suppressMenu: true,
 		},
 		{
-			field: "product_size", 
+			field: "Product_size", 
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
-			field: "any", 
+			field: "Any", 
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
 			field: "3'", 
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
-			field: "end_stability", 
+			field: "End_stability", 
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
-			field: "hairpin", 
+			field: "Hairpin", 
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
-			field: "penalty", 
+			field: "Penalty",
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
-			field: "compl_any", 
+			field: "Compl_any",
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
-			field: "compl_end", 
+			field: "Compl_end",
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 		{
 			headerName: "matched",
-			field: "matched_chromosomes",
-			//valueGetter: params => params.data.matched_chromosomes.split(";").length -1;
+			field: "matched",
+			filter: 'agNumberColumnFilter',
+			filterParams: {
+				filterOptions: ['inRange']
+			}
 		},
 	]
+
+	let removed_nodes = new Array();
 	
 	var gridOptions2 = {
 			defaultColDef: { 
 				editable: false, 
 				sortable: false, 
 				resizable: true,
-				suppressMenu: true, 
+				suppressMenu: false, 
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], 
 			},
 			columnDefs: columnDefs2,
 			colResizeDefault: "shift",
 			suppressDragLeaveHidesColumns: true,
+			//suppressRowClickSelection: true,
+			suppressRowTransform: true,
 			rowHeight: 35,
-			rowSelection: "single",
+			rowMultiSelectWithClick: true,
+			rowSelection: "multiple",
 			animateRows: true,
-			//suppressHorizontalScroll: true,
-	}
-	
-
-	
-	//var modelGrid = [];
-	function showGrid(value) {
-		
-		const model_name = $('#model_name').val();
-		const resultpath = $('#resultpath').val();
-		const jobid_param = $('#jobid_param').val();
-		
-		//const csv_to_grid = $(`#grid_${model_name}`);
-		const csv_to_grid = document.getElementById(`grid_${model_name}`);
-		
-		try {
-			//console.log(csv_to_grid.innerText.trim());
-			if(csv_to_grid.innerText.trim()) {
-				gridOptions2.api.destroy();
+			getRowId: params => params['data']['ID'],
+			onCellClicked: (params) => {
+			},
+			onRowSelected: (params) => {
+				const is_selected = params.node.selected;
+				const row_index = params.node.rowIndex - (params.node.rowIndex % 3);
+				
+				gridOptions2.api.forEachNode(node=> {
+					if(node.rowIndex ==  row_index || node.rowIndex ==  row_index+1 || (gridOptions.api.getSelectedRows()[0]['marker_category'] == 'KASP' && node.rowIndex ==  row_index+2) ) {
+						node.setSelected(is_selected);
+					}
+				})
+			},
+			onFilterChanged: (params) => {
+				//필터링을 끝낸 이후에는 제거조건용 배열 초기화
+				removed_nodes = [];
+			},
+			isExternalFilterPresent: () => {
+				return Object.keys(gridOptions2.api.getFilterModel()).length == 0 ? false : true;
+			},
+			doesExternalFilterPass: (node) => {
+				//console.log(node);
+				
+				const filtered_columns = gridOptions2.api.getFilterModel();
+				
+				if(removed_nodes.length == 0 ) {
+					gridOptions2.api.forEachNode(node => {
+						for(column in filtered_columns) {
+							if ( !(filtered_columns[column]['filter'] <= node['data'][column] && node['data'][column] <= filtered_columns[column]['filterTo']) ) {
+								removed_nodes.push(node.id.slice(0, node.id.lastIndexOf("-")));
+							} 
+						}
+					});
+				}
+				
+				return removed_nodes.includes(node.id.slice(0, node.id.lastIndexOf("-"))) ? false : true;
+				
+				/*
+				for(column in filtered_columns) {
+					return (filtered_columns[column]['filter'] <= node['data'][column] && node['data'][column] <= filtered_columns[column]['filterTo'] ) ? true : false; 
+				}
+				*/
+			},
+			defaultCsvExportParams: {
+				columnKeys: ["ID", "seq", "Product_size","Any","3'","End_stability","Hairpin","Penalty","Compl_any","Compl_end","matched"]
+			},
+			defaultExcelExportParams: {
+				columnKeys: ["ID", "seq", "Product_size","Any","3'","End_stability","Hairpin","Penalty","Compl_any","Compl_end","matched"]
 			}
-		} catch (error) {
-			console.error(error);
-		}
-		
-		
-		
-		//console.log(`#grid_${model_name}`);
-		//console.log("path : ", resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv");
-		
-		fetch(resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv")
-		.then((response) => response.blob())
-		.then((file) => {
-			var reader = new FileReader();
-		    reader.onload = function(){
-		        var fileData = reader.result;
-		        var wb = XLSX.read(fileData, {type : 'binary'});
-		        
-		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-		        //console.log("rowObj : ", rowObj);
-		        //console.log(csv_to_grid);
-		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
-		        gridOptions2.api.setRowData(rowObj);
-		        //gridOptions2.api.sizeColumnsToFit();
-		        //console.log(document.querySelector(`#grid_${model_name}`));
-		        
-		        gridOptions2.columnApi.autoSizeAllColumns();
-		        
-		    };
-		    reader.readAsBinaryString(file);
-		});
 	}
+	
 
 	function replaceClass(id, oldClass, newClass) {
 	    var elem = $(`#${id}`);
@@ -454,17 +505,6 @@
 			gridOptions.api.setRowData(data);
 			gridOptions.api.sizeColumnsToFit();
   		})
-  		
-  		
-  		//const varietyid = $( "#variety-select option:selected" ).val();
-
-  		/*** DEFINED TABLE VARIABLE ***/
-  		//const gridTraitNameTable = document.getElementById("phenotypeSelectGrid");
-  		//const TraitNameGrid = new agGrid.Grid(gridTraitNameTable, gridOptionsTraitName);
-  		
-  		
-  		const EnzymeGrid = new agGrid.Grid(document.getElementById('RestrictionEnzymeGrid'), enzyme_gridOptions);
-  		enzyme_gridOptions.api.setRowData();
   		
   		const resultGrid = new agGrid.Grid(document.getElementById('resultGrid'), gridOptions2);
   	});

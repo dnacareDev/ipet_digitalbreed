@@ -91,13 +91,12 @@
 	  color: #000000;	  
 	}
 
-/*
-	#RestrictionEnzymeGrid {
-		--ag-cell-horizontal-padding: 5px !important;
-		--ag-widget-horizontal-spacing: 5px !important;
-		--ag-widget-vertical-spacing: 0px !important;
-	}	
-*/
+	.cell-span {
+		background: white;
+		border-left: 1px solid lightgrey !important;
+	  	border-right: 1px solid lightgrey !important;
+	  	border-bottom: 1px solid lightgrey !important;
+	}
 </style>
 
 <%
@@ -177,7 +176,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:465px;"></div><br>
                             <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
@@ -193,31 +192,11 @@
 										<div class='tab-content'>
 											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 												<div class="row">
-													<div class="col-2 text-center">Product Size</div>
-													<div class="col-2 text-center">any</div>
-													<div class="col-2 text-center">Hairpin</div>
-													<div class="col-2 text-center">Penalty</div>
-													<div class="col-2 text-center">End stability</div>
-													<div class="col-2 text-center"></div>
-												</div>
-												<div class="row p-1">
-													<div class="col-2">
-														<input class="form-control">
-													</div>
-													<div class="col-2">
-														<input class="form-control">
-													</div>
-													<div class="col-2">
-														<input class="form-control">
-													</div>
-													<div class="col-2">
-														<input class="form-control">
-													</div>
-													<div class="col-2">
-														<input class="form-control">
-													</div>
-													<div class="col-2 d-flex justify-content-center">
-														<button type="button" class="btn btn-primary">적용</button>
+													<div class="col-12">
+														<!--  
+														<button type="button" class="btn btn-outline-success ml-1 mr-1 mb-1 float-right" onclick="if(gridOptions2.api.getSelectedRows().length == 0){return alert('primer set를 선택해주세요.');} gridOptions2.api.exportDataAsCsv({onlySelected:true});">Export CSV(selected)</button>
+														-->
+														<button type="button" class="btn btn-outline-success mb-1 mr-1 mb-1 float-right" onclick="if(gridOptions2.api.getSelectedRows().length == 0){return alert('primer set를 선택해주세요.');} gridOptions2.api.exportDataAsExcel({onlySelected:true});">Export Excel(selected)</button>
 													</div>
 												</div>
 												<div id="resultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
@@ -239,7 +218,7 @@
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title" id="myModalLabel5">Primer design</h4>
@@ -251,7 +230,7 @@
 					<form class="form" id="uploadForm">
 					    <div class="form-body">
 					        <div class="row p-1">
-				            	<div class="col-12" style="display:flex; column-gap:5%;">
+				            	<div class="col-12" style="display:flex; column-gap:12%;">
 					            	<div class="col-2">
 					            		<input type="radio" class="form-check-input" id="KASP" name='modalCategory1' onclick="onClickMarkerCategory(this.id);" checked/>
                                         <label class="form-check form-check-label" for="KASP" style="padding-top:1px; padding-left:15px;"  >KASP</label>
@@ -277,24 +256,26 @@
 					             		<label for="first-name-column">Comment</label>
 					                </div>
 					            </div>
+					            <!--  
 					            <div class="col-md-12 col-12">
 					             	<div class="form-label-group">
 					                	<input type="text" id="Marker_Name" class="form-control" placeholder="Marker Name" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 					             		<label for="first-name-column">Marker Name</label>
 					                </div>
 					            </div>
-					            <div class="col-12 mb-1" style="display:flex; column-gap:5%;">
-					            	<div class="col-2">
+					            -->
+					            <div class="col-12 mb-1" style="display:flex; column-gap:4%;">
+					            	<div class="col-3">
 					            		<input type="radio" class="form-check-input" id="Genomic_DB"  name='modalCategory2' onclick="onClickMethodCategory(this.id);" checked/>
-                                        <label class="form-check form-check-label" for="Genomic_DB" style="padding-top:1px; padding-left:15px;" >Genomic DB</label>
+                                        <label class="form-check form-check-label" for="Genomic_DB" style="padding-top:1px; padding-left:14px;" >Genomic DB</label>
 					            	</div>
-					            	<div class="col-2">
+					            	<div class="col-3">
 					            		<input type="radio" class="form-check-input" id="Direct_Input"  name='modalCategory2' onclick="onClickMethodCategory(this.id);" />
-                                        <label class="form-check form-check-label" for="Direct_Input" style="padding-top:1px; padding-left:15px;" >Direct input</label>
+                                        <label class="form-check form-check-label" for="Direct_Input" style="padding-top:1px; padding-left:14px;" >Direct input</label>
 					            	</div>
-					            	<div class="col-2">
+					            	<div class="col-3">
 					            		<input type="radio" class="form-check-input" id="File_Upload"  name='modalCategory2'  onclick="onClickMethodCategory(this.id);" />
-                                        <label class="form-check form-check-label" for="File_Upload" style="padding-top:1px; padding-left:15px;" >File upload</label>
+                                        <label class="form-check form-check-label" for="File_Upload" style="padding-top:1px; padding-left:14px;" >File upload</label>
 					            	</div>
 				            	</div>
 				            	<div id="VCF_Select_Div" class="col-12" style="display:block;">
@@ -328,9 +309,6 @@
 					        <div class="row pb-1 pl-1 pr-1">
 					        	<fieldset class="border w-100 m-1 pt-1">
 						        	<legend class="w-auto ml-1 mr-1">Option</legend>
-							        <div id="RestrictionEnzymeGrid_Div" class="col-12 mb-1" style="display:none;">
-							        	<div id="RestrictionEnzymeGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-							        </div>
 							        <div class="col-12 mb-1" style="display:flex;">
 						            	<div class="col-4">
 						            	</div>
@@ -547,7 +525,7 @@
 		// 파일전송 컨트롤 생성
 	    box = innorix.create({
 	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-	        width			: "100%",
+	        width			: 445,
 	    	height          : 130,
 	        maxFileCount   : 1,  
 	        allowType : ["vcf"],
@@ -563,7 +541,7 @@
 	    box.on('uploadComplete', function (p) {
 			
 	    	//console.log(p);
-	    	p.postData['vcf_filename'] = p.files[0]['clientFileName'];
+	    	p.postData['filename'] = p.files[0]['clientFileName'];
 	    	//p.postData['filename'] = 'primer_test.vcf';
 	    	//p.postData['fasta_filename'] = p.files[0]['clientFileName'];
 	    	
@@ -575,13 +553,13 @@
 				body: JSON.stringify(p.postData),
 			})
 	    	
-			/*
+			
 	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
 	   		setTimeout( function () {
 	   			refresh();
 	   			$("#backdrop").modal("hide");
 	   		}, 1000);
-			*/
+			
 	    });
 	};
 	
@@ -591,7 +569,7 @@
 
 		const marker_category = document.querySelector(`input[name='modalCategory1']:checked`).id;
 		const comment = document.getElementById('comment').value;
-		const marker_name = document.getElementById('Marker_Name').value;
+		//const marker_name = document.getElementById('Marker_Name').value;
 		const upload_method = document.querySelector(`input[name='modalCategory2']:checked`).id;
 		const jobid_vcf = document.querySelector(`#VcfSelect option:checked`).dataset.jobid;
 		const filename = document.querySelector(`#VcfSelect option:checked`).dataset.filename;
@@ -614,7 +592,7 @@
 			'varietyid': varietyid,
 			'marker_category': marker_category,
 			'comment': comment,
-			'marker_name': marker_name,
+			//'marker_name': marker_name,
 			'upload_method': upload_method,
 			'jobid_vcf': jobid_vcf,
 			'filename': filename,
@@ -673,13 +651,13 @@
 				body: JSON.stringify(data),
 			})
 			
-			/*
+			
 			setTimeout( function () {
 	   			refresh();
 	   			$("#backdrop").modal("hide");
 	   			}
 	   		, 1000);
-			*/
+			
 		}
 		
 					

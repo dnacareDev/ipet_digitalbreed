@@ -26,7 +26,7 @@
 	
 	String marker_category = jsonObject.get("marker_category").getAsString();
 	String comment = jsonObject.get("comment").getAsString();
-	String marker_name = jsonObject.get("marker_name").getAsString();
+	//String marker_name = jsonObject.get("marker_name").getAsString();
 	String upload_method = jsonObject.get("upload_method").getAsString();
 	String jobid_vcf = jsonObject.get("jobid_vcf").getAsString();
 	String filename = jsonObject.get("filename").getAsString();
@@ -93,7 +93,7 @@
 			break;
 		case "Direct_Input":
 			
-			File folder_savePath = new File(rootFolder+"uploads/primer_design/"+jobid_pd);
+			File folder_savePath = new File(rootFolder+"uploads/primer_design/"+jobid_pd+"/");
 			System.out.println(folder_savePath);
 			if (!folder_savePath.exists()) {
 				try{
@@ -105,13 +105,13 @@
 			
 			File sequenceFasta = new File(folder_savePath+"/"+jobid_pd+".fasta");
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sequenceFasta), "UTF-8"));
-			bw.write(">A");
-			bw.newLine();
+			//bw.write(">A");
+			//bw.newLine();
 			bw.write(sequence);
 			bw.close();
 			
-			//savePath = folder_savePath+"/"+jobid_pd+".fasta";
-			savePath = folder_savePath+"/design.fasta";
+			savePath = folder_savePath+"/";
+			//System.out.println("savePath : " + savePath);
 			filename = jobid_pd+".fasta";
 			
 			String direct_input = "Rscript " +script_path+script +" 2 "+ outputPath +" "+ jobid_pd +" "+ ref_fasta_path +" "+ Length_Min +" "+ Length_Max +" "+ GCcontent_Min +" "+ GCcontent_Max +" "+ TM_Min +" "+ TM_Max +" "+ Size_Min +" "+ Size_Max +" "+ savePath +" "+ filename;
@@ -119,7 +119,7 @@
 			break;
 		case "File_Upload":
 			//savePath = "/ipet_digitalbreed/uploads/primer_design/"+jobid_pd+"/";
-			savePath = "/ipet_digitalbreed/uploads/primer_design/"+jobid_pd+"/";
+			savePath = rootFolder+"uploads/primer_design/"+jobid_pd+"/";
 			String file_upload = "Rscript " +script_path+script +" 3 "+ outputPath +" "+ jobid_pd +" "+ ref_fasta_path +" "+ Length_Min +" "+ Length_Max +" "+ GCcontent_Min +" "+ GCcontent_Max +" "+ TM_Min +" "+ TM_Max +" "+ Size_Min +" "+ Size_Max +" "+ savePath +" "+ filename;
 			file_upload(file_upload, jsonObject);
 			break;
@@ -134,7 +134,7 @@
 		
 		RunAnalysisTools runanalysistools = new RunAnalysisTools();
 		runanalysistools.execute(cmd, "cmd");
-		
+		/*
 		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
@@ -150,6 +150,7 @@
 			ipetdigitalconndb.stmt.close();
 			ipetdigitalconndb.conn.close();
 		}
+		*/
 		
 	}
 %>
@@ -160,7 +161,7 @@
 		
 		RunAnalysisTools runanalysistools = new RunAnalysisTools();
 		runanalysistools.execute(cmd, "cmd");
-
+		/*
 		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
@@ -176,6 +177,7 @@
 			ipetdigitalconndb.stmt.close();
 			ipetdigitalconndb.conn.close();
 		}
+		*/
 	}
 %>
 
@@ -185,7 +187,8 @@
 		
 		RunAnalysisTools runanalysistools = new RunAnalysisTools();
 		runanalysistools.execute(cmd, "cmd");
-
+		
+		/*
 		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
@@ -201,5 +204,6 @@
 			ipetdigitalconndb.stmt.close();
 			ipetdigitalconndb.conn.close();
 		}
+		*/
 	}
 %>

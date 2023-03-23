@@ -426,12 +426,19 @@ body {
    	
     function FileUpload() {
     	
-    	//const variety_id = $("#variety-select :selected").val();
     	const crop_name = $("#variety-select-modal :selected").text();
     	//debugger;
     	
     	const refgenomeParam = document.getElementById('refgenomeParam').value;
     	const gffParam = document.getElementById('gffParam').value;
+    	//const authorParam = document.getElementById('authorParam').value;
+    	
+    	if(!refgenomeParam) {
+    		return alert("참조유전체를 입력해주세요.");
+    	}
+    	if(!gffParam) {
+    		return alert("GFF를 입력해주세요.");
+    	}
     	
     	let flagDuplicated = false;
     	gridOptions.api.forEachNode((rowNode, index) => {
@@ -444,18 +451,10 @@ body {
     	})
     	
     	if(flagDuplicated) {
-    		alert("해당 참조유전체가 이미 등록된 상태입니다.");
-    		return;
+    		return alert("해당 참조유전체가 이미 등록된 상태입니다.");
     	}
     	
     	const form = document.getElementById('uploadForm');
-    	/*
-    	const objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
-		objs.setAttribute('type', 'hidden'); // 값이 들어있는 녀석의 type
-		objs.setAttribute('name', 'variety_id'); // 객체이름
-		objs.setAttribute('value', variety_id); //객체값
-		form.appendChild(objs);
-    	*/
     	const formData = new FormData(form);
     	formData.append('cropParam', crop_name);
     	

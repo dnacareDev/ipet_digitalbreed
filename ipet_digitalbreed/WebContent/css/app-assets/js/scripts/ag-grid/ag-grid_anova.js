@@ -251,6 +251,37 @@
 		}
 	};
 	
+	var columnDefsTraitName = [
+		{ 	
+			headerName:'특성', 
+			field: "traitname",
+			menuTabs: ["filterMenuTab"], 
+			width: 420, 
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true,
+			headerCheckboxSelection: true,
+			cellClass: "grid-cell-centered", 
+		},
+		{
+			field: "traitname_key",
+			hide:true
+		}
+	];
+	var gridOptionsTraitName = {
+			defaultColDef: {
+				editable: false, 
+			    sortable: true,
+			    filter: true,
+			},
+			columnDefs: columnDefsTraitName,
+			rowHeight: 35,
+			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
+			suppressMultiRangeSelection: true,
+			animateRows: true,
+			suppressHorizontalScroll: true,
+	}
+	
 	// 클릭이벤트 : iframe 로딩 중 로드스피너 출력
 	document.addEventListener('click', function(event) {
 		//console.log(event.target.id);
@@ -290,11 +321,12 @@
 	}
  
 	document.addEventListener('DOMContentLoaded', () => {
-  		const gridTable = document.getElementById("myGrid");
   		
+		const varietyid = $( "#variety-select option:selected" ).val();
+		
+		const gridTable = document.getElementById("myGrid");
   		const myGrid = new agGrid.Grid(gridTable, gridOptions);
   		
-  		/*** GET TABLE DATA FROM URL ***/
   		fetch("./anova_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
   		.then((response) => response.json())
   		.then((data) => {
@@ -303,6 +335,16 @@
 			gridOptions.api.sizeColumnsToFit();
 			
   		})
+  		
+  		const gridTraitNameTable = document.getElementById("phenotypeSelectGrid");
+  		const TraitNameGrid = new agGrid.Grid(gridTraitNameTable, gridOptionsTraitName);
+  		
+  		fetch(`../traitname.jsp?varietyid=${varietyid}`)
+  		.then((response) => response.json())
+  		.then((data) => {
+  			console.log("traitname : ", data);
+  			gridOptionsTraitName.api.setRowData(data);
+  		})	
   		
 	})	
   

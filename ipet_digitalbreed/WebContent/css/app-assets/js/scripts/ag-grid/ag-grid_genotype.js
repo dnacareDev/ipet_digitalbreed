@@ -229,7 +229,6 @@
 	},
     columnDefs: columnDefs,
     rowHeight: 35,
-    headerHeight: 100,
     enableRangeSelection: true,
 	suppressMultiRangeSelection: true,
     rowSelection: "multiple",

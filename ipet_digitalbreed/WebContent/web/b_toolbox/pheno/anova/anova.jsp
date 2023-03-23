@@ -38,6 +38,7 @@
 
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/bootstrap5_custom.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/colors.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/components.css">
@@ -176,53 +177,116 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+        <!--  
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width : 1140px; margin: 0 auto;" role="document">
+        -->
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">PCA New Analysis</h4>
+                    <h4 class="modal-title" id="myModalLabel5">ANOVA New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-					<form class="form" id="uploadPcaForm">
+					<form class="form" id="uploadGwasForm">
 					    <div class="form-body">
-					        <div class="row">
-					            <div class="col-md-12 col-12 ml-1">
-					                <br>
-					             	<div class="form-label-group">
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
-					             		<label for="first-name-column">Comment</label>
-					                </div>
-					            </div>
-					            <div class="col-md-12 col-12 ml-1">
-					            	<div class="form-label-group" >
-					                    <select class="select2 form-select" id="VcfSelect" style="width: 444px;">
-					                    </select>
-					                </div>
-					            </div>
-					            <div class="col-md-12 col-12">
-									<div class="form-label-group">
-							            <h6 style="margin-left:13px; font-weight:bold;">Population &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button></h6>
-							            <div class="col-md-12 col-12">
-											<div id="fileControl" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div>
-											<br>
-							            </div>
-						            </div>
-						        </div>
-					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetPCA();">Reset</button>
-					            </div>
+					        <div class="row pt-1 pl-1 pr-1">
+					        	<div class="col-12">
+			                		<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" autocomplete="off" required data-validation-required-message="This name field is required">
+			                	</div>						                     
 					        </div>
-					    </div>
+					        <!--  
+					        <div class="row pt-1 pl-1 pr-1">
+			                    <div class="col-12">
+				                    <select class="select2 form-select" id="VcfSelect" data-width="100%">
+				                    </select>
+				                </div>
+					        </div>
+					        -->
+					        <div class="row pt-1 pl-1 pr-1">
+					            <fieldset class="border w-100 ml-1 mr-1 pt-1 pl-1 pr-1">
+					            	<legend  class="w-auto">Phenotype Selection</legend>
+						            <div class="row pl-1 pr-1">
+						            	<div class="form-check col-sm-6 col-12">
+											<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false)" value="0" checked>
+											<label class="form-check-label" for="RadioPhenotype" style="padding-left:15px;"> Phenotype Database</label>
+										</div>
+										<div class="form-check col-sm-6 col-12">
+											<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true)" value="1">
+											<label class="form-check-label" for="RadioCsvFile" style="padding-left:15px;"> New Phenotype</label>
+										</div>
+						            </div>
+						            <div class="row pt-1 pl-1 pr-1" id="isPhenotype">
+					                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div>
+							            <div class="col-12 mt-1 mb-1 p-0">
+	                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; width:49%; background-color:white;" name="cre_date" placeholder=" (Optional) 등록일자" />
+	                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; width:49%; background-color:white;" name="inv_date" placeholder=" (Optional) 조사일자" />
+							            </div>
+							        </div>
+							        <div class="row p-1" id="isNewFile" style="display:none">
+						            	<div class="col-12" style="margin-bottom:35px; margin-left:15px;">
+											<button type="button" id="exampleButton" class="btn btn-info btn-sm" style="float: right;" ><a href="/ipet_digitalbreed/uploads/phenotype.csv" download="phenotype.csv" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>	 
+										</div>
+								    	<div class="col-12" id="PhenotypeCsvFile" style="padding: 0; border: 1px solid #48BAE4;"></div>
+							        </div>
+						        </fieldset>
+						    </div>
+						    <!--  
+						    <div class="row p-1">
+						        <fieldset class="border w-100 ml-1 mr-1 pl-1 pr-1">
+						        	<legend  class="w-auto">Model</legend>
+									<div class="row pl-1 pr-1">
+                                       	<div class="form-check col-sm-6 col-12" style="padding-bottom:2px;">
+                                        	<input class="form-check-input" type="checkbox" id="GLM" name="modelGroup" value="GLM" />
+                                           	<label class="form-check-label" for="GLM" style="padding-left:10px;">GLM (General Linear Model)</label>
+                                        </div>
+                                        <div class="form-check col-sm-6 col-12" style="padding-bottom:2px;">
+                                            <input class="form-check-input" type="checkbox" id="MLM" name="modelGroup" value="MLM" />
+                                            <label class="form-check-label" for="MLM" style="padding-left:10px;">MLM(Mixed Linear Model)</label>
+                                        </div>
+	                                </div>
+	                                <div class="row pl-1 pr-1">
+	                                   	<div class="form-check col-sm-6 col-12" style="padding-bottom:2px;">
+                                           <input class="form-check-input" type="checkbox" id="CMLM" name="modelGroup" value="CMLM" />
+                                           <label class="form-check-label" for="CMLM" style="padding-left:10px;">CMLM(Compression MLM)</label>
+                                       </div>
+	                                   	<div class="form-check col-sm-6 col-12" style="padding-bottom:2px;">
+                                           <input class="form-check-input" type="checkbox" id="FarmCPU" name="modelGroup" value="FarmCPU"/>
+                                           <label class="form-check-label" for="FarmCPU" style="padding-left:10px;">FarmCPU</label>
+                                       </div>
+	                                </div>
+	                                <div class="row pl-1 pr-1">
+	                                   	<div class="form-check col-sm-6 col-12" style="padding-bottom:2px;">
+                                            <input class="form-check-input" type="checkbox" id="SUPER" name="modelGroup" value="SUPER" />
+                                            <label class="form-check-label" for="SUPER" style="padding-left:10px;">SUPER</label>
+                                        </div>
+                                        <div class="form-check col-sm-6 col-12" style="padding-bottom:2px;">
+                                            <input class="form-check-input" type="checkbox" id="BLINK" name="modelGroup" value="BLINK" />
+                                            <label class="form-check-label" for="BLINK" style="padding-left:10px;">BLINK</label>
+                                        </div>
+	                                </div>
+	                                <div class="row pb-1 pl-1 pr-1">
+	                                	<div class="form-check">
+	                                        <input class="form-check-input" type="checkbox" id="MLMM" name="modelGroup" value="MLMM" />
+	                                        <label class="form-check-label" for="MLMM" style="padding-left:10px;">MLMM</label>
+	                                    </div>
+						            </div>
+	                            </fieldset>
+	                        </div>
+	                        -->
+				            <div class="col-12">
+				                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
+				                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetGWAS();">Reset</button>
+				            </div>
+				        </div>
 					</form>
                 </div>
             </div>
         </div>
     </div>
     
-   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+   	<div class="modal" id="Loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
 			<div><strong>Loading...</strong></div>
@@ -280,7 +344,7 @@ body {
 
    	$(document).ready(function(){ 
    		vcfFileList();
-   		$(".select2.select2-container.select2-container--default").eq(1).width("444px");
+   		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
    	});
    	 
 
@@ -313,7 +377,27 @@ body {
    		resetPCA();
     });    
    	
-    function resetPCA() {
+ 	//radio 선택에 따라 파일창 노출여부 결정  | true: New Phenotype , false: Phenotype Database
+	function radioSelect(flag) {
+		//console.log(flag);
+		if(flag) {
+			$("#isNewFile").css('display','block');
+			$("#exampleButton").css('display','block');
+			$("#isPhenotype").css('display','none');
+			
+			// New Phenotype 선택시 특성 체크박스 해제
+			gridOptionsTraitName.api.deselectAll();
+		} else {
+			$("#isNewFile").css('display','none');
+			$("#exampleButton").css('display','none');
+			$("#isPhenotype").css('display','block');
+			
+			// Phenotype Database 선택시 innorix 파일목록 해제
+			box.removeAllFiles();
+		}
+	}
+   	
+    function reset() {
     	document.getElementById('uploadPcaForm').reset();
     	vcfFileList();
     	box.removeAllFiles();
@@ -327,7 +411,8 @@ body {
     	
     	// 파일전송 컨트롤 생성
 	    box = innorix.create({
-	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
+	    	el: '#PhenotypeCsvFile', // 컨트롤 출력 HTML 객체 ID
+	        //width			: "100%",
 	        width			: 445,
 	    	height          : 130,
 	        maxFileCount   : 1,  

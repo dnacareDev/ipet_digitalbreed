@@ -37,9 +37,9 @@ if (request.getMethod().equals("POST"))
 	
 	System.out.println(jobid_pd);
 	
-	uploader.setDirectory(savePath+jobid_pd); 
+	//uploader.setDirectory(savePath+jobid_pd);
     //uploader.setFileName(jobid_pd + ".vcf");
-    uploader.setFileName("primer_test.vcf");
+    //uploader.setFileName("primer_test.vcf");
 	
 	String _run_retval = uploader.run();
 	
@@ -50,13 +50,23 @@ if (request.getMethod().equals("POST"))
 		File folder_savePath = new File(savePath+jobid_pd);
 
 		if (!folder_savePath.exists()) {
-		try{
-			folder_savePath.mkdir(); 
-	        } 
-	        catch(Exception e){
-		    e.getStackTrace();
+			try {
+				folder_savePath.mkdir(); 
+	        } catch(Exception e) {
+		    	e.getStackTrace();
 			}        
 		}
+		
+		File from = new File(savePath+_orig_filename);
+        File to = new File(savePath+jobid_pd+"/"+_orig_filename);
+ 
+        try {
+            Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File moved successfully.");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+		
 	}
 }
 %>

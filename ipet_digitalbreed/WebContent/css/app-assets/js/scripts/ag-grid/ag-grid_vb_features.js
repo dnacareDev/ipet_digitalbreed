@@ -928,7 +928,8 @@
   		const Marker_gridTable = document.getElementById("Marker_Grid");
   		const Marker_Grid = new agGrid.Grid(Marker_gridTable, Marker_gridOptions);
   		const Marker_rowData = [ { "selection": "star", "Chr": 1, "Pos": 40326, "Type": "SNP", "Indel Length": 0 } ];
-  		Marker_gridOptions.api.setRowData(Marker_rowData)
+  		//Marker_gridOptions.api.setRowData(Marker_rowData)
+  		Marker_gridOptions.api.setRowData();
   		
   		const SelectionList_gridTable = document.getElementById("SelectionList_Grid");
   		const SelectionList_Grid = new agGrid.Grid(SelectionList_gridTable, SelectionList_gridOptions);
@@ -947,12 +948,14 @@
   		const STRUCTURE_gridTable = document.getElementById("STRUCTURE_Grid");
   		const STRUCTURE_Grid = new agGrid.Grid(STRUCTURE_gridTable, STRUCTURE_gridOptions);
   		const STRUCTURE_rowData = [ { "ID": "sample9", "Miss(%)": "", "Population": "", "K": "Cluster1",} ];
-  		STRUCTURE_gridOptions.api.setRowData(STRUCTURE_rowData)
+  		//STRUCTURE_gridOptions.api.setRowData(STRUCTURE_rowData)
+  		STRUCTURE_gridOptions.api.setRowData()
   		
   		const Haplotype_gridTable = document.getElementById("Haplotype_Grid");
   		const Haplotype_Grid = new agGrid.Grid(Haplotype_gridTable, Haplotype_gridOptions);
   		const Haplotype_rowData = [ { "ID": "sample1", "Haplotype": "Hap1",} ];
-  		Haplotype_gridOptions.api.setRowData(Haplotype_rowData)
+  		//Haplotype_gridOptions.api.setRowData(Haplotype_rowData)
+  		Haplotype_gridOptions.api.setRowData()
   		
   	});
   	
