@@ -177,7 +177,7 @@
                                 </div>
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:465px;"></div><br>
-                            <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
+                            <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> Primer design</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
@@ -187,12 +187,14 @@
 								<div class='row'>
 									<div class='col-12'>
 										<ul class='nav nav-pills nav-active-bordered-pill'>
-											<li class='nav-item'><a class='nav-link active' id='qf_1' data-toggle='pill' href='#pill1' aria-expanded='true'>Marker Info </a></li>
+											<li class='nav-item'><a class='nav-link active' id='Marker_Info' data-toggle='pill' href='#pill1' aria-expanded='true'>Marker Info </a></li>
 										</ul>
 										<div class='tab-content'>
 											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 												<div class="row">
 													<div class="col-12">
+														<select class="select2 form-select" id="Enzyme_Select" data-width="15%" data-placeholder="Restriction Enzyme" onchange="onChangeRestrictionEnzyme(this[this.selectedIndex].dataset.enzyme);">
+														</select>
 														<!--  
 														<button type="button" class="btn btn-outline-success ml-1 mr-1 mb-1 float-right" onclick="if(gridOptions2.api.getSelectedRows().length == 0){return alert('primer set를 선택해주세요.');} gridOptions2.api.exportDataAsCsv({onlySelected:true});">Export CSV(selected)</button>
 														-->
@@ -204,8 +206,6 @@
 										</div>
 									</div>
 								</div>
-								<input type='hidden' id='jobid'>
-								<input type='hidden' id='resultpath'>
 							</div>
 						</div>
                     </div>
@@ -218,7 +218,7 @@
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title" id="myModalLabel5">Primer design</h4>
@@ -309,6 +309,7 @@
 					        <div class="row pb-1 pl-1 pr-1">
 					        	<fieldset class="border w-100 m-1 pt-1">
 						        	<legend class="w-auto ml-1 mr-1">Option</legend>
+							        <div id="Enzyme_Grid" class="ag-theme-alpine ml-1 mr-1" style="display:none; margin: 0px auto; height:320px;"></div><br>
 							        <div class="col-12 mb-1" style="display:flex;">
 						            	<div class="col-4">
 						            	</div>
@@ -435,9 +436,11 @@
 </body>
 <!-- END: Body-->
 <script type="text/javascript">
+	
 	$(document).ready(function(){ 
 		vcfFileList();
 		referenceGenomeList();
+		//restrictionEnzymeList();
 	});
 	 
 
@@ -482,8 +485,22 @@
 		}
 	}
 	
+	/*
+	function restrictionEnzymeList() {
+		const selectEl = document.getElementById('Enzyme_Select');
+		selectEl.innerHTML = `<option data-enzyme="-"></option>`;
+		for(let i=0 ; i<restriction_enzyme_jsonArray.length ; i++) {
+			selectEl.insertAdjacentHTML('beforeend',`<option data-enzyme="\${restriction_enzyme_jsonArray[i]['Enzyme']}">\${restriction_enzyme_jsonArray[i]['Enzyme']}</option>`)
+		}
+	}
+	*/
+	
 	function onClickMarkerCategory(id) {
-		document.getElementById('RestrictionEnzymeGrid_Div').style.display = id=='CAPs' ? 'block' : 'none';
+		document.getElementById('Enzyme_Grid').style.display = id=='CAPs' ? 'block' : 'none';
+		
+		if(id != 'CAPs') {
+			enzyme_gridOptions.api.deselectAll();
+		}
 		
 		enzyme_gridOptions.columnApi.autoSizeAllColumns();
 	}
@@ -494,7 +511,6 @@
 		referenceGenomeList(); 
 		box.removeAllFiles();
 		
-		
 		document.getElementById('VCF_Select_Div').style.display = id=='Genomic_DB' ? 'block' : 'none';
 		document.getElementById('Reference_Select_Div').style.display = id=='Genomic_DB' ? 'none' : 'block';
 		
@@ -502,6 +518,25 @@
 		document.getElementById('Sequence').value = id=='Direct_Input' ? document.getElementById('Sequence').value : '';
 		
 		document.getElementById('Innorix_Div').style.display = id=='File_Upload' ? 'block' : 'none';
+		
+	}
+	
+	function onChangeRestrictionEnzyme(enzyme) {
+		//console.log(enzyme);
+		
+		if(enzyme == '-') {
+			gridOptions2.api.setFilterModel(null);
+		} else {
+			const filter_instance = gridOptions2.api.getFilterInstance('ID');
+			filter_instance.setModel({
+				filterType: 'text',
+				type: 'contains',
+				filter: enzyme,
+			});
+			gridOptions2.api.onFilterChanged();
+		}
+		
+		
 		
 	}
 		
@@ -577,6 +612,9 @@
 		const refgenome = upload_method == 'Genomic_DB' ? document.querySelector(`#VcfSelect option:checked`).dataset.refgenome : document.querySelector(`#ReferenceSelect option:checked`).dataset.refgenome;
 		const fasta_filename = upload_method == 'Genomic_DB' ? document.querySelector(`#VcfSelect option:checked`).dataset.fasta_filename : document.querySelector(`#ReferenceSelect option:checked`).dataset.fasta_filename;
 		const sequence = document.getElementById('Sequence').value;
+		
+		const enzymes = enzyme_gridOptions.api.getSelectedRows();
+		
 		const Length_Min = document.getElementById('Length_Min').value;
 		const Length_Max = document.getElementById('Length_Max').value;
 		const GCcontent_Min = document.getElementById('GCcontent_Min').value;
@@ -600,6 +638,7 @@
 			'refgenome': refgenome,
 			'fasta_filename': fasta_filename,
 			'sequence': sequence,
+			'enzymes': enzymes,
 			'Length_Min': Length_Min,
 			'Length_Max': Length_Max,
 			'GCcontent_Min': GCcontent_Min,
@@ -611,31 +650,15 @@
 			'jobid_pd': jobid_pd,
 		};
 		
-		// Genomic DB : 선택한 vcf의 reference를 사용
-		/*
-		if(upload_method == 'Genomic_DB') {
-			data['refgenome_id'] = document.querySelector(`#VcfSelect option:checked`).dataset.refgenome_id;
-			data['refgenome'] = document.querySelector(`#VcfSelect option:checked`).dataset.refgenome;
-			data['fasta_filename'] = document.querySelector(`#VcfSelect option:checked`).dataset.fasta_filename;
-		}
-		*/
 		
 		fetch(`./pd_insertSql.jsp`, {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
 			},
-			/*
-			body: JSON.stringify({
-				'varietyid': varietyid,
-				'vcf_filename': vcf_filename,
-				'comment': comment,
-				'marker_category': marker_category,
-				'jobid_pd': jobid_pd,
-			}),
-			*/
 			body: JSON.stringify(data),
 		})
+		
 		
 		if(upload_method == 'File_Upload') {
 			
@@ -659,31 +682,13 @@
 	   		, 1000);
 			
 		}
-		
-					
-		
-		
-		/*					
-		console.log("jobid_pca : ", jobid_pca);
-		//$("#jobid_pca").val(jobid_pca);
-		const filename = $('#VcfSelect').find(':selected').data('filename');
-		// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
-		// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
-		
-		
-		if(Number(jobid_vcf) == -1) {
-			alert("VCF 파일을 선택하세요");
-			return;
-		}
-		*/
-		
 	}
 	
-	/*
 	$("#backdrop").on("shown.bs.modal", function(e) {
 		enzyme_gridOptions.columnApi.autoSizeAllColumns();
+		//enzyme_gridOptions.api.sizeColumnsToFit();
 	});
-	*/
+	
 	
 	async function getFetchData(url_string, map_params) {
 		

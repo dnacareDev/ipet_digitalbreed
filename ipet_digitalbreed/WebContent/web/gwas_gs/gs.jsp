@@ -219,7 +219,7 @@ body {
         <!--  
         <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width : 1140px; margin: 0 auto;" role="document">
         -->
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title" id="myModalLabel5">GWAS New Analysis</h4>
@@ -325,7 +325,7 @@ body {
                                 </fieldset>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="reset();">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -610,7 +610,34 @@ body {
    	}
    	
    	function resetFlatpickr() {
+   		/*
+   		jQuery("#cre_date").flatpickr().clear();
+   		jQuery("#cre_date").flatpickr({
+   			mode: "range",
+   			dateFormat: "Y-m-d",
+   			conjunction: " ~ "
+   		});
+   		*/
    		
+   		const cre_date = document.getElementById('cre_date');
+   		cre_date.flatpickr().clear();
+   		cre_date.flatpickr({
+   			mode: "range",
+   			dateFormat: "Y-m-d",
+   			conjunction: " ~ "
+   		})
+   		
+   		const inv_date = document.getElementById('inv_date');
+   		inv_date.flatpickr().clear();
+   		inv_date.flatpickr({
+   			mode: "range",
+   			dateFormat: "Y-m-d",
+   			conjunction: " ~ "
+   		})
+   		
+   		
+   		
+   		/*
    		let dateSelector = document.querySelectorAll(".flatpickr-day");
    		
    		//범위선택시 추가된 class를 삭제하여 css 제거 - 서버에는 input text값이 올라가므로 css만 신경쓰면 된다.
@@ -619,6 +646,7 @@ body {
    			//console.log(el.classList.contains('inRange'));
    			el.classList.remove('selected', 'startRange', 'endRange', 'inRange');
    		}));
+   		*/
    	}
    	
    	async function execute() {
@@ -825,7 +853,7 @@ body {
    		resetGWAS();
     });
    	
-   	function reset() {
+   	function resetForm() {
    		document.getElementById('uploadForm').reset();
    		
    		// 모달창 닫으면 초기화

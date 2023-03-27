@@ -22,7 +22,7 @@
 		e.printStackTrace();
 	}
 	
-	//System.out.println(sb);
+	System.out.println(sb);
 	JsonObject jsonObject = new Gson().fromJson(sb.toString(), JsonObject.class);
 	
 	String permissionUid = session.getAttribute("permissionUid")+"";
@@ -31,6 +31,17 @@
 	String comment = jsonObject.get("comment").getAsString();
 	String marker_category = jsonObject.get("marker_category").getAsString();
 	String jobid_pd = jsonObject.get("jobid_pd").getAsString();
+	
+	JsonArray enzymesJsonArray = jsonObject.get("enzymes").getAsJsonArray();
+	StringBuilder enzymes = new StringBuilder();
+	for(int i=0 ; i<enzymesJsonArray.size() ; i++) {
+		enzymes.append(enzymesJsonArray.get(i).getAsJsonObject().get("Enzyme").getAsString());
+		if(i != enzymesJsonArray.size()-1) {
+			enzymes.append(",");
+		}
+	}
+	//System.out.println(enzymes);
+	
 	/*
 	System.out.println("=========================================");
 	System.out.println("permissionUid : " + permissionUid);
@@ -49,6 +60,8 @@
 	System.out.println("script_path : " + db_outputPath);
 	System.out.println("===========================================");
 	*/
+	
+	
 	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Primer design', 'New analysis', now());";
 	//System.out.println(log_sql);
 	try{
@@ -60,9 +73,8 @@
 	}
 	
 	
-	
-	String sql = "insert into primer_design_t (cropid, varietyid, status, filename, comment, marker_category, uploadpath, resultpath, jobid, creuser, cre_dt) ";
-	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', '" +comment+ "', '" +marker_category+ "', '"+db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
+	String sql = "insert into primer_design_t (cropid, varietyid, status, filename, comment, marker_category, restriction_enzymes, uploadpath, resultpath, jobid, creuser, cre_dt) ";
+	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', '" +comment+ "', '" +marker_category+ "', '" +enzymes+ "','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
 
 	
 	System.out.println("sql : " + sql);

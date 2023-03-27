@@ -328,12 +328,25 @@ body {
         </div>
     </div>
     
-   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+   	<div class="modal" id="Loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
-			<div><strong>Loading PCA Result...</strong></div>
+			<div><strong>Waiting to Upload...</strong></div>
 	  	</div>
 	</div>
+	<div class="modal" id="ProgressBar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<div class="progress">
+				<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			</div>
+			<div><strong>Waiting to Upload...</strong></div>
+	  	</div>
+	</div>
+	<!--  
+	<div id="ProgressBar" class="progress">
+		<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+	</div>
+	-->
 	
 	<!-- Modal end-->
                         
@@ -463,8 +476,8 @@ body {
     		console.log(key, ":", formData.get(key));
     	}
     	
-    	
-    	console.log("not returned");
+    	$("#Loading").modal('show');
+    	//$("#ProgressBar").modal('show');
     	
     	//debugger;
     	
@@ -472,15 +485,38 @@ body {
     		method:'POST',
     		body: formData,
     	})
-    	.then((response) => response.ok)
-    	.then((ok) => {
-    		console.log(ok);
+    	.then((response) => {
     		
-    		//if(ok != 0)	return;
+    		//document.getElementById('ProgressBar').style.display = 'block';
+    		/*
+    		// instead of response.json() and other methods
+			const reader = response.body.getReader();
+			
+			const contentLength = response.headers.get('content-length');
+			let receivedLength = 0;
     		
-    		refresh();
-    		$("#backdrop").modal("hide");
-    	});
+			// infinite loop while the body is downloading
+			while(true) {
+				// done is true for the last chunk
+				// value is Uint8Array of the chunk bytes
+			  	const {done, value} = await reader.read();
+			
+			  	if (done) {
+			    	break;
+			  	}
+			  	
+			  	receivedLength += value.length;
+			
+			  	console.log(`Received \${receivedLength} of \${contentLength}`);
+			}
+    		*/
+    		if(!!response.ok) {
+	    		refresh();
+	    		$("#Loading").modal('hide');
+	    		$("#backdrop").modal("hide");
+    		}
+    	})
+    	
     	
     	/*
     	$.ajax({

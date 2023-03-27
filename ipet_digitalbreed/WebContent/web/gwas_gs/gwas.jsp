@@ -175,6 +175,7 @@ body {
 									<div class='col-12'>
 										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
 										</ul>
+										<!--  
 										<div class='row'>
 											<div class='col-12'>
 												<div style="width:15%; padding:0px;"> 
@@ -195,6 +196,7 @@ body {
 												</div>
 											</div>
 										</div>
+										-->
 										<div id='content-list' class='tab-content'>
 										</div>
 									</div>

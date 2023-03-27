@@ -10,7 +10,7 @@
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
-			.simpleHttpRequest({ url: "/ipet_digitalbreed/web/gwas_gs/gwas_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+			.simpleHttpRequest({ url: "/ipet_digitalbreed/web/gwas_gs/gs_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
 		    	//console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
@@ -43,7 +43,7 @@
 		
 		$.ajax(
 		{
-		    url:"/ipet_digitalbreed/web/gwas_gs/gwas_delete.jsp",
+		    url:"/ipet_digitalbreed/web/gwas_gs/gs_delete.jsp",
 		    type:"POST",
 		    data:{'params':deleteitems, 'varietyid':varietyid},
 		    success: function(result) {
@@ -87,26 +87,26 @@
 		    	}
 		    }
 		},
-	    {
-			headerName: "Genotype",
-			field: "genotype_filename",
+		{
+			headerName: "Phenotype",
+			field: "phenotype",
 			filter: true,
 			width: 600,
 			minWidth: 120,
 	    },
 	    {
-			headerName: "Phenotype",
-			field: "phenotype_name",
+			headerName: "Training Genotype",
+			field: "training_genotype",
 			filter: true,
-			width: 350,
+			width: 600,
 			minWidth: 120,
 	    },
 	    {
-			headerName: "Model",
-			field: "model",
+			headerName: "Prediction Genotype",
+			field: "prediction_genotype",
 			filter: true,
-			width: 300,
-			minWidth: 100,
+			width: 350,
+			minWidth: 120,
 	    },
 	    {
 	    	headerName: "상세내용",
@@ -329,150 +329,10 @@
 		}
 	};
 
-	/*
-	document.addEventListener('click', function(event) {
-		if(event.target.id.includes('gwas_')) {
-//			$("#param_phenotype").val('-1').trigger('change');
-			document.getElementById('param_phenotype').value = '-1';
-			document.getElementById('param_phenotype').dispatchEvent(new Event('change'));
-			
-			document.getElementById('isQQ').value = '-1';
-			document.getElementById('isQQ').dispatchEvent(new Event('change'));
-			
-			document.getElementById('QQ_model').value = '-1';
-			document.getElementById('QQ_model').dispatchEvent(new Event('change'));
-			
-			$('#model_name').val(event.target.id.replaceAll("gwas_",""));
-			
-			const model_name = $('#model_name').val();
-			
-			$('iframe').each(function(index, item) {
-				item.src = "";
-			});
-			
-			//console.log(document.getElementById('grid_'+model_name));
-			if(document.getElementById('grid_'+model_name)) {
-				document.getElementById('grid_'+model_name).innerHTML = "";
-			}
-			
-			if( $("#status404") ) {
-				$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-			}
-			
-			if (event.target.id == "gwas_Multi") {
-				$("#isQQ").parent().css('display','');
-				$("#QQ_model").parent().css('display','none');
-			} else if (event.target.id == "gwas_QQ") {
-				$("#isQQ").parent().css('display','none');
-				$("#QQ_model").parent().css('display','');
-			} else {
-				$("#isQQ").parent().css('display','none');
-				$("#QQ_model").parent().css('display','none');
-			}
-		} 
-	})
-	
-	
-	// form-select2_gwas의 'select2:select' 
-	// => document.getElementById('isQQ').dispatchEvent(new Event('change'));를 거쳐서 온다. 
-	document.querySelector('#isQQ').addEventListener('change', function(event) {
-		
-		const model_name = $('#model_name').val();
-		const value = event.target.value.trim();
-		const isQQ = document.getElementById('isQQ').value;
-		const param_phenotype = document.getElementById('param_phenotype').value.trim();
-		
-		if(isQQ == '-1' || param_phenotype == '-1') {
-			return;
-		}
-		
-		const resultpath = document.getElementById('resultpath').value;
-		const jobid = document.getElementById('jobid_param').value;
-		
-		//console.log("isQQ : ", isQQ);
-		
-		
-		if( $("#status404") ) {
-			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-		}
-		
-		$(`iframe#${model_name}`).attr('src', '');		// empty plot
-		
-		
-		let url;
-		if(isQQ == "QQ") {
-			url = `${resultpath}${jobid}/multi_QQ_${param_phenotype}.html`
-		} else {
-			url = `${resultpath}${jobid}/multi_${param_phenotype}.html`
-		}
-		
-		fetch(url, {method: "HEAD"})
-		.then((response) => response.ok)
-		.then((ok) => {
-			if(!ok) {
-				HTMLNotExist(model_name);
-				$("#Multi").height(0);
-				return;
-			} else {
-				$("#Multi").height("500px");					// iframe 높이 정상
-				$("#iframeLoading").modal('show');
-				$('iframe#Multi').attr('src', url);
-			}
-		});
-		
-		
-		if(param_phenotype == "-1") {
-			alert("특성을 선택해주세요");
-			$("#isQQ").val("-1").trigger('change');
-		}
-		
-	});
-	
-	
-	document.querySelector('#QQ_model').addEventListener('change', function(event) {
-		
-		const value = event.target.value;
-		const param_phenotype = document.getElementById('param_phenotype').value.trim();
-		const model_name = $('#model_name').val();
-		const QQ_model_name = document.getElementById('QQ_model').value;
 
-		if(model_name == '-1' || param_phenotype == '-1') {
-			return;
-		}
-		
-		const resultpath = document.getElementById('resultpath').value;
-		const jobid = document.getElementById('jobid_param').value;
-		
-		
-		if( $("#status404") ) {
-			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-		}
-		
-		
-		const url = `${resultpath}${jobid}/QQ_${QQ_model_name}_${param_phenotype}.html`;
-		
-		fetch(url, {method: "HEAD"})
-		.then((response) => response.ok)
-		.then((ok) => {
-			if(!ok) {
-				HTMLNotExist(model_name);
-				$("#QQ").height(0);
-				return;
-			} else {
-				$("#QQ").height("500px");					// iframe 높이 정상
-				$("#iframeLoading").modal('show');
-				$('iframe#QQ').attr('src', url);
-			}
-		});
-		
-		if(param_phenotype == "-1") {
-			alert("특성을 선택해주세요");
-			$("#QQ_model").val("-1").trigger('change');
-		}
-	})
 	
 	
-	*/
+	
 	function HTMLNotExist(model_name) {
 		$(`iframe#${model_name}`).attr('src', '');		// empty plot
 		
@@ -580,13 +440,6 @@
 		const resultpath = document.getElementById('resultpath').value;
 		const jobid = document.getElementById('jobid_param').value;
 		
-		//console.log("isQQ : ", isQQ);
-		
-		/*
-		if( $("#status404") ) {
-			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-		}
-		*/
 		$(`iframe#${model_name}`).attr('src', '');		// empty plot
 		
 		
@@ -597,21 +450,6 @@
 			url = `${resultpath}${jobid}/multi_${multi_phenotype}.html`
 		}
 		
-		/*
-		fetch(url, {method: "HEAD"})
-		.then((response) => response.ok)
-		.then((ok) => {
-			if(!ok) {
-				HTMLNotExist(model_name);
-				//$("#Multi").height(0);
-				return;
-			} else {
-				//$("#Multi").height("500px");					// iframe 높이 정상
-				$("#iframeLoading").modal('show');
-				$('iframe#Multi').attr('src', url);
-			}
-		});
-		*/
 		fetch(url, {method: "HEAD"})
 		.then((response) => {
 			if(!response.ok) {
@@ -634,40 +472,11 @@
 			return;
 		}
 		
-		//const value = event.target.value;
-		//const param_phenotype = document.getElementById('param_phenotype').value.trim();
-		//const model_name = $('#model_name').val();
-		//const QQ_model_name = document.getElementById('QQ_model').value;
-		/*
-		if(model_name == '-1' || param_phenotype == '-1') {
-			return;
-		}
-		*/
 		const resultpath = document.getElementById('resultpath').value;
 		const jobid = document.getElementById('jobid_param').value;
 		
-		/*
-		if( $("#status404") ) {
-			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-		}
-		*/
 		
 		const url = `${resultpath}${jobid}/QQ_${QQ_model}_${QQ_phenotype}.html`;
-		/*
-		fetch(url, {method: "HEAD"})
-		.then((response) => response.ok)
-		.then((ok) => {
-			if(!ok) {
-				HTMLNotExist(model_name);
-				$("#QQ").height(0);
-				return;
-			} else {
-				$("#QQ").height("500px");					// iframe 높이 정상
-				$("#iframeLoading").modal('show');
-				$('iframe#QQ').attr('src', url);
-			}
-		});
-		*/
 		
 		fetch(url, {method: "HEAD"})
 		.then((response) => {
@@ -861,7 +670,7 @@
   		const myGrid = new agGrid.Grid(gridTable, gridOptions);
   		
   		/*** GET TABLE DATA FROM URL ***/
-  		fetch("/ipet_digitalbreed/web/gwas_gs/gwas_json.jsp?varietyid="+$( "#variety-select option:selected" ).val() )
+  		fetch("/ipet_digitalbreed/web/gwas_gs/gs_json.jsp?varietyid="+$( "#variety-select option:selected" ).val() )
   		.then((response) => response.json())
   		.then((data) => {
   			console.log(data);
@@ -923,16 +732,3 @@
 	});
   
 	//console.log(gridOptions);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-  

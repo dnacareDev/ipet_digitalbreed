@@ -65,7 +65,7 @@
 	      $(this).next(".select2").find(".select2-selection__rendered").addClass(text+textVariation);
 	});
 
-	
+	/*
 	$("#param_phenotype").on('select2:select', function(e) {
 		const model_name = $('#model_name').val();
 		const value = e.params.data.id.trim();
@@ -147,7 +147,7 @@
 		}
 	});
 	
-
+	*/
 	
 	
 

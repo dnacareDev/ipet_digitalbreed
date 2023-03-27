@@ -23,10 +23,9 @@
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("no",ipetdigitalconndb.rs.getInt("no"));
 			jsonObject.addProperty("status",ipetdigitalconndb.rs.getString("status"));
-			jsonObject.addProperty("filename",ipetdigitalconndb.rs.getString("filename"));
+			jsonObject.addProperty("training_genotype",ipetdigitalconndb.rs.getString("filename"));
+			jsonObject.addProperty("prediction_genotype",ipetdigitalconndb.rs.getString("filename"));
 			jsonObject.addProperty("comment",ipetdigitalconndb.rs.getString("comment"));
-			jsonObject.addProperty("marker_category",ipetdigitalconndb.rs.getString("marker_category"));
-			jsonObject.addProperty("restriction_enzymes",ipetdigitalconndb.rs.getString("restriction_enzymes"));
 			jsonObject.addProperty("uploadpath",ipetdigitalconndb.rs.getString("uploadpath"));
 			jsonObject.addProperty("resultpath",ipetdigitalconndb.rs.getString("resultpath"));
 			jsonObject.addProperty("jobid",ipetdigitalconndb.rs.getString("jobid"));
