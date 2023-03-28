@@ -456,7 +456,7 @@ body {
 		$("#iframeLoading").modal('hide');
 	}
    	
-	function saveToVcf(filename, jobid, refgenome, refgenome_id) { 
+	function saveToVcf(filename, jobid, refgenome, refgenome_id, annotation_filename) { 
 		if(!confirm("결과를 Genotype DB에 저장하시겠습니까?")) {
 			return;
 		}
@@ -470,7 +470,7 @@ body {
 	   	console.log("saveToVcf refgenome :", refgenome );
 	   	
 	   	
-	   	fetch(`../../database/fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&variety_id=\${variety_id}&refgenome=\${refgenome}&refgenome_id=\${refgenome_id}`);
+	   	fetch(`./sf_fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&variety_id=\${variety_id}&refgenome=\${refgenome}&refgenome_id=\${refgenome_id}&annotation_filename=\${annotation_filename}`);
 	   	
 	   	$("#iframeLoading").modal('show');
 	   	

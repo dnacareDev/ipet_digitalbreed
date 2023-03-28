@@ -45,9 +45,8 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/aggrid.css">
-    <!--  
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap5_custom.css">
-    -->
+    <link rel="stylesheet" type="text/css" href="../../css/index_assets/css/icons.min.css">
     <!-- END: Page CSS-->
 
 </head>
@@ -77,6 +76,11 @@ body {
 
 .select2-search__field:placeholder-shown {
     width: 100% !important; /*makes the placeholder to be 100% of the width while there are no options selected*/
+}
+
+.min-range-max {
+	color: gray;
+	cursor: pointer;
 }
 
 
@@ -168,42 +172,67 @@ body {
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
-                    <div id="gwas_status" class="card" style="display:none;">
+                    <div id="gwas_status" class="card">
                     	<div class='card-content'>
 							<div class='card-body'>
 								<div class='row'>
 									<div class='col-12'>
 										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
+											<li class='nav-item'><a class='nav-link active' id='Cross_Validation' data-toggle='pill' href='#pill1' aria-expanded='true'>Cross Validation</a></li>
+											<li class='nav-item'><a class='nav-link' id='Prediction' data-toggle='pill' href='#pill2' aria-expanded='true'>Prediction</a></li>
+											<li class='nav-item'><a class='nav-link' id='Multiple_Prediction' data-toggle='pill' href='#pill3' aria-expanded='true'>Multiple Prediction</a></li>
 										</ul>
-										<div class='row'>
-											<div class='col-12'>
-												<div style="width:15%; padding:0px;"> 
-													<select id='param_phenotype' class='select2 form-select float-left'>
-													</select>
+										<div id='content-list' class='tab-content'>
+											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+												<div class="row">
+													<div class="col-2" style="max-width:12%;">
+														<select id='Select-Cross_Validation' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showMultiPlot();">
+														</select>
+													</div>
 												</div>
-												<div style="display:none; width:15%; margin-top:1px; padding:0px;"> 
-													<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
-														<option value='-1' hidden disabled selected>Select plot type</option>
-														<option value='QQ'>QQ plot</option>
-														<option value='noQQ'>Manhattan plot</option>
-													</select>
-												</div>
-												<div style="display:none; width:15%; margin-top:1px; padding:0px;"> 
-													<select id='QQ_model' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
-														<option value='-1' hidden disabled selected>Select Model</option>
-													</select>
+												<div class="row">
+													<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
+														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Cross_Validation' onload="$('#Loading').modal('hide')"></iframe>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div id='content-list' class='tab-content'>
+											<div class='tab-pane' id='pill2' aria-expanded='true' aria-labelledby='base-pill1'>
+												<div class="row">
+													<div class="col-2" style="max-width:12%;">
+														<select id='Select-Prediction' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showMultiPlot();">
+														</select>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 col-xl-6" style="margin-top:25px; float:left;">
+														<div id="Grid-Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+													</div>
+													<div class="col-12 col-xl-6" style="height:445px; margin-top:25px; float:left;">
+														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Prediction' onload="$('#Loading').modal('hide')"></iframe>
+													</div>
+												</div>
+											</div>
+											<div class='tab-pane' id='pill3' aria-expanded='true' aria-labelledby='base-pill1'>
+												<div class="row">
+													<div class="col-2" style="max-width:12%;">
+														<select id='Select-Multiple_Prediction' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showMultiPlot();">
+														</select>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 col-xl-4 style="height:445px; margin-top:25px; float:left;">
+														<div id="Grid-Multiple_Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+													</div>
+													<div class="col-12 col-xl-8 style="height:445px; margin-top:25px; float:left;">
+														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="$('#Loading').modal('hide')"></iframe>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 								<div class='hidden-parameter'>
 									<!-- parameters -->
-									<input type='hidden' id='model_name'>
-									<input type='hidden' id='resultpath'>
-									<input type='hidden' id='jobid_param'>
 								</div>
 							</div>
 						</div>
@@ -219,10 +248,10 @@ body {
         <!--  
         <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width : 1140px; margin: 0 auto;" role="document">
         -->
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">GWAS New Analysis</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Genomic Selection New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -231,35 +260,29 @@ body {
 					<form class="form" id="uploadForm">
 					    <div class="form-body">
 					        <div class="row">
-					            <div class="col-md-12 col-12 ml-1">
-					                <br>
-					             	<div class="form-label-group">
+					            <div class="col-md-12 col-12">
+					             	<div class="form-label-group d-flex justify-content-center">
 					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:93%;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 					                </div>
 					            </div>
-					            <div class="col-md-12 col-12 ml-1">
-					            	<div class="form-label-group" >
-					                    <select class="select2 form-select" id="VcfSelect" style="width:50%;">
+					            <div class="col-md-12 col-12">
+					            	<div class="form-label-group d-flex justify-content-center" >
+					                    <select class="select2 form-select" id="Training_VCF" data-width="93%" data-placeholder="Select Training VCF File">
 					                    </select>
 					                </div>
 					            </div>
 					            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
 					            	<legend  class="w-auto">Phenotype Selection</legend>
-						            <div style="margin-bottom:4px;">
-						            	<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false)" value="0" checked>
-											<label class="form-check-label" for="RadioPhenotype"> Phenotype Database</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true)" value="1">
-											<label class="form-check-label" for="RadioCsvFile"> New Phenotype</label>
-										</div>
-										<div class="form-check form-check-inline" style="margin-top:5px; margin-left:45px;">
-											<div>
-												<button type="button" id="exampleButton" style="float: right; display:none;" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/phenotype.csv" download="phenotype.csv" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>	 
-											</div>
-										</div>
-						            </div>
+						            <div class="col-12" style="display:flex;">
+						            	<div class="col-6">
+						            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false)" value="0" checked>
+											<label class="form-check-label" for="RadioPhenotype" style="padding-left: 14px;"> Phenotype Database</label>
+						            	</div>
+						            	<div class="col-6">
+						            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true)" value="1">
+											<label class="form-check-label" for="RadioCsvFile" style="padding-left: 14px;"> New Phenotype</label>
+						            	</div>
+					            	</div>
 						            <div>
 							            <div id="isPhenotype" class="form-label-group mt-1" >
 						                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
@@ -271,58 +294,147 @@ body {
 							            </div>
 							        </div>
 							        <div>
-										<div id="isNewFile" class="form-label-group" style="display:none">
+										<div id="isNewFile" class="form-label-group mt-1" style="display:none">
 								            <div id="PhenotypeCsvFile" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div>
-											<br>
-						                	<!--  
-						                	<div style="float: left; margin-top:5px;">
-												<button type="button" style="float: left;" class="btn btn-danger btn-sm" ><a href="/ipet_digitalbreed/uploads/phenotype.csv" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>	 
-											</div>
-											-->
 							            </div>
 							        </div>
+							        
 						        </fieldset>
-						        <fieldset class="border w-100 m-1 pl-1">
-						        	<legend  class="w-auto">Model</legend>
-									<div class="form-label-group">
-							            <div class="demo-inline-spacing">
-	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="GLM" name="modelGroup" value="GLM" />
-	                                            <label class="form-check-label" for="GLM">GLM (General Linear Model)</label>
-	                                        </div>
-	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="MLM" name="modelGroup" value="MLM" />
-	                                            <label class="form-check-label" for="MLM">MLM(Mixed Linear Model)</label>
-	                                        </div>
-	                                    </div>
-	                                    <div class="demo-inline-spacing">
-	                                    	<div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="CMLM" name="modelGroup" value="CMLM" />
-	                                            <label class="form-check-label" for="CMLM">CMLM(Compression MLM)</label>
-	                                        </div>
-	                                    	<div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="FarmCPU" name="modelGroup" value="FarmCPU"  style="margin-left:9px;" />
-	                                            <label class="form-check-label" for="FarmCPU">FarmCPU</label>
-	                                        </div>
-	                                    </div>
-	                                    <div class="demo-inline-spacing">
-	                                    	<div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="SUPER" name="modelGroup" value="SUPER" />
-	                                            <label class="form-check-label" for="SUPER">SUPER</label>
-	                                        </div>
-	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="BLINK" name="modelGroup" value="BLINK" style="margin-left:121px;" />
-	                                            <label class="form-check-label" for="BLINK">BLINK</label>
-	                                        </div>
-	                                    </div>
-	                                    <div class="demo-inline-spacing">
-	                                        <div class="form-check form-check-inline">
-	                                            <input class="form-check-input" type="checkbox" id="MLMM" name="modelGroup" value="MLMM" />
-	                                            <label class="form-check-label" for="MLMM">MLMM</label>
-	                                        </div>
-	                                    </div>
-						            </div>
+						        <div class="col-12 mt-3 mb-1 d-flex justify-content-center">
+				                    <select class="select2 form-select" id="Prediction_VCF" data-width="93%" data-placeholder="Select Prediction VCF File (Optional)">
+				                    </select>
+					            </div>
+						        <fieldset class="border w-100 m-1">
+						        	<legend  class="w-auto ml-1">Model</legend>
+									<div class="col-12" style="display:flex;">
+						            	<div class="col-3 form-check">
+						            		<input class="form-check-input" type="checkbox" id="BLUP" onclick="switchCheckbox(this.id)" checked>
+											<label class="form-check-label" for="BLUP" style="padding-left: 14px;"> BLUP</label>
+						            	</div>
+						            	<div class="col-4 form-check">
+						            		<input class="form-check-input" type="checkbox" id="Bayesian" onclick="switchCheckbox(this.id)">
+											<label class="form-check-label" for="Bayesian" style="padding-left: 14px;"> Bayesian</label>
+						            	</div>
+						            	<div class="col-7 form-check">
+						            		<input class="form-check-input" type="checkbox" id="Semi-parametic" onclick="switchCheckbox(this.id)">
+											<label class="form-check-label" for="Semi-parametic" style="padding-left: 14px;"> Semi-parametic</label>
+						            	</div>
+					            	</div>
+					            	<div class="col-12 mt-1">
+					            		<div id="Model_Grid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div>
+					            	</div>
                                 </fieldset>
+                                <fieldset class="border w-100 m-1 pt-1">
+						        <legend class="w-auto ml-1 mr-1">Options</legend>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4" style="margin-top:8px;">MAXNA</div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAXNA_Range').value = 0; document.getElementById('MAXNA_Number').value = 0;">0</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="MAXNA_Range" min="0" max="1" value="0.2" step="0.01" oninput="document.getElementById('MAXNA_Number').value = this.value" />
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAXNA_Range').value = 1; document.getElementById('MAXNA_Number').value = 1">1</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="MAXNA_Number" autocomplete="off" value="0.2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('MAXNA_Range').value = this.value;" />
+						            		</div>
+						            	</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4" style="margin-top:8px;">MAF</div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAF_Range').value = 0; document.getElementById('MAF_Number').value = 0;">0</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="MAF_Range" min="0" max="0.5" value="0.05" step="0.01" oninput="document.getElementById('MAF_Number').value = this.value" />
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAF_Range').value = 0.5; document.getElementById('MAF_Number').value = 0.5">0.5</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="MAF_Number" autocomplete="off" value="0.05" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('MAF_Range').value = this.value;" />
+						            		</div>
+						            	</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4 form-check" style="margin-top:8px;">
+						            			<input type="checkbox" class="form-check-input" id="Checkbox-LD" onclick="document.getElementById('LD_Range').disabled = !this.checked; document.getElementById('LD_Number').disabled = !this.checked;">
+						            			<label class="form-check-label" for="Checkbox-LD" style="padding-left: 14px;"> LD (R²)</label>
+						            		</div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 0; document.getElementById('LD_Number').value = 0;}">0</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="LD_Range" min="0" max="1" value="0.2" step="0.01" oninput="document.getElementById('LD_Number').value = this.value" disabled/>
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 1; document.getElementById('LD_Number').value = 1"}>1</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="LD_Number" autocomplete="off" value="0.2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('LD_Range').value = this.value;" disabled/>
+						            		</div>
+						            	</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4 form-check" style="margin-top:8px;">
+						            			<input type="checkbox" class="form-check-input" id="Checkbox-ANO" onclick="document.getElementById('ANO_Range').disabled = !this.checked; document.getElementById('ANO_Number').disabled = !this.checked;">
+						            			<label class="form-check-label" for="Checkbox-ANO" style="padding-left: 14px;"> ANO (pval)</label>
+						            		</div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-ANO').checked) {document.getElementById('ANO_Range').value = 0; document.getElementById('ANO_Number').value = 0;}">0</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="ANO_Range" min="0" max="0.5" value="0.05" step="0.01" oninput="document.getElementById('ANO_Number').value = this.value" disabled/>
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-ANO').checked) {document.getElementById('ANO_Range').value = 0.5; document.getElementById('ANO_Number').value = 0.5;"}>0.5</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="ANO_Number" autocomplete="off" value="0.05" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('ANO_Range').value = this.value;" disabled/>
+						            		</div>
+						            	</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4" style="margin-top:8px;">nFolds <i class="ri-question-line"data-toggle="popover" data-trigger="hover" data-placement="top" data-content="nFolds Popover"></i></div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('N-Folds_Range').value = 2; document.getElementById('N-Folds_Number').value = 2;">2</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="N-Folds_Range" min="2" max="9" value="3" step="1" oninput="document.getElementById('N-Folds_Number').value = this.value" />
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('N-Folds_Range').value = 9; document.getElementById('N-Folds_Number').value = 9">9</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="N-Folds_Number" autocomplete="off" value="3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>9)this.value=9; document.getElementById('N-Folds_Range').value = this.value;" />
+						            		</div>
+						            	</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4" style="margin-top:8px;">nTimes <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="nTimes Popover"></i></div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('N-Times_Range').value = 1; document.getElementById('N-Times_Number').value = 1;">1</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="N-Times_Range" min="1" max="9" value="3" step="1" oninput="document.getElementById('N-Times_Number').value = this.value" />
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('N-Times_Range').value = 9; document.getElementById('N-Times_Number').value = 9">9</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="N-Times_Number" autocomplete="off" value="3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>9)this.value=9; document.getElementById('N-Times_Range').value = this.value;" />
+						            		</div>
+						            	</div>
+						            </div>
+						        </fieldset>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
 					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
@@ -336,7 +448,7 @@ body {
     </div>
     
     
-   	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+   	<div class="modal" id="Loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
 			<div><strong>Loading GWAS Result...</strong></div>
@@ -402,9 +514,9 @@ body {
    		vcfFileList();
    		//phenotypeList();
    		
-   		//$(".select2-container--default:gt(0)").width("444px");
-   		//$(".select2-container--default:eq(1)").width("93%");
-   		//$(".select2-container--default:eq(2)").width("99%");
+   		jQuery("#Training_VCF").select2();
+   		jQuery("#Prediction_VCF").select2();
+   		
    	});
 	
 	var box = new Object();
@@ -540,12 +652,16 @@ body {
 	  			console.log("vcf file list : ", data);
 	  			// data.selectFiles = vcfdata_info_t PK
 	  			
-	  			$("#VcfSelect").empty();
-	  	    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
+	  			$("#Training_VCF").empty();
+	  	    	$("#Training_VCF").append(`<option data-jobid="-1"></option>`);
 	  	    	for(let i=0 ; i<data.length ; i++) {
-	  				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-	  				//$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
-	  	    		$("#VcfSelect").append(`<option data-vcfdata_no=\${data[i].selectfiles} data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
+	  	    		$("#Training_VCF").append(`<option data-vcfdata_no=\${data[i].selectfiles} data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
+	  			}
+	  	    	
+	  	    	$("#Prediction_VCF").empty();
+	  	    	$("#Prediction_VCF").append(`<option data-jobid="-1"></option>`);
+	  	    	for(let i=0 ; i<data.length ; i++) {
+	  	    		$("#Prediction_VCF").append(`<option data-vcfdata_no=\${data[i].selectfiles} data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
 	  			}
    			}
    	  	});
@@ -595,12 +711,21 @@ body {
 		}
 	}
    	
+	function switchCheckbox(id) {
+		
+		
+		const isChecked = document.getElementById(id).checked;
+		
+		// filtered-out이면 deselect
+		gridOptions_model.api.forEachNode((node) => {
+			if(node.data.group == id) {
+				node.setSelected(isChecked);
+			} 
+		})
+	}
    	
    	function flatpickr() {
-   		//let dateSelector = document.querySelectorAll(".flatpickr-range");
-   		dateSelector = document.querySelectorAll(".flatpickr-range");
-   		
-   		
+   		const dateSelector = document.querySelectorAll(".flatpickr-range");
    		
    		dateSelector.flatpickr({
    			mode: "range",
@@ -610,43 +735,20 @@ body {
    	}
    	
    	function resetFlatpickr() {
-   		/*
-   		jQuery("#cre_date").flatpickr().clear();
-   		jQuery("#cre_date").flatpickr({
-   			mode: "range",
-   			dateFormat: "Y-m-d",
-   			conjunction: " ~ "
-   		});
-   		*/
    		
    		const cre_date = document.getElementById('cre_date');
-   		cre_date.flatpickr().clear();
    		cre_date.flatpickr({
    			mode: "range",
    			dateFormat: "Y-m-d",
    			conjunction: " ~ "
-   		})
+   		}).clear();
    		
    		const inv_date = document.getElementById('inv_date');
-   		inv_date.flatpickr().clear();
    		inv_date.flatpickr({
    			mode: "range",
    			dateFormat: "Y-m-d",
    			conjunction: " ~ "
-   		})
-   		
-   		
-   		
-   		/*
-   		let dateSelector = document.querySelectorAll(".flatpickr-day");
-   		
-   		//범위선택시 추가된 class를 삭제하여 css 제거 - 서버에는 input text값이 올라가므로 css만 신경쓰면 된다.
-   		console.log(document.querySelectorAll('.flatpickr-day').forEach(el => {
-   			//console.log(el);
-   			//console.log(el.classList.contains('inRange'));
-   			el.classList.remove('selected', 'startRange', 'endRange', 'inRange');
-   		}));
-   		*/
+   		}).clear();
    	}
    	
    	async function execute() {
@@ -663,7 +765,7 @@ body {
    			return;
    		} 
    		
-   		const jobid_gwas = await fetch('../getJobid.jsp')
+   		const jobid_gs = await fetch('../getJobid.jsp')
 	   							.then((response) => response.text())
 	   							.then((data) => data);
    		
@@ -671,17 +773,11 @@ body {
    		if(document.querySelector('input[name="radio_phenotype"]:checked').value == '0') {
    			
    			// phenotype options AG-Grid
-   			if(!gridOptionsTraitName.api.getSelectedRows().length) {
-   				alert("Phenotype을 한 개 이상 선택해 주세요");
+   			if(!gridOptions_model.api.getSelectedRows().length) {
+   				alert("Model을 한 개 이상 선택해 주세요");
    				return;
    			}
    			
-   			
-   			//modelGroup
-   			if(document.querySelectorAll('input[name="modelGroup"]:checked').length == 0) {
-   				alert("Model을  한 개 이상 선택해 주세요")
-   				return;
-   			}
    			
    			// permissionUid 삭제 (jsp session에서 받음)
    			const varietySelectEl = document.getElementById('variety-select');
@@ -689,9 +785,14 @@ body {
 
    			const comment = document.getElementById('comment').value;
    			
-   			const VcfSelectEl = document.getElementById('VcfSelect');
-   			const jobid_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.jobid;
-   			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename
+   			const Training_VCF = document.getElementById('Training_VCF');
+   			const jobid_training_vcf = Training_VCF.options[Training_VCF.selectedIndex].dataset.jobid;
+   			const filename_training_vcf = Training_VCF.options[Training_VCF.selectedIndex].dataset.filename
+   			
+   			const Prediction_VCF = document.getElementById('Prediction_VCF');
+   			const jobid_prediction_vcf = Prediction_VCF.options[Prediction_VCF.selectedIndex].dataset.jobid;
+   			const filename_prediction_vcf = Prediction_VCF.options[Prediction_VCF.selectedIndex].dataset.filename
+   			
    			// 2023-01-10 | 파라미터에 refgenome 추가
 			const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
    			// 2023-02-03 | vcfdata_no, regenome_id 추가
@@ -711,26 +812,7 @@ body {
    	    	
 			
 			const cre_date = document.getElementById('cre_date').value;
-			//if(!cre_date) {
-			//	cre_date = "-"
-			//}
 			const inv_date = document.getElementById('inv_date').value;
-			//if(!inv_date) {
-			//	inv_date = "-"
-			//}
-			
-			const model_arr = ['GLM', 'MLM', 'CMLM', 'FarmCPU', 'SUPER', 'BLINK', 'MLMM'];
-
-			//체크하지 않은 model은 배열에서 탈락
-			for(let i=0 ; i<model_arr.length ; i++) {
-				const modelCheckbox = document.getElementById(model_arr[i]);
-				if(!modelCheckbox.checked) {
-					model_arr.splice(i,1);
-					i--;
-				}
-			}
-			//console.log(modelArr);
-			
 			
    	    	
    	    	//console.log(traitname_arr);

@@ -240,42 +240,42 @@
 						        //console.log(csv_to_grid);
 						        gridOptions2.api.setRowData(rowObj);
 						        
+						        
+						        
 						        columnDefs2[1]['minWidth'] = 0;
 						        columnDefs2[2]['minWidth'] = 0;
 						        gridOptions2.api.setColumnDefs(columnDefs2);
 						        gridOptions2.columnApi.autoSizeAllColumns();
 						        
-						        const width_id = gridOptions2.columnApi.getColumn("ID").actualWidth
-						        const width_seq = gridOptions2.columnApi.getColumn("seq").actualWidth
+						        const resultGrid_width = document.getElementById('resultGrid').clientWidth;
+						        const all_columns = gridOptions2.columnApi.getColumns();
+						        let columns_width = 0;
+						        for(let i=0 ; i<all_columns.length ; i++) {
+						        	columns_width += all_columns[i].actualWidth;
+						        }
 						        
-						        columnDefs2[1]['minWidth'] = width_id;
-						        columnDefs2[2]['minWidth'] = width_seq;
-						        gridOptions2.api.setColumnDefs(columnDefs2);
-						        gridOptions2.api.sizeColumnsToFit();
+						        if(resultGrid_width > columns_width) {
+						        	const width_id = gridOptions2.columnApi.getColumn("ID").actualWidth
+						        	const width_seq = gridOptions2.columnApi.getColumn("seq").actualWidth
+						        	
+						        	columnDefs2[1]['minWidth'] = width_id;
+						        	columnDefs2[2]['minWidth'] = width_seq;
+						        	gridOptions2.api.setColumnDefs(columnDefs2);
+						        	gridOptions2.api.sizeColumnsToFit();
+						        }
+						        
 						        gridOptions.api.sizeColumnsToFit();
 						        
 						        
 						        
 						        const selectEl = document.getElementById('Enzyme_Select');
-								selectEl.innerHTML = `<option data-enzyme="-"></option>`;
+								selectEl.innerHTML = `<option data-enzyme="-">- Select All -</option>`;
 								
 								const enzymes_arr = params.data.restriction_enzymes.split(",");
 								for(let i=0 ; i<enzymes_arr.length ; i++) {
 									selectEl.insertAdjacentHTML('beforeend',`<option data-enzyme="${enzymes_arr[i]}">${enzymes_arr[i]}</option>`);
 								}
 								
-								/*
-								const enzyme_container = new Array();
-								gridOptions2.api.forEachNode((node) => {
-									const enzyme = node.data.ID.split(",")[0].split("-")[node.data.ID.split(",")[0].split("-").length -1];
-									if(!enzyme_container.includes(enzyme)) {
-										selectEl.insertAdjacentHTML('beforeend',`<option data-enzyme="${enzyme}">${enzyme}</option>`);
-										enzyme_container.push(enzyme);
-									}
-								})
-						        */
-						        
-						        
 						        
 						        //$("#Loading").modal('hide');
 						    };
@@ -303,7 +303,7 @@
 			checkboxSelection: (params) => document.getElementById('Marker_Info').dataset.marker_category == 'KASP' ? !!(params.node.rowIndex % 3 == 0) : !!(params.node.rowIndex % 2 == 0),
 			headerCheckboxSelectionFilteredOnly: true,
 			headerCheckboxSelection: true,
-			//rowSpan: (params) => params.node.rowIndex % 3 == 0 ? 3 : 0,
+			pinned: 'left',
 			rowSpan: (params) => document.getElementById('Marker_Info').dataset.marker_category == 'KASP' ? (params.node.rowIndex % 3 == 0 ? 3 : 0) : (params.node.rowIndex % 2 == 0 ? 2 : 0),
 	    },
 		{
@@ -482,6 +482,7 @@
 			headerCheckboxSelection: true,
 			minWidth:50,
 			maxWidth:50,
+			pinned: 'left',
 		},
 		{
 			field: 'N'
@@ -599,7 +600,6 @@
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
-		gridOptionsTraitName.api.sizeColumnsToFit();
 	});
   
 	//console.log(gridOptions);

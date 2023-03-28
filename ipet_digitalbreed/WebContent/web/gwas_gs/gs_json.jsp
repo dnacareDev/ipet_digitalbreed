@@ -15,7 +15,7 @@
 
 	try{
 
-		String sql="select *, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from primer_design_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ORDER BY no DESC;";
+		String sql="select *, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from genomic_selection_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ORDER BY no DESC;";
 		System.out.println(sql);
 		
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
@@ -23,8 +23,9 @@
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("no",ipetdigitalconndb.rs.getInt("no"));
 			jsonObject.addProperty("status",ipetdigitalconndb.rs.getString("status"));
-			jsonObject.addProperty("training_genotype",ipetdigitalconndb.rs.getString("filename"));
-			jsonObject.addProperty("prediction_genotype",ipetdigitalconndb.rs.getString("filename"));
+			jsonObject.addProperty("phenotype",ipetdigitalconndb.rs.getString("phenotype"));
+			jsonObject.addProperty("training_genotype",ipetdigitalconndb.rs.getString("training_genotype"));
+			jsonObject.addProperty("prediction_genotype",ipetdigitalconndb.rs.getString("prediction_genotype"));
 			jsonObject.addProperty("comment",ipetdigitalconndb.rs.getString("comment"));
 			jsonObject.addProperty("uploadpath",ipetdigitalconndb.rs.getString("uploadpath"));
 			jsonObject.addProperty("resultpath",ipetdigitalconndb.rs.getString("resultpath"));

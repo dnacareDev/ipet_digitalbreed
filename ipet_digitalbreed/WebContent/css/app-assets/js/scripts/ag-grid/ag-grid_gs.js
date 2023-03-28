@@ -123,7 +123,7 @@
 	    	filterParams: {
 	        	comparator: comparator
 	        },
-	    	width: 200,
+	    	width: 300,
 	    	minWidth: 100,
 	    },
 		{
@@ -184,16 +184,6 @@
 		colResizeDefault: "shift",
 		suppressDragLeaveHidesColumns: true,
 		animateRows: true,
-		//suppressHorizontalScroll: true,
-		serverSideInfiniteScroll: true,
-		
-		defaultCsvExportParams:{
-			columnKeys:["no","status","cre_dt"]
-		},
-		defaultExcelExportParams:{
-			columnKeys:["no","status","cre_dt"]
-		},
-		
 		onCellClicked: params => {
 		
 			//console.log("cell clicked : " + params.column.getId());
@@ -208,112 +198,19 @@
 					case 1:
 						//console.log('jobid : ', params.data.jobid);
 						//console.log('resultpath : ', params.data.resultpath);
-						//console.log("model : ", params.data.model)
 						
-						const model_arr = params.data.model.split(", ");
-						//console.log("model[] : ", model_arr);
+						document.getElementById('Multiple_Prediction').style.display = params.data.prediction_genotype == "-" ? 'none' : 'block';
 						
-						const phenotype_arr = params.data.phenotype_name.split(",");
-						//console.log("phenotype[] : ", phenotype_arr);
+						document.getElementById('Select-Cross_Validation').innerHTML = `<option hidden disabled selected></option>`;
+						document.getElementById('Select-Prediction').innerHTML = `<option hidden disabled selected></option>`;
+						document.getElementById('Select-Multiple_Prediction').innerHTML = `<option hidden disabled selected></option>`;
 						
-						$("#gwas_status").css('display','block');
-						
-						$("#button_list").empty();
-						$("#content-list").empty();
-						for(let i=0 ; i<model_arr.length ; i++) {
-							$('#button_list').append(`<li class='nav-item'><a class='nav-link' id='gwas_${model_arr[i]}' data-toggle='pill' href='#panel_${model_arr[i]}' aria-expanded='true'>${model_arr[i]}</a></li>`);
-							$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_${model_arr[i]}' aria-expanded='true'>
-															<div class="row">
-																<div class="col-2" style="max-width:12%;">
-																	<select id='${model_arr[i]}_phenotype' class='select2 form-select float-left' onchange="showPlot(this.options[this.selectedIndex].value); showGrid(this.options[this.selectedIndex].value);">
-																	</select>
-																</div>
-															</div>
-															<div class="row">
-																<div class="col-12 col-xl-8 style="height:445px; margin-top:25px; float:left;">
-																	<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='${model_arr[i]}' onload="$('#iframeLoading').modal('hide')"></iframe>
-																</div>
-																<div id='grid_${model_arr[i]}' class="col-12 col-xl-4 ag-theme-alpine">
-																</div>
-															</div>
-														</div>`);
-							if(i==0) {
-								$('#button_list').children().last().children().addClass('active')
-								$('#content-list').children().addClass('active');
-								$('#resultpath').val(params.data.resultpath);
-								$('#jobid_param').val(params.data.jobid);
-								//첫번째 모델은 클릭하지 않아도 기본으로 클릭
-								$('#model_name').val(model_arr[i]);
-							}
-							
-							//$(`#${model_arr[i]}_phenotype`).append(`<option value="-1"></option>`)
-							$(`#${model_arr[i]}_phenotype`).append(`<option value="-1" hidden disabled selected>Select Phenotype</option>`)
-							for(let j=0 ; j<phenotype_arr.length ; j++) {
-								$(`#${model_arr[i]}_phenotype`).append(`<option value="${phenotype_arr[j]}" >${phenotype_arr[j]}</option>`)
-							}
-						}
-						
-						$('#button_list').append(`<li class='nav-item'><a class='nav-link' id='gwas_Multi' data-toggle='pill' href='#panel_Multi' aria-expanded='true'>Multiple Model</a></li>`);
-						$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_Multi' aria-expanded='true'>
-														<div class="row">
-															<div class="col-2" style="max-width:12%;">
-																<select id='Multi_phenotype' class='select2 form-select float-left' onchange="showMultiPlot();">
-																	<option value="-1" hidden disabled selected>Select Phenotype</option>
-																</select>
-															</div>
-															<div class="col-2" style="max-width:12%;">
-																<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' onchange="showMultiPlot();">
-																	<option value='-1' hidden disabled selected>Select plot type</option>
-																	<option value='QQ'>QQ plot</option>
-																	<option value='noQQ'>Manhattan plot</option>
-																</select>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
-																<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='Multi' onload="$('#iframeLoading').modal('hide')"></iframe>
-															</div>
-														</div>
-													</div>`)
-						
+						const phenotype_arr = params.data.phenotype.split(",");
 						for(let i=0 ; i<phenotype_arr.length ; i++) {
-							$(`#Multi_phenotype`).append(`<option value="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`)
+							document.getElementById('Select-Cross_Validation').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
+							document.getElementById('Select-Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
+							document.getElementById('Select-Multiple_Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
 						}
-						
-						
-						$('#button_list').append(`<li class='nav-item'><a class='nav-link' id='gwas_QQ' data-toggle='pill' href='#panel_QQ' aria-expanded='true'>QQ Plot</a></li>`);
-						$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_QQ' aria-expanded='true'>
-														<div class="row">
-															<div class="col-2" style="max-width:12%;">
-																<select id='QQ_phenotype' class='select2 form-select float-left' onchange="showQQPlot()">
-																	<option value="-1" hidden disabled selected>Select Phenotype</option>
-																</select>
-															</div>
-															<div class="col-2" style="max-width:12%;">
-																<select id='QQ_model' class='select2 form-select ml-1 mb-1 float-left' onchange="showQQPlot()">
-																	<option value='-1' hidden disabled selected>Select Model</option>
-																</select>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
-																<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='QQ' onload="$('#iframeLoading').modal('hide')"></iframe>
-															</div>
-														</div>
-													</div>`)
-						
-						for(let i=0 ; i<phenotype_arr.length ; i++) {
-							$(`#QQ_phenotype`).append(`<option value="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`)
-						}
-						
-						for(let i=0 ; i<model_arr.length ; i++) {
-							$(`#QQ_model`).append(`<option value="${model_arr[i]}" >${model_arr[i]}</option>`)
-						}
-													
-						jQuery(".tab-pane .select2").select2({
-							dropdownAutoWidth: true,
-							width: '100%',
-						});
 						
 						gridOptions.api.sizeColumnsToFit();
 						
@@ -356,60 +253,11 @@
 							`;
 		
 		if( (model_name == 'Multi' || model_name == 'QQ') ) {
-			/*
-			const htmlElement = `
-								<div id="status404">
-									<div class="row mt-5">
-										<div class="col-12 d-flex justify-content-center">
-											<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-												<line x1="12" y1="9" x2="12" y2="13"></line>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
-											</svg>
-										</div>
-									</div>
-									<div class="row mt-1 mb-5">
-										<div class="col-12 d-flex justify-content-center" style="font-size:20px; color:black;">
-											표현형과의 유사성을 찾을 수 없습니다.
-										</div>
-									</div>
-								</div>
-								`;
-			*/
-			//$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
 			$(`#panel_${model_name}`).children().append(htmlElement);
-			
 		} else {
-			// Multiple Model, QQ Plot이 아닐 경우
-			/*
-			const htmlElement = `
-								<div id="status404">
-									<div class="row mt-5">
-										<div class="col-xl-6"></div>
-										<div class="col-12 col-xl-6 d-flex justify-content-center">
-											<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-												<line x1="12" y1="9" x2="12" y2="13"></line>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
-											</svg>
-										</div>
-									</div>
-									<div class="row mt-1 mb-5">
-										<div class="col-xl-6"></div>
-										<div class="col-12 col-xl-6 d-flex justify-content-center" style="font-size:20px; color:black;">
-											표현형과의 유사성을 찾을 수 없습니다.
-										</div>
-									</div>
-								</div>
-								`;
-			*/
 			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
 		}
 	}
-
-	
-	
-	
 
 	function showPlot(value) {
 		
@@ -426,74 +274,8 @@
 		$(`iframe#${model_name}`).attr('src', resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
 		
 	}
-	
-	function showMultiPlot() {
-		
-		const multi_phenotype = document.getElementById('Multi_phenotype').value;
-		const multi_isQQ = document.getElementById('isQQ').value;
-		
-		if(multi_phenotype == "-1" || multi_isQQ == "-1") {
-			return;
-		}
-		
-		const model_name = document.getElementById('model_name').value;
-		const resultpath = document.getElementById('resultpath').value;
-		const jobid = document.getElementById('jobid_param').value;
-		
-		$(`iframe#${model_name}`).attr('src', '');		// empty plot
-		
-		
-		let url;
-		if(multi_isQQ == "QQ") {
-			url = `${resultpath}${jobid}/multi_QQ_${multi_phenotype}.html`
-		} else {
-			url = `${resultpath}${jobid}/multi_${multi_phenotype}.html`
-		}
-		
-		fetch(url, {method: "HEAD"})
-		.then((response) => {
-			if(!response.ok) {
-				//HTMLNotExist("Multi");
-				//$("#Multi").height(0);
-			} else {
-				//$("#Multi").height("500px");
-				$("#iframeLoading").modal('show');
-				$('iframe#Multi').attr('src', url);
-			}
-		})
-	}
-	
-	function showQQPlot() {
-		
-		const QQ_phenotype = document.getElementById('QQ_phenotype').value;
-		const QQ_model = document.getElementById('QQ_model').value;
-		
-		if(QQ_phenotype == "-1" || QQ_model == "-1") {
-			return;
-		}
-		
-		const resultpath = document.getElementById('resultpath').value;
-		const jobid = document.getElementById('jobid_param').value;
-		
-		
-		const url = `${resultpath}${jobid}/QQ_${QQ_model}_${QQ_phenotype}.html`;
-		
-		fetch(url, {method: "HEAD"})
-		.then((response) => {
-			if(!response.ok) {
-				//HTMLNotExist("Multi");
-				//$("#Multi").height(0);
-			} else {
-				//$("#Multi").height("500px");
-				$("#iframeLoading").modal('show');
-				$('iframe#QQ').attr('src', url);
-			}
-		})
-		
-		//console.log("QQ process");
-	}
 
-	var columnDefs2 = [
+	var columnDefs_multiplePrediction = [
 		{
 			field: "SNP", 
 			width: 180, 
@@ -527,7 +309,7 @@
 		}
 	]
 	
-	var gridOptions2 = {
+	var gridOptions_multiplePrediction = {
 			defaultColDef: { 
 				editable: false, 
 				sortable: false, 
@@ -536,7 +318,7 @@
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], 
 			},
-			columnDefs: columnDefs2,
+			columnDefs: columnDefs_multiplePrediction,
 			colResizeDefault: "shift",
 			suppressDragLeaveHidesColumns: true,
 			rowHeight: 35,
@@ -575,6 +357,74 @@
 			suppressMultiRangeSelection: true,
 			animateRows: true,
 			suppressHorizontalScroll: true,
+	}
+	
+	const columnDefs_model = [
+		{
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true,
+			headerCheckboxSelection: true,
+			minWidth: 50,
+			maxWidth: 50,
+		},
+		{
+			field: 'model',
+		},
+		{
+			field : 'group'
+		},
+	];
+	
+	const gridOptions_model = {
+			defaultColDef: {
+				editable: false, 
+				filter: true,
+			    rezible: true,
+			    sortable: true,
+			    //suppressMenu: true,
+			    cellClass: "grid-cell-centered", 
+			},
+			columnDefs: columnDefs_model,
+			rowData: [
+				{'model': 'GBLUP', 'group': 'BLUP'}, 
+				{'model': 'EGBLUP', 'group': 'BLUP'}, 
+				{'model': 'RR', 'group': 'BLUP'}, 
+				{'model': 'LASSO', 'group': 'BLUP'}, 
+				{'model': 'EN', 'group': 'BLUP'}, 
+				{'model': 'BRR', 'group': 'Bayesian'}, 
+				{'model': 'BL', 'group': 'Bayesian'}, 
+				{'model': 'BA', 'group': 'Bayesian'}, 
+				{'model': 'BB', 'group': 'Bayesian'}, 
+				{'model': 'BC', 'group': 'Bayesian'}, 
+				{'model': 'RKHS', 'group': 'Semi-parametic'},
+				{'model': 'RF', 'group': 'Semi-parametic'},
+				{'model': 'SVM', 'group': 'Semi-parametic'},
+			],
+			rowHeight: 35,
+			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
+			suppressMultiRangeSelection: true,
+			animateRows: true,
+			suppressHorizontalScroll: true,
+			onRowSelected: (params) => {
+				const group = params.data.group;
+				const group_id = document.getElementById(group);
+				const all_nodes = gridOptions_model.api.getModel().nodeManager.allNodesMap;
+				
+				group_id.checked = true;
+				//for(let i=0 ; i<all_nodes.length ; i++) {
+				for(let i=0 ; i<Object.keys(all_nodes).length ; i++) {
+					if(all_nodes[i].data.group != group) {
+						continue;
+					}
+					
+					if(all_nodes[i].selected == false) {
+						group_id.checked = false;
+						break;
+					}
+				}
+				//debugger;
+			}
 	}
 	
 	//var modelGrid = [];
@@ -692,23 +542,13 @@
   			console.log("traitname : ", data);
   			gridOptionsTraitName.api.setRowData(data);
   			//gridOptionsTraitName.api.sizeColumnsToFit();
-  			
-  			if(linkedJobid !== "null") {
-				gridOptions.api.forEachNode((rowNode, index) => {
-					if(linkedJobid == rowNode.data.jobid) {
-						console.log(rowNode.rowIndex);
-						
-						gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
-						
-						gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
-						rowNode.setSelected(true);
-						
-						//gridOptions.api.setFocusedCell(Number(rowNode.rowIndex), 'no');
-						//console.log($("[row-id='0'] [col-id='displayno']"));
-						$(`[row-index=${rowNode.rowIndex}] [col-id='0']`).trigger("click");
-					}
-				});	
-			}
+  		});
+  		
+  		new agGrid.Grid(document.getElementById('Model_Grid'), gridOptions_model);
+  		gridOptions_model.api.forEachNode((node) => {
+  			if(node.data.group == 'BLUP') {
+  				node.setSelected(true);
+  			}
   		})
   	});
 

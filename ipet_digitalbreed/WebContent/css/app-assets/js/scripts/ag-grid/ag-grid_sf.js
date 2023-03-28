@@ -115,12 +115,9 @@
 	      width: 150,
 	      minWidth: 80,
 	      cellRenderer: function(params) {
-	    	  
-	    	  console.log(params);
-	    	  
 	    	  switch(params.value) {
 	    	  	case "0":
-	    	  		return `<span style='cursor:pointer;' onclick='const status=${Number(params.data.status)}; if(status==0){return alert("분석 중입니다.");} saveToVcf("${params.data.filename}", "${params.data.jobid}", "${params.data.refgenome}", "${params.data.refgenome_id}")'><i class='feather icon-save'></i></span>`;
+	    	  		return `<span style='cursor:pointer;' onclick='const status=${Number(params.data.status)}; if(status==0){return alert("분석 중입니다.");} saveToVcf("${params.data.filename}", "${params.data.jobid}", "${params.data.refgenome}", "${params.data.refgenome_id}", "${params.data.annotation_filename}")'><i class='feather icon-save'></i></span>`;
 	    	  	case "1":
 	    	  		return `<span style='cursor:pointer;' onclick='moveToVcf("${params.data.jobid}")'><i class='feather icon-link-2'></i></span>`;
 	    	  }
@@ -167,6 +164,10 @@
 		},
 		{
 		      field: "refgenome",
+		      hide: true
+		},
+		{
+		      field: "annotation_filename",
 		      hide: true
 		},
 		{
