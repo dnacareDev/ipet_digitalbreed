@@ -17,7 +17,7 @@
 			ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
 			String cropvari_sql = "select traitname from sampledata_traitname_t where varietyid='" +varietyid+ "' order by seq asc;";
-			System.out.println("cropvari_sql : " + cropvari_sql);
+			//System.out.println("cropvari_sql : " + cropvari_sql);
 			ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
 			
 			int i=0;

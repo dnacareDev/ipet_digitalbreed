@@ -28,6 +28,7 @@ public class RunAnalysisTools {
 	 
 	    if(cmd_flag.equals("cmd")) {
 	    	cmdList.add("/bin/sh");
+	    	//cmdList.add("/bin/bash");
 			cmdList.add("-c");
 	    }
 	        

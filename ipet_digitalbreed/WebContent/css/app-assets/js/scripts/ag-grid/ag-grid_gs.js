@@ -203,14 +203,22 @@
 						
 						document.getElementById('Select-Cross_Validation').innerHTML = `<option hidden disabled selected></option>`;
 						document.getElementById('Select-Prediction').innerHTML = `<option hidden disabled selected></option>`;
-						document.getElementById('Select-Multiple_Prediction').innerHTML = `<option hidden disabled selected></option>`;
+						//document.getElementById('Select-Multiple_Prediction').innerHTML = `<option hidden disabled selected></option>`;
 						
 						const phenotype_arr = params.data.phenotype.split(",");
 						for(let i=0 ; i<phenotype_arr.length ; i++) {
 							document.getElementById('Select-Cross_Validation').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
 							document.getElementById('Select-Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
-							document.getElementById('Select-Multiple_Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
+							//document.getElementById('Select-Multiple_Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
 						}
+						
+						document.getElementById('Extra_Card').dataset.jobid = params.data.jobid;
+						document.getElementById('Extra_Card').dataset.resultpath = params.data.resultpath;
+						
+						if(params.data.prediction_genotype != "-") {
+							showMultiPredictionPlot(params.data.phenotype.split(","));
+						}
+						
 						
 						gridOptions.api.sizeColumnsToFit();
 						
@@ -259,57 +267,27 @@
 		}
 	}
 
-	function showPlot(value) {
-		
-		const model_name = $('#model_name').val();
-		const resultpath = $('#resultpath').val();
-		const jobid_param = $('#jobid_param').val();
-		
-		//console.log(`iframe#${model_name}`);
-		//console.log(resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
-
-		
-		
-		$("#iframeLoading").modal('show');
-		$(`iframe#${model_name}`).attr('src', resultpath+jobid_param+"/"+`${model_name}_${value}.html`);
-		
+	const columnDefs_prediction = [];
+	const gridOptions_prediction = {
+			defaultColDef: {
+				editable: false, 
+				filter: true,
+			    rezible: true,
+			    sortable: true,
+			    //suppressMenu: true,
+			    cellClass: "grid-cell-centered", 
+			},
+			//columnDefs: columnDefs_prediction,
+			rowHeight: 35,
+			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
+			suppressMultiRangeSelection: true,
+			animateRows: true,
+			suppressHorizontalScroll: true,
 	}
-
-	var columnDefs_multiplePrediction = [
-		{
-			field: "SNP", 
-			width: 180, 
-			hide: true, 
-		},
-		{
-			field: "Chr", 
-			width: 180, 
-		},
-		{
-			field: "Pos", 
-			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-			width: 120, 
-		},
-		{
-			field: "P-value", 
-			valueFormatter: (params) => Number(params.value).toFixed(5),
-			width: 120, 
-			sortable: true, 
-			
-		},
-		{
-			field: "MAF", 
-			valueFormatter: (params) => Number(params.value).toFixed(5),
-			width: 120, 
-		},
-		{
-			field: "Effect", 
-			valueFormatter: (params) => Number(params.value).toFixed(5),
-			width: 120, 
-		}
-	]
 	
-	var gridOptions_multiplePrediction = {
+	const columnDefs_multiplePrediction = [];
+	const gridOptions_multiplePrediction = {
 			defaultColDef: { 
 				editable: false, 
 				sortable: false, 
@@ -318,14 +296,41 @@
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], 
 			},
-			columnDefs: columnDefs_multiplePrediction,
+			//columnDefs: columnDefs_multiplePrediction,
 			colResizeDefault: "shift",
 			suppressDragLeaveHidesColumns: true,
 			rowHeight: 35,
-			rowSelection: "single",
+			rowMultiSelectWithClick: true,
+			rowSelection: "multiple",
 			animateRows: true,
 			//suppressHorizontalScroll: true,
 			serverSideInfiniteScroll: true,
+			onRowSelected: (params) => {
+				
+				const jobid = document.getElementById('Extra_Card').dataset.jobid;
+				//const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+				
+				let selected_row_index = ""
+				const rows = gridOptions_multiplePrediction.api.getSelectedRows(); 
+				for(let i=0 ; i<rows.length ; i++) {
+					selected_row_index += rows[i]['__rowNum__'];
+					if(i != rows.length -1) {
+						selected_row_index += ",";
+					}
+				}
+				
+				//console.log(selected_row_index);
+				
+				//fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&resultpath=${resultpath}&selected_row=${selected_row_index}`)
+				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=${selected_row_index}`)
+				.then((response) => {
+					if(!response.ok) {
+						throw new Error('Error - ' +response.status);
+					} /*else {
+						return response.blob();
+					}*/
+				})
+			}
 	}
 	
 	var columnDefsTraitName = [
@@ -426,49 +431,8 @@
 				//debugger;
 			}
 	}
-	
-	//var modelGrid = [];
-	function showGrid(value) {
-		
-		const model_name = $('#model_name').val();
-		const resultpath = $('#resultpath').val();
-		const jobid_param = $('#jobid_param').val();
-		
-		//const csv_to_grid = $(`#grid_${model_name}`);
-		const csv_to_grid = document.getElementById(`grid_${model_name}`);
-		
-		try {
-			//console.log(csv_to_grid.innerText.trim());
-			if(csv_to_grid.innerText.trim()) {
-				gridOptions2.api.destroy();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-		
-		
-		
-		//console.log(`#grid_${model_name}`);
-		//console.log("path : ", resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv");
-		
-		fetch(resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv")
-		.then((response) => response.blob())
-		.then((file) => {
-			var reader = new FileReader();
-		    reader.onload = function(){
-		    	
-		    	var fileData = reader.result;
-		        var wb = XLSX.read(fileData, {type : 'binary'});
-		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-		        //console.log("rowObj : ", rowObj);
-		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
-		        gridOptions2.api.setRowData(rowObj);
-		        gridOptions2.columnApi.autoSizeAllColumns();
-		        
-		    };
-		    reader.readAsBinaryString(file);
-		});
-	}
+
+
 
 	function replaceClass(id, oldClass, newClass) {
 	    var elem = $(`#${id}`);
@@ -543,6 +507,9 @@
   			gridOptionsTraitName.api.setRowData(data);
   			//gridOptionsTraitName.api.sizeColumnsToFit();
   		});
+  		
+  		new agGrid.Grid(document.getElementById('Grid-Prediction'), gridOptions_prediction);
+  		new agGrid.Grid(document.getElementById('Grid-Multiple_Prediction'), gridOptions_multiplePrediction);
   		
   		new agGrid.Grid(document.getElementById('Model_Grid'), gridOptions_model);
   		gridOptions_model.api.forEachNode((node) => {

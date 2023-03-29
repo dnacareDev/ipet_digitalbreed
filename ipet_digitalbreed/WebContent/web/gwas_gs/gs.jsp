@@ -172,7 +172,7 @@ body {
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
-                    <div id="gwas_status" class="card">
+                    <div id="Extra_Card" class="card">
                     	<div class='card-content'>
 							<div class='card-body'>
 								<div class='row'>
@@ -186,7 +186,7 @@ body {
 											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 												<div class="row">
 													<div class="col-2" style="max-width:12%;">
-														<select id='Select-Cross_Validation' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showMultiPlot();">
+														<select id='Select-Cross_Validation' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showCVPlot(this[this.selectedIndex].dataset.phenotype);">
 														</select>
 													</div>
 												</div>
@@ -199,31 +199,33 @@ body {
 											<div class='tab-pane' id='pill2' aria-expanded='true' aria-labelledby='base-pill1'>
 												<div class="row">
 													<div class="col-2" style="max-width:12%;">
-														<select id='Select-Prediction' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showMultiPlot();">
+														<select id='Select-Prediction' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showPredictionPlot(this[this.selectedIndex].dataset.phenotype);">
 														</select>
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-12 col-xl-6" style="margin-top:25px; float:left;">
-														<div id="Grid-Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+													<div class="col-12 col-xl-4" style="margin-top:25px; float:left;">
+														<div id="Grid-Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:500px;"></div><br>
 													</div>
-													<div class="col-12 col-xl-6" style="height:445px; margin-top:25px; float:left;">
+													<div class="col-12 col-xl-8" style="height:445px; margin-top:25px; float:left;">
 														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Prediction' onload="$('#Loading').modal('hide')"></iframe>
 													</div>
 												</div>
 											</div>
 											<div class='tab-pane' id='pill3' aria-expanded='true' aria-labelledby='base-pill1'>
+												<!--  
 												<div class="row">
 													<div class="col-2" style="max-width:12%;">
 														<select id='Select-Multiple_Prediction' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showMultiPlot();">
 														</select>
 													</div>
 												</div>
+												-->
 												<div class="row">
-													<div class="col-12 col-xl-4 style="height:445px; margin-top:25px; float:left;">
-														<div id="Grid-Multiple_Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-													</div>
 													<div class="col-12 col-xl-8 style="height:445px; margin-top:25px; float:left;">
+														<div id="Grid-Multiple_Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:500px;"></div><br>
+													</div>
+													<div class="col-12 col-xl-4 style="height:445px; margin-top:25px; float:left;">
 														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="$('#Loading').modal('hide')"></iframe>
 													</div>
 												</div>
@@ -301,7 +303,7 @@ body {
 							        
 						        </fieldset>
 						        <div class="col-12 mt-3 mb-1 d-flex justify-content-center">
-				                    <select class="select2 form-select" id="Prediction_VCF" data-width="93%" data-placeholder="Select Prediction VCF File (Optional)">
+				                    <select class="select2 form-select" id="Prediction_VCF" data-width="93%" data-placeholder="(Optional) Select Prediction VCF File">
 				                    </select>
 					            </div>
 						        <fieldset class="border w-100 m-1">
@@ -363,27 +365,42 @@ body {
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
 						            		<div class="col-4 form-check" style="margin-top:8px;">
-						            			<input type="checkbox" class="form-check-input" id="Checkbox-LD" onclick="document.getElementById('LD_Range').disabled = !this.checked; document.getElementById('LD_Number').disabled = !this.checked;">
-						            			<label class="form-check-label" for="Checkbox-LD" style="padding-left: 14px;"> LD (R²)</label>
-						            		</div>
-						            		<div class="col-5" style="margin-top:8px;">
-						            			<div class="row">
-						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 0; document.getElementById('LD_Number').value = 0;}">0</div>
-							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
-								            			<input type="range" class="form-range" id="LD_Range" min="0" max="1" value="0.2" step="0.01" oninput="document.getElementById('LD_Number').value = this.value" disabled/>
-							            			</div>
-						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 1; document.getElementById('LD_Number').value = 1"}>1</div>
-						            			</div>
-						            		</div>
-						            		<div class="col-3">
-						            			<input type="text" class="form-control" id="LD_Number" autocomplete="off" value="0.2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('LD_Range').value = this.value;" disabled/>
+						            			Geno.reduct
 						            		</div>
 						            	</div>
 						            </div>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
 						            		<div class="col-4 form-check" style="margin-top:8px;">
-						            			<input type="checkbox" class="form-check-input" id="Checkbox-ANO" onclick="document.getElementById('ANO_Range').disabled = !this.checked; document.getElementById('ANO_Number').disabled = !this.checked;">
+						            			<input type="checkbox" class="form-check-input" id="Checkbox-LD" 
+						            				onclick="document.getElementById('LD_Range').disabled = !this.checked; 
+						            						document.getElementById('LD_Number').disabled = !this.checked; 
+						            						if(!this.checked){document.getElementById('LD_Range').value = 0.2; document.getElementById('LD_Number').value = 0.2;}"
+						            			/>
+						            			<label class="form-check-label" for="Checkbox-LD" style="padding-left: 14px;"> LD (R²)</label>
+						            		</div>
+						            		<div class="col-5" style="margin-top:8px;">
+						            			<div class="row">
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 0; document.getElementById('LD_Number').value = 0;}">0</div>
+							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
+								            			<input type="range" class="form-range" id="LD_Range" min="0" max="1" value="0.95" step="0.01" oninput="document.getElementById('LD_Number').value = this.value" disabled/>
+							            			</div>
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 1; document.getElementById('LD_Number').value = 1"}>1</div>
+						            			</div>
+						            		</div>
+						            		<div class="col-3">
+						            			<input type="text" class="form-control" id="LD_Number" autocomplete="off" value="0.95" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('LD_Range').value = this.value;" disabled/>
+						            		</div>
+						            	</div>
+						            </div>
+						            <div class="col-md-12 col-12 mt-1 mb-1">
+						            	<div class="row">
+						            		<div class="col-4 form-check" style="margin-top:8px;">
+						            			<input type="checkbox" class="form-check-input" id="Checkbox-ANO" 
+						            				onclick="document.getElementById('ANO_Range').disabled = !this.checked; 
+						            						document.getElementById('ANO_Number').disabled = !this.checked; 
+						            						if(!this.checked){document.getElementById('ANO_Range').value = 0.05; document.getElementById('ANO_Number').value = 0.05;}"
+						            			/>
 						            			<label class="form-check-label" for="Checkbox-ANO" style="padding-left: 14px;"> ANO (pval)</label>
 						            		</div>
 						            		<div class="col-5" style="margin-top:8px;">
@@ -529,120 +546,179 @@ body {
 	    	height          : 130,
 	        maxFileCount   : 1,  
 	        //allowType : ["vcf"],
-	        allowType : ["csv"],
+	        allowType : ["txt"],
 	        charset : "utf-8",
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: '/ipet_digitalbreed/web/gwas_gs/gwas_file_check.jsp',
+	        uploadUrl: '/ipet_digitalbreed/web/gwas_gs/gs_uploader.jsp',
+	        
 	    });
     	
     	
 
 	    // 업로드 완료 이벤트
 	    box.on('uploadComplete', function (p) {
-			//document.getElementById('uploadGwasForm').reset();
-	    	box.removeAllFiles();
-	    	//const jobid_gwas = $("#jobid_gwas").val();
-	    	const jobid_gwas = p.postData.jobid_gwas;
-	    	console.log("jobid_gwas : ", jobid_gwas);
+	    	//box.removeAllFiles();
+	    	const data = p.postData;
 	    	
-	    	let data_arr;
-	    	$.ajax({
-	    		url: "./gwas_samplecheck.jsp",
-	    		method: "POST",
-	    		data: {"jobid_gwas": jobid_gwas},
-	    		async: false,
-	    		success: function(data) {
-					console.log("없는 표현형 : ", data);
-   	    			
-   	    			//let data_arr = data.split(",");
-   	    			//data_arr.pop();
-   	    			let data_arr = data.substring(0, data.length - 1).split(",");
-   	    			
-   	    			$.ajax({
-   	    				url: "./gwas_phenotypeFromCsv.jsp",
-   	    				method: "POST",
-   	    				data: {"jobid_gwas": jobid_gwas},
-   	    				success: function(result_phenotype) {
-   	    					
-   	    					console.log("result_phenotype : ", result_phenotype);
-   	    					
-   	    					if(data_arr.length == 0 ) {
-   	    	    				alert("분석이 시작됩니다. 잠시만 기다려주세요.");
-   	    	    			} else {
-   	    	    				if(!confirm(data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?"))	return; 
-   	    	    			}
-   	    					
-    	   	    	    	
-    	   	    	    	
-    	   	    	  		// permissionUid 삭제 (jsp session에서 받음)
-    	   	    			const varietySelectEl = document.getElementById('variety-select');
-    	   	    			const variety_id = varietySelectEl.options[varietySelectEl.selectedIndex].value;
-
-    	   	    			const comment = document.getElementById('comment').value;
-    	   	    			
-    	   	    			const VcfSelectEl = document.getElementById('VcfSelect');
-    	   	    			const jobid_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.jobid;
-    	   	    			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename
-    	   	    			// 2023-01-10 | 파라미터에 refgenome 추가
-    	   	 				const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
-    	   	    			const refgenome_id = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome_id;
-    	   	    			// 2023-02-03 | vcfdata_no 추가
-    	   	    			const vcfdata_no = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.vcfdata_no;
-    	   	    					
-    	   	    	    	
-	    	   	 			
-    	   	    	    	const model_arr = ['GLM', 'MLM', 'CMLM', 'FarmCPU', 'SUPER', 'BLINK', 'MLMM'];
-	    	   	 	   		//체크하지 않은 model은 배열에서 탈락
-	    	   	 			for(let i=0 ; i<model_arr.length ; i++) {
-	    	   	 				const modelCheckbox = document.getElementById(model_arr[i]);
-	    	   	 				if(!modelCheckbox.checked) {
-	    	   	 					model_arr.splice(i,1);
-	    	   	 					i--;
-	    	   	 				}
-	    	   	 			}
-    	   	    	    	
-    	   	    	    	
-    	   	    	    	const phenotype = result_phenotype;
-    	   	    	    	
-    	   	    	    	
-    	   	    	    	const data = {
-   	   	    	    			"variety_id": variety_id,
-   	   	    	    			"comment": comment,
-   	   	    	    			"jobid_gwas": jobid_gwas,
-   	   	    	    			"jobid_vcf": jobid_vcf,
-   	   	    	    			"refgenome": refgenome,						// analysis.jsp에서 사용
-   	   	    	    			"refgenome_id": refgenome_id,
-   	   	    	    			"vcfdata_no": vcfdata_no,
-   	   	    	    			"radio_phenotype": 1,						// New Phenotype
-   	   	    	    			"filename_vcf": filename_vcf,
-   	   	    	    			"model_arr": model_arr,
-   	   	    	    			"phenotype": phenotype,
-    	   	    	    	}
-    	   	    	    	
-    	   	    	    	$.ajax({
-    	    					url: "./gwas_analysis.jsp",
-    	    					method: "POST",
-    	    					data: data,
-    	    				})
-    	    				
-    	    				setTimeout( function () {
-    	    		   			refresh();
-    	    		   			$("#backdrop").modal("hide");
-    	    		   		}, 1000);
-    	   	    	    	
-   	    				}
-   	 	    		});	
-   	    			
-	    		}
-	    	});
+	    	fetch("./gs_analysis.jsp", {
+   	    		method: "POST",
+   	    		headers: {
+   	    			"Content-Type": "application/json"
+   	    		},
+   	    		body:JSON.stringify(data),
+   	    	});
    	    	
         });
 	    
 	    //console.log("box? : ", box);
     };
 	
+    function showCVPlot(phenotype) {
+		//console.log(phenotype);
+		const jobid = document.getElementById('Extra_Card').dataset.jobid;
+		const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+		
+		const url = `\${resultpath+jobid}/Cross-validation_box_\${phenotype}.html`;
+		
+		fetch(url, {method: "HEAD"})
+		.then((response) => {
+			if(!response.ok) {
+				//HTMLNotExist("Multi");
+				//$("#Multi").height(0);
+				console.log("file not exist");
+			} else {
+				//$("#Multi").height("500px");
+				$("#Loading").modal('show');
+				$('iframe#iframe-Cross_Validation').attr('src', url);
+			}
+		})
+	}
+    
+    function showPredictionPlot(phenotype) {
+    	const jobid = document.getElementById('Extra_Card').dataset.jobid;
+		const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+		
+		const columnDefs_prediction = [
+			{
+				headerName: '순번',
+				field: 'no',
+				checkboxSelection: true, 
+				headerCheckboxSelectionFilteredOnly: true,
+				headerCheckboxSelection: true,
+				minWidth: 120,
+				maxWidth: 120,
+				valueGetter: inverseRowCount,
+				
+			},
+			{
+				headerName: '개체명',
+				field: 'TAXA',
+			},
+			{
+				field: phenotype
+			}
+		];
+		
+		//Grid-Prediction
+		fetch(`\${resultpath+jobid}/predicted.result.csv`)
+		.then((response) => {
+			if(!response.ok) {
+				//HTMLNotExist("Multi");
+				//$("#Multi").height(0);
+				throw new Error('Error - ' +response.status);
+			} else {
+				return response.blob();
+			}
+		})
+		.then((file) => {
+			var reader = new FileReader();
+		    reader.onload = function(){
+		    	
+		    	var fileData = reader.result;
+		        var wb = XLSX.read(fileData, {type : 'binary'});
+		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+		        //console.log("rowObj : ", rowObj);
+				gridOptions_prediction.api.setColumnDefs(columnDefs_prediction);
+		        gridOptions_prediction.api.setRowData(rowObj);
+		        //gridOptions_prediction.columnApi.autoSizeAllColumns();
+		        
+		    };
+		    reader.readAsBinaryString(file);
+		});
+		
+		
+		const url = `\${resultpath+jobid}/Predict_GEBV_bar_\${phenotype}.html`;
+		
+		fetch(url, {method: "HEAD"})
+		.then((response) => {
+			if(!response.ok) {
+				//HTMLNotExist("Multi");
+				//$("#Multi").height(0);
+				console.log("file not exist");
+			} else {
+				//$("#Multi").height("500px");
+				$("#Loading").modal('show');
+				$('iframe#iframe-Prediction').attr('src', url);
+			}
+		})
+    }
 	
+    function showMultiPredictionPlot(phenotype_arr) {
+    	const jobid = document.getElementById('Extra_Card').dataset.jobid;
+		const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+		
+		
+		const columnDefs_prediction = [
+			{
+				headerName: '순번',
+				field: 'no',
+				checkboxSelection: true, 
+				headerCheckboxSelectionFilteredOnly: true,
+				headerCheckboxSelection: true,
+				minWidth: 120,
+				maxWidth: 120,
+				valueGetter: inverseRowCount,
+				
+			},
+			{
+				headerName: '개체명',
+				field: 'TAXA',
+			},
+		];
+		
+		for(let i=0 ; i<phenotype_arr.length ; i++) {
+			columnDefs_prediction.push({'field': phenotype_arr[i]})
+		}
+		
+		
+		fetch(`\${resultpath+jobid}/predicted.result.csv`)
+		.then((response) => {
+			if(!response.ok) {
+				throw new Error('Error - ' +response.status);
+			} else {
+				return response.blob();
+			}
+		})
+		.then((file) => {
+			var reader = new FileReader();
+		    reader.onload = function(){
+		    	
+		    	var fileData = reader.result;
+		        var wb = XLSX.read(fileData, {type : 'binary'});
+		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+		        //console.log("rowObj : ", rowObj);
+				gridOptions_multiplePrediction.api.setColumnDefs(columnDefs_prediction);
+		        gridOptions_multiplePrediction.api.setRowData(rowObj);
+		        //gridOptions_prediction.columnApi.autoSizeAllColumns();
+		        
+		    };
+		    reader.readAsBinaryString(file);
+		});
+		
+		
+    }
+    
    	function vcfFileList() {
    		
    		$.ajax({
@@ -653,13 +729,13 @@ body {
 	  			// data.selectFiles = vcfdata_info_t PK
 	  			
 	  			$("#Training_VCF").empty();
-	  	    	$("#Training_VCF").append(`<option data-jobid="-1"></option>`);
+	  	    	$("#Training_VCF").append(`<option data-jobid="-1" data-filename="null"></option>`);
 	  	    	for(let i=0 ; i<data.length ; i++) {
 	  	    		$("#Training_VCF").append(`<option data-vcfdata_no=\${data[i].selectfiles} data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
 	  			}
 	  	    	
 	  	    	$("#Prediction_VCF").empty();
-	  	    	$("#Prediction_VCF").append(`<option data-jobid="-1"></option>`);
+	  	    	$("#Prediction_VCF").append(`<option data-jobid="-1" data-filename="null"></option>`);
 	  	    	for(let i=0 ; i<data.length ; i++) {
 	  	    		$("#Prediction_VCF").append(`<option data-vcfdata_no=\${data[i].selectfiles} data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} data-refgenome_id=\${data[i].refgenome_id} > \${data[i].filename} (\${data[i].comment}) </option>`);
 	  			}
@@ -712,11 +788,8 @@ body {
 	}
    	
 	function switchCheckbox(id) {
-		
-		
 		const isChecked = document.getElementById(id).checked;
 		
-		// filtered-out이면 deselect
 		gridOptions_model.api.forEachNode((node) => {
 			if(node.data.group == id) {
 				node.setSelected(isChecked);
@@ -760,113 +833,127 @@ body {
 		}
    		
    		//VCF파일 목록 선택 안했으면 return
-   		if($("#VcfSelect :selected").data('jobid') == '-1') {
-   			alert("VCF파일을 선택하세요.");
+   		if($("#Training_VCF :selected").data('jobid') == '-1') {
+   			alert("Training VCF파일을 선택하세요.");
    			return;
    		} 
+   		
+	   	// model options Ag-Grid
+		if(!gridOptions_model.api.getSelectedRows().length) {
+			alert("Model을 한 개 이상 선택해 주세요");
+			return;
+		}
+   		
    		
    		const jobid_gs = await fetch('../getJobid.jsp')
 	   							.then((response) => response.text())
 	   							.then((data) => data);
    		
+   		
+		// permissionUid 삭제 (jsp session에서 받음)
+		const varietySelectEl = document.getElementById('variety-select');
+		const variety_id = varietySelectEl.options[varietySelectEl.selectedIndex].value;
+
+		const comment = document.getElementById('comment').value;
+		
+		const Training_VCF = document.getElementById('Training_VCF');
+		const jobid_training_vcf = Training_VCF.options[Training_VCF.selectedIndex].dataset.jobid;
+		const filename_training_vcf = Training_VCF.options[Training_VCF.selectedIndex].dataset.filename
+		
+		const Prediction_VCF = document.getElementById('Prediction_VCF');
+		const jobid_prediction_vcf = Prediction_VCF.options[Prediction_VCF.selectedIndex].dataset.jobid;
+		const filename_prediction_vcf = Prediction_VCF.options[Prediction_VCF.selectedIndex].dataset.filename
+		
+    	const selectedTrait = gridOptionsTraitName.api.getSelectedRows();
+    	let traitname_keys = "";
+		for (var i = 0; i < selectedTrait.length; i++) {
+			traitname_keys += (selectedTrait[i].traitname_key + 2).toString();
+			if(i != selectedTrait.length -1) {
+				traitname_keys += ",";
+			}
+		}
+		
+		const cre_date = document.getElementById('cre_date').value;
+		const inv_date = document.getElementById('inv_date').value;
+		
+		const model_selected = gridOptions_model.api.getSelectedRows()
+		let model_keys = "";
+		for(let i=0 ; i<model_selected.length ; i++) {
+			//model_arr.push(model_selected[i].data.model);
+			model_keys += model_selected[i].model;
+			if(i != model_selected.length -1) {
+				model_keys += ",";
+			}
+		}
+		
+		const MAXNA = document.getElementById('MAXNA_Number').value;
+		const MAF = document.getElementById('MAF_Number').value;
+		const LD_checked = document.getElementById('Checkbox-LD').checked;
+		const LD = document.getElementById('LD_Number').value;
+		const ANO_checked = document.getElementById('Checkbox-ANO').checked;
+		const ANO = document.getElementById('ANO_Number').value;
+		const nFolds = document.getElementById('N-Folds_Number').value;
+		const nTimes = document.getElementById('N-Times_Number').value;
+	    	
+	    	
+    	const data = {
+    			"variety_id": variety_id,
+    			"comment": comment,
+    			"jobid_gs": jobid_gs,
+    			"jobid_training_vcf": jobid_training_vcf,
+    			"filename_training_vcf": filename_training_vcf,
+    			"radio_phenotype": document.querySelector('input[name="radio_phenotype"]:checked').value,						// Phenotype Database
+    			"traitname_keys": traitname_keys,
+    			"jobid_prediction_vcf": jobid_prediction_vcf,
+    			"filename_prediction_vcf": filename_prediction_vcf,
+    			"model_keys": model_keys,
+    			"cre_date": cre_date,
+    			"inv_date": inv_date,
+    			"MAXNA": MAXNA,
+    			"MAF": MAF,
+    			"LD_checked": LD_checked,
+    			"LD": LD,
+    			"ANO_checked": ANO_checked,
+    			"ANO": ANO,
+    			"nFolds": nFolds,
+    			"nTimes": nTimes,
+    	}
+   		
+   		
    		//select Phenotype Database
    		if(document.querySelector('input[name="radio_phenotype"]:checked').value == '0') {
    			
    			// phenotype options AG-Grid
-   			if(!gridOptions_model.api.getSelectedRows().length) {
-   				alert("Model을 한 개 이상 선택해 주세요");
+   			if(!gridOptionsTraitName.api.getSelectedRows().length) {
+   				alert("phenotype을 한 개 이상 선택해 주세요");
    				return;
    			}
-   			
-   			
-   			// permissionUid 삭제 (jsp session에서 받음)
-   			const varietySelectEl = document.getElementById('variety-select');
-   			const variety_id = varietySelectEl.options[varietySelectEl.selectedIndex].value;
-
-   			const comment = document.getElementById('comment').value;
-   			
-   			const Training_VCF = document.getElementById('Training_VCF');
-   			const jobid_training_vcf = Training_VCF.options[Training_VCF.selectedIndex].dataset.jobid;
-   			const filename_training_vcf = Training_VCF.options[Training_VCF.selectedIndex].dataset.filename
-   			
-   			const Prediction_VCF = document.getElementById('Prediction_VCF');
-   			const jobid_prediction_vcf = Prediction_VCF.options[Prediction_VCF.selectedIndex].dataset.jobid;
-   			const filename_prediction_vcf = Prediction_VCF.options[Prediction_VCF.selectedIndex].dataset.filename
-   			
-   			// 2023-01-10 | 파라미터에 refgenome 추가
-			const refgenome = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome;
-   			// 2023-02-03 | vcfdata_no, regenome_id 추가
-   			const vcfdata_no = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.vcfdata_no;
-   			const refgenome_id = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.refgenome_id;
-   					
    	    	
-   	    	const selectedTrait = gridOptionsTraitName.api.getSelectedRows();
-   	    	//console.log("selectedData : ", selectedData);
-   	    	let traitname_arr = new Array();
-   	    	let traitname_key_arr = new Array();
-			  
-			for (var i = 0; i < selectedTrait.length; i++) {
-				traitname_arr.push(selectedTrait[i].traitname);
-				traitname_key_arr.push(selectedTrait[i].traitname_key);
-			}
+   			//debugger;
+   	    	/*
+   	    	fetch("./gs_insertSql.jsp", {
+   	    		method: "POST",
+   	    		headers: {
+   	    			"Content-Type": "application/json"
+   	    		},
+   	    		body:JSON.stringify(data),
+   	    	});
+   	    	*/
    	    	
-			
-			const cre_date = document.getElementById('cre_date').value;
-			const inv_date = document.getElementById('inv_date').value;
-			
+   	    	fetch("./gs_analysis.jsp", {
+   	    		method: "POST",
+   	    		headers: {
+   	    			"Content-Type": "application/json"
+   	    		},
+   	    		body:JSON.stringify(data),
+   	    	});
    	    	
-   	    	//console.log(traitname_arr);
-   	    	//console.log(traitname_key_arr);
-   	    	
-   	    	const data = {
-   	    			"variety_id": variety_id,
-   	    			"comment": comment,
-   	    			"jobid_gwas": jobid_gwas,
-   	    			"jobid_vcf": jobid_vcf,
-   	    			"refgenome": refgenome,						// analysis.jsp에서 사용
-   	    			"refgenome_id": refgenome_id,
-   	    			"vcfdata_no": vcfdata_no,
-   	    			"radio_phenotype": 0,						// Phenotype Database
-   	    			"filename_vcf": filename_vcf,
-   	    			"traitname_arr": traitname_arr,
-   	    			"traitname_key_arr": traitname_key_arr,
-   	    			"model_arr": model_arr,
-   	    			"cre_date": cre_date,
-   	    			"inv_date": inv_date,
-   	    	}
-   	    	
-   	    	
-   	    	const check_data = await $.ajax({
-							   	    		url: "./gwas_check.jsp",
-							   	    		method: "POST",
-							   	    		data: data,
-							   	    		async: false,
-							   	    	})
-							  
-   	    	
-			const check_data_arr = check_data.substring(0, check_data.length - 1).split(",");
-							   	    	
-   	    	console.log(check_data_arr);
-   	    	
-   	    	if(check_data_arr.length == 0 ) {
-   				alert("분석이 시작됩니다. 잠시만 기다려주세요.");
-   			} else {
-   				if(!confirm(check_data_arr.length+"개의 표현형이 없습니다. 그래도 진행하시겠습니까?"))	return; 
-   			}
-   	    	
-   	    	
-   	    	$.ajax({
-				url: "./gwas_analysis.jsp",
-				method: "POST",
-				data: data,
-				
-			})
-			
+   	    	/*
 			setTimeout( function () {
 	   			refresh();
 	   			$("#backdrop").modal("hide");
 	   		}, 1000);
-   	    	
+   	    	*/
    			
    			
    		// select New Phenotype File	
@@ -877,28 +964,9 @@ body {
    				return;
    			}
    			
-   			//modelGroup
-   			if(document.querySelectorAll('input[name="modelGroup"]:checked').length == 0) {
-   				alert("Model을  한 개 이상 선택해 주세요.")
-   				return;
-   			}
-   			
-   			
-   			const VcfSelectEl = document.getElementById('VcfSelect');
-   			const jobid_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.jobid;
-   			const filename_vcf = VcfSelectEl.options[VcfSelectEl.selectedIndex].dataset.filename;
-   			
-   			
    			
 			// 파일 업로드 영역
-	    	var postObj = new Object();
-	    	//postObj.comment = comment;       
-	        //postObj.variety_id = variety_id;
-	        postObj.jobid_vcf = jobid_vcf;
-	        postObj.filename_vcf = filename_vcf;
-	        //postObj.model_arr = model_arr;
-	        postObj.jobid_gwas = jobid_gwas;
-	        box.setPostData(postObj);
+	        box.setPostData(data);
 	        box.upload();
 	   		
    		}
@@ -932,10 +1000,10 @@ body {
     
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-   		resetGWAS();
+   		//reset();
     });
    	
-   	function resetForm() {
+   	function reset() {
    		document.getElementById('uploadForm').reset();
    		
    		// 모달창 닫으면 초기화

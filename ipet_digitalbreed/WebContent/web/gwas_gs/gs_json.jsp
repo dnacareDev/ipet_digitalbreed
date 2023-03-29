@@ -16,7 +16,7 @@
 	try{
 
 		String sql="select *, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from genomic_selection_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ORDER BY no DESC;";
-		System.out.println(sql);
+		//System.out.println(sql);
 		
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
