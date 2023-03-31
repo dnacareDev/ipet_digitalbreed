@@ -177,7 +177,7 @@
                                 </div>
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:465px;"></div><br>
-                            <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> Primer design</button>
+                            <button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
@@ -221,7 +221,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">Primer design</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Primer Desgin New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -292,18 +292,17 @@
 					            </div>
 					            <div id="Sequence_Div" class="col-12" style="display:none;">
 					            	<div class="form-label-group">
-					            		<textarea id="Sequence" class="form-control" rows="3" placeholder="Sequence를 입력해주세요 &#13;&#10Ex) ATACATATGATAAA[T]CCCGGGGTATGG"></textarea>
+					            		<textarea id="Sequence" class="form-control" rows="3" placeholder=">chr01_337278 &#13;&#10ATACATATGATAAA[T]CCCGGGGTATGG"></textarea>
 					            	</div>
 					            </div>
 					            <div id="Innorix_Div" class="col-md-12 col-12" style="display:none;">
-									<div style="display:flex; justify-content:space-between;">
-							            <h6>Sequence</h6>
-							            <button type="button" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>
+									<div style="display:flex; justify-content:end;">
+							            <button type="button" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/flanking_sequence.csv" download="flanking_sequence.csv" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button>
 							            <!--  
 							            <h6 style="margin-left:13px; font-weight:bold;">Population &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button></h6>
 							            -->
 						            </div>
-									<div id="fileControl" class="col-md-12 col-12 mt-1"  style="padding: 0; border: 1px solid #48BAE4;"></div>
+									<div id="fileControl" class="col-md-12 col-12 mt-1 d-flex justify-content-center"  style="padding: 0; border: 1px solid #48BAE4;"></div>
 						        </div>
 					        </div>
 					        <div class="row pb-1 pl-1 pr-1">
@@ -560,7 +559,8 @@
 		// 파일전송 컨트롤 생성
 	    box = innorix.create({
 	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
-	        width			: 445,
+	        //width			: 445,
+	        width			: "100%",
 	    	height          : 130,
 	        maxFileCount   : 1,  
 	        allowType : ["vcf"],
@@ -579,6 +579,14 @@
 	    	p.postData['filename'] = p.files[0]['clientFileName'];
 	    	//p.postData['filename'] = 'primer_test.vcf';
 	    	//p.postData['fasta_filename'] = p.files[0]['clientFileName'];
+	    	
+	    	fetch(`./pd_insertSql.jsp`, {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify(p.postData),
+			})
 	    	
 	    	fetch(`./pd_analysis.jsp`, {
 				method: "POST",
@@ -623,9 +631,33 @@
 		const TM_Max = document.getElementById('TM_Max').value;
 		const Size_Min = document.getElementById('Size_Min').value;
 		const Size_Max = document.getElementById('Size_Max').value;
-		const jobid_pd = await fetch("../getJobid.jsp")
-							.then((response) => response.text())
 		
+							
+		if(!comment) {
+			return alert("Comment를 입력해주세요.")
+		}
+		
+		if(upload_method == 'Genomic_DB' && jobid_vcf == '-1') {
+   			return alert("VCF파일을 선택해주세요.");
+   		} 
+		
+		if(upload_method != 'Genomic_DB' && refgenome_id == '-1') {
+			return alert("Referece를 선택해주세요.")
+		}
+			
+		if(upload_method == 'Direct_Input' && !document.getElementById('Sequence').value.trim()) {
+			return alert("Sequence를 입력해주세요.");
+		}
+		
+		if(upload_method == 'File_Upload' && box.fileList.files.length == 0) {
+			return alert("업로드할 파일이 없습니다.");
+		}
+		
+		
+		
+		const jobid_pd = await fetch("../getJobid.jsp")
+								.then((response) => response.text())
+							
 		const data = {
 			'varietyid': varietyid,
 			'marker_category': marker_category,
@@ -651,13 +683,7 @@
 		};
 		
 		
-		fetch(`./pd_insertSql.jsp`, {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify(data),
-		})
+		
 		
 		
 		if(upload_method == 'File_Upload') {
@@ -665,6 +691,14 @@
 			box.setPostData(data);
 			box.upload();
 		} else {
+			
+			fetch(`./pd_insertSql.jsp`, {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify(data),
+			})
 			
 			fetch(`./pd_analysis.jsp`, {
 				method: "POST",

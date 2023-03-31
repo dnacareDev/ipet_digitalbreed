@@ -45,6 +45,7 @@ public class RunAnalysisTools {
 				process = runtime.exec(cmd);				
 			}
 
+			
 			successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
 	 
 	        while ((msg = successBufferReader.readLine()) != null) {
@@ -58,10 +59,12 @@ public class RunAnalysisTools {
 	            //errorOutput.append(msg + System.getProperty("line.separator"));
 				System.out.println(msg);
 	        }
-
+			
+			
 			if(cmd_flag.equals("cmd")) {
 				process.waitFor();
 			}
+			
 			
 	        if (process.exitValue() == 0) {
 	            System.out.println("Success "+"\n");
@@ -73,7 +76,7 @@ public class RunAnalysisTools {
 	  
 	    } catch (IOException e) {
 	    	System.out.println("error");
-	    } catch (InterruptedException e) {
+	    } catch (Exception e) {
 	       	System.out.println("error");
 	    } finally {
 	        try {

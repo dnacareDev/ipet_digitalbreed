@@ -167,12 +167,12 @@ body {
                                 </div>
                                   
                             </div>
-                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:465px;"></div><br>
 							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
-                    <div id="Extra_Card" class="card">
+                    <div id="Extra_Card" class="card" style="display:none;">
                     	<div class='card-content'>
 							<div class='card-body'>
 								<div class='row'>
@@ -180,7 +180,7 @@ body {
 										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
 											<li class='nav-item'><a class='nav-link active' id='Cross_Validation' data-toggle='pill' href='#pill1' aria-expanded='true'>Cross Validation</a></li>
 											<li class='nav-item'><a class='nav-link' id='Prediction' data-toggle='pill' href='#pill2' aria-expanded='true'>Prediction</a></li>
-											<li class='nav-item'><a class='nav-link' id='Multiple_Prediction' data-toggle='pill' href='#pill3' aria-expanded='true'>Multiple Prediction</a></li>
+											<li class='nav-item'><a class='nav-link' id='Multiple_Prediction' data-toggle='pill' href='#pill3' aria-expanded='true' onclick="resizeMultiplePredictionGrid();">Multiple Prediction</a></li>
 										</ul>
 										<div id='content-list' class='tab-content'>
 											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
@@ -199,13 +199,13 @@ body {
 											<div class='tab-pane' id='pill2' aria-expanded='true' aria-labelledby='base-pill1'>
 												<div class="row">
 													<div class="col-2" style="max-width:12%;">
-														<select id='Select-Prediction' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showPredictionPlot(this[this.selectedIndex].dataset.phenotype);">
+														<select id='Select-Prediction' class='select2 form-select float-left' data-placeholder="Select Phenotype" onchange="showPredictionPlot(this[this.selectedIndex].dataset.phenotype, this[this.selectedIndex].dataset.order);">
 														</select>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-12 col-xl-4" style="margin-top:25px; float:left;">
-														<div id="Grid-Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:500px;"></div><br>
+														<div id="Grid-Prediction" class="ag-theme-alpine" style="display:none; margin: 0px auto; width: 98%; height:500px;"></div><br>
 													</div>
 													<div class="col-12 col-xl-8" style="height:445px; margin-top:25px; float:left;">
 														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Prediction' onload="$('#Loading').modal('hide')"></iframe>
@@ -222,10 +222,11 @@ body {
 												</div>
 												-->
 												<div class="row">
-													<div class="col-12 col-xl-8 style="height:445px; margin-top:25px; float:left;">
-														<div id="Grid-Multiple_Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:500px;"></div><br>
+													<div class="col-12 col-xl-8" style="height:445px; margin-top:25px; float:left;">
+														<div id="Grid-Multiple_Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:430px;"></div><br>
 													</div>
-													<div class="col-12 col-xl-4 style="height:445px; margin-top:25px; float:left;">
+													<div class="col-12 col-xl-4" style="height:445px; margin-top:25px; float:left;">
+														<div class="col-12 d-flex justify-content-start h4 font-weight-bold">Spyder-Plot</div>
 														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="$('#Loading').modal('hide')"></iframe>
 													</div>
 												</div>
@@ -335,13 +336,13 @@ body {
 						            			<div class="row">
 						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAXNA_Range').value = 0; document.getElementById('MAXNA_Number').value = 0;">0</div>
 							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
-								            			<input type="range" class="form-range" id="MAXNA_Range" min="0" max="1" value="0.2" step="0.01" oninput="document.getElementById('MAXNA_Number').value = this.value" />
+								            			<input type="range" class="form-range" id="MAXNA_Range" min="0" max="1" value="1" step="0.01" oninput="document.getElementById('MAXNA_Number').value = this.value" />
 							            			</div>
 						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAXNA_Range').value = 1; document.getElementById('MAXNA_Number').value = 1">1</div>
 						            			</div>
 						            		</div>
 						            		<div class="col-3">
-						            			<input type="text" class="form-control" id="MAXNA_Number" autocomplete="off" value="0.2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('MAXNA_Range').value = this.value;" />
+						            			<input type="text" class="form-control" id="MAXNA_Number" autocomplete="off" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('MAXNA_Range').value = this.value;" />
 						            		</div>
 						            	</div>
 						            </div>
@@ -352,13 +353,13 @@ body {
 						            			<div class="row">
 						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAF_Range').value = 0; document.getElementById('MAF_Number').value = 0;">0</div>
 							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
-								            			<input type="range" class="form-range" id="MAF_Range" min="0" max="0.5" value="0.05" step="0.01" oninput="document.getElementById('MAF_Number').value = this.value" />
+								            			<input type="range" class="form-range" id="MAF_Range" min="0" max="0.5" value="0.01" step="0.01" oninput="document.getElementById('MAF_Number').value = this.value" />
 							            			</div>
 						            				<div class="col-1 min-range-max" onclick="document.getElementById('MAF_Range').value = 0.5; document.getElementById('MAF_Number').value = 0.5">0.5</div>
 						            			</div>
 						            		</div>
 						            		<div class="col-3">
-						            			<input type="text" class="form-control" id="MAF_Number" autocomplete="off" value="0.05" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('MAF_Range').value = this.value;" />
+						            			<input type="text" class="form-control" id="MAF_Number" autocomplete="off" value="0.01" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('MAF_Range').value = this.value;" />
 						            		</div>
 						            	</div>
 						            </div>
@@ -375,7 +376,7 @@ body {
 						            			<input type="checkbox" class="form-check-input" id="Checkbox-LD" 
 						            				onclick="document.getElementById('LD_Range').disabled = !this.checked; 
 						            						document.getElementById('LD_Number').disabled = !this.checked; 
-						            						if(!this.checked){document.getElementById('LD_Range').value = 0.2; document.getElementById('LD_Number').value = 0.2;}"
+						            						if(!this.checked){document.getElementById('LD_Range').value = 0.99; document.getElementById('LD_Number').value = 0.99;}"
 						            			/>
 						            			<label class="form-check-label" for="Checkbox-LD" style="padding-left: 14px;"> LD (R²)</label>
 						            		</div>
@@ -383,13 +384,13 @@ body {
 						            			<div class="row">
 						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 0; document.getElementById('LD_Number').value = 0;}">0</div>
 							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
-								            			<input type="range" class="form-range" id="LD_Range" min="0" max="1" value="0.95" step="0.01" oninput="document.getElementById('LD_Number').value = this.value" disabled/>
+								            			<input type="range" class="form-range" id="LD_Range" min="0" max="1" value="0.99" step="0.01" oninput="document.getElementById('LD_Number').value = this.value" disabled/>
 							            			</div>
-						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 1; document.getElementById('LD_Number').value = 1"}>1</div>
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-LD').checked) {document.getElementById('LD_Range').value = 1; document.getElementById('LD_Number').value = 1;}">1</div>
 						            			</div>
 						            		</div>
 						            		<div class="col-3">
-						            			<input type="text" class="form-control" id="LD_Number" autocomplete="off" value="0.95" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('LD_Range').value = this.value;" disabled/>
+						            			<input type="text" class="form-control" id="LD_Number" autocomplete="off" value="0.99" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>1)this.value=1; document.getElementById('LD_Range').value = this.value;" disabled/>
 						            		</div>
 						            	</div>
 						            </div>
@@ -399,7 +400,7 @@ body {
 						            			<input type="checkbox" class="form-check-input" id="Checkbox-ANO" 
 						            				onclick="document.getElementById('ANO_Range').disabled = !this.checked; 
 						            						document.getElementById('ANO_Number').disabled = !this.checked; 
-						            						if(!this.checked){document.getElementById('ANO_Range').value = 0.05; document.getElementById('ANO_Number').value = 0.05;}"
+						            						if(!this.checked){document.getElementById('ANO_Range').value = 0.1; document.getElementById('ANO_Number').value = 0.1;}"
 						            			/>
 						            			<label class="form-check-label" for="Checkbox-ANO" style="padding-left: 14px;"> ANO (pval)</label>
 						            		</div>
@@ -407,13 +408,13 @@ body {
 						            			<div class="row">
 						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-ANO').checked) {document.getElementById('ANO_Range').value = 0; document.getElementById('ANO_Number').value = 0;}">0</div>
 							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
-								            			<input type="range" class="form-range" id="ANO_Range" min="0" max="0.5" value="0.05" step="0.01" oninput="document.getElementById('ANO_Number').value = this.value" disabled/>
+								            			<input type="range" class="form-range" id="ANO_Range" min="0" max="0.5" value="0.1" step="0.01" oninput="document.getElementById('ANO_Number').value = this.value" disabled/>
 							            			</div>
-						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-ANO').checked) {document.getElementById('ANO_Range').value = 0.5; document.getElementById('ANO_Number').value = 0.5;"}>0.5</div>
+						            				<div class="col-1 min-range-max" onclick="if(document.getElementById('Checkbox-ANO').checked) {document.getElementById('ANO_Range').value = 0.5; document.getElementById('ANO_Number').value = 0.5;}">0.5</div>
 						            			</div>
 						            		</div>
 						            		<div class="col-3">
-						            			<input type="text" class="form-control" id="ANO_Number" autocomplete="off" value="0.05" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('ANO_Range').value = this.value;" disabled/>
+						            			<input type="text" class="form-control" id="ANO_Number" autocomplete="off" value="0.1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value>0.5)this.value=0.5; document.getElementById('ANO_Range').value = this.value;" disabled/>
 						            		</div>
 						            	</div>
 						            </div>
@@ -443,7 +444,7 @@ body {
 							            			<div class="col-8" style="margin-right:-5px; padding-left:3px; padding-right:0px;">
 								            			<input type="range" class="form-range" id="N-Times_Range" min="1" max="9" value="3" step="1" oninput="document.getElementById('N-Times_Number').value = this.value" />
 							            			</div>
-						            				<div class="col-1 min-range-max" onclick="document.getElementById('N-Times_Range').value = 9; document.getElementById('N-Times_Number').value = 9">9</div>
+						            				<div class="col-1 min-range-max" onclick="document.getElementById('N-Times_Range').value = 9; document.getElementById('N-Times_Number').value = 9;">9</div>
 						            			</div>
 						            		</div>
 						            		<div class="col-3">
@@ -468,7 +469,7 @@ body {
    	<div class="modal" id="Loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
-			<div><strong>Loading GWAS Result...</strong></div>
+			<div><strong>Loading GS Result...</strong></div>
 	  	</div>
 	</div>
 	<!-- Modal end-->
@@ -529,10 +530,12 @@ body {
 		flatpickr();   		
 
    		vcfFileList();
-   		//phenotypeList();
+   		phenotypeList();
    		
    		jQuery("#Training_VCF").select2();
-   		jQuery("#Prediction_VCF").select2();
+   		jQuery("#Prediction_VCF").select2({
+   			allowClear: true,
+   		});
    		
    	});
 	
@@ -545,8 +548,7 @@ body {
 	        width			: 445,
 	    	height          : 130,
 	        maxFileCount   : 1,  
-	        //allowType : ["vcf"],
-	        allowType : ["txt"],
+	        allowType : ["csv"],
 	        charset : "utf-8",
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
@@ -560,14 +562,37 @@ body {
 	    box.on('uploadComplete', function (p) {
 	    	//box.removeAllFiles();
 	    	const data = p.postData;
+	    	//data['traitname_keys'] = '2,3';
 	    	
-	    	fetch("./gs_analysis.jsp", {
-   	    		method: "POST",
-   	    		headers: {
-   	    			"Content-Type": "application/json"
-   	    		},
-   	    		body:JSON.stringify(data),
-   	    	});
+	    	
+	    	fetch(`./gs_samplecheck.jsp?jobid_gs=\${p.postData.jobid_gs}`)
+	    	.then((response) => response.text())
+	    	.then((text) => {
+	    		//console.log(text);
+	    		if(confirm(text+" 진행하시겠습니까?")) {
+	    			
+	    			fetch("./gs_insertSql.jsp", {
+	       	    		method: "POST",
+	       	    		headers: {
+	       	    			"Content-Type": "application/json; charset='UTF-8';"
+	       	    		},
+	       	    		body:JSON.stringify(data),
+	       	    	});
+	    			
+	    			fetch("./gs_analysis.jsp", {
+	       	    		method: "POST",
+	       	    		headers: {
+	       	    			"Content-Type": "application/json"
+	       	    		},
+	       	    		body:JSON.stringify(data),
+	       	    	});
+	    			
+	    			setTimeout( function () {
+	    	   			refresh();
+	    	   			$("#backdrop").modal("hide");
+	    	   		}, 1000);
+	    		}
+	    	})
    	    	
         });
 	    
@@ -595,29 +620,37 @@ body {
 		})
 	}
     
-    function showPredictionPlot(phenotype) {
+    function showPredictionPlot(phenotype, order) {
+    	
+    	$("#Loading").modal('show');
+    	
     	const jobid = document.getElementById('Extra_Card').dataset.jobid;
 		const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+		
+		document.getElementById('Grid-Prediction').style.display = 'block';
 		
 		const columnDefs_prediction = [
 			{
 				headerName: '순번',
 				field: 'no',
-				checkboxSelection: true, 
-				headerCheckboxSelectionFilteredOnly: true,
-				headerCheckboxSelection: true,
-				minWidth: 120,
-				maxWidth: 120,
+				//checkboxSelection: true, 
+				//headerCheckboxSelectionFilteredOnly: true,
+				//headerCheckboxSelection: true,
+				minWidth: 80,
+				maxWidth: 80,
 				valueGetter: inverseRowCount,
 				
 			},
 			{
 				headerName: '개체명',
-				field: 'TAXA',
+				field: 'Taxa',
 			},
+			/*
 			{
-				field: phenotype
+				field: phenotype,
+				filter: 'agNumberColumnFilter',
 			}
+			*/
 		];
 		
 		//Grid-Prediction
@@ -636,13 +669,23 @@ body {
 		    reader.onload = function(){
 		    	
 		    	var fileData = reader.result;
-		        var wb = XLSX.read(fileData, {type : 'binary'});
+		        var wb = XLSX.read(fileData, {type : 'binary', encoding:'UTF-8'});
 		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 		        //console.log("rowObj : ", rowObj);
+		        
+		        let i=0;
+		        for(const key in rowObj[0]) {
+		        	if(i == Number(order) + 1) {
+			        	columnDefs_prediction.push({headerName:phenotype, field: key, filter: 'agNumberColumnFilter',})
+		        	}
+		        	i++;
+		        }
+		        
+		        
 				gridOptions_prediction.api.setColumnDefs(columnDefs_prediction);
 		        gridOptions_prediction.api.setRowData(rowObj);
+		        gridOptions_prediction.api.sizeColumnsToFit();
 		        //gridOptions_prediction.columnApi.autoSizeAllColumns();
-		        
 		    };
 		    reader.readAsBinaryString(file);
 		});
@@ -655,18 +698,22 @@ body {
 			if(!response.ok) {
 				//HTMLNotExist("Multi");
 				//$("#Multi").height(0);
-				console.log("file not exist");
+				$("#Loading").modal('hide');
+				throw new Error('Error - ' +response.status);
 			} else {
 				//$("#Multi").height("500px");
-				$("#Loading").modal('show');
 				$('iframe#iframe-Prediction').attr('src', url);
+				$("#Loading").modal('hide');
 			}
 		})
     }
 	
     function showMultiPredictionPlot(phenotype_arr) {
+    	
     	const jobid = document.getElementById('Extra_Card').dataset.jobid;
 		const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+		
+		//const url = `\${resultpath+jobid}/spyder.html`;
 		
 		
 		const columnDefs_prediction = [
@@ -675,7 +722,7 @@ body {
 				field: 'no',
 				checkboxSelection: true, 
 				headerCheckboxSelectionFilteredOnly: true,
-				headerCheckboxSelection: true,
+				headerCheckboxSelection: false,
 				minWidth: 120,
 				maxWidth: 120,
 				valueGetter: inverseRowCount,
@@ -683,13 +730,11 @@ body {
 			},
 			{
 				headerName: '개체명',
-				field: 'TAXA',
+				field: 'Taxa',
 			},
 		];
 		
-		for(let i=0 ; i<phenotype_arr.length ; i++) {
-			columnDefs_prediction.push({'field': phenotype_arr[i]})
-		}
+		
 		
 		
 		fetch(`\${resultpath+jobid}/predicted.result.csv`)
@@ -708,15 +753,48 @@ body {
 		        var wb = XLSX.read(fileData, {type : 'binary'});
 		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 		        //console.log("rowObj : ", rowObj);
-				gridOptions_multiplePrediction.api.setColumnDefs(columnDefs_prediction);
+				
+		        const phenotype_fields = new Array();
+		        for(key in rowObj[0]) {
+		        	if(key == "Taxa") {
+		        		continue;
+		        	}
+		        	phenotype_fields.push(key);
+		        }
+		        
+		        for(let i=0 ; i<phenotype_arr.length ; i++) {
+					//columnDefs_prediction.push({field: phenotype_arr[i], filter:'agNumberColumnFilter', })
+					columnDefs_prediction.push({headerName: phenotype_arr[i], field: phenotype_fields[i], filter:'agNumberColumnFilter', })
+				}
+		        
+		        
+		        
+		        gridOptions_multiplePrediction.api.setColumnDefs(columnDefs_prediction);
 		        gridOptions_multiplePrediction.api.setRowData(rowObj);
 		        //gridOptions_prediction.columnApi.autoSizeAllColumns();
-		        
 		    };
 		    reader.readAsBinaryString(file);
 		});
-		
-		
+    }
+    
+    async function resizeMultiplePredictionGrid() {
+    	
+    	await sleep(100);
+    	
+   		gridOptions_multiplePrediction.columnApi.autoSizeAllColumns();
+       	
+       	const grid_width = document.getElementById('Grid-Multiple_Prediction').clientWidth;
+       	const columns = gridOptions_multiplePrediction.columnApi.getColumnState();
+       	let columns_width = 0;
+       	for(let i=0 ; i<columns.length ; i++) {
+       		columns_width += columns[i]['width'];
+       	}
+       	
+       	if(grid_width>columns_width) {
+       		gridOptions_multiplePrediction.api.sizeColumnsToFit();
+       	}
+    	
+    	
     }
     
    	function vcfFileList() {
@@ -758,14 +836,19 @@ body {
 			dataType : "json",
 			success : function(result){
 				gridOptionsTraitName.api.setRowData(result);
-				/*
-	   	    	for(let i=0 ; i<result.length ; i++) {
-	   	    		$("#PhenotypeSelect").append(`<option data-traitname_key=\${i} data-traitname=\${result[i]} > \${result[i]} </option>`);
-	   	    	}
-				*/
 			}
 		});
    	}
+	
+	function modelCheckList() {
+		gridOptions_model.api.forEachNode((node) => {
+  			if(node.data.group == 'BLUP') {
+  				node.setSelected(true);
+  			} else {
+  				node.setSelected(false);
+  			}
+  		})
+	}
    	
 	//radio 선택에 따라 파일창 노출여부 결정  | true: New Phenotype , false: Phenotype Database
 	function radioSelect(flag) {
@@ -865,11 +948,14 @@ body {
 		const filename_prediction_vcf = Prediction_VCF.options[Prediction_VCF.selectedIndex].dataset.filename
 		
     	const selectedTrait = gridOptionsTraitName.api.getSelectedRows();
-    	let traitname_keys = "";
+    	let traitname = "";
+		let traitname_keys = "";
 		for (var i = 0; i < selectedTrait.length; i++) {
+			traitname += selectedTrait[i].traitname;
 			traitname_keys += (selectedTrait[i].traitname_key + 2).toString();
 			if(i != selectedTrait.length -1) {
 				traitname_keys += ",";
+				traitname += ",";
 			}
 		}
 		
@@ -903,6 +989,7 @@ body {
     			"jobid_training_vcf": jobid_training_vcf,
     			"filename_training_vcf": filename_training_vcf,
     			"radio_phenotype": document.querySelector('input[name="radio_phenotype"]:checked').value,						// Phenotype Database
+    			"traitname": traitname,
     			"traitname_keys": traitname_keys,
     			"jobid_prediction_vcf": jobid_prediction_vcf,
     			"filename_prediction_vcf": filename_prediction_vcf,
@@ -930,31 +1017,42 @@ body {
    			}
    	    	
    			//debugger;
-   	    	/*
-   	    	fetch("./gs_insertSql.jsp", {
-   	    		method: "POST",
-   	    		headers: {
-   	    			"Content-Type": "application/json"
-   	    		},
-   	    		body:JSON.stringify(data),
-   	    	});
-   	    	*/
    	    	
-   	    	fetch("./gs_analysis.jsp", {
-   	    		method: "POST",
-   	    		headers: {
-   	    			"Content-Type": "application/json"
-   	    		},
-   	    		body:JSON.stringify(data),
-   	    	});
-   	    	
-   	    	/*
-			setTimeout( function () {
-	   			refresh();
-	   			$("#backdrop").modal("hide");
-	   		}, 1000);
-   	    	*/
    			
+   			
+   			const text =  await fetch(`./gs_check.jsp`, {
+					   				method: "POST",
+					   	    		headers: {
+					   	    			"Content-Type": "application/json"
+					   	    		},
+					   	    		body:JSON.stringify(data),
+					   			})
+						    	.then((response) => response.text())
+						    	.then((text) => text)
+   			
+			if(confirm(text+" 진행하시겠습니까?")) {
+	   	    	fetch("./gs_insertSql.jsp", {
+	   	    		method: "POST",
+	   	    		headers: {
+	   	    			"Content-Type": "application/json"
+	   	    		},
+	   	    		body:JSON.stringify(data),
+	   	    	});
+	   	    	
+	   	    	fetch("./gs_analysis.jsp", {
+	   	    		method: "POST",
+	   	    		headers: {
+	   	    			"Content-Type": "application/json"
+	   	    		},
+	   	    		body:JSON.stringify(data),
+	   	    	});
+	   	    	
+	   	    	
+				setTimeout( function () {
+		   			refresh();
+		   			$("#backdrop").modal("hide");
+		   		}, 1000);
+			}     
    			
    		// select New Phenotype File	
    		} else {
@@ -1000,17 +1098,24 @@ body {
     
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-   		//reset();
+   		resetForm();
     });
    	
-   	function reset() {
+   	function resetForm() {
    		document.getElementById('uploadForm').reset();
+   		document.getElementById('LD_Number').disabled = true;
+   		document.getElementById('LD_Range').disabled = true;
+   		document.getElementById('ANO_Number').disabled = true;
+   		document.getElementById('ANO_Range').disabled = true;
    		
-   		// 모달창 닫으면 초기화
-    	// document.getElementById('uploadGwasForm').reset();
    		vcfFileList();
     	phenotypeList();
+    	modelCheckList();
     	resetFlatpickr();
+   	}
+   	
+   	function sleep(ms) {
+   		return new Promise((r) => setTimeout(r, ms));
    	}
        
 </script>

@@ -61,6 +61,7 @@
 	var columnDefs = [
 		{
 			headerName: "순번",
+			field: "no",
 			valueGetter: inverseRowCount,
 			maxWidth: 100,
 			minWidth: 100,
@@ -199,7 +200,14 @@
 						//console.log('jobid : ', params.data.jobid);
 						//console.log('resultpath : ', params.data.resultpath);
 						
-						document.getElementById('Multiple_Prediction').style.display = params.data.prediction_genotype == "-" ? 'none' : 'block';
+						$('iframe#iframe-Cross_Validation').attr('src', '');
+						$('iframe#iframe-Prediction').attr('src', '');
+						document.getElementById('Cross_Validation').click()
+						
+						document.getElementById('Extra_Card').style.display = 'block';
+						
+						document.getElementById('Prediction').style.display = params.data.prediction_genotype == "null" ? 'none' : 'block';
+						document.getElementById('Multiple_Prediction').style.display = params.data.prediction_genotype == "null" || params.data.phenotype.split(",").length<2 ? 'none' : 'block';
 						
 						document.getElementById('Select-Cross_Validation').innerHTML = `<option hidden disabled selected></option>`;
 						document.getElementById('Select-Prediction').innerHTML = `<option hidden disabled selected></option>`;
@@ -208,14 +216,14 @@
 						const phenotype_arr = params.data.phenotype.split(",");
 						for(let i=0 ; i<phenotype_arr.length ; i++) {
 							document.getElementById('Select-Cross_Validation').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
-							document.getElementById('Select-Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
+							document.getElementById('Select-Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" data-order="${i}" >${phenotype_arr[i]}</option>`);
 							//document.getElementById('Select-Multiple_Prediction').insertAdjacentHTML('beforeend', `<option data-phenotype="${phenotype_arr[i]}" >${phenotype_arr[i]}</option>`);
 						}
 						
 						document.getElementById('Extra_Card').dataset.jobid = params.data.jobid;
 						document.getElementById('Extra_Card').dataset.resultpath = params.data.resultpath;
 						
-						if(params.data.prediction_genotype != "-") {
+						if(params.data.prediction_genotype != "null" &&  params.data.phenotype.split(",").length>=2 ) {
 							showMultiPredictionPlot(params.data.phenotype.split(","));
 						}
 						
@@ -276,6 +284,7 @@
 			    sortable: true,
 			    //suppressMenu: true,
 			    cellClass: "grid-cell-centered", 
+			    menuTabs: ['filterMenuTab'], 
 			},
 			//columnDefs: columnDefs_prediction,
 			rowHeight: 35,
@@ -290,9 +299,8 @@
 	const gridOptions_multiplePrediction = {
 			defaultColDef: { 
 				editable: false, 
-				sortable: false, 
+				sortable: true, 
 				resizable: true,
-				suppressMenu: true, 
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], 
 			},
@@ -307,11 +315,19 @@
 			serverSideInfiniteScroll: true,
 			onRowSelected: (params) => {
 				
+				const rows = gridOptions_multiplePrediction.api.getSelectedRows(); 
+				if(rows.length > 10) {
+					params.node.setSelected(false);
+					return alert("10개까지만 선택 가능합니다.");
+				}
+				
+				
+				$("#Loading").modal('show');
+				
 				const jobid = document.getElementById('Extra_Card').dataset.jobid;
-				//const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+				const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
 				
 				let selected_row_index = ""
-				const rows = gridOptions_multiplePrediction.api.getSelectedRows(); 
 				for(let i=0 ; i<rows.length ; i++) {
 					selected_row_index += rows[i]['__rowNum__'];
 					if(i != rows.length -1) {
@@ -321,14 +337,36 @@
 				
 				//console.log(selected_row_index);
 				
-				//fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&resultpath=${resultpath}&selected_row=${selected_row_index}`)
 				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=${selected_row_index}`)
 				.then((response) => {
 					if(!response.ok) {
+						$("#Loading").modal('hide');
 						throw new Error('Error - ' +response.status);
-					} /*else {
-						return response.blob();
-					}*/
+					} else {
+						return response.text();
+					}
+				})
+				.then((data) => {
+					const url = `${resultpath+jobid}/spyder.html`;
+					$('iframe#iframe-Multiple_Prediction').attr('src', '');
+					sleep(200);
+					$('iframe#iframe-Multiple_Prediction').attr('src', url);
+				})
+			},
+			onGridReady: (params) => {
+				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=''`)
+				.then((response) => {
+					if(!response.ok) {
+						throw new Error('Error - ' +response.status);
+					} else {
+						return response.text();
+					}
+				})
+				.then((data) => {
+					const url = `${resultpath+jobid}/spyder.html`;
+					$('iframe#iframe-Multiple_Prediction').attr('src', '');
+					sleep(200);
+					$('iframe#iframe-Multiple_Prediction').attr('src', url);
 				})
 			}
 	}
@@ -499,7 +537,7 @@
   		const gridTraitNameTable = document.getElementById("phenotypeSelectGrid");
   		const TraitNameGrid = new agGrid.Grid(gridTraitNameTable, gridOptionsTraitName);
   		
-  		/*** GET TABLE DATA FROM URL ***/
+  		/*
   		fetch(`./gwas_traitname.jsp?varietyid=${varietyid}`)
   		.then((response) => response.json())
   		.then((data) => {
@@ -507,16 +545,13 @@
   			gridOptionsTraitName.api.setRowData(data);
   			//gridOptionsTraitName.api.sizeColumnsToFit();
   		});
+  		*/
   		
   		new agGrid.Grid(document.getElementById('Grid-Prediction'), gridOptions_prediction);
   		new agGrid.Grid(document.getElementById('Grid-Multiple_Prediction'), gridOptions_multiplePrediction);
   		
   		new agGrid.Grid(document.getElementById('Model_Grid'), gridOptions_model);
-  		gridOptions_model.api.forEachNode((node) => {
-  			if(node.data.group == 'BLUP') {
-  				node.setSelected(true);
-  			}
-  		})
+  		modelCheckList();
   	});
 
 	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/

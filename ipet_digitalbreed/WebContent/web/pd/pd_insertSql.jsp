@@ -31,6 +31,8 @@
 	String comment = jsonObject.get("comment").getAsString();
 	String marker_category = jsonObject.get("marker_category").getAsString();
 	String jobid_pd = jsonObject.get("jobid_pd").getAsString();
+	String upload_method = jsonObject.get("upload_method").getAsString();
+	String sequence = jsonObject.get("sequence").getAsString();
 	
 	JsonArray enzymesJsonArray = jsonObject.get("enzymes").getAsJsonArray();
 	StringBuilder enzymes = new StringBuilder();
@@ -74,7 +76,14 @@
 	
 	
 	String sql = "insert into primer_design_t (cropid, varietyid, status, filename, comment, marker_category, restriction_enzymes, uploadpath, resultpath, jobid, creuser, cre_dt) ";
-	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', '" +comment+ "', '" +marker_category+ "', '" +enzymes+ "','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
+	
+	if(upload_method.equals("Direct_Input")) {
+		sequence = sequence.split("\n")[0].substring(1);
+		System.out.println(sequence);
+		sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+sequence+"', '" +comment+ "', '" +marker_category+ "', '" +enzymes+ "','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
+	} else {
+		sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', '" +comment+ "', '" +marker_category+ "', '" +enzymes+ "','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
+	}
 
 	
 	System.out.println("sql : " + sql);

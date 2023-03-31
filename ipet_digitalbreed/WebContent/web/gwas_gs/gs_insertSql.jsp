@@ -7,6 +7,9 @@
 <%@ page import="com.google.gson.*" %>
     
 <%
+
+	request.setCharacterEncoding("UTF-8");
+
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
@@ -32,6 +35,8 @@
 	String jobid_training_vcf = jsonObject.get("jobid_training_vcf").getAsString();
 	String filename_training_vcf = jsonObject.get("filename_training_vcf").getAsString();
 	int radio_phenotype = jsonObject.get("radio_phenotype").getAsInt();
+	String traitname = "";
+	//String traitname = jsonObject.get("traitname").getAsString();
 	String traitname_keys = jsonObject.get("traitname_keys").getAsString();
 	String jobid_prediction_vcf = jsonObject.get("jobid_prediction_vcf").getAsString();
 	String filename_prediction_vcf = jsonObject.get("filename_prediction_vcf").getAsString();
@@ -56,7 +61,16 @@
 	System.out.println("===========================================");
 	*/
 	
-	/*
+	String rootFolder = request.getSession().getServletContext().getRealPath("/");
+	String phenotypePath = rootFolder + "/uploads/GS/Pheno/"+jobid_gs+"/";
+	
+	if(radio_phenotype == 0 ) {
+		traitname = jsonObject.get("traitname").getAsString();
+	} else {
+		traitname = readPhenotypeTxt(phenotypePath);
+	}
+	
+	
 	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','Genomic Selection', 'New analysis', now());";
 	//System.out.println(log_sql);
 	try{
@@ -68,8 +82,9 @@
 	}
 	
 	
-	String sql = "insert into genomic_selection_t (cropid, varietyid, status, filename, comment, marker_category, restriction_enzymes, uploadpath, resultpath, jobid, creuser, cre_dt) ";
-	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', '" +comment+ "', '" +marker_category+ "', '" +enzymes+ "','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
+	String sql = "insert into genomic_selection_t (cropid, varietyid, status, phenotype, training_genotype, prediction_genotype, comment, uploadpath, resultpath, jobid, creuser, cre_dt) ";
+	//sql += "values((select cropid from variety_t where varietyid='"+variety_id+"'), '"+variety_id+"', 0, '"+ traitname +"', '"+  filename_training_vcf+"', '"+ filename_prediction_vcf +"', '" +comment+ "', '"  +db_savePath+"','"+db_outputPath+"', '"+jobid_gs+"','" +permissionUid+ "',now());";
+	sql += "values((select cropid from variety_t where varietyid='"+variety_id+"'), '"+variety_id+"', 0, '"+ traitname +"', '"+  filename_training_vcf+"', '"+ filename_prediction_vcf +"', '" +comment+ "', '"  +db_savePath+"','"+db_outputPath+"', '"+jobid_gs+"','" +permissionUid+ "',now());";
 
 	
 	System.out.println("sql : " + sql);
@@ -82,6 +97,29 @@
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();
 	}
-	*/
 
+%>
+
+<%! 
+	public String readPhenotypeTxt(String phenotypePath) throws IOException {
+	
+	File file = new File(phenotypePath+"GS_trait.csv");
+	BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+	
+	String line = br.readLine();
+	String[] columns = line.split(",");
+	
+	String traitname = "";
+	for(int i=1 ; i<columns.length ; i++) {
+		//System.out.println(i);
+		traitname += columns[i];
+		if(i != columns.length -1) {
+			traitname += ",";
+		}
+	}
+	
+	br.close();
+	
+	return traitname;
+}
 %>

@@ -14,8 +14,11 @@
 	//String resultpath = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/result/GS/";
 	String selected_row = request.getParameter("selected_row");
 	
-	String cmd = "Rscript /data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/GS_spyderplot.R " +jobid+"/" +" "+ selected_row;
+	String cmd = "Rscript /data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/GS_spyderplot.R "+ jobid +" "+ selected_row;
 	
 	System.out.println("cmd : " + cmd);
 	runanalysistools.execute(cmd, "cmd");
+	
+	out.clear();
+	out.print("1");
 %>

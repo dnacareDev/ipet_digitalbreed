@@ -2,12 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="com.innorix.transfer.InnorixUpload" %>
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
-<%@ page import="ipet_digitalbreed.*"%>    
 <%@ page import="com.google.gson.*" %>
-<%@ page import="org.apache.commons.*" %>
-<%@ page import="org.apache.commons.exec.*" %>
-
-
+<%@ page import="ipet_digitalbreed.*"%>    
 <%
 	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	//ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
@@ -82,54 +78,42 @@
 		
 	}
 	
+	writePhenotypeTxt(permissionUid, variety_id, phenotypePath, cre_date, inv_date);
 	
-	if(radio_phenotype == 0) {
-		//writePhenotypeTxt(permissionUid, variety_id, phenotypePath, cre_date, inv_date);
-	}  else {
-		traitname_keys = readPhenotypeTxt(phenotypePath);
-		//System.out.println(traitname_keys);
+	String vcf_path = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/uploads/database/db_input/" + jobid_training_vcf + "/";
+	String gs_pheno_path = "/data/apache-tomcat-9.0.64/webapps/ipet_digitalbreed/uploads/GS/Pheno/";
+	String outputdir = rootFolder + "/result/GS/";
+	
+	String cmd = "Rscript " +script_path+ "gwas_samplecheck_final.R " +vcf_path+ " " +gs_pheno_path+ " " +outputdir+ " " +jobid_gs+ " " +filename_training_vcf+ " " +"GS_trait.csv";
+	System.out.println("===========================================");
+	System.out.println("GS parameter : " + cmd);
+	System.out.println("===========================================");
+	runanalysistools.execute(cmd, "cmd");
+	
+	try {
+		BufferedReader reader = new BufferedReader(new FileReader(outputdir+jobid_gs+"/"+jobid_gs+"_samplecheck.txt"));
+		String line_br = reader.readLine();
+		out.clear();
+		out.print(line_br);
+		reader.close();
+		
+		/*
+		String str;
+		boolean first_line = true;
+		while((str = reader.readLine()) != null) {
+			if(first_line) {
+				first_line = false;
+				continue;
+			}
+			//System.out.println(str);
+			out.print(str+",");
+		}
+		reader.close();
+		*/
+	} catch(IOException e) {
+		e.printStackTrace();
 	}
 	
-	
-	//String cmd = "Rscript "+ script_path +"GS_script.R "+ jobid_gs +" "+ VcfPath+jobid_training_vcf +"/ "+ filename_training_vcf +" ";
-	String cmd = "Rscript "+ script_path +"GS_script.R "+ jobid_gs +" "+ jobid_training_vcf +" "+ filename_training_vcf +" ";
-	
-	if(jobid_prediction_vcf.equals("-1")) {
-		cmd += "NULL NULL ";
-	} else {
-		//cmd += VcfPath+jobid_prediction_vcf +"/ "+ filename_prediction_vcf +" ";
-		cmd += jobid_prediction_vcf +" "+ filename_prediction_vcf +" ";
-	}
-	
-	cmd += "GS_trait.csv" +" "+ traitname_keys +" "+ MAXNA +" "+ MAF;
-	
-	if(ANO_checked && LD_checked) {
-		cmd += " ANO+LD ";
-	} else if(ANO_checked && LD_checked) {
-		cmd += " ANO "; 
-	} else if(!ANO_checked && LD_checked) {
-		cmd += " LD ";
-	} else if(!ANO_checked && !LD_checked) {
-		cmd += " NULL ";
-	}
-	
-	//cmd += ANO +" "+ LD +" "+ model_keys +" "+ nFolds +" "+ nTimes;
-	
-	cmd += ANO_checked ? ANO+" " : "NULL ";
-	cmd += LD_checked ? LD+" " : "NULL ";
-	cmd += model_keys +" "+ nFolds +" "+ nTimes;
-	
-	
-	System.out.println("cmd : " + cmd);
-	//runanalysistools.execute(cmd, "cmd");
-	
-	//String line2 = "Rscript /data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/GS_script.R 20230331162358 20230329144333 train_geno_GS.vcf 20230329144349 predict_geno_GS.vcf GS_trait.csv 2,3,4,5,6,7,8 1 0.01 LD NULL 0.99 GBLUP,EGBLUP,RR,LASSO,EN,BRR,BL,BA,BB,BC,RKHS,RF,SVM 3 3"
-
-	 CommandLine cmdLine = CommandLine.parse(cmd);
-	 DefaultExecutor executor = new DefaultExecutor();
-	
-	 executor.setExitValue(1);
-	 int exitValue = executor.execute(cmdLine);
 %>
 
 <%!
@@ -141,8 +125,8 @@
 		
 		try {
 			File phenotypeTxt = new File(phenotypePath+"GS_trait.csv");
-			//BufferedWriter bw = new BufferedWriter(new FileWriter(phenotypeTxt));
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "UTF-8"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(phenotypeTxt));
+			//BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "UTF-8"));
 			//BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "EUC-KR"));
 			//System.out.println(phenotypeTxt);
 			
@@ -221,28 +205,4 @@
 			System.out.println("error - bufferedWriter | GS");
 		}
 	}
-%>
-
-<%! 
-	public String readPhenotypeTxt(String phenotypePath) throws IOException {
-	
-	File file = new File(phenotypePath+"GS_trait.csv");
-	BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-	
-	String line = br.readLine();
-	int column_count = line.split(",").length; 
-	
-	String traitname_keys = "";
-	for(int i=2 ; i<=column_count ; i++) {
-		//System.out.println(i);
-		traitname_keys += i;
-		if(i != column_count) {
-			traitname_keys += ",";
-		}
-	}
-	
-	br.close();
-	
-	return traitname_keys;
-}
 %>
