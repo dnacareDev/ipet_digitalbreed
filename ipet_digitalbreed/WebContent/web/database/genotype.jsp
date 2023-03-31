@@ -165,7 +165,7 @@ body {
                                         </div>
                                     </div>
                                 </div>								                              
-                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:320px;" ></div><br>
+                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:435px;" ></div><br>
                               	<!--  
                                 <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;" onclick="addRow()"><i class="feather icon-corner-up-left"></i> Tool Box</button>
                                 -->
