@@ -87,6 +87,14 @@ body {
 	cursor: pointer;
 }
 
+.irx-file-inner-wrapper {
+	height: 30px !important;
+}
+
+.innorix_basic div.irx_filetree, .irx_container {
+	border : none !important;
+}
+
 </style>
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -244,26 +252,26 @@ body {
 						            <div class="col-12">
 					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="userSelect" name="selectRegion" checked/>
+							            		<input type="radio" class="form-check-input" id="userSelect" name="selectRegion" value="userSelect" checked/>
 		                                        <label class="form-check-label" for="userSelect" style="margin-left:4px;" >User select</label>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="bedFileUpload" name="selectRegion" />
+							            		<input type="radio" class="form-check-input" id="bedFileUpload" name="selectRegion" value="bedFileUpload" />
 		                                        <label class="form-check-label" for="bedFileUpload" style="margin-left:4px;" >BED file upload</label>
 		                                        <i class="ri-question-line"></i>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="posFileUpload" name="selectRegion" />
+							            		<input type="radio" class="form-check-input" id="posFileUpload" name="selectRegion" value="posFileUpload" />
 		                                        <label class="form-check-label" for="posFileUpload" style="margin-left:4px;" >Pos. file upload</label>
 		                                        <i class="ri-question-line"></i> 
 							            	</div>
 					            		</div>
 						            </div>
-						            <div class="col-12 mt-1 mb-1">
-						            	<div class="row" style="display:flex; justify-content:space-between;">
+						            <div class="col-12 mt-1">
+						            	<div id="userSelectDiv" class="row" style="display:flex; justify-content:space-between;">
 					            			<div class="col-12 col-lg-6">
 												<div class="col-12 mb-2 p-0">Select chromosome</div>
-												<div id="selectChromosomeGrid" class="ag-theme-alpine mb-2" style="margin: 0px auto; width: 98%; height:220px;"></div>
+												<div id="selectChromosomeGrid" class="ag-theme-alpine mb-1" style="margin: 0px auto; width: 98%; height:220px;"></div>
 											</div>
 					            			<div class="col-12 col-lg-6">
 					            				<div class="col-12 mb-2 p-0">
@@ -273,7 +281,12 @@ body {
 						            					</button>
 						            				</span>
 					            				</div>
-					            				<div id="regionByChromosomeGrid" class="ag-theme-alpine mb-2" style="margin: 0px auto; width: 98%; height:220px;"></div>
+					            				<div id="regionByChromosomeGrid" class="ag-theme-alpine mb-1" style="margin: 0px auto; width: 98%; height:220px;"></div>
+					            			</div>
+					            		</div>
+					            		<div class="row">
+					            			<div id="fileUploadDiv" class="col-12 p-1">
+					            				<div id="fileControl" style="display:block; margin: 0px auto; border: 1px solid #48BAE4;"></div>
 					            			</div>
 					            		</div>
 						            </div>
@@ -283,12 +296,12 @@ body {
 						            <div class="col-md-12 col-12">
 					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="userSelectSample" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='block'; document.getElementById('fileControl').style.display='none';" checked />
+							            		<input type="radio" class="form-check-input" id="userSelectSample" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='block'; document.getElementById('sampleFileControl').style.display='none';" checked />
 		                                        <label class="form-check-label" for="userSelectSample" style="margin-left:4px;" >User Select</label>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-6 pl-1">
-							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='none'; document.getElementById('fileControl').style.display='block';" />
-		                                        <label class="form-check-label" for="sampleNameFileUpload" style="margin-left:4px;" >Sample name file uploadBED File Upload</label>
+							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='none'; document.getElementById('sampleFileControl').style.display='block';" />
+		                                        <label class="form-check-label" for="sampleNameFileUpload" style="margin-left:4px;" >Sample name file upload</label>
 		                                        <i class="ri-question-line"></i>
 							            	</div>
 					            		</div>
@@ -297,7 +310,7 @@ body {
 						            	<div class="row">
 					            			<div class="col-12">
 												<div id="sampleNameGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:220px;"></div>
-												<div id="fileControl" style="display:none; margin: 0px auto; border: 1px solid #48BAE4;"></div>
+												<div id="sampleFileControl" style="display:none; margin: 0px auto; border: 1px solid #48BAE4;"></div>
 											</div>
 					            		</div>
 						            </div>
@@ -381,10 +394,11 @@ body {
    		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
    	});
    	
-   	var sample_box = new Object();
+   	let sample_box = new Object();
+   	let box = new Object();
     window.onload = function() {
-        // 파일전송 컨트롤 생성
-        sample_box = innorix.create({
+        
+    	box = innorix.create({
             el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
             height          : 150,
             width			: '99%',
@@ -392,39 +406,68 @@ body {
             allowExtension: ["csv"],
 			addDuplicateFile : false,
             agent: false, // true = Agent 설치, false = html5 모드 사용                    
-            uploadUrl: './fileuploader.jsp' // 업로드 URL
+            uploadUrl: './sf_fileUploader.jsp' // 업로드 URL
+        });
+
+        box.on("addFileError", function(p) {
+            alert("하나의 csv 파일만 업로드 할 수 있습니다.")
+        }),
+
+        // 업로드 완료 이벤트
+        box.on('uploadComplete', function (p) {
+        	
+        	console.log("p : ", p);
+        	//console.log("filename : ", p.files[0].file.name);
+			if (p.postData.sample_select == "sampleNameFileUpload") {
+    	    	sample_box.setPostData(p.postData);
+    	    	sample_box.upload();
+        	} else {
+        		fetch(`./sf_analysis.jsp`, {
+    	    		method: "POST",
+    	    		headers: {
+    	    			"Content-Type": "application/json",
+    	    		},
+    	    		body: JSON.stringify(p.postData)
+    	    	})
+        	}
+        });
+    	
+    	
+    	// 파일전송 컨트롤 생성
+        sample_box = innorix.create({
+            el: '#sampleFileControl', // 컨트롤 출력 HTML 객체 ID
+            height          : 150,
+            width			: '99%',
+            maxFileCount   : 1,  
+            allowExtension: ["csv"],
+			addDuplicateFile : false,
+            agent: false, // true = Agent 설치, false = html5 모드 사용                    
+            uploadUrl: './sf_sampleFileuploader.jsp' // 업로드 URL
         });
 
         sample_box.on("addFileError", function(p) {
-            alert("하나의 VCF 파일만 업로드 할 수 있습니다")
+            alert("하나의 csv 파일만 업로드 할 수 있습니다.")
         }),
 
         // 업로드 완료 이벤트
         sample_box.on('uploadComplete', function (p) {
         	
-        	console.log("p : ", p);
-        	//console.log("filename : ", p.files[0].file.name);
+        	console.log("sample_box p : ", p);
+        	
+        	fetch(`./sf_analysis.jsp`, {
+	    		method: "POST",
+	    		headers: {
+	    			"Content-Type": "application/json",
+	    		},
+	    		body: JSON.stringify(p.postData)
+	    	})
 
-			document.getElementById('uploadvcfform').reset();
-		    box.removeAllFiles();
-			$('#backdrop').modal('hide');
-			jQuery('#vcf_status').html('');
-			$('html').scrollTop(0);
-			refresh();
-			
-			
-			
-			const jobid = p.postData.jobid;
-			const filename = p.files[0].file.name;
-			const comment = p.postData.comment;
-			const varietyid = p.postData.varietyid;
-			const refgenome = p.postData.refgenome;
-			const annotation_filename = p.postData.annotation_filename;
-			
-			
-			//afterUpload(jobid, filename, comment, varietyid, refgenome, annotation_filename);
-			
         });
+        
+        
+        
+        
+        
     };
 
    	function vcfFileList() {
@@ -526,6 +569,9 @@ body {
 		
 		//debugger;
 		selectChromosome_gridOptions.api.setRowData(vcf_information.chr);
+		selectChromosome_gridOptions.api.forEachNode((node) => {
+			node.setSelected(true);
+		});
 		regionByChromosome_gridOptions.api.setRowData();
 		sampleNameGrid_gridOptions.api.setRowData(vcf_information.sample);
 	}
@@ -571,18 +617,14 @@ body {
     	const region_select = document.querySelector(`input[name='selectRegion']:checked`).id;
     	const sample_select = document.querySelector(`input[name='selectSubSetOfSample']:checked`).id;
     	
-    	
     	selectChromosome_gridOptions.api.forEachNode((node) => {
-    		console.log("node", node);
+    		//console.log("node", node);
     		if(node.selected == false) {
     			//chr_regions.delete(node.data.chromosome);
     			delete chr_regions[node.data.chromosome];
     		}
-    		//debugger;
     	})
     	
-    	//const region = chr_regions;
-    	//const region = JSON.parse(JSON.stringify( Array.from(chr_regions.entries()) ));
     	const region = JSON.parse(JSON.stringify(chr_regions));
     	
     	const sample_arr = new Array();
@@ -597,6 +639,8 @@ body {
     		"refgenome_id": refgenome_id,
     		"jobid_vcf": jobid_vcf,
     		"jobid_sf": jobid_sf,
+    		"region_select": region_select,
+    		"sample_select": sample_select,
     		"file_name": file_name,
     		"region": region,
     		"sample_arr": sample_arr,
@@ -609,13 +653,36 @@ body {
     		return;
     	}
     	
-    	fetch(`./sf_analysis.jsp`, {
+    	if(region_select != "userSelect") {
+	    	box.setPostData(data);
+	    	box.upload();
+    	} else if (sample_select == "sampleNameFileUpload") {
+	    	sample_box.setPostData(data);
+	    	sample_box.upload();
+    	}
+    	
+    	
+    	
+    	
+    	fetch(`./sf_insertSql.jsp`, {
     		method: "POST",
     		headers: {
     			"Content-Type": "application/json",
     		},
     		body: JSON.stringify(data)
     	})
+    	
+    	
+    	if(region_select == "userSelect" && sample_select == "userSelectSample" ) {
+	    	fetch(`./sf_analysis.jsp`, {
+	    		method: "POST",
+	    		headers: {
+	    			"Content-Type": "application/json",
+	    		},
+	    		body: JSON.stringify(data)
+	    	})
+    	}
+    	
     	
     	
     	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침

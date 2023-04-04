@@ -226,8 +226,10 @@ body {
 														<div id="Grid-Multiple_Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:430px;"></div><br>
 													</div>
 													<div class="col-12 col-xl-4" style="height:445px; margin-top:25px; float:left;">
-														<div class="col-12 d-flex justify-content-start h4 font-weight-bold">Spyder-Plot</div>
-														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="$('#Loading').modal('hide')"></iframe>
+														<!--  
+														<div class="col-12 d-flex justify-content-center h4">Spyder-Plot</div>
+														-->
+														<iframe src = '' height='400px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="$('#Loading').modal('hide')"></iframe>
 													</div>
 												</div>
 											</div>

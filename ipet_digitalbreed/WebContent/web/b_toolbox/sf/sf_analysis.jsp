@@ -4,6 +4,7 @@
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
 <%@ page import="ipet_digitalbreed.*"%>    
 <%@ page import="com.google.gson.*"%>    
+<%@ page import="org.apache.commons.exec.*" %>
 
 <%
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -25,7 +26,6 @@
 	//System.out.println(sb);
 	//JsonObject jsonObject = new JsonParser().parseString(sb.toString()).getAsJsonObject();
 	// 문자열 => jsonArray
-	//JsonArray array = new Gson().fromJson("JsonArray 문자열", JsonArray.class);	
 	JsonObject jsonObject = new Gson().fromJson(sb.toString(), JsonObject.class);
 	System.out.println(jsonObject);
 	System.out.println();
@@ -34,6 +34,8 @@
 	String refgenome_id = jsonObject.get("refgenome_id").getAsString();
 	String jobid_vcf = jsonObject.get("jobid_vcf").getAsString();
 	String jobid_sf = jsonObject.get("jobid_sf").getAsString();
+	String region_select = jsonObject.get("region_select").getAsString();
+	String sample_select = jsonObject.get("sample_select").getAsString();
 	String file_name = jsonObject.get("file_name").getAsString();
 	JsonObject jsonObject_region = new Gson().fromJson(jsonObject.get("region"), JsonObject.class);
 	JsonArray jsonArray_sample = new Gson().fromJson(jsonObject.get("sample_arr"), JsonArray.class);
@@ -55,72 +57,52 @@
 	String db_savePath = "uploads/database/db_input/";
 	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/subset/";
 	
-	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Quality Filter', 'New analysis', now());";
-	System.out.println(log_sql);
-	try{
-		ipetdigitalconndb.stmt.executeUpdate(log_sql);
-	}catch(Exception e){
-		System.out.println(e);
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.conn.close();
-	}
-	
-	String sql = "insert into subset_filter_t (cropid, varietyid, refgenome_id, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, creuser, cre_dt) ";
-	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', " +refgenome_id+ ", 0, '"+file_name+"', 'quality', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_sf+"','" +permissionUid+ "',now());";
-	
-	System.out.println("sql : " + sql);
-	
-	try{
-		ipetdigitalconndb.stmt.executeUpdate(sql);
-	} catch(Exception e) {
-		System.out.println(e);
-	}
-	
-	
-	
-	File folder_subsetSavePath = new File(subsetSavePath+jobid_sf);
-	if (!folder_subsetSavePath.exists()) {
-		try{
-			folder_subsetSavePath.mkdirs(); 
-	    } catch(Exception e){
-			e.getStackTrace();
-		}        
-	}
-	
-	
-	File chrFile = new File(subsetSavePath+jobid_sf+"/subset.csv");
-	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(chrFile), "UTF8"));
-	
-	Iterator<String> iterator = jsonObject_region.keySet().iterator();
-	while(iterator.hasNext()) {
-		String chr = iterator.next();
+	if(region_select.equals("userSelect")) {
+		File folder_subsetSavePath = new File(subsetSavePath+jobid_sf);
+		if (!folder_subsetSavePath.exists()) {
+			try{
+				folder_subsetSavePath.mkdirs(); 
+		    } catch(Exception e){
+				e.getStackTrace();
+			}        
+		}
 		
-		JsonArray jsonArray_chr = jsonObject_region.get(chr).getAsJsonArray();
-		//System.out.println(jsonArray_chr);
-		for(int i=0 ; i<jsonArray_chr.size() ; i++) {
-			String csvLine = chr+","+jsonArray_chr.get(i).getAsJsonObject().get("start_pos").getAsString()+","+jsonArray_chr.get(i).getAsJsonObject().get("end_pos").getAsString();
-			//System.out.println(csvLine);
-			bw.write(csvLine);
-			if( !(!iterator.hasNext() && i == jsonArray_chr.size()-1)) {
-				bw.newLine();
+		
+		File chrFile = new File(subsetSavePath+jobid_sf+"/subset.csv");
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(chrFile), "UTF-8"));
+		
+		Iterator<String> iterator = jsonObject_region.keySet().iterator();
+		while(iterator.hasNext()) {
+			String chr = iterator.next();
+			
+			JsonArray jsonArray_chr = jsonObject_region.get(chr).getAsJsonArray();
+			//System.out.println(jsonArray_chr);
+			for(int i=0 ; i<jsonArray_chr.size() ; i++) {
+				String csvLine = chr+","+jsonArray_chr.get(i).getAsJsonObject().get("start_pos").getAsString()+","+jsonArray_chr.get(i).getAsJsonObject().get("end_pos").getAsString();
+				//String csvLine = chr+"\t"+jsonArray_chr.get(i).getAsJsonObject().get("start_pos").getAsString()+"\t"+jsonArray_chr.get(i).getAsJsonObject().get("end_pos").getAsString();
+				//System.out.println(csvLine);
+				bw.write(csvLine);
+				if( !(!iterator.hasNext() && i == jsonArray_chr.size()-1)) {
+					bw.newLine();
+				}
+				bw.flush();
 			}
-			bw.flush();
+			
 		}
-		
+		bw.close();
 	}
-	bw.close();
 	
-	File sampleFile = new File(subsetSavePath+jobid_sf+"/samplename.csv");
-	BufferedWriter bw2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sampleFile), "UTF8"));
-	for(int i=0 ; i<jsonArray_sample.size() ; i++) {
-		bw2.write(jsonArray_sample.get(i).getAsString());
-		if(i != jsonArray_sample.size()-1) {
-			bw2.newLine();
+	if(sample_select.equals("userSelectSample")) {
+		File sampleFile = new File(subsetSavePath+jobid_sf+"/samplename.csv");
+		BufferedWriter bw2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sampleFile), "UTF-8"));
+		for(int i=0 ; i<jsonArray_sample.size() ; i++) {
+			bw2.write(jsonArray_sample.get(i).getAsString());
+			if(i != jsonArray_sample.size()-1) {
+				bw2.newLine();
+			}
 		}
+		bw2.close();
 	}
-	bw2.close();
-	
 	
 	
 	
@@ -136,22 +118,48 @@
 	}
 	
 	
+	
 	String SF = "Rscript " +script_path+ "breedertoolbox_subset.R " +savePath+ " " +outputPath+ " " +jobid_sf+ " " +file_name+ " " +subsetSavePath+jobid_sf+"/"+ " subset.csv samplename.csv";
 	System.out.println("Subset Filter parameter : " + SF);
-	
-	runanalysistools.execute(SF, "cmd");
-	
-	
-	
-	String updateSql = "update subset_filter_t set status=1 where jobid='" +jobid_sf+ "';";
-	System.out.println(updateSql);
-	try{
-		ipetdigitalconndb.stmt.executeUpdate(updateSql);
+	//runanalysistools.execute(SF, "cmd");
+	try {
+		CommandLine cmdLine = CommandLine.parse(SF);
+		DefaultExecutor executor = new DefaultExecutor();
+		executor.setExitValue(0);
+		int exitValue = executor.execute(cmdLine);
+		if(exitValue == 0) {
+			System.out.println("Success");
+			
+			String updateSql = "update subset_filter_t set status=1 where jobid='" +jobid_sf+ "';";
+			System.out.println(updateSql);
+			try{
+				ipetdigitalconndb.stmt.executeUpdate(updateSql);
+			} catch(Exception e) {
+				System.out.println(e);
+			} finally { 
+				ipetdigitalconndb.stmt.close();
+				ipetdigitalconndb.conn.close();
+			} 
+		} else {
+			System.out.println("Fail");
+			
+			String updateSql = "update subset_filter_t set status=2 where jobid='" +jobid_sf+ "';";
+			System.out.println(updateSql);
+			try{
+				ipetdigitalconndb.stmt.executeUpdate(updateSql);
+			} catch(Exception e) {
+				System.out.println(e);
+			} finally { 
+				ipetdigitalconndb.stmt.close();
+				ipetdigitalconndb.conn.close();
+			} 
+		}
 	} catch(Exception e) {
-		System.out.println(e);
-	} finally { 
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.conn.close();
-	} 
+		e.printStackTrace();
+	}
+	
+	
+	
+	
 	
 %>

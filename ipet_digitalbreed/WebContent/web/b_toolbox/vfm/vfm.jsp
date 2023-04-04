@@ -24,22 +24,11 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/tether.min.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/shepherd-theme-default.css">
-    <!--  
-	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/extensions/nouislider.min.css">
-	-->
-    <!--  
-    <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/vendors.min.css">
-    -->
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
 	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/forms/validation/form-validation.css">
 	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/forms/select/select2.min.css">
 	
-	<!--  
-	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.min.css">
-	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.structure.min.css">
-	<link rel="stylesheet" type="text/css" href="../../../css/app-assets/vendors/css/jquery-ui/jquery-ui.theme.min.css">
-    -->
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -56,11 +45,9 @@
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/dashboard-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/tour/tour.css">
-    <!--  
-    <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/plugins/extensions/ext-component-sliders.css">
-    -->
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/pages/aggrid.css">
     <link rel="stylesheet" type="text/css" href="../../../css/app-assets/css/bootstrap5_custom.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/index_assets/css/icons.min.css">
     <!-- END: Page CSS-->
 
 </head>
@@ -166,22 +153,6 @@ body {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                    	<!--  
-                                    	<i class='feather icon-database'></i>
-                                    	-->
-                                    	<%-- 
-	                                    	String  drive;
-	                                    	double  totalSize, freeSize, useSize;        
-	
-	                                    	File[] roots = File.listRoots();
-	                                    	totalSize = roots[0].getTotalSpace() / Math.pow(1024, 3);
-	                                    	useSize = roots[0].getUsableSpace() / Math.pow(1024, 3);
-	                                    	freeSize = totalSize - useSize;
-	
-	                                    	out.println(String.format("%.2f",freeSize) + " GB Remained");
-                                    	--%>
-                                    </div>
                                 </div>
                                   
                             </div>
@@ -233,7 +204,7 @@ body {
     </div>
     
 	<!-- Modal start-->
-    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true" style="z-index:10">
         <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
@@ -246,27 +217,30 @@ body {
 					<form class="form" id="uploadForm">
 					    <div class="form-body">
 					        <div class="row">
-					            <fieldset class="border w-100 ml-1 mr-1">
-						        <legend class="w-auto ml-1 mr-1">Options</legend>
+					            <fieldset class="border w-100 ml-1 mr-1 p-1">
+						        <legend class="w-auto">Options</legend>
 						            <div class="col-12">
-					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
-							            	<div class="form-check col-12 col-lg-3 pl-1">
+					            		<div class="row">
+							            	<div class="form-check col-6 pl-2">
 							            		<input type="radio" class="form-check-input" id="analysisModalRadio1" name="analysisModalRadioType1" checked/>
 		                                        <label class="form-check-label" for="analysisModalRadio1" style="margin-left:4px;" >Concatenate</label>
-		                                        <i class="ri-question-line"></i>
+		                                        <!--  
+		                                        <i class="ri-question-line" title="동일한 샘플에 대해"></i>
+		                                        -->
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-content="동일한 샘플에 대해 부분적으로(partial) 작성된 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.\n입력 파일 간에는 반드시 동일한 형태의 VCF header와 sample ID 정보를 공유해야 합니다."></i>
 							            	</div>
-							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            	<div class="form-check col-6 pl-2">
 							            		<input type="radio" class="form-check-input" id="analysisModalRadio2" name="analysisModalRadioType1" />
 		                                        <label class="form-check-label" for="analysisModalRadio2" style="margin-left:4px;" >Merge</label>
-		                                        <i class="ri-question-line"></i>
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-content="동일한 변이 site에 대해 서로 다른 샘플에 대한 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.\n입력 파일 간에는 반드시 동일한 형태의 VCF header와 변이 sites 정보를 공유해야 합니다."></i>
 							            	</div>
 					            		</div>
-					            		<div class="row pl-2 pr-2 mt-1" style="display:flex; column-gap:10px;">
-							            	<div class="form-check col-12 col-lg-3 pl-1">
+					            		<div class="row mt-1">
+							            	<div class="form-check col-6 pl-2">
 							            		<input type="checkbox" class="form-check-input" id="analysisModalCheckbox1"/>
-		                                        <label class="form-check-label" for="analysisModalCheckbox1" style="margin-left:4px;" >Allow duplicate samples</label>
+		                                        <label class="form-check-label" for="analysisModalCheckbox1" style="margin-left:4px;" >remove duplicate sites</label>
 							            	</div>
-							            	<div class="form-check col-12 col-lg-3 pl-1">
+							            	<div class="form-check col-6 pl-2">
 							            		<input type="checkbox" class="form-check-input" id="analysisModalCheckbox2" />
 		                                        <label class="form-check-label" for="analysisModalCheckbox2" style="margin-left:4px;" >Missing to Ref genotype</label>
 							            	</div>
@@ -358,6 +332,10 @@ body {
 	//Statistics에서 링크를 타고 왔을때 받는 전역변수. AG-Grid 로딩직후 cell click 용도로 사용
 	var linkedJobid = "<%=linkedJobid%>";
 
+	$(function () {
+		$('[data-toggle="popover"]').popover()
+	})
+	
    	$(document).ready(function(){
    		//vcfFileList();
    		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");

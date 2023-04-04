@@ -248,6 +248,7 @@
 	String cds_filename = request.getParameter("cds_filename");
 	String protein_filename = request.getParameter("protein_filename");
 	String annotation_filename = request.getParameter("annotation_filename");
+	String varietyid = request.getParameter("varietyid");
 	
 %>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
@@ -468,7 +469,7 @@
 											            		<button type="button" class="btn btn-light mb-1" style="margin-left:13px; margin-right:15px;" onclick="flanking_sequence();">Flanking sequence</button>
 											            		-->
 											            		<button type="button" class="btn btn-light mb-1" style="margin-right:5px; float:left; background-color:#7367F0 !important; color:#FFFFFF;" onclick=" if(SelectionList_gridOptions.api.getSelectedNodes().length != 1) {return alert('position을 하나만 선택해주세요.')} $('#flankingSequenceModal').modal();">Sequence</button>
-											            		<button type="button" class="btn btn-light mb-1" style="margin-left:5px; margin-right:auto; float:left; background-color:#7367F0 !important; color:#FFFFFF;" onclick="alert('전송되었습니다.');">Primer Design</button>
+											            		<button type="button" class="btn btn-light mb-1" style="margin-left:5px; margin-right:auto; float:left; background-color:#7367F0 !important; color:#FFFFFF;" onclick=" if(SelectionList_gridOptions.api.getSelectedRows().length == 0) {return alert('position을 1개 이상 선택해주세요.');} $('#Primer_Design').modal()">Primer Design</button>
 											            		<button type="button" class="btn btn-outline-success mb-1" style="margin-left:5px; margin-right:15px; float:right;" onclick="selection_mark();">표지</button>
 											            		<button type="button" class="btn btn-outline-warning mb-1" style="margin-left:13px; margin-right:5px; float:right;" onclick="clear_mark_all();">Reset</button>
 											            	</div>
@@ -749,6 +750,119 @@
 	  	</div>
 	</div>
 	
+	<div class="modal fade text-left" id="Primer_Design" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning white">
+                    <h4 class="modal-title" id="myModalLabel5">Primer Design New Analysis</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+					<form class="form" id="uploadForm">
+					    <div class="form-body">
+					        <div class="row p-1">
+				            	<div class="col-12" style="display:flex; column-gap:12%;">
+					            	<div class="col-2">
+					            		<input type="radio" class="form-check-input" id="KASP" name='Category' value="KASP" onclick="onClickMarkerCategory(this.id);" checked/>
+                                        <label class="form-check form-check-label" for="KASP" style="padding-top:1px; padding-left:15px;"  >KASP [200bp]</label>
+					            	</div>
+					            	<div class="col-2">
+					            		<input type="radio" class="form-check-input" id="CAPs" name='Category' value="CAPs" onclick="onClickMarkerCategory(this.id);" />
+                                        <label class="form-check form-check-label" for="CAPs" style="padding-top:1px; padding-left:15px;" >CAPs [500bp]</label>
+					            	</div>
+					            	<div class="col-2">
+					            		<input type="radio" class="form-check-input" id="INDEL" name='Category' value="INDEL" onclick="onClickMarkerCategory(this.id);" disabled/>
+                                        <label class="form-check form-check-label" for="INDEL" style="padding-top:1px; padding-left:15px;">INDEL</label>
+					            	</div>
+					            	<div class="col-2">
+					            		<input type="radio" class="form-check-input" id="HRM" name='Category' value="HRM" onclick="onClickMarkerCategory(this.id);" disabled/>
+                                        <label class="form-check form-check-label" for="HRM" style="padding-top:1px; padding-left:15px;">HRM</label>
+					            	</div>
+				            	</div>
+				            </div>
+				            <div class="row p-1">
+				             	<div class="col-md-12 col-12">
+					             	<div class="form-label-group">
+					                	<input type="text" id="comment" name="comment" class="form-control" placeholder="Comment" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+					             		<label for="first-name-column"></label>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="row pb-1 pl-1 pr-1">
+					        	<fieldset class="border w-100 m-1 pt-1">
+						        	<legend class="w-auto ml-1 mr-1">Option</legend>
+							        <div id="Enzyme_Grid" class="ag-theme-alpine ml-1 mr-1" style="display:none; margin: 0px auto; height:320px;"></div><br>
+							        <div class="col-12 mb-1" style="display:flex;">
+						            	<div class="col-4">
+						            	</div>
+						            	<div class="col-4" style="text-align:center;">
+						            		Min
+						            	</div>
+						            	<div class="col-4" style="text-align:center;">
+						            		Max
+						            	</div>
+					            	</div>
+							        <div class="col-12 mb-1" style="display:flex;">
+						            	<div class="col-4">
+						            		Primer length
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="Length_Min" name="Length_Min" value="18" />
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="Length_Max" name="Length_Max" value="22" />
+						            	</div>
+					            	</div>
+					            	<div class="col-12 mb-1" style="display:flex;">
+						            	<div class="col-4">
+						            		Primer GCcontent
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="GCcontent_Min" name="GCcontent_Min" value="40" />
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="GCcontent_Max" name="GCcontent_Max" value="55" />
+						            	</div>
+					            	</div>
+					            	<div class="col-12 mb-1" style="display:flex;">
+						            	<div class="col-4">
+						            		Primer TM
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="TM_Min" name="TM_Min" value="55" />
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="TM_Max" name="TM_Max" value="65" />
+						            	</div>
+					            	</div>
+				            		<div class="col-12 mb-1" style="display:flex;">
+						            	<div class="col-4">
+						            		Product size
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="Size_Min" name="Size_Min" value="60" />
+						            	</div>
+						            	<div class="col-4">
+						            		<input type="text" class="form-control" id="Size_Max" name="Size_Max" value="100" />
+						            	</div>
+					            	</div>
+						        </fieldset>
+					        </div>
+					        <div class="row p-1">
+					            <div class="col-12">
+					                <button type="button" class="btn btn-success mb-1" style="float: right;" onclick="primerDesign();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="reset();">Reset</button>
+					            </div>
+					        </div>
+					    </div>
+					</form>
+                </div>
+            </div>
+        </div>
+    </div>
+	
 	<div class="modal" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
@@ -815,6 +929,7 @@
 	const cds_filename = "<%=cds_filename%>";
 	const protein_filename = "<%=protein_filename%>";
 	const annotation_filename = "<%=annotation_filename%>";
+	const varietyid = "<%=varietyid%>";
 	
 	
 	const chr_orders_map = new Map();
@@ -2835,6 +2950,69 @@
    	function resetSort_UPGMA() {
    		// UPGMA Reset 버튼
    		document.getElementById('reset_UPGMA').dataset = "true";
+   	}
+   	
+   	
+   	async function primerDesign() {
+   		
+   		if(!document.getElementById('comment').value) {
+   			return alert('comment를 입력해주세요.');
+   		}
+   		
+   		const form = document.getElementById('uploadForm');
+   		const formData = new FormData(form);
+   		
+   		
+   		const jobid_pd = await fetch('../getJobid.jsp').then((response)=>response.text());
+   		const chr_info = new Array();
+   		SelectionList_gridOptions.api.forEachNode((node) => {
+   			chr_info.push({
+   				'chr': node.data.chr,
+   				'pos': node.data.pos,
+   			})
+   		});
+
+   		formData.append('jobid_vcf', linkedJobid);
+   		formData.append('filename_vcf', filename);
+   		formData.append('refgenome', refgenome);
+   		formData.append('fasta_filename', fasta_filename);
+   		formData.append('jobid_pd', jobid_pd);
+   		formData.append('chr_info', JSON.stringify(chr_info));
+   		formData.append('varietyid', varietyid);
+
+   		const params = new URLSearchParams(formData);
+   		/*
+   		for(const key of formData.keys()) {
+   			console.log(key, ":", formData.get(key));
+   		}
+   		*/
+   		
+   		fetch(`./vb_features_insertSql_PrimerDesign.jsp`, {
+   			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded",
+   			},
+   			body: params
+   		})
+   		.then(response => {
+   			if(!response.ok) {
+   				throw new Error('error');
+   			}
+   		})
+   		
+   		fetch(`./vb_features_primerDesign.jsp`, {
+   			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded",
+   			},
+   			body: params
+   		})
+   		.then(response => {
+   			if(!response.ok) {
+   				throw new Error('error');
+   			}
+   		})
+   		
    	}
    	
    	function resizeGrid() {

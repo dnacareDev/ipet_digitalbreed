@@ -4,6 +4,7 @@
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*,java.nio.file.*"%>
 <%@ page import="com.google.gson.JsonObject" %>
 <%@ page import="ipet_digitalbreed.*"%>    
+<%@ page import="org.apache.commons.exec.*" %> 
 
 <%
 
@@ -142,7 +143,16 @@
 	if(!annotation_filename.equals("null")) {
 		System.out.println("========snp_eff========");
 		System.out.println(snp_eff);
-		runanalysistools.execute(snp_eff, "cmd");
+		//runanalysistools.execute(snp_eff, "cmd");
+		
+		try {
+			CommandLine cmdLine = CommandLine.parse(snp_eff);
+			DefaultExecutor executor = new DefaultExecutor();
+			executor.setExitValue(0);
+			int exitValue = executor.execute(cmdLine);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

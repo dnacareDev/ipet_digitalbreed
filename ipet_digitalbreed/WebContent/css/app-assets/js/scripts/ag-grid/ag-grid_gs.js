@@ -207,7 +207,11 @@
 						document.getElementById('Extra_Card').style.display = 'block';
 						
 						document.getElementById('Prediction').style.display = params.data.prediction_genotype == "null" ? 'none' : 'block';
+						document.getElementById('Grid-Prediction').style.display='none';
+						
 						document.getElementById('Multiple_Prediction').style.display = params.data.prediction_genotype == "null" || params.data.phenotype.split(",").length<2 ? 'none' : 'block';
+						//document.getElementById('iframe-Multiple_Prediction').style.display = 'none';
+						$('iframe#iframe-Multiple_Prediction').attr('src', '');
 						
 						document.getElementById('Select-Cross_Validation').innerHTML = `<option hidden disabled selected></option>`;
 						document.getElementById('Select-Prediction').innerHTML = `<option hidden disabled selected></option>`;
@@ -288,7 +292,7 @@
 			},
 			//columnDefs: columnDefs_prediction,
 			rowHeight: 35,
-			rowSelection: "multiple",
+			rowSelection: "single",
 			rowMultiSelectWithClick: true,
 			suppressMultiRangeSelection: true,
 			animateRows: true,
@@ -348,13 +352,18 @@
 				})
 				.then((data) => {
 					const url = `${resultpath+jobid}/spyder.html`;
-					$('iframe#iframe-Multiple_Prediction').attr('src', '');
-					sleep(200);
+					//$('iframe#iframe-Multiple_Prediction').attr('src', '');
+					//document.getElementById('iframe-Multiple_Prediction').style.display = 'block';
+					//sleep(200);
 					$('iframe#iframe-Multiple_Prediction').attr('src', url);
 				})
 			},
-			onGridReady: (params) => {
-				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=''`)
+			onFirstDataRendered: (params) => {
+				
+				const jobid = document.getElementById('Extra_Card').dataset.jobid;
+				const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+				
+				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=`)
 				.then((response) => {
 					if(!response.ok) {
 						throw new Error('Error - ' +response.status);
@@ -369,6 +378,7 @@
 					$('iframe#iframe-Multiple_Prediction').attr('src', url);
 				})
 			}
+			
 	}
 	
 	var columnDefsTraitName = [

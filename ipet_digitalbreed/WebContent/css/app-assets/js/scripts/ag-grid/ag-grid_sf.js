@@ -298,7 +298,6 @@
 			colResizeDefault: "shift",
 			animateRows: true,
 			getRowId: params => params.data.chromosome,
-			
 			onCellClicked: params => {
 					
 					document.getElementById('addPosition').dataset.chromosome = params.data.chromosome;
@@ -373,7 +372,14 @@
 			undoRedoCellEditing: true,
 			undoRedoCellEditingLimit: 1,
 			onCellClicked: params => {
-				
+				//debugger;
+				if(params.colDef.field == "del") {
+					//params.rowIndex
+					const chr = document.getElementById('addPosition').dataset.chromosome;
+					const row_index = params.rowIndex;
+					chr_regions[chr].splice(params.rowIndex, 1);
+					regionByChromosome_gridOptions.api.setRowData(chr_regions[chr]);
+				}
 			},
 			onCellEditingStopped: params => {
 				//debugger;
