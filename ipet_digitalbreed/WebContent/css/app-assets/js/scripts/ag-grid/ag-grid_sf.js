@@ -497,6 +497,8 @@
 				}
 				break;
 		}
+		
+		return;
 	});
 	
 	document.addEventListener('DOMContentLoaded', () => {
@@ -587,11 +589,11 @@
 	    gridOptions.api.exportDataAsCsv();
 	});
 	
-	document.addEventListener('click', function(event) {
-  		if(event.composedPath()[0].classList.contains("nav-link")) {
-  			$("html").animate({ scrollTop: $(document).height() }, 1000);
-  		}
-  	});
+	document.querySelectorAll(`.nav-link`).forEach((node) => {
+		node.addEventListener('click', function(event) {
+			$("html").animate({ scrollTop: $(document).height() }, 1000);
+		})
+	})
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();

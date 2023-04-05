@@ -792,6 +792,7 @@
 		//console.log(`#grid_${model_name}`);
 		//console.log("path : ", resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv");
 		
+		/*
 		fetch(resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv")
 		.then((response) => response.blob())
 		.then((file) => {
@@ -808,6 +809,31 @@
 		        
 		    };
 		    reader.readAsBinaryString(file);
+		});
+		*/
+		
+		const params = new URLSearchParams({
+			"model_name" : model_name,
+			"phenotype": value,
+			"jobid_param" : jobid_param,
+		});
+		
+		fetch(`./gwas_gapit.jsp`, {
+			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+   			},
+   			body: params,
+		})
+		.then((response) => {
+			if(response.ok) {
+				return response.text();
+			} else {
+				throw new Error('error : status ', response.status);
+			}
+		})
+		.then((data) => {
+			console.log(data);
 		});
 	}
 

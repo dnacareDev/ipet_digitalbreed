@@ -252,18 +252,18 @@ body {
 						            <div class="col-12">
 					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="userSelect" name="selectRegion" value="userSelect" checked/>
+							            		<input type="radio" class="form-check-input" id="userSelect" name="selectRegion" value="userSelect" onclick="document.getElementById('userSelectDiv').style.display='flex'; document.getElementById('fileUploadDiv').style.display='none'; box.removeAllFiles();" checked/>
 		                                        <label class="form-check-label" for="userSelect" style="margin-left:4px;" >User select</label>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="bedFileUpload" name="selectRegion" value="bedFileUpload" />
+							            		<input type="radio" class="form-check-input" id="bedFileUpload" name="selectRegion" value="bedFileUpload" onclick="document.getElementById('userSelectDiv').style.display='none'; document.getElementById('fileUploadDiv').style.display='flex'; box.removeAllFiles();" />
 		                                        <label class="form-check-label" for="bedFileUpload" style="margin-left:4px;" >BED file upload</label>
-		                                        <i class="ri-question-line"></i>
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="• BED file<br>염색체명, 시작 위치, 끝 위치 세 열이 tab으로 구분된 파일<br>* 예시<br>chr1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;1000000" data-html="true" ></i>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="posFileUpload" name="selectRegion" value="posFileUpload" />
+							            		<input type="radio" class="form-check-input" id="posFileUpload" name="selectRegion" value="posFileUpload" onclick="document.getElementById('userSelectDiv').style.display='none'; document.getElementById('fileUploadDiv').style.display='flex'; box.removeAllFiles();" />
 		                                        <label class="form-check-label" for="posFileUpload" style="margin-left:4px;" >Pos. file upload</label>
-		                                        <i class="ri-question-line"></i> 
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="• Pos file<br>변이 위치를 담은 position 파일로 염색체명, 변이위치 정보가 tab으로 구분되어 작성된 파일<br>* 예시<br>chr1&nbsp;&nbsp;&nbsp;&nbsp;1" data-html="true" ></i> 
 							            	</div>
 					            		</div>
 						            </div>
@@ -284,9 +284,9 @@ body {
 					            				<div id="regionByChromosomeGrid" class="ag-theme-alpine mb-1" style="margin: 0px auto; width: 98%; height:220px;"></div>
 					            			</div>
 					            		</div>
-					            		<div class="row">
-					            			<div id="fileUploadDiv" class="col-12 p-1">
-					            				<div id="fileControl" style="display:block; margin: 0px auto; border: 1px solid #48BAE4;"></div>
+					            		<div id="fileUploadDiv" class="row" style="display:none;">
+					            			<div class="col-12 p-1">
+					            				<div id="fileControl" style="margin: 0px auto; border: 1px solid #48BAE4;"></div>
 					            			</div>
 					            		</div>
 						            </div>
@@ -296,13 +296,13 @@ body {
 						            <div class="col-md-12 col-12">
 					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
 							            	<div class="form-check col-12 col-lg-3 pl-1">
-							            		<input type="radio" class="form-check-input" id="userSelectSample" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='block'; document.getElementById('sampleFileControl').style.display='none';" checked />
+							            		<input type="radio" class="form-check-input" id="userSelectSample" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='block'; document.getElementById('sampleFileControl').style.display='none'; sample_box.removeAllFiles();" checked />
 		                                        <label class="form-check-label" for="userSelectSample" style="margin-left:4px;" >User Select</label>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-6 pl-1">
-							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='none'; document.getElementById('sampleFileControl').style.display='block';" />
+							            		<input type="radio" class="form-check-input" id="sampleNameFileUpload" name="selectSubSetOfSample" onclick="document.getElementById('sampleNameGrid').style.display='none'; document.getElementById('sampleFileControl').style.display='block'; sample_box.removeAllFiles();" />
 		                                        <label class="form-check-label" for="sampleNameFileUpload" style="margin-left:4px;" >Sample name file upload</label>
-		                                        <i class="ri-question-line"></i>
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover"  data-container="#backdrop" data-content="• 샘플 목록 파일<br>* 예시<br>sample1<br>sample2<br>...<br>sample10<br>" data-html="true"></i>
 							            	</div>
 					            		</div>
 						            </div>
@@ -389,9 +389,12 @@ body {
 	//const chr_regions = new Map();
 	const chr_regions = {};
 
+	$(function () {
+   		$('[data-toggle="popover"]').popover()
+	});
+	
    	$(document).ready(function(){
    		vcfFileList();
-   		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
    	});
    	
    	let sample_box = new Object();
@@ -552,17 +555,22 @@ body {
 		//sample_map.clear();
 		
 		const jobid = selectedOption('VcfSelect').dataset.jobid;
+		const filename = selectedOption('VcfSelect').dataset.filename;
 		
 		//vcf_map
 		if( vcf_map.get(jobid) !== null && vcf_map.get(jobid) !== undefined ) {
 			selectChromosome_gridOptions.api.setRowData(vcf_map.get(jobid)?.chr);
 			sampleNameGrid_gridOptions.api.setRowData(vcf_map.get(jobid)?.sample);
+			selectChromosome_gridOptions.api.forEachNode((node) => {
+				node.setSelected(true);
+			});
 			return;
 		}
 		
 		const url_string = './sf_getSubsetOfRegionsAndSamples.jsp';
 		const map_params = new Map();
 		map_params.set("jobid", jobid);
+		map_params.set("filename", filename);
 		
 		const vcf_information = await getFetchData(url_string, map_params);
 		vcf_map.set(jobid, vcf_information);
@@ -591,14 +599,17 @@ body {
 	function resetQF() {
 		//document.getElementById('uploadForm').reset();
 		
-		document.getElementById('userSelect').checked = true;
-		document.getElementById('userSelectSample').checked = true;
+		//document.getElementById('userSelect').checked = true;
+		//document.getElementById('userSelectSample').checked = true;
+		document.getElementById('userSelect').click();
+		document.getElementById('userSelectSample').click();
+		
+		vcfFileList();
 		
 		selectChromosome_gridOptions.api.setRowData();
     	regionByChromosome_gridOptions.api.setRowData();
     	sampleNameGrid_gridOptions.api.setRowData();
 		
-		vcfFileList();
 	}
    	
     async function Execute() {

@@ -27,6 +27,7 @@
 	//JsonObject jsonObject = new JsonParser().parseString(sb.toString()).getAsJsonObject();
 	// 문자열 => jsonArray
 	JsonObject jsonObject = new Gson().fromJson(sb.toString(), JsonObject.class);
+	System.out.println();
 	System.out.println(jsonObject);
 	System.out.println();
 	

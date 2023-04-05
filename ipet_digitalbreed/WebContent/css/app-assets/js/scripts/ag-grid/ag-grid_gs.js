@@ -341,27 +341,45 @@
 				
 				//console.log(selected_row_index);
 				
-				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=${selected_row_index}`)
-				.then((response) => {
-					if(!response.ok) {
-						$("#Loading").modal('hide');
-						throw new Error('Error - ' +response.status);
-					} else {
-						return response.text();
-					}
-				})
-				.then((data) => {
-					const url = `${resultpath+jobid}/spyder.html`;
-					//$('iframe#iframe-Multiple_Prediction').attr('src', '');
-					//document.getElementById('iframe-Multiple_Prediction').style.display = 'block';
-					//sleep(200);
-					$('iframe#iframe-Multiple_Prediction').attr('src', url);
-				})
+				//sleep(3000);
+				//document.getElementById('iframe-Multiple_Prediction').contentWindow.document.innerHTML = "";
+				//document.getElementById('iframe-Multiple_Prediction').contentWindow.document.querySelector(`script[type="application/json"]`).innerHTML = "";
+				
+				setTimeout(() => {
+					fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=${selected_row_index}`)
+					.then((response) => {
+						if(!response.ok) {
+							$("#Loading").modal('hide');
+							throw new Error('Error - ' +response.status);
+						} else {
+							return response.text();
+						}
+					})
+					.then((data) => {
+						const url = `${resultpath+jobid}/spyder.html`;
+						//$('iframe#iframe-Multiple_Prediction').attr('src', '');
+						//document.getElementById('iframe-Multiple_Prediction').style.display = 'block';
+						
+						$('iframe#iframe-Multiple_Prediction').attr('src', url);
+						
+						
+						
+						/*
+						setTimeout(function() {
+							$('iframe#iframe-Multiple_Prediction').attr('src', url);
+						}, 2000)
+						*/
+					})
+				}, 3000);
+				
+				
 			},
 			onFirstDataRendered: (params) => {
 				
 				const jobid = document.getElementById('Extra_Card').dataset.jobid;
 				const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+				
+				//$('iframe#iframe-Multiple_Prediction').attr('src', '');
 				
 				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=`)
 				.then((response) => {
@@ -373,8 +391,8 @@
 				})
 				.then((data) => {
 					const url = `${resultpath+jobid}/spyder.html`;
-					$('iframe#iframe-Multiple_Prediction').attr('src', '');
-					sleep(200);
+					//$('iframe#iframe-Multiple_Prediction').attr('src', '');
+					//sleep(200);
 					$('iframe#iframe-Multiple_Prediction').attr('src', url);
 				})
 			}

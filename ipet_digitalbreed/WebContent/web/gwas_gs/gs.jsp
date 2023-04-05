@@ -167,7 +167,7 @@ body {
                                 </div>
                                   
                             </div>
-                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:465px;"></div><br>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:435px;"></div><br>
 							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
@@ -229,7 +229,7 @@ body {
 														<!--  
 														<div class="col-12 d-flex justify-content-center h4">Spyder-Plot</div>
 														-->
-														<iframe src = '' height='400px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="$('#Loading').modal('hide')"></iframe>
+														<iframe src = '' height='400px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="checkJsonValid();"></iframe>
 													</div>
 												</div>
 											</div>
@@ -515,7 +515,9 @@ body {
 
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_gs.js"></script>
+    <!--  
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>
+    -->
 	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>  
     <!--  
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
@@ -1072,29 +1074,32 @@ body {
    		}
     }
    	
-   	function printCSV(text) {
-   		//console.log("iframe param(text) : ", text);
-   		let SNP_key = text.split("<br>").shift();
-   		SNP_key = SNP_key.replace(/ /gi,"");
-   		const SNP_value = SNP_key.split(":").pop();
-   		console.log(SNP_value);
+   	function checkJsonValid() {
+   		const str = document.getElementById('iframe-Multiple_Prediction').contentWindow.document.querySelector(`script[type="application/json"]`).innerHTML;
    		
-   		if(!SNP_value){
-   			return;
+   		function IsJsonString(str) {
+   			try {
+   		    	var json = JSON.parse(str);
+   		    	return (typeof json === 'object');
+   			} catch (e) {
+   		    	return false;
+   		    }
    		}
    		
-   		const model_name = $('#model_name').val();
-   		
-   		gridOptions2.api.forEachNode((rowNode, index) => {
-   			if(SNP_value == rowNode.data.SNP) {
-   				//console.log(rowNode);
-	   		    //console.log('node ' + rowNode.data.SNP + ' is in the grid');
-	   		    //console.log(rowNode.rowIndex);
-	   		 	gridOptions2.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
-	   		 	rowNode.setSelected(true);
-	   		 	//gridOptions2.api.getRowStyle(param)
+   		if(IsJsonString(str)) {
+	   		$('#Loading').modal('hide');
+   		} else {
+   			// setInterval
+   			const interval_id = setInterval(myCallback, 500);
+   			
+   			function myCallback() {
+   				const interval_str = document.getElementById('iframe-Multiple_Prediction').contentWindow.document.querySelector(`script[type="application/json"]`).innerHTML;
+   				if(isJsonString(interval_str)) {
+   					$('iframe#iframe-Multiple_Prediction').attr('src', url);
+   					clearInterval(interval_id);
+   				}
    			}
-   		});
+   		}
    		
    	}
     

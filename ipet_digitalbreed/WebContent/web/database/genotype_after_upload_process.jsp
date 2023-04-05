@@ -90,14 +90,15 @@
 	makeJsonFromCsv(outputPath, jobid, permissionUid);
 	System.out.println("========CSV to Json & excuteUpdate end========"); 
 	
-	System.out.println("========save chromosome list start========");
+	System.out.println("========save reference information start========");
 	if(refgenome.equals("-")) {
 		System.out.println("Non-referenece. make chromosome list stopped");
 	} else {
 		makeChrDataCsv(rootFolder, jobid, refgenome);
 	}
-	System.out.println("========save chromosome list end========");
+	System.out.println("========save reference information end========");
 
+	/*
 	String updateVcfinfo2_sql="update vcfdata_info_t set status=2 where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
 	System.out.println(updateVcfinfo_sql);
 	
@@ -109,17 +110,8 @@
    		ipetdigitalconndb.stmt.close();
    		ipetdigitalconndb.conn.close();
    	}
-	
-	
-	/*
-	// CSV => 행렬변환된 CSV파일 생성
-	String csv_transpose = "Rscript " +script_path+ "genotype_sequence_bakground.R " +outputPath+" "+ jobid;
-	
-	System.out.println("========CSV transpose start========");
-	System.out.println("csv_transpose : " + csv_transpose);
-	runanalysistools.execute(csv_transpose, "cmd");
-	System.out.println("========CSV transpose end========");
 	*/
+	
 	System.out.println("vcf file background process complete");
 	
 	
@@ -249,61 +241,6 @@
 		
 		bw.flush();
 		bw.close();
-		
-		/*
-		List<List<String>> chrList = new ArrayList<>();
-		
-		br.readLine();
-		String line = br.readLine();
-		
-		for(int i=1, chrListCount=0 ; true ; i++) {
-			//System.out.println(line);
-			String chr = line.substring(0, line.indexOf(","));
-			
-			if(i==1) {
-				String vcf_id = getVcfId(chr, jobid);
-
-				chrList.add( Arrays.asList(chr, vcf_id, "") );
-				bw.write( chr + "," + vcf_id + ",");
-				
-				System.out.println("chr : " + chr + " & vcf_id : " + vcf_id);
-				
-			}
-			
-			//System.out.println(chr);
-			if( !(chr.equals( chrList.get(chrListCount).get(0) )) ) {
-				
-				
-				if(chrListCount == 0) {
-					chrList.get(chrListCount).set(2, String.valueOf(i-1));
-					bw.write(String.valueOf(i-1));
-				} else {
-					chrList.get(chrListCount).set(2, String.valueOf(i));
-					bw.write(String.valueOf(i));
-				}
-				
-				chrListCount++;
-				bw.newLine();
-				
-				i=0;
-				//chrList.add( Arrays.asList(line.substring(0, line.indexOf("_")), String.valueOf(i), "") );
-			}
-			
-			
-			if( (line = br.readLine()) == null ) {
-				chrList.get(chrListCount).set(2, String.valueOf(i+1));
-				bw.write(String.valueOf(i+1));
-				break;
-			}
-		}
-		//System.out.println(chrList);
-		//System.out.println("end");
-		
-		br.close();
-		
-		bw.flush();
-		bw.close();
-		*/
 	}
 %>
 

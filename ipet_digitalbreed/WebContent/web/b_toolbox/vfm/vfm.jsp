@@ -156,7 +156,7 @@ body {
                                 </div>
                                   
                             </div>
-                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:435px;"></div><br>
 							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
@@ -204,7 +204,7 @@ body {
     </div>
     
 	<!-- Modal start-->
-    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true" style="z-index:10">
+    <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true" >
         <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
@@ -222,27 +222,37 @@ body {
 						            <div class="col-12">
 					            		<div class="row">
 							            	<div class="form-check col-6 pl-2">
-							            		<input type="radio" class="form-check-input" id="analysisModalRadio1" name="analysisModalRadioType1" checked/>
+							            		<input type="radio" class="form-check-input" id="analysisModalRadio1" name="analysisModalRadioType1" value="concatenate" onclick="document.getElementById('concatenateOptionDiv').style.display='flex'; document.getElementById('mergeOptionDiv').style.display='none'; deselectAllCheckbox()" checked/>
 		                                        <label class="form-check-label" for="analysisModalRadio1" style="margin-left:4px;" >Concatenate</label>
 		                                        <!--  
 		                                        <i class="ri-question-line" title="동일한 샘플에 대해"></i>
 		                                        -->
-		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-content="동일한 샘플에 대해 부분적으로(partial) 작성된 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.\n입력 파일 간에는 반드시 동일한 형태의 VCF header와 sample ID 정보를 공유해야 합니다."></i>
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="동일한 샘플에 대해 부분적으로(partial) 작성된 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.<br><br>입력 파일 간에는 반드시 동일한 형태의 VCF header와 sample ID 정보를 공유해야 합니다." data-html="true"></i>
 							            	</div>
 							            	<div class="form-check col-6 pl-2">
-							            		<input type="radio" class="form-check-input" id="analysisModalRadio2" name="analysisModalRadioType1" />
+							            		<input type="radio" class="form-check-input" id="analysisModalRadio2" name="analysisModalRadioType1" value="merge" onclick="document.getElementById('concatenateOptionDiv').style.display='none'; document.getElementById('mergeOptionDiv').style.display='flex'; deselectAllCheckbox" />
 		                                        <label class="form-check-label" for="analysisModalRadio2" style="margin-left:4px;" >Merge</label>
-		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-content="동일한 변이 site에 대해 서로 다른 샘플에 대한 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.\n입력 파일 간에는 반드시 동일한 형태의 VCF header와 변이 sites 정보를 공유해야 합니다."></i>
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="동일한 변이 site에 대해 서로 다른 샘플에 대한 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.<br><br>입력 파일 간에는 반드시 동일한 형태의 VCF header와 변이 sites 정보를 공유해야 합니다."></i>
 							            	</div>
 					            		</div>
-					            		<div class="row mt-1">
+					            		<div id="concatenateOptionDiv" class="row mt-1">
 							            	<div class="form-check col-6 pl-2">
-							            		<input type="checkbox" class="form-check-input" id="analysisModalCheckbox1"/>
-		                                        <label class="form-check-label" for="analysisModalCheckbox1" style="margin-left:4px;" >remove duplicate sites</label>
+							            		<input type="checkbox" class="form-check-input" id="modalCheckbox1" name="removeDuplicateSites" />
+		                                        <label class="form-check-label" for="modalCheckbox1" style="margin-left:4px;" >Remove duplicate sites</label>
 							            	</div>
 							            	<div class="form-check col-6 pl-2">
-							            		<input type="checkbox" class="form-check-input" id="analysisModalCheckbox2" />
-		                                        <label class="form-check-label" for="analysisModalCheckbox2" style="margin-left:4px;" >Missing to Ref genotype</label>
+							            		<input type="checkbox" class="form-check-input" id="modalCheckbox2" name="sortPositions" />
+		                                        <label class="form-check-label" for="modalCheckbox2" style="margin-left:4px;" >Sort positions</label>
+							            	</div>
+					            		</div>
+					            		<div id="mergeOptionDiv" class="row mt-1" style="display:none;">
+							            	<div class="form-check col-6 pl-2">
+							            		<input type="checkbox" class="form-check-input" id="modalCheckbox3" name="AllowDuplicateSamples" />
+		                                        <label class="form-check-label" for="modalCheckbox3" style="margin-left:4px;" >Allow duplicate samples</label>
+							            	</div>
+							            	<div class="form-check col-6 pl-2">
+							            		<input type="checkbox" class="form-check-input" id="modalCheckbox4" name="missingToRefGenotype" />
+		                                        <label class="form-check-label" for="modalCheckbox4" style="margin-left:4px;" >Missing to Ref genotype</label>
 							            	</div>
 					            		</div>
 						            </div>
@@ -333,12 +343,11 @@ body {
 	var linkedJobid = "<%=linkedJobid%>";
 
 	$(function () {
-		$('[data-toggle="popover"]').popover()
-	})
+   		$('[data-toggle="popover"]').popover()
+	});
 	
    	$(document).ready(function(){
-   		//vcfFileList();
-   		//$(".select2.select2-container.select2-container--default").eq(1).width("444px");
+   		
    	});
 
    	function vcfFileList() {
@@ -390,9 +399,9 @@ body {
 	   	
 	   	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
    		setTimeout( function () {
-   			refresh();
-   			hideSpinner();
-   			$("#backdrop").modal("hide");
+	   			refresh();
+	   			hideSpinner();
+	   			$("#backdrop").modal("hide");
    			}
    		, 2000);
 	}
@@ -424,109 +433,69 @@ body {
 		document.getElementById("thin").style.display = "none";
 		vcfFileList();
 	}
+	
+	function deselectAllCheckbox() {
+		document.querySelectorAll('#concatenateOptionDiv input[type="checkbox"], #mergeOptionDiv input[type="checkbox"]').forEach((node) => {
+			node.checked=false;
+		})
+	}
    	
     async function Execute() {
     	
+    	
 	   	const variety_id = $( "#variety-select option:selected" ).val();
     	
-    	const select_vcf = document.getElementById('VcfSelect');
-    	const jobid_vcf = select_vcf.options[select_vcf.selectedIndex].dataset.jobid;
-    	const file_name = select_vcf.options[select_vcf.selectedIndex].dataset.filename;
-    	const refgenome_id = select_vcf.options[select_vcf.selectedIndex].dataset.refgenome_id;
+   		const jobid_vfm = await fetch('../../getJobid.jsp').then((response)=>response.text());
     	
-    	const jobid_qf = await fetch('../../getJobid.jsp')
-    					.then((response) => response.text());
+    	const form = document.getElementById('uploadForm');
+    	const formData = new FormData(form);
     	
-    	const snp_checked = document.getElementById('variant_snp').checked;
-    	const indel_checked = document.getElementById('variant_indel').checked;
-    	const allelic_bi_checked = document.getElementById('allelic_bi').checked;
-    	const missing = document.getElementById('missing-number').value;
-    	const maf = document.getElementById('maf-number').value;
-    	const minDP = document.getElementById('minDP').value;
-    	const minGQ = document.getElementById('minGQ').value;
-    	//thin input이 빈칸이면 false로 판단(사용 체크해제해도 값을 비우므로 false)
-    	let thin = document.getElementById('thin').value;
+    	const selected_vcf = vcf_gridOptions.api.getSelectedRows();
     	
-    	if(jobid_vcf == -1) {
-    		alert("VCF 파일을 선택하세요");
-    		return;
+    	if( document.getElementById('analysisModalRadio1').checked && (!document.getElementById('modalCheckbox1').checked && !document.getElementById('modalCheckbox2').checked) ) {
+    		return alert("Remove doplicate sites 또는 Sort positions 중 하나 이상을 체크하셔야 합니다.")
     	}
     	
-    	if(!snp_checked && !indel_checked) {
-    		alert("Variant Type을 한 개 이상 선택해 주세요");
-    		return;
+    	if( document.getElementById('analysisModalRadio2').checked && (!document.getElementById('modalCheckbox3').checked && !document.getElementById('modalCheckbox4').checked) ) {
+    		return alert("Allow duplicate samples 또는 Missing to Ref genotype 중 하나 이상을 체크하셔야 합니다.")
     	}
     	
-    	if(!minDP) {
-    		alert("MinDP를 입력하세요");
-    		return;
+    		
+    	if(selected_vcf.length != 2) {
+    		return alert("vcf파일을 2개 선택해주세요.");
     	}
     	
-    	if(!minGQ) {
-    		alert("MinGQ를 입력하세요");
-    		return;
-    	}
     	
-    	// thin이 빈값이면 0으로 간주
-    	if(!thin) {
-    		thin = 0;
-    	}
- 
-    	// snp체크 = 1, indel체크 = 2, 둘다체크 = 0
-    	let variant_type;
-    	if(snp_checked && indel_checked) {
-    		variant_type = 0;
-    	} else if(snp_checked && !indel_checked) {
-    		variant_type = 1;
-    	} else if(!snp_checked && indel_checked) {
-    		variant_type = 2;
-    	}
-    	
-    	// Bi-allelic체크 = 1, 체크x = 0
-    	let allelic_type;
-    	if(allelic_bi_checked) {
-    		allelic_type = 1;
-    	} else {
-    		allelic_type = 0;
-    	}
+    	formData.append('variety_id', variety_id);
+    	formData.append('jobid_vfm', jobid_vfm);
+    	formData.append('vcf_1', selected_vcf[0]['jobid']+","+selected_vcf[0]['filename']);
+    	formData.append('vcf_2', selected_vcf[1]['jobid']+","+selected_vcf[1]['filename']);
+
+    	const params = new URLSearchParams(formData);
     	
     	/*
-    	const data = {
-    			"jobid_vcf": jobid_vcf, "jobid_qf": jobid_qf, "variant_type": variant_type, "file_name":file_name,
-    			"allelic_type": allelic_type, "missing": missing, "maf": maf,
-    			"minDP": minDP, "minGQ": minGQ, "thin": thin
-    	}
-    	console.log(data);
+    	for(const key of formData.keys()) {
+   			console.log(key, ":", formData.get(key));
+   		}
     	*/
     	
+   		fetch(`./vfm_insertSql.jsp`, {
+    		method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded",
+   			},
+   			body: params
+    	});
     	
-    	$.ajax({
-    		url: './qf_analysis.jsp',
-    		method: 'POST',
-    		data: {
-    			"jobid_vcf": jobid_vcf, "jobid_qf": jobid_qf, "variant_type": variant_type, "file_name":file_name,
-    			"allelic_type": allelic_type, "missing": missing, "maf": maf,
-    			"minDP": minDP, "minGQ": minGQ, "thin": thin
-    		},
-    		success: function(result) {
-    			console.log("success");
-    		}
-    	})
+    	fetch(`./vfm_analysis.jsp`, {
+   			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded",
+   			},
+   			body: params
+   		});
     	
-    	
-    	$.ajax({
-    		url: './qf_insertSql.jsp',
-    		method: 'POST',
-    		data: {
-    			"variety_id": variety_id,
-    			"jobid_qf": jobid_qf,
-    			"file_name": file_name,
-    			"refgenome_id": refgenome_id,
-    		},
-    		sucess: function(result) {
-    		}
-    	})
-    	
+   		
     	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
    		setTimeout( function () {
    			refresh();

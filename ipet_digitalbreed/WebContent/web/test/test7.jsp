@@ -24,8 +24,6 @@
 		csvStream(rootFolder, jobid);
 	}
 	
-	
-	
 %>
 
 <%!

@@ -28,7 +28,7 @@
 	// 문자열 => jsonArray
 	//JsonArray array = new Gson().fromJson("JsonArray 문자열", JsonArray.class);	
 	JsonObject jsonObject = new Gson().fromJson(sb.toString(), JsonObject.class);
-	System.out.println(jsonObject);
+	//System.out.println(jsonObject);
 	System.out.println();
 	
 	String varietyid = jsonObject.get("variety_id").getAsString();
@@ -76,18 +76,9 @@
 		ipetdigitalconndb.stmt.executeUpdate(sql);
 	} catch(Exception e) {
 		System.out.println(e);
+	} finally {
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
 	}
-	
-	
-	
-	File folder_subsetSavePath = new File(subsetSavePath+jobid_sf);
-	if (!folder_subsetSavePath.exists()) {
-		try{
-			folder_subsetSavePath.mkdirs(); 
-	    } catch(Exception e){
-			e.getStackTrace();
-		}        
-	}
-	
 	
 %>

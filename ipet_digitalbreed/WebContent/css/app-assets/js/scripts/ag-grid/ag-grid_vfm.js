@@ -231,7 +231,7 @@
 						document.getElementById('qf_1').click();
 						
 						$('#pill1_frame').attr('height',"130px");
-						$('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/b_toolbox/qf/qf_vcfinfo.jsp?jobid="+params.data.jobid);
+						$('#pill1_frame').attr( 'src', "./vfm_vcfinfo.jsp?jobid="+params.data.jobid);
 						
 						// 클릭시 초기화
 						$('#pill2_frame').attr('src', '');
@@ -263,7 +263,7 @@
 		{
 			checkboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true,
+			//headerCheckboxSelection: true,
 		},
 		{
 			headerName: "순번",
@@ -389,10 +389,17 @@
 			columnDefs: vcf_columnDefs,
 			rowHeight: 35,
 			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
 			suppressMultiRangeSelection: true,
 			suppressDragLeaveHidesColumns: true,
 			colResizeDefault: "shift",
 			animateRows: true,
+			onRowSelected: (params) => {
+				if(vcf_gridOptions.api.getSelectedRows().length > 2) {
+					alert("vcf를 2개 이상 선택할 수 없습니다.");
+					params.node.setSelected(false);
+				}
+			}
 	}
 	
 	function comparator(filterLocalDateAtMidnight, cellValue) {
