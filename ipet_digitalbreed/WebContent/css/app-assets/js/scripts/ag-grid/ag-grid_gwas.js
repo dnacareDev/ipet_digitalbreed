@@ -553,7 +553,8 @@
 
 	function showPlot(value) {
 		
-		const model_name = $('#model_name').val();
+		//const model_name = $('#model_name').val();
+		const model_name = document.querySelector(`.nav-link.active`).textContent;
 		const resultpath = $('#resultpath').val();
 		const jobid_param = $('#jobid_param').val();
 		
@@ -576,7 +577,8 @@
 			return;
 		}
 		
-		const model_name = document.getElementById('model_name').value;
+		//const model_name = document.getElementById('model_name').value;
+		const model_name = document.querySelector(`.nav-link.active`).textContent;
 		const resultpath = document.getElementById('resultpath').value;
 		const jobid = document.getElementById('jobid_param').value;
 		
@@ -587,7 +589,7 @@
 			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
 		}
 		*/
-		$(`iframe#${model_name}`).attr('src', '');		// empty plot
+		$(`iframe#Multi`).attr('src', '');		// empty plot
 		
 		
 		let url;
@@ -701,7 +703,9 @@
 		},
 		{
 			field: "P-value", 
-			valueFormatter: (params) => Number(params.value).toFixed(5),
+			//valueFormatter: (params) => Number(params.value).toFixed(5),
+			valueFormatter: (params) => -Math.log10(Number(params.value)).toFixed(5),
+			comparator: (valueA, valueB, nodeA, nodeB, isDescending) => (-Math.log10(Number(valueA)) == -Math.log10(Number(valueB))) ? 0 : (-Math.log10(Number(valueA)) > -Math.log10(Number(valueB))) ? 1 : -1,
 			width: 120, 
 			sortable: true, 
 			
@@ -771,7 +775,8 @@
 	//var modelGrid = [];
 	function showGrid(value) {
 		
-		const model_name = $('#model_name').val();
+		//const model_name = $('#model_name').val();
+		const model_name = document.querySelector(`.nav-link.active`).textContent;
 		const resultpath = $('#resultpath').val();
 		const jobid_param = $('#jobid_param').val();
 		
@@ -827,13 +832,18 @@
 		})
 		.then((response) => {
 			if(response.ok) {
-				return response.text();
+				//return response.text();
+				return response.json();
 			} else {
 				throw new Error('error : status ', response.status);
 			}
 		})
 		.then((data) => {
 			console.log(data);
+			
+			const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
+	        gridOptions2.api.setRowData(data);
+	        gridOptions2.columnApi.autoSizeAllColumns();
 		});
 	}
 

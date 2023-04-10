@@ -232,6 +232,7 @@
 						$("#iframeLoading").modal('show');
 						
 						document.getElementById('vcf_status').style.display = "block";
+						window.scrollTo(0, document.body.scrollHeight);
 						document.getElementById('qf_1').click();
 						
 						$('#pill1_frame').attr('height',"130px");
@@ -250,7 +251,7 @@
 				   		
 						gridOptions.api.sizeColumnsToFit();
 						
-			  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+			  			//$("html").animate({ scrollTop: $(document).height() }, 1000);
 						
 						break;
 					case 2:
@@ -373,11 +374,14 @@
 	    gridOptions.api.exportDataAsCsv();
 	});
 	
+	/*
 	document.addEventListener('click', function(event) {
   		if(event.composedPath()[0].classList.contains("nav-link")) {
   			$("html").animate({ scrollTop: $(document).height() }, 1000);
   		}
   	});
+  	*/
+	
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();

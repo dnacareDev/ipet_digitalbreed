@@ -229,6 +229,7 @@
 						$("#iframeLoading").modal('show');
 						
 						document.getElementById('vcf_status').style.display = "block";
+						window.scrollTo(0, document.body.scrollHeight);
 						document.getElementById('qf_1').click();
 						
 						$('#pill1_frame').attr('height',"130px");
@@ -247,7 +248,7 @@
 				   		
 						gridOptions.api.sizeColumnsToFit();
 						
-			  			$("html").animate({ scrollTop: $(document).height() }, 1000);
+			  			//$("html").animate({ scrollTop: $(document).height() }, 1000);
 						
 						break;
 					case 2:

@@ -9,7 +9,7 @@
 <%
 
 //if (request.getMethod().equals("POST")){
-	System.out.println("SF file_ext executed");
+	System.out.println("VFM file_ext executed");
 	
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();			
 
@@ -18,7 +18,7 @@
 	
 	String savePath = rootFolder+"uploads/database/db_input/";
 	String outputPath = rootFolder+"result/database/genotype_statistics/";		
-	String org_savePath = rootFolder+"result/Breeder_toolbox_analyses/subset/";
+	String org_savePath = rootFolder+"result/Breeder_toolbox_analyses/merge/";
 
 
 	String db_savePath = "uploads/database/db_input/";
@@ -43,7 +43,7 @@
 	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	String SaveSql = "UPDATE subset_filter_t SET save_cmd = '1' where jobid='" +jobid+ "';";
+	String SaveSql = "UPDATE vcf_file_merge_t SET save_cmd = '1' where jobid='" +jobid+ "';";
 	
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(SaveSql);

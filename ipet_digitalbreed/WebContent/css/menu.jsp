@@ -64,12 +64,7 @@
                                     </li>
                                     <li class="<%if(menu_active.equals("vft")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/vft/vft.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Vcf file transformation</a>
                                     </li>
-                                    <li class="<%if(menu_active.equals("anno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Annotation</a>
-                                    </li>
-                                    <li class="<%if(menu_active.equals("idiogram")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Idiogram</a>
-                                    </li>
-                                    <li class="<%if(menu_active.equals("structure")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Structure</a>
-                                    </li>
+                                    
                                 </ul>
                             </li>
                             <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Form Elements"><i class="feather icon-monitor"></i>Genotype Analyses</a>
@@ -86,6 +81,12 @@
                                     <li class="<%if(menu_active.equals("mabc")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/mabc/mabc.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>MABC Transformation</a>
                                     </li>
                                     --%>
+                                    <li class="<%if(menu_active.equals("anno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Annotation</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("idiogram")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Idiogram</a>
+                                    </li>
+                                    <li class="<%if(menu_active.equals("structure")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Structure</a>
+                                    </li>
                                 </ul>
                             </li>
 							<li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Chat"><i class="feather icon-sliders"></i>Phenotype Analyses</a>

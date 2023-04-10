@@ -7,8 +7,8 @@
 <%@ page import="org.apache.commons.exec.*" %>
 
 <%
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	//ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
 	
@@ -38,12 +38,18 @@
 	String region_select = jsonObject.get("region_select").getAsString();
 	String sample_select = jsonObject.get("sample_select").getAsString();
 	String file_name = jsonObject.get("file_name").getAsString();
+	String subset_filename = jsonObject.get("subset_filename") == null ? "subset.csv" : jsonObject.get("subset_filename").getAsString();
+	String sample_filename = jsonObject.get("sample_filename") == null ? "samplename.csv" : jsonObject.get("sample_filename").getAsString();
 	JsonObject jsonObject_region = new Gson().fromJson(jsonObject.get("region"), JsonObject.class);
 	JsonArray jsonArray_sample = new Gson().fromJson(jsonObject.get("sample_arr"), JsonArray.class);
 	
+	
+	
 	//System.out.println(jobid_vcf);
 	//System.out.println(jobid_sf);
-	//System.out.println(filename);
+	//System.out.println(file_name);
+	System.out.println(subset_filename);
+	System.out.println(sample_filename);
 	//System.out.println(jsonObject_region);
 	//System.out.println(jsonArray_sample);
 	
@@ -120,7 +126,7 @@
 	
 	
 	
-	String SF = "Rscript " +script_path+ "breedertoolbox_subset.R " +savePath+ " " +outputPath+ " " +jobid_sf+ " " +file_name+ " " +subsetSavePath+jobid_sf+"/"+ " subset.csv samplename.csv";
+	String SF = "Rscript " +script_path+ "breedertoolbox_subset.R " +savePath+ " " +outputPath+ " " +jobid_sf+ " " +file_name+ " " +subsetSavePath+jobid_sf+"/ "+ subset_filename +" "+ sample_filename;
 	System.out.println("Subset Filter parameter : " + SF);
 	//runanalysistools.execute(SF, "cmd");
 	try {
@@ -130,7 +136,7 @@
 		int exitValue = executor.execute(cmdLine);
 		if(exitValue == 0) {
 			System.out.println("Success");
-			
+			/*
 			String updateSql = "update subset_filter_t set status=1 where jobid='" +jobid_sf+ "';";
 			System.out.println(updateSql);
 			try{
@@ -141,9 +147,10 @@
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.conn.close();
 			} 
+			*/
 		} else {
 			System.out.println("Fail");
-			
+			/*
 			String updateSql = "update subset_filter_t set status=2 where jobid='" +jobid_sf+ "';";
 			System.out.println(updateSql);
 			try{
@@ -154,6 +161,7 @@
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.conn.close();
 			} 
+			*/
 		}
 	} catch(Exception e) {
 		e.printStackTrace();

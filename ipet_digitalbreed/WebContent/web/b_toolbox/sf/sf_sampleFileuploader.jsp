@@ -42,6 +42,7 @@ if (request.getMethod().equals("POST"))
 	
 	
 	//uploader.setDirectory(savePath);
+	//uploader.setFileName("samplename.csv");
 	String _run_retval = uploader.run();
 	
 

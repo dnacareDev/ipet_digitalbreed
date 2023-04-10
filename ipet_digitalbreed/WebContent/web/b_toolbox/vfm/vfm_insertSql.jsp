@@ -28,12 +28,15 @@
 	String vcf_2 = request.getParameter("vcf_2");
 	String jobid_vcf_2 = vcf_2.split(",")[0];
 	String filename_vcf_2 = vcf_2.split(",")[1];
+	String refgenome_id = request.getParameter("refgenome_id");
+	
+	System.out.println("refgenome_id : " + refgenome_id);
+	
+	/*
 	System.out.println(jobid_vcf_1);
 	System.out.println(filename_vcf_1);
 	System.out.println(jobid_vcf_2);
 	System.out.println(filename_vcf_2);
-	//JsonArray jsonArray = new Gson().fromJson(merged_vcf, JsonArray.class);
-	
 	
 	System.out.println(jobid_vfm);
 	System.out.println(analysisModalRadioType1);
@@ -41,7 +44,7 @@
 	System.out.println(sortPositions);
 	System.out.println(AllowDuplicateSamples);
 	System.out.println(missingToRefGenotype);
-	
+	*/	
 	
 	
 	
@@ -68,8 +71,8 @@
 	}
 	
 	String sql = "insert into vcf_file_merge_t (cropid, varietyid, refgenome_id, status, filename, manufacture, uploadpath, resultpath, save_cmd, jobid, creuser, cre_dt) ";
-	//sql += "values((select cropid from variety_t where varietyid='"+variety_id+"'), '"+variety_id+"', " +refgenome_id+ ", 0, '"+filename_vcf_1+filename_vcf_2+"', 'merge', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_vfm+"','" +permissionUid+ "',now());";
-	sql += "values((select cropid from variety_t where varietyid='"+variety_id+"'), '"+variety_id+"', 0, 0, '"+jobid_vfm+"_merge.vcf"+"', 'merge', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_vfm+"','" +permissionUid+ "',now());";
+	sql += "values((select cropid from variety_t where varietyid='"+variety_id+"'), '"+variety_id+"', " +refgenome_id+ ", 0, '"+jobid_vfm+"_merge.vcf', 'merge', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_vfm+"','" +permissionUid+ "',now());";
+	//sql += "values((select cropid from variety_t where varietyid='"+variety_id+"'), '"+variety_id+"', 0, 0, '"+jobid_vfm+"_merge.vcf"+"', 'merge', '"+db_savePath+"','"+db_outputPath+"','0', '"+jobid_vfm+"','" +permissionUid+ "',now());";
 	
 	System.out.println(sql);
 	try{

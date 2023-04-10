@@ -8,8 +8,8 @@
 
 <%
 	
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	//ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	//RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
 	
@@ -34,13 +34,14 @@
 	System.out.println(filename_vcf_2);
 	//JsonArray jsonArray = new Gson().fromJson(merged_vcf, JsonArray.class);
 	
-	
+	/*
 	System.out.println(jobid_vfm);
 	System.out.println(analysisModalRadioType1);
 	System.out.println(removeDuplicateSites);
 	System.out.println(sortPositions);
 	System.out.println(AllowDuplicateSamples);
 	System.out.println(missingToRefGenotype);
+	*/
 	
 	int concatenate_count = 0;
 	if(removeDuplicateSites.equals("on") && sortPositions.equals("off")) {
@@ -122,7 +123,7 @@
 		int exitValue = executor.execute(cmdLine);
 		if(exitValue == 0) {
 			System.out.println("Success");
-			
+			/*
 			String updateSql = "update vcf_file_merge_t set status=1 where jobid='" +jobid_vfm+ "';";
 			System.out.println(updateSql);
 			try{
@@ -133,10 +134,10 @@
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.conn.close();
 			} 
-			
+			*/
 		} else {
 			System.out.println("Fail");
-			
+			/*
 			String updateSql = "update vcf_file_merge_t set status=2 where jobid='" +jobid_vfm+ "';";
 			System.out.println(updateSql);
 			try{
@@ -147,7 +148,7 @@
 				ipetdigitalconndb.stmt.close();
 				ipetdigitalconndb.conn.close();
 			} 
-			
+			*/
 		}
 	} catch(Exception e) {
 		e.printStackTrace();

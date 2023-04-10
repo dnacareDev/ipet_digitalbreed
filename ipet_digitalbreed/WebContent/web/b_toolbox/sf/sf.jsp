@@ -69,6 +69,10 @@
 
 <!-- BEGIN: Body-->
 <style>
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: 'SDSamliphopangche_Outline';
 }
@@ -258,12 +262,12 @@ body {
 							            	<div class="form-check col-12 col-lg-3 pl-1">
 							            		<input type="radio" class="form-check-input" id="bedFileUpload" name="selectRegion" value="bedFileUpload" onclick="document.getElementById('userSelectDiv').style.display='none'; document.getElementById('fileUploadDiv').style.display='flex'; box.removeAllFiles();" />
 		                                        <label class="form-check-label" for="bedFileUpload" style="margin-left:4px;" >BED file upload</label>
-		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="• BED file<br>염색체명, 시작 위치, 끝 위치 세 열이 tab으로 구분된 파일<br>* 예시<br>chr1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;1000000" data-html="true" ></i>
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="• BED file<br>염색체명, 시작 위치, 끝 위치 세 열이 comma(,)로 구분된 파일<br>* 예시<br>chr1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;1000000" data-html="true" ></i>
 							            	</div>
 							            	<div class="form-check col-12 col-lg-3 pl-1">
 							            		<input type="radio" class="form-check-input" id="posFileUpload" name="selectRegion" value="posFileUpload" onclick="document.getElementById('userSelectDiv').style.display='none'; document.getElementById('fileUploadDiv').style.display='flex'; box.removeAllFiles();" />
 		                                        <label class="form-check-label" for="posFileUpload" style="margin-left:4px;" >Pos. file upload</label>
-		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="• Pos file<br>변이 위치를 담은 position 파일로 염색체명, 변이위치 정보가 tab으로 구분되어 작성된 파일<br>* 예시<br>chr1&nbsp;&nbsp;&nbsp;&nbsp;1" data-html="true" ></i> 
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="• Pos file<br>변이 위치를 담은 position 파일로 염색체명, 변이위치 정보가 comma(,)로 구분되어 작성된 파일<br>* 예시<br>chr1&nbsp;&nbsp;&nbsp;&nbsp;1" data-html="true" ></i> 
 							            	</div>
 					            		</div>
 						            </div>
@@ -421,6 +425,7 @@ body {
         	
         	console.log("p : ", p);
         	//console.log("filename : ", p.files[0].file.name);
+			p.postData['subset_filename'] = p.files[0]['file']['name'];
 			if (p.postData.sample_select == "sampleNameFileUpload") {
     	    	sample_box.setPostData(p.postData);
     	    	sample_box.upload();
@@ -456,6 +461,8 @@ body {
         sample_box.on('uploadComplete', function (p) {
         	
         	console.log("sample_box p : ", p);
+        	
+        	p.postData['sample_filename'] = p.files[0]['file']['name'];
         	
         	fetch(`./sf_analysis.jsp`, {
 	    		method: "POST",

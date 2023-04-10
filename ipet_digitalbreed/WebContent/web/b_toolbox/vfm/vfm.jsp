@@ -55,6 +55,10 @@
 
 <!-- BEGIN: Body-->
 <style>
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: 'SDSamliphopangche_Outline';
 }
@@ -274,7 +278,7 @@ body {
 						        </fieldset>
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="Execute();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="javascript:resetQF();">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="javascript:resetForm();">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -353,13 +357,12 @@ body {
    	function vcfFileList() {
    		$.ajax(
    			{
- 	   			//url: "./pca_non_population.jsp",
  	   			url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
  	   			method: 'POST',
  	   			success: function(data) {
  		  			console.log("vcf file list : ", data);
  		  			
- 		  			makeOptions(data);
+ 		  			//makeOptions(data);
  	   			}
    	  	});
    	}
@@ -379,7 +382,7 @@ body {
 		$("#iframeLoading").modal('hide');
 	}
    	
-	function saveToVcf(filename, jobid, refgenome, refgenome_id) { 
+	function saveToVcf(filename, jobid, refgenome, refgenome_id, annotation_filename) { 
 		if(!confirm("결과를 Genotype DB에 저장하시겠습니까?")) {
 			return;
 		}
@@ -393,7 +396,7 @@ body {
 	   	console.log("saveToVcf refgenome :", refgenome );
 	   	
 	   	
-	   	fetch(`../../database/fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&variety_id=\${variety_id}&refgenome=\${refgenome}&refgenome_id=\${refgenome_id}`);
+	   	fetch(`./vfm_fileupload_ext.jsp?jobid=\${jobid}&vcf_filename=\${filename}&variety_id=\${variety_id}&refgenome=\${refgenome}&refgenome_id=\${refgenome_id}&annotation_filename=\${annotation_filename}`);
 	   	
 	   	$("#iframeLoading").modal('show');
 	   	
@@ -424,20 +427,27 @@ body {
 	}
 	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-   		resetQF();
+   		resetForm();
     });    
    	
-	function resetQF() {
-		document.getElementById('uploadForm').reset();
+	function resetForm() {
+		//document.getElementById('uploadForm').reset();
+		document.querySelectorAll(`#uploadForm .form-check input[type="checkbox"]`).forEach((node) => {
+			node.checked = false;
+		});
+		document.getElementById('analysisModalRadio1').click();
 		
-		document.getElementById("thin").style.display = "none";
-		vcfFileList();
+		vcf_gridOptions.api.forEachNode((node) => {
+			node.setSelected(false);
+		});
+		
+		//vcfFileList();
 	}
 	
 	function deselectAllCheckbox() {
-		document.querySelectorAll('#concatenateOptionDiv input[type="checkbox"], #mergeOptionDiv input[type="checkbox"]').forEach((node) => {
-			node.checked=false;
-		})
+		document.querySelectorAll(`#uploadForm .form-check input[type="checkbox"]`).forEach((node) => {
+			node.checked = false;
+		});
 	}
    	
     async function Execute() {
@@ -466,10 +476,21 @@ body {
     	}
     	
     	
+    	let refgenome_id = 0;
+    	if(selected_vcf[0].refgenome_id != selected_vcf[1].refgenome_id) {
+    		if(!confirm("각 VCF가 서로 다른 참조유전체를 가지고 있습니다.\n이대로 진행할 경우 참조유전체 정보가 사라집니다.\n계속하시겠습니까?")) {
+    			return;
+    		}
+    	} else {
+	    	refgenome_id = selected_vcf[0].refgenome_id;
+    	}
+    	
+    	
     	formData.append('variety_id', variety_id);
     	formData.append('jobid_vfm', jobid_vfm);
     	formData.append('vcf_1', selected_vcf[0]['jobid']+","+selected_vcf[0]['filename']);
     	formData.append('vcf_2', selected_vcf[1]['jobid']+","+selected_vcf[1]['filename']);
+    	formData.append('refgenome_id', refgenome_id);
 
     	const params = new URLSearchParams(formData);
     	

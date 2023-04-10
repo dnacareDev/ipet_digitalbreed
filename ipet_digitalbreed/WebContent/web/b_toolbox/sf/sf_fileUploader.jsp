@@ -59,10 +59,11 @@ if (request.getMethod().equals("POST"))
 		}
 		File from = new File(savePath+_orig_filename);
         File to = new File(savePath+jobid_sf+"/"+_orig_filename);
+        //File to = new File(savePath+jobid_sf+"/subset.csv");
  
         try {
             Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("File moved successfully.");
+            System.out.println("subset File moved successfully.");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

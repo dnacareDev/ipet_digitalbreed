@@ -3013,6 +3013,12 @@
    			}
    		})
    		
+   		setTimeout( function () {
+   			refresh();
+   			$("#Primer_Design").modal("hide");
+   			}
+   		, 1000);
+   		
    	}
    	
    	function resizeGrid() {
