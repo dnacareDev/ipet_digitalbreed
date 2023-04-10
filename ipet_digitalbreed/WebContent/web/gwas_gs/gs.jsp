@@ -225,11 +225,9 @@ body {
 													<div class="col-12 col-xl-8" style="height:445px; margin-top:25px; float:left;">
 														<div id="Grid-Multiple_Prediction" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:430px;"></div><br>
 													</div>
-													<div class="col-12 col-xl-4" style="height:445px; margin-top:25px; float:left;">
-														<!--  
-														<div class="col-12 d-flex justify-content-center h4">Spyder-Plot</div>
-														-->
-														<iframe src = '' height='400px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="checkJsonValid();"></iframe>
+													<div class="col-12 col-xl-4 p-1" style="height:430px; margin-top:25px; float:left; border:2px dashed #b8c2cc; border-radius:1px;">
+														<div class="col-12 d-flex justify-content-start h5" style="color: #7a7a7a; font-weight: 600;">Spyder-Plot</div>
+														<iframe src = '' height='380px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Multiple_Prediction' onload="checkJsonValid();"></iframe>
 													</div>
 												</div>
 											</div>
@@ -1075,6 +1073,11 @@ body {
     }
    	
    	function checkJsonValid() {
+   		
+   		if(!document.getElementById('iframe-Multiple_Prediction').contentWindow.document.querySelector(`script[type="application/json"]`)) {
+   			return;
+   		}
+   		
    		const str = document.getElementById('iframe-Multiple_Prediction').contentWindow.document.querySelector(`script[type="application/json"]`).innerHTML;
    		
    		function IsJsonString(str) {

@@ -720,7 +720,6 @@
 	
 	$("#backdrop").on("shown.bs.modal", function(e) {
 		enzyme_gridOptions.columnApi.autoSizeAllColumns();
-		//enzyme_gridOptions.api.sizeColumnsToFit();
 	});
 	
 	

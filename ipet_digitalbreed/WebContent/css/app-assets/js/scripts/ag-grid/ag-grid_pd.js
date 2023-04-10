@@ -212,6 +212,13 @@
 							jQuery("#Enzyme_Select").trigger("change");
 						}
 						
+						const selectEl = document.getElementById('Enzyme_Select');
+					    selectEl.innerHTML = `<option data-enzyme="-">- Select All -</option>`;
+					    
+					    const enzymes_arr = params.data.restriction_enzymes.split(",");
+					    for(let i=0 ; i<enzymes_arr.length ; i++) {
+					    	selectEl.insertAdjacentHTML('beforeend',`<option data-enzyme="${enzymes_arr[i]}">${enzymes_arr[i]}</option>`);
+					    }
 						
 						fetch(`${params.data.resultpath+params.data.jobid+"/"+params.data.jobid+"_primer_design.csv"}`)
 						.then((response)=> {
@@ -268,18 +275,13 @@
 						        
 						        
 						        
-						        const selectEl = document.getElementById('Enzyme_Select');
-								selectEl.innerHTML = `<option data-enzyme="-">- Select All -</option>`;
-								
-								const enzymes_arr = params.data.restriction_enzymes.split(",");
-								for(let i=0 ; i<enzymes_arr.length ; i++) {
-									selectEl.insertAdjacentHTML('beforeend',`<option data-enzyme="${enzymes_arr[i]}">${enzymes_arr[i]}</option>`);
-								}
 								
 						        
 						        //$("#Loading").modal('hide');
 						    };
 						    reader.readAsBinaryString(file);
+
+						    
 						})
 						
 						break;

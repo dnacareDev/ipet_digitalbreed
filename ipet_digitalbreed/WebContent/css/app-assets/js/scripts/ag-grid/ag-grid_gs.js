@@ -320,11 +320,16 @@
 			onRowSelected: (params) => {
 				
 				const rows = gridOptions_multiplePrediction.api.getSelectedRows(); 
+				
+				if(rows.length == 0) {
+					$('iframe#iframe-Multiple_Prediction').attr('src', '');
+					return;
+				}
+				
 				if(rows.length > 10) {
 					params.node.setSelected(false);
 					return alert("10개까지만 선택 가능합니다.");
 				}
-				
 				
 				$("#Loading").modal('show');
 				
@@ -340,10 +345,6 @@
 				}
 				
 				//console.log(selected_row_index);
-				
-				//sleep(3000);
-				//document.getElementById('iframe-Multiple_Prediction').contentWindow.document.innerHTML = "";
-				//document.getElementById('iframe-Multiple_Prediction').contentWindow.document.querySelector(`script[type="application/json"]`).innerHTML = "";
 				
 				setTimeout(() => {
 					fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=${selected_row_index}`)
@@ -374,13 +375,13 @@
 				
 				
 			},
+			/*
 			onFirstDataRendered: (params) => {
 				
 				const jobid = document.getElementById('Extra_Card').dataset.jobid;
 				const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
 				
 				//$('iframe#iframe-Multiple_Prediction').attr('src', '');
-				
 				fetch(`./gs_spyderPlot.jsp?jobid=${jobid}&selected_row=`)
 				.then((response) => {
 					if(!response.ok) {
@@ -396,6 +397,7 @@
 					$('iframe#iframe-Multiple_Prediction').attr('src', url);
 				})
 			}
+			 */
 			
 	}
 	

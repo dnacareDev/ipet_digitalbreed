@@ -83,9 +83,9 @@
                                     --%>
                                     <li class="<%if(menu_active.equals("anno")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Annotation</a>
                                     </li>
-                                    <li class="<%if(menu_active.equals("idiogram")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Idiogram</a>
+                                    <li class="<%if(menu_active.equals("ideogram")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/ideogram/ideogram.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Ideogram</a>
                                     </li>
-                                    <li class="<%if(menu_active.equals("structure")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/anno/anno.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Structure</a>
+                                    <li class="<%if(menu_active.equals("structure")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/structure/structure.jsp" data-toggle="dropdown" data-i18n="Input"><i class="feather icon-circle"></i>Structure</a>
                                     </li>
                                 </ul>
                             </li>

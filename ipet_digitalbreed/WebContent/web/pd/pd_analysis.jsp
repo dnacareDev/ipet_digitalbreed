@@ -181,23 +181,6 @@
 		
 		RunAnalysisTools runanalysistools = new RunAnalysisTools();
 		runanalysistools.execute(cmd, "cmd");
-		/*
-		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-		
-		String sql = "update primer_design_t set status = 1 where jobid = '" +jsonObject.get("jobid_pd").getAsString()+ "';";
-
-		System.out.println("sql : " + sql);
-		
-		try{
-			ipetdigitalconndb.stmt.executeUpdate(sql);
-		} catch(Exception e) {
-			System.out.println(e);
-		} finally { 
-			ipetdigitalconndb.stmt.close();
-			ipetdigitalconndb.conn.close();
-		}
-		*/
 		
 	}
 %>
@@ -208,23 +191,6 @@
 		
 		RunAnalysisTools runanalysistools = new RunAnalysisTools();
 		runanalysistools.execute(cmd, "cmd");
-		/*
-		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-		
-		String sql = "update primer_design_t set status = 1 where jobid = '" +jsonObject.get("jobid_pd").getAsString()+ "';";
-
-		System.out.println("sql : " + sql);
-		
-		try{
-			ipetdigitalconndb.stmt.executeUpdate(sql);
-		} catch(Exception e) {
-			System.out.println(e);
-		} finally { 
-			ipetdigitalconndb.stmt.close();
-			ipetdigitalconndb.conn.close();
-		}
-		*/
 	}
 %>
 
@@ -235,22 +201,5 @@
 		RunAnalysisTools runanalysistools = new RunAnalysisTools();
 		runanalysistools.execute(cmd, "cmd");
 		
-		/*
-		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-		
-		String sql = "update primer_design_t set status = 1 where jobid = '" +jsonObject.get("jobid_pd").getAsString()+ "';";
-
-		System.out.println("sql : " + sql);
-		
-		try{
-			ipetdigitalconndb.stmt.executeUpdate(sql);
-		} catch(Exception e) {
-			System.out.println(e);
-		} finally { 
-			ipetdigitalconndb.stmt.close();
-			ipetdigitalconndb.conn.close();
-		}
-		*/
 	}
 %>

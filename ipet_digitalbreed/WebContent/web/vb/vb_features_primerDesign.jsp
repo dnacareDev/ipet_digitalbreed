@@ -13,11 +13,13 @@
 	String fasta_filename = request.getParameter("fasta_filename");
 	String jobid_pd = request.getParameter("jobid_pd");
 	String chr_info = request.getParameter("chr_info");
+	String enzymes = request.getParameter("enzymes");
 	
 	String Category = request.getParameter("Category");
 	//String comment = request.getParameter("comment");	
 	
 	JsonArray jsonArray = new Gson().fromJson(chr_info, JsonArray.class);
+	JsonArray jsonArray_enzymes = new Gson().fromJson(enzymes, JsonArray.class);
 	
 	String Length_Min = request.getParameter("Length_Min");
 	String Length_Max = request.getParameter("Length_Max");
@@ -39,6 +41,7 @@
 	System.out.println(Size_Min);
 	System.out.println(Size_Max);
 	*/
+	//System.out.println(jsonArray_enzymes);
 	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String vcfPath = rootFolder + "uploads/database/db_input/"+jobid_vcf+"/";	
@@ -59,6 +62,47 @@
         	e.getStackTrace();
 		}        
 	}
+	
+	
+	File enzymeCSV = new File(savePath+"/"+jobid_pd+"_enzymes.csv");
+	try {
+		BufferedWriter bw = new BufferedWriter(new FileWriter(enzymeCSV));
+		
+		for(int i=0 ; i<jsonArray_enzymes.size() ; i++) {
+			if(i==0) {
+				Iterator<String> iterator = jsonArray_enzymes.get(0).getAsJsonObject().keySet().iterator();
+				while (iterator.hasNext()) {
+				    String key = iterator.next();
+				    //System.out.print(key);
+				    bw.write(key);
+				    if(iterator.hasNext()) {
+				    	bw.write(",");
+				    } else {
+				    	bw.newLine();
+				    }
+				}
+			}
+			
+			Iterator<String> iterator = jsonArray_enzymes.get(0).getAsJsonObject().keySet().iterator();
+			while (iterator.hasNext()) {
+			    String key = iterator.next();
+			    bw.write(jsonArray_enzymes.get(i).getAsJsonObject().get(key).getAsString());
+			    
+			    if(iterator.hasNext()) {
+			    	bw.write(",");
+			    } else if(i  != jsonArray_enzymes.size()) {
+			    	bw.newLine();
+			    }
+			}
+		}
+		bw.flush();
+		bw.close();
+	} catch (IOException e) {
+		e.getMessage();
+		System.out.println("error - bufferedWriter | primer_design CSV");
+	}
+	
+	
 	
 	File folder_outputPath = new File(outputPath+jobid_pd);
 	if (!folder_outputPath.exists()) {
@@ -115,7 +159,7 @@
 	
 	//String cmd_fileUpload = "Rscript " +script_path+script +" 3 "+ outputPath +" "+ jobid_pd +" "+ refgenomePath +" "+ Length_Min +" "+ Length_Max +" "+ GCcontent_Min +" "+ GCcontent_Max +" "+ TM_Min +" "+ TM_Max +" "+ Size_Min +" "+ Size_Max +" "+ vcfPath +" "+ savePath+"pos.txt";
 	String cmd_fileUpload = "Rscript " +script_path+script +" 3 "+ outputPath +" "+ jobid_pd +" "+ refgenomePath +" "+ Length_Min +" "+ Length_Max +" "+ GCcontent_Min +" "+ GCcontent_Max +" "+ TM_Min +" "+ TM_Max +" "+ Size_Min +" "+ Size_Max +" "+ outputPath+jobid_pd+"/ "+ jobid_pd+"_for_flnking.csv" ;
-	System.out.println(cmd_fileUpload);
+	System.out.println("cmd_fileUpload : " + cmd_fileUpload);
 	
 	try {
 		CommandLine cmdLine2 = CommandLine.parse(cmd_fileUpload);
@@ -142,7 +186,8 @@ public void fileWrite(String savePath, JsonArray jsonArray) throws IOException {
 	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(savePath+"pos.txt"), "UTF-8"));
 	
 	for(int i=0 ; i<jsonArray.size(); i++) {
-		bw.write(jsonArray.get(i).getAsJsonObject().get("chr").getAsString()+"\t"+jsonArray.get(i).getAsJsonObject().get("pos").getAsString());
+		//bw.write(jsonArray.get(i).getAsJsonObject().get("chr").getAsString()+"\t"+jsonArray.get(i).getAsJsonObject().get("pos").getAsString());
+		bw.write(jsonArray.get(i).getAsJsonObject().get("chr").getAsString()+","+jsonArray.get(i).getAsJsonObject().get("pos").getAsString());
 		if(i != jsonArray.size() -1) {
 			bw.newLine();
 		}

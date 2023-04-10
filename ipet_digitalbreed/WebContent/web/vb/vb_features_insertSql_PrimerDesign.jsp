@@ -22,6 +22,17 @@
 	String chr_info = request.getParameter("chr_info");
 	String varietyid = request.getParameter("varietyid");
 	
+	String enzymes = request.getParameter("enzymes");
+	
+	JsonArray jsonArray_enzymes = new Gson().fromJson(enzymes, JsonArray.class);
+	StringBuilder enzymes_stringified = new StringBuilder();
+	for(int i=0 ; i<jsonArray_enzymes.size() ; i++) {
+		enzymes_stringified.append(jsonArray_enzymes.get(i).getAsJsonObject().get("Enzyme").getAsString());
+		if(i != jsonArray_enzymes.size()-1) {
+			enzymes_stringified.append(",");
+		}
+	}
+	
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String db_savePath = "/ipet_digitalbreed/uploads/database/db_input/";
 	//String db_outputPath = "/ipet_digitalbreed/result/primer_design/";
@@ -41,8 +52,8 @@
 	
 	String sql = "insert into primer_design_t (cropid, varietyid, status, filename, comment, marker_category, restriction_enzymes, uploadpath, resultpath, jobid, creuser, cre_dt) ";
 	
-	//sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '" +comment+ "', '" +Category+ "', '" +enzymes+ "','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
-	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '" +comment+ "', '" +Category+ "', '','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());"; 
+	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '" +comment+ "', '" +Category+ "', '" +enzymes_stringified+ "','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());";
+	//sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename_vcf+"', '" +comment+ "', '" +Category+ "', '','" +db_savePath+"','"+db_outputPath+"', '"+jobid_pd+"','" +permissionUid+ "',now());"; 
 
 	
 	System.out.println("sql : " + sql);

@@ -765,7 +765,7 @@
 					        <div class="row p-1">
 				            	<div class="col-12" style="display:flex; column-gap:12%;">
 					            	<div class="col-2">
-					            		<input type="radio" class="form-check-input" id="KASP" name='Category' value="KASP" onclick="onClickMarkerCategory(this.id);" checked/>
+					            		<input type="radio" class="form-check-input" id="KASP" name='Category' value="KASP" onclick="onClickMarkerCategory(this.id); " checked/>
                                         <label class="form-check form-check-label" for="KASP" style="padding-top:1px; padding-left:15px;"  >KASP [200bp]</label>
 					            	</div>
 					            	<div class="col-2">
@@ -793,7 +793,7 @@
 					        <div class="row pb-1 pl-1 pr-1">
 					        	<fieldset class="border w-100 m-1 pt-1">
 						        	<legend class="w-auto ml-1 mr-1">Option</legend>
-							        <div id="Enzyme_Grid" class="ag-theme-alpine ml-1 mr-1" style="display:none; margin: 0px auto; height:320px;"></div><br>
+							        <div id="Enzyme_Grid" class="ag-theme-alpine ml-1 mr-1" style="display:none;; margin: 0px auto; height:320px;"></div><br>
 							        <div class="col-12 mb-1" style="display:flex;">
 						            	<div class="col-4">
 						            	</div>
@@ -853,7 +853,7 @@
 					        <div class="row p-1">
 					            <div class="col-12">
 					                <button type="button" class="btn btn-success mb-1" style="float: right;" onclick="primerDesign();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="reset();">Reset</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
 					            </div>
 					        </div>
 					    </div>
@@ -2804,6 +2804,16 @@
    		$('[data-toggle="popover"]').popover();
    	}
    	
+   	function onClickMarkerCategory(id) {
+		document.getElementById('Enzyme_Grid').style.display = id=='CAPs' ? 'block' : 'none';
+		
+		if(id != 'CAPs') {
+			enzyme_gridOptions.api.deselectAll();
+		}
+		
+		enzyme_gridOptions.columnApi.autoSizeAllColumns();
+	}
+   	
    	function getUpgmaSelectList() {
    		fetch(`./vb_getSelectLists.jsp?command=UPGMA&jobid=\${linkedJobid}`)
    		.then((response) => response.json())
@@ -2971,6 +2981,8 @@
    				'pos': node.data.pos,
    			})
    		});
+   		
+   		const enzymes = enzyme_gridOptions.api.getSelectedRows();
 
    		formData.append('jobid_vcf', linkedJobid);
    		formData.append('filename_vcf', filename);
@@ -2978,6 +2990,7 @@
    		formData.append('fasta_filename', fasta_filename);
    		formData.append('jobid_pd', jobid_pd);
    		formData.append('chr_info', JSON.stringify(chr_info));
+   		formData.append('enzymes', JSON.stringify(enzymes));
    		formData.append('varietyid', varietyid);
 
    		const params = new URLSearchParams(formData);
@@ -2986,6 +2999,7 @@
    			console.log(key, ":", formData.get(key));
    		}
    		*/
+   		
    		
    		fetch(`./vb_features_insertSql_PrimerDesign.jsp`, {
    			method: "POST",
@@ -2999,6 +3013,7 @@
    				throw new Error('error');
    			}
    		})
+   		
    		
    		fetch(`./vb_features_primerDesign.jsp`, {
    			method: "POST",
@@ -3014,16 +3029,13 @@
    		})
    		
    		setTimeout( function () {
-   			refresh();
    			$("#Primer_Design").modal("hide");
-   			}
-   		, 1000);
+   		}, 1000);
    		
    	}
    	
    	function resizeGrid() {
    		
-				
    		setTimeout( () => {
 			
    			const position = Number(document.getElementById('currentId').dataset.position);
@@ -3043,9 +3055,23 @@
 		}, 100)
    	}
    	
+   	function resetForm() {
+   		document.getElementById('Enzyme_Grid').style.display = 'none';
+   		document.getElementById('uploadForm').reset();
+   		enzyme_gridOptions.api.deselectAll();
+   	}
+   	
    	$("#flankingSequenceModal").on('hidden.bs.modal', function(e) {
    		document.getElementById('flankingSequence').value = "";
    	});
+   	
+   	$("#Primer_Design").on("shown.bs.modal", function(e) {
+		enzyme_gridOptions.columnApi.autoSizeAllColumns();
+	});
+   	
+   	$("#Primer_Design").on("hidden.bs.modal", function(e) {
+   		resetForm();
+	});
    	
 	async function getFetchData(url_string, map_params) {
 		
