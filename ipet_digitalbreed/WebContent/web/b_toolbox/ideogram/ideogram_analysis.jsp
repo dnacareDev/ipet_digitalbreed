@@ -13,6 +13,7 @@
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String filename = request.getParameter("filename");
 	String refgenome = request.getParameter("refgenome");
+	//String refgenome = request.getParameter("refgenome").equals("null") ? "non" : request.getParameter("refgenome");
 	String annotation_filename = request.getParameter("annotation_filename");
 	
 	String CM_Plot_Bin_Size = request.getParameter("CM_Plot_Bin_Size");
@@ -32,7 +33,8 @@
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String savePath = rootFolder + "uploads/database/db_input/" + jobid_vcf + "/";
 	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/ideogram/";
-	String annotationPath = rootFolder + "uploads/reference_database/"+refgenome+"/";
+	//String annotationPath = rootFolder + "uploads/reference_database/"+refgenome+"/";
+	String annotationPath = refgenome.equals("null") ? "non" : rootFolder + "uploads/reference_database/"+refgenome+"/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	

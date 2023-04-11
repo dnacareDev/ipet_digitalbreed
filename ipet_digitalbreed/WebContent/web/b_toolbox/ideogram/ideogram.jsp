@@ -358,6 +358,7 @@
    	
    	function vcfFileList() {
    		
+   		/*
    		fetch("../../../web/vb/vb_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(), {
    			method: "POST",
    		})
@@ -367,8 +368,8 @@
 	 			
  			makeOptions(data);
    		})
+   		*/
    		
-   		/*
    		$.ajax(
  	   	{
  	   		url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
@@ -379,7 +380,6 @@
 	 			makeOptions(data);
  	   	   	}
    	   	});
-   		*/
    	}
    	
    	function makeOptions(data) {
