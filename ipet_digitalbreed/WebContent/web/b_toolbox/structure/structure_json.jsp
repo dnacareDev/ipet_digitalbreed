@@ -13,7 +13,7 @@
 	JsonArray jsonArray = new JsonArray();
 
 	try{
-		String sql="select no, cropid, filename, status, uploadpath, resultpath, comment, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from structure_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
+		String sql="select no, cropid, filename, status, uploadpath, resultpath, comment, number_of_k, jobid, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt  from structure_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' order by no desc;";
 		//System.out.println(sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		while (ipetdigitalconndb.rs.next()) { 
@@ -25,6 +25,7 @@
 			jsonObject.addProperty("uploadpath",ipetdigitalconndb.rs.getString("uploadpath"));
 			jsonObject.addProperty("resultpath",ipetdigitalconndb.rs.getString("resultpath"));
 			jsonObject.addProperty("comment",ipetdigitalconndb.rs.getString("comment"));
+			jsonObject.addProperty("number_of_k",ipetdigitalconndb.rs.getString("number_of_k"));
 			jsonObject.addProperty("cropid",ipetdigitalconndb.rs.getString("cropid"));
 			jsonObject.addProperty("jobid",ipetdigitalconndb.rs.getString("jobid"));
 			jsonObject.addProperty("cre_dt",ipetdigitalconndb.rs.getString("cre_dt"));

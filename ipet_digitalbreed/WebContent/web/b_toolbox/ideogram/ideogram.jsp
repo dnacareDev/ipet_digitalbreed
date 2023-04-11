@@ -109,7 +109,6 @@
 	<jsp:include page="../../../css/menu.jsp" flush="true">
 		<jsp:param value="ideogram" name="menu_active"/>
 	</jsp:include>
-
     <!-- BEGIN: Content-->
     <div class="app-content content">
         <div class="content-overlay"></div>
@@ -184,8 +183,8 @@
    								<div class='row'>
    									<div class='col-12'>
    										<ul class='nav nav-pills nav-active-bordered-pill'>
-   											<li class='nav-item'><a class='nav-link active' id='Density_Plot' data-toggle='pill' href='#pill1' aria-expanded='true'>Density Plot</a></li>
-   											<li class='nav-item'><a class='nav-link' id='Ideogram' data-toggle='pill' href='#pill2' aria-expanded='true'>Ideogram</a></li>
+   											<li class='nav-item'><a class='nav-link active' id='Density_Plot' data-toggle='pill' href='#pill1' aria-expanded='true' onclick="gridOptions_binSize.api.sizeColumnsToFit();">Density Plot</a></li>
+   											<li class='nav-item'><a class='nav-link' id='Ideogram' data-toggle='pill' href='#pill2' aria-expanded='true' onclick="gridOptions_binSize.api.sizeColumnsToFit();" >Ideogram</a></li>
    										</ul>
    										<div class='tab-content'>
    											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>

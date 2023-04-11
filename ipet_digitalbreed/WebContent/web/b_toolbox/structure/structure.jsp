@@ -184,67 +184,35 @@
    								<div class='row'>
    									<div class='col-12'>
    										<ul class='nav nav-pills nav-active-bordered-pill'>
-   											<li class='nav-item'><a class='nav-link active' id='info' data-toggle='pill' href='#pill1' aria-expanded='true'>DeltaK</a></li>
-   											<li class='nav-item'><a class='nav-link' id='info' data-toggle='pill' href='#pill2' aria-expanded='true'>STURCTURE result</a></li>
+   											<li class='nav-item'><a class='nav-link active' id='DeltaK' data-toggle='pill' href='#pill1' aria-expanded='true' onclick="window.scrollTo(0, document.body.scrollHeight);">DeltaK</a></li>
+   											<li class='nav-item'><a class='nav-link' id='Sturcture_Result' data-toggle='pill' href='#pill2' aria-expanded='true' onclick="window.scrollTo(0, document.body.scrollHeight);">STURCTURE result</a></li>
    										</ul>
    										<div class='tab-content'>
    											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
-   													<div class="row justify-content-between">
-	  													<div style="width:65%; margin-bottom:9px; padding-left:14px; "> 
-															<div class="form-check" style="margin-right:0.4rem; padding-left:1.2rem; display:inline-block;">
-											            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="high" style="margin-left:-16px; margin-top:1px;" >HIGH</label>
-											            	</div>
-											            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;" >
-											            		<input type="checkbox" class="form-check-input" id="moderate" data-impact="MODERATE" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="moderate" style="margin-left:-16px; margin-top:1px;" >MODERATE</label>
-											            	</div>
-											            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;">
-											            		<input type="checkbox" class="form-check-input" id="low" data-impact="LOW" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="low" style="margin-left:-16px; margin-top:1px;" >LOW</label>
-											            	</div>
-											            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;">
-											            		<input type="checkbox" class="form-check-input" id="modifier" data-impact="MODIFIER" onclick="SnpEff_filter();" checked />
-						                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
-											            	</div>
-														</div>
-													</div>
    												<div class="row">
-	   												<div class="col-12 col-xl-8">
-	   													<div id="snpEffGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 100%; height:435px;"></div>
+	   												<div class="col-12">
+	   													<select id="Select_Delta_K" class="select2 form-select" data-placeholder="Select K" data-width="150px" onchange="selectMergePlot(this.options[this.selectedIndex].dataset.number)">
+	   														<option></option>
+	   													</select>
 	   												</div>
-	   												<div class="col-12 col-xl-4">
-		   												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid}); gridOptions.api.sizeColumnsToFit();'></iframe>
+	   											</div>
+   												<div class="row mt-1">
+	   												<div class="col-12">
+		   												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='$("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
 	   												</div>
    												</div>
    											</div>
    											<div class='tab-pane' id='pill2' aria-expanded='true' aria-labelledby='base-pill1'>
-  												<div class="row justify-content-between">
-  													<div style="width:65%; margin-bottom:9px; padding-left:14px; "> 
-														<div class="form-check" style="margin-right:0.4rem; padding-left:1.2rem; display:inline-block;">
-										            		<input type="checkbox" class="form-check-input" id="high" data-impact="HIGH" onclick="SnpEff_filter();" checked />
-					                                        <label class="form-check form-check-label" for="high" style="margin-left:-16px; margin-top:1px;" >HIGH</label>
-										            	</div>
-										            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;" >
-										            		<input type="checkbox" class="form-check-input" id="moderate" data-impact="MODERATE" onclick="SnpEff_filter();" checked />
-					                                        <label class="form-check form-check-label" for="moderate" style="margin-left:-16px; margin-top:1px;" >MODERATE</label>
-										            	</div>
-										            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;">
-										            		<input type="checkbox" class="form-check-input" id="low" data-impact="LOW" onclick="SnpEff_filter();" checked />
-					                                        <label class="form-check form-check-label" for="low" style="margin-left:-16px; margin-top:1px;" >LOW</label>
-										            	</div>
-										            	<div class="form-check" style="margin-right:0.4rem; display:inline-block;">
-										            		<input type="checkbox" class="form-check-input" id="modifier" data-impact="MODIFIER" onclick="SnpEff_filter();" checked />
-					                                        <label class="form-check form-check-label" for="modifier" style="margin-left:-16px; margin-top:1px;" >MODIFIER</label>
-										            	</div>
-													</div>
-												</div>
    												<div class="row">
-	   												<div class="col-12 col-xl-8">
-	   													<div id="snpEffGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 100%; height:435px;"></div>
+	   												<div class="col-12">
+	   													<select id="Select_Structure_result" class="select2 form-select" data-placeholder="Select Plot" data-width="150px" onchange="selectPlot(this.options[this.selectedIndex].dataset.file_name)">
+	   														<option></option>
+	   													</select>
 	   												</div>
-	   												<div class="col-12 col-xl-4">
-		   												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload='hideSpinner(this, ${params.data.jobid}); gridOptions.api.sizeColumnsToFit();'></iframe>
+	   											</div>
+   												<div class="row mt-1">
+	   												<div class="col-12">
+		   												<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='$("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
 	   												</div>
    												</div>
    											</div>
@@ -294,13 +262,13 @@
                                         	<div class="row">
                                         		<div class="col-1 min-range-max" onclick="document.getElementById('iteration-range').value = 1; document.getElementById('iteration-number').value = 1;">1</div>
                                         		<div class="col-8" style="margin-right:-3px; padding-left:3px; padding-right:0px;">
-		                                        	<input type="range" class="form-range" id="iteration-range" name="iteration-range" min="1" max="10" value="5" step="1" oninput="document.getElementById('iteration-number').value = this.value" />
+		                                        	<input type="range" class="form-range" id="iteration-range" min="1" max="10" value="5" step="1" oninput="document.getElementById('iteration-number').value = this.value" />
                                         		</div>
                                         		<div class="col-1 min-range-max" onclick="document.getElementById('iteration-range').value = 10; document.getElementById('iteration-number').value = 10;"> 10</div>
                                         	</div>
                                         </div>
                                         <div class="col-3">
-					            			<input type="text" class="form-control" id="iteration-number" autocomplete="off" value="5" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value<1)this.value=1; if(this.value>10)this.value=10; document.getElementById('iteration-range').value = this.value;" />
+					            			<input type="text" class="form-control" id="iteration-number" name="iteration-number" autocomplete="off" value="5" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value<1)this.value=1; if(this.value>10)this.value=10; document.getElementById('iteration-range').value = this.value;" />
 					            		</div>
                                     </div>
 					            </div>
@@ -316,7 +284,7 @@
 					            	<div class="row">
 										<div class="col-4">Burn-IN<br>(Max 100,000)</div>
 										<div class="col-8">
-											<input type="number" class="form-control" id="Burn-IN" name="Burn-IN" name="" value="10000" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+											<input type="number" class="form-control" id="Burn_IN" name="Burn_IN" max="100000" value="10000" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value<1)this.value=1; if(this.value>100000)this.value=100000;" />
 										</div>
 									</div>
 					            </div>
@@ -324,7 +292,7 @@
 					            	<div class="row">
 										<div class="col-4">MCMC<br>(Max 1,000,000)</div>
 										<div class="col-8">
-											<input type="number" class="form-control" id="MCMC" name="MCMC" value="20000" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+											<input type="number" class="form-control" id="MCMC" name="MCMC" max="1000000" value="20000" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value<1)this.value=1; if(this.value>1000000)this.value=1000000;" />
 										</div>
 									</div>
 					            </div>
@@ -343,7 +311,7 @@
 	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
    			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
-			<div><strong>Loading Core Selection Result...</strong></div>
+			<div><strong>Loading Result...</strong></div>
 	  	</div>
 	</div>  
 	<!-- Modal end-->
@@ -398,6 +366,7 @@
    	
    	function vcfFileList() {
    		
+   		/*
    		fetch("../../../web/vb/vb_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(), {
    			method: "POST",
    		})
@@ -407,8 +376,8 @@
 	 			
  			makeOptions(data);
    		})
+   		*/
    		
-   		/*
    		$.ajax(
  	   	{
  	   		url: "../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
@@ -419,7 +388,6 @@
 	 			makeOptions(data);
  	   	   	}
    	   	});
-   		*/
    	}
    	
    	function makeOptions(data) {
@@ -430,6 +398,26 @@
 			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
 			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-refgenome_id=\${data[i].refgenome_id} data-refgenome=\${data[i].refgenome} data-annotation_filename=\${data[i].annotation_filename} > \${data[i].filename} (\${data[i].comment}) </option>`);
 		}
+    }
+    
+    function selectMergePlot(number_of_k) {
+    	//console.log(number_of_k);
+    	
+    	const jobid = document.getElementById('vcf_status').dataset.jobid;
+    	const resultpath = document.getElementById('vcf_status').dataset.resultpath;
+    	
+    	$("#iframeLoading").modal("show");
+    	
+    	$('#pill1_frame').attr('src', `\${resultpath+"/"+jobid+"/merge_plot/"+number_of_k+".html"}`);
+    }
+    
+    function selectPlot(file_name) {
+    	const jobid = document.getElementById('vcf_status').dataset.jobid;
+    	const resultpath = document.getElementById('vcf_status').dataset.resultpath;
+    	
+    	$("#iframeLoading").modal("show");
+    	
+    	$('#pill2_frame').attr('src', `\${resultpath+"/"+jobid+"/plot/"+file_name+".html"}`);
     }
     
     function resetForm() {
@@ -443,7 +431,7 @@
    	
     async function execute() {
 	   	
-		const variety_id = $( "#variety-select option:selected" ).val();
+		const varietyid = $( "#variety-select option:selected" ).val();
 
 		let comment = $('#comment').val();
    		
@@ -459,17 +447,19 @@
    		const refgenome = vcfSelect.options[vcfSelect.selectedIndex].dataset.refgenome;
    		const annotation_filename = vcfSelect.options[vcfSelect.selectedIndex].dataset.annotation_filename;
    		
+   		formData.append("varietyid", varietyid);
+   		formData.append("jobid_structure", jobid_structure);
    		formData.append("jobid_vcf", jobid_vcf);
    		formData.append("filename", filename);
     	formData.append("refgenome_id", refgenome_id);
     	formData.append("refgenome", refgenome);
     	formData.append("annotation_filename", annotation_filename);
     	
-   		
+   		/*
    		for(const key of formData.keys()) {
    			console.log(key, ":", formData.get(key));
    		}
-   		
+   		*/
    		/*
    		console.log("comment : ", comment);
    		console.log("varietyid : ", varietyid);
@@ -477,34 +467,29 @@
    		console.log("filename : ", filename);
    		console.log("uploadpath : ", uploadpath);
    		*/
-   		/*
+   		
    		if(!comment) {
    			return alert("comment를 입력하세요.");
    		}
    		
     	if(Number(jobid_vcf) == -1) {
-    		return alert("VCF 파일을 선택하세요");
+    		return alert("VCF 파일을 선택하세요.");
     	}
-    	*/
+    	
+    	if(!document.getElementById('Number_of_K').value) {
+    		return alert("K값을 입력하세요.");
+    	}
+    	
    		
-    	/*
-    	fetch(`./anno_insertSql.jsp`, {
+    	
+    	fetch(`./structure_insertSql.jsp`, {
     		method: "POST",
    			headers: {
    				"Content-Type": "application/x-www-form-urlencoded",
    			},
-   			body: new URLSearchParams({
-   					"comment" : comment, 
-					"varietyid" : varietyid, 
-					"jobid_anno": jobid_anno,
-					"jobid_vcf" : jobid_vcf, 
-					"filename" : filename,
-					"refgenome": refgenome,
-					"refgenome_id": refgenome_id,
-					"annotation_filename": annotation_filename,
-   			})
+   			body: new URLSearchParams(formData)
     	});
-    	*/
+    	
     	
    		fetch(`./structure_analysis.jsp`, {
    			method: "POST",
@@ -514,12 +499,12 @@
    			body: new URLSearchParams(formData)
    		})
    		
-   		/*
+   		
    		setTimeout( function () {
    			refresh();
    			$("#backdrop").modal("hide");
    		}, 1000);
-   		*/
+   		
     }
     
        

@@ -202,6 +202,7 @@
 
 						$('#pill1_frame').attr('src', `${params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_density.html"}`);
 						
+						/*
 						fetch(`${params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_totalcount.csv"}`)
 						.then((response) => {
 							if(!response.ok) {
@@ -218,15 +219,40 @@
 						    	const fileData = reader.result;
 						    	const wb = XLSX.read(fileData, {type : 'binary', });
 						    	const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-						        console.log("rowObj : ", rowObj);
+						        console.log("density rowObj : ", rowObj);
 						        
-						        gridOptions_totalCount.api.setRowData(rowObj);
-						        gridOptions_totalCount.api.sizeColumnsToFit();
+						        gridOptions_binSize.api.setRowData(rowObj);
+						        
 						        $("#iframeLoading").modal('hide');
 						    };
 						    reader.readAsBinaryString(file);
 						});
+						*/
+						fetch('./ideogram_csv_totalCount.jsp', {
+							method: "POST",
+				   			headers: {
+				   				"Content-Type": "application/x-www-form-urlencoded",
+				   			},
+				   			body: new URLSearchParams({
+				   					"jobid": params.data.jobid,
+				   					"resultpath": params.data.resultpath,
+				   			})
+						})
+						.then((response) => {
+							if(!response.ok) {
+								throw new Error('Error - ' +response.status);
+								$("#iframeLoading").modal('hide');
+							} else {
+								return response.json();
+							}
+						})
+						.then((data) => {
+							//console.log(data);
+							gridOptions_binSize.api.setRowData(data);
+						});
 						
+						
+						/*
 						fetch(`${params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_binsize.csv"}`)
 						.then((response) => {
 							if(!response.ok) {
@@ -243,15 +269,41 @@
 						    	const fileData = reader.result;
 						    	const wb = XLSX.read(fileData, {type : 'binary', });
 						    	const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-						        console.log("rowObj : ", rowObj);
+						        console.log("binsize rowObj : ", rowObj);
 						        
-						        gridOptions_binSize.api.setRowData(rowObj);
+						        gridOptions_totalCount.api.setRowData(rowObj);
+						        //gridOptions_totalCount.api.sizeColumnsToFit();
+						        
 						        //gridOptions2.api.sizeColumnsToFit();
 						        $("#iframeLoading").modal('hide');
 						    };
 						    reader.readAsBinaryString(file);
 						});
-					    
+					    */
+						
+						fetch('./ideogram_csv_binSize.jsp', {
+							method: "POST",
+				   			headers: {
+				   				"Content-Type": "application/x-www-form-urlencoded",
+				   			},
+				   			body: new URLSearchParams({
+				   					"jobid": params.data.jobid,
+				   					"resultpath": params.data.resultpath,
+				   			})
+						})
+						.then((response) => {
+							if(!response.ok) {
+								throw new Error('Error - ' +response.status);
+								$("#iframeLoading").modal('hide');
+							} else {
+								return response.json();
+							}
+						})
+						.then((data) => {
+							//console.log("binsize : ", data);
+							gridOptions_totalCount.api.setRowData(data);
+						});
+						
 					    break;
 					case 2:
 						alert("분석에 실패했습니다.");
@@ -291,10 +343,13 @@
 	});
 	
 	const columnDefs_totalCount = [
-	  		{ field: "chr", width: 212, filter: 'agNumberColumnFilter', },
-	  		{ field: "variant_count", width: 215, filter: 'agTextColumnFilter', },
-	  	];
-
+  		{ field: "chr", width: 212, filter: 'agNumberColumnFilter', },
+  		{ field: "pos_start", width: 215, filter: 'agTextColumnFilter', },
+  		{ field: "pos_end", width: 220, filter: true, },
+  		{ field: "count", width: 220, filter: 'agNumberColumnFilter', },
+  		{ field: "key", width: 220, filter: 'agNumberColumnFilter', hide: true, },
+  	];
+	
   	const gridOptions_totalCount = {
 		defaultColDef: {
 			editable: false, 
@@ -311,14 +366,11 @@
 	  	},
   	}
   	
-	const columnDefs_binSize = [
-  		{ field: "chr", width: 212, filter: 'agNumberColumnFilter', },
-  		{ field: "pos_start", width: 215, filter: 'agTextColumnFilter', },
-  		{ field: "pos_end", width: 220, filter: true, },
-  		{ field: "count", width: 220, filter: 'agNumberColumnFilter', },
-  		{ field: "key", width: 220, filter: 'agNumberColumnFilter', hide: true, },
+  	const columnDefs_binSize = [
+  		{ field: "Chr", width: 212, filter: 'agNumberColumnFilter', },
+  		{ field: "variant_count", width: 215, filter: 'agTextColumnFilter', },
   	];
-
+  	
 	const gridOptions_binSize = {
 		defaultColDef: {
 			editable: false, 

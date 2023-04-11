@@ -6,10 +6,12 @@
 <%@ page import="org.apache.commons.exec.*" %>
 
 <%
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	
-	
+	String varietyid = request.getParameter("varietyid");
 	String jobid_structure = request.getParameter("jobid_structure");
+	String comment = request.getParameter("comment");
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String filename = request.getParameter("filename");
 	String refgenome = request.getParameter("refgenome");
@@ -22,6 +24,7 @@
 	
 	/*
 	System.out.println("====================================");
+	System.out.println("varietyid : " + varietyid);
 	System.out.println("jobid_structure : " + jobid_structure);
 	System.out.println("jobid_vcf : " + jobid_vcf);
 	System.out.println("filename : " + filename);
@@ -41,53 +44,35 @@
 	String annotationPath = rootFolder + "uploads/reference_database/"+refgenome+"/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
+	String db_savePath = "/ipet_digitalbreed/uploads/database/db_input/";
+	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/structure/";
 	
-	File folder_savePath = new File(savePath);
 	
-	if (!folder_savePath.exists()) {
-		try{
-			folder_savePath.mkdirs(); 
-	        } 
-	        catch(Exception e){
-		    e.getStackTrace();
-		}        
+	
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','STRUCTURE', 'New analysis', now());";
+	//System.out.println(log_sql);
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(log_sql);
+	}catch(Exception e){
+		System.out.println(e);
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
 	}
+	
+	String sql = "insert into structure_t (cropid, varietyid, status, filename, comment, number_of_k, uploadpath, resultpath, jobid, creuser, cre_dt) ";
+	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', '"+ comment +"', '"+ Number_of_K +"', '"+ db_savePath+"','"+db_outputPath+"', '"+jobid_structure+"','" +permissionUid+ "',now());";
 
-	File folder_outputPath = new File(outputPath+jobid_structure);
-	
-	if (!folder_outputPath.exists()) {
-		try{
-			folder_outputPath.mkdirs(); 
-	        } 
-	        catch(Exception e){
-		    e.getStackTrace();
-		}        
-	}
-	
-	/*
 	System.out.println();
-	System.out.println("script_path : " + script_path);
-	System.out.println("savePath : " + savePath);
-	System.out.println("outputPath : " + outputPath);
-	System.out.println();
-	*/
-	
-	
-	
-	String cmd = "perl " +script_path+ "breedertoolbox_STRUCTURE_total_running.pl " +savePath+ " "+ filename +" "+ jobid_structure +" "+ outputPath+jobid_structure +" "+ Number_of_K +" "+ Burn_IN +" "+ MCMC +" "+ iteration_number ;
-	
-	System.out.println();
-	System.out.println("STRUCTURE parameter : " + cmd);
+	System.out.println("sql : " + sql);
 	System.out.println();
 	
-	CommandLine cmdLine = CommandLine.parse(cmd);
-	DefaultExecutor executor = new DefaultExecutor();
-	executor.setExitValue(0);
-	int exitValue = executor.execute(cmdLine);
-	if(exitValue == 0) {
-		System.out.println("Success");
-	} else {
-		System.out.println("Fail");
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(sql);
+	} catch(Exception e) {
+		System.out.println(e);
+	} finally { 
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
 	}
 	
 	

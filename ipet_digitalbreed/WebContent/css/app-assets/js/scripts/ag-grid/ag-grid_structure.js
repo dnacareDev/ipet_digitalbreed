@@ -105,6 +105,10 @@
 	      minWidth: 110,
 	    },
 	    {
+		      field: "number_of_k",
+		      hide: true
+		},
+	    {
 	      headerName: "분석일",
 	      field: "cre_dt",
 	      filter: "agDateColumnFilter",
@@ -193,35 +197,81 @@
 					case 1:
 	
 						//$("#iframeLoading").modal('show');
+						$('#pill1_frame').attr('src', '');
+						$('#pill2_frame').attr('src', '');
 						
 						document.getElementById('vcf_status').style.display = 'block';
 						window.scrollTo(0, document.body.scrollHeight);
 
-						$('#pill1_frame').attr('src', `${params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_sunburst.html"}`);
+						document.getElementById('vcf_status').dataset.jobid = params.data.jobid;
+						document.getElementById('vcf_status').dataset.resultpath = params.data.resultpath;
 						
-						fetch(`${params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_snpeff.csv"}`)
+						const number_of_k = Number(params.data.number_of_k);
+						//$('#pill1_frame').attr('src', `${params.data.resultpath+"/"+params.data.jobid+"/"+params.data.jobid+"_sunburst.html"}`);
+						
+						const Select_Delta_K = document.getElementById('Select_Delta_K'); 
+						Select_Delta_K.textContent = "";
+						Select_Delta_K.insertAdjacentHTML('beforeend', `<option></option>`);
+						for(let i=1 ; i<=number_of_k ; i++){
+							Select_Delta_K.insertAdjacentHTML('beforeend', `<option data-number=${i} > ${i} </option>`);
+						}
+						
+						const Select_Structure_result = document.getElementById('Select_Structure_result');
+						Select_Structure_result.textContent = "";
+						
+						fetch('./structure_html_list.jsp',{
+							method: 'POST',
+							headers: {
+				   				"Content-Type": "application/x-www-form-urlencoded",
+				   			},
+				   			body: new URLSearchParams({
+				   				"jobid": params.data.jobid,
+				   			})
+						})
 						.then((response) => {
 							if(!response.ok) {
 								throw new Error('Error - ' +response.status);
 								$("#iframeLoading").modal('hide');
 							} else {
-								return response.blob();
+								return response.json();
 							}
 						})
-						.then((file) => {
-							const reader = new FileReader();
-						    reader.onload = function(){
-						    	
-						    	const fileData = reader.result;
-						    	const wb = XLSX.read(fileData, {type : 'binary', });
-						    	const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-						        console.log("rowObj : ", rowObj);
-						        
-						        gridOptions2.api.setRowData(rowObj);
-						        gridOptions2.api.sizeColumnsToFit();
-						        $("#iframeLoading").modal('hide');
-						    };
-						    reader.readAsBinaryString(file);
+						.then((data) => {
+							//data.sort((a,b) => a.chr>b.chr ? 1 : (a.chr<b.chr ? -1 : 0));
+							data.sort((a,b) => {
+								
+								//Number(a.file_name.substring(a.file_name.indexOf('_K')+2, a.file_name.indexOf('_rep'))) > Number(b.file_name.substring(b.file_name.indexOf('_K')+2, b.file_name.indexOf('_rep'))) ? 1 : (Number(a.file_name.substring(a.file_name.indexOf('_rep')+4, a.file_name.lastIndexOf('_'))) > Number(b.file_name.substring(a.file_name.indexOf('_rep')+4, b.file_name.lastIndexOf('_'))) ? -1 : 0) ; 
+								
+								const K_a = Number(a.file_name.substring(a.file_name.indexOf('_K')+2, a.file_name.indexOf('_rep')));
+								const K_b = Number(b.file_name.substring(b.file_name.indexOf('_K')+2, b.file_name.indexOf('_rep')));
+								
+								if(K_a > K_b) {
+									return 1;
+								} else if (K_a < K_b) {
+									return -1;
+								} else {
+									
+									const rep_a = Number(a.file_name.substring(a.file_name.indexOf('_rep')+4, a.file_name.lastIndexOf('_')));
+									const rep_b = Number(b.file_name.substring(a.file_name.indexOf('_rep')+4, b.file_name.lastIndexOf('_')));
+									
+									if(rep_a > rep_b) {
+										return 1;
+									} else if( rep_a < rep_b) {
+										return -1;
+									} else {
+										return 0;
+									}
+								}
+								
+								//a.chr>b.chr ? 1 : (a.chr<b.chr ? -1 : 0));
+							})
+							
+							console.log("file list : ", data);
+							
+							Select_Structure_result.insertAdjacentHTML('beforeend', `<option></option>`);
+							for(let i=0 ; i<data.length ; i++){
+								Select_Structure_result.insertAdjacentHTML('beforeend', `<option data-file_name=${data[i].file_name} > ${data[i].file_name} </option>`);
+							}
 						});
 					    
 					    break;
@@ -303,14 +353,8 @@
 			gridOptions.api.sizeColumnsToFit();
   		});
   		
-  		const gridTable2 = document.getElementById("snpEffGrid");
-  		new agGrid.Grid(gridTable2, gridOptions2);
-  	});
-  	
-  	document.addEventListener('click', function(event) {
-  		if(event.composedPath()[0].classList.contains("nav-link")) {
-  			$("html").animate({ scrollTop: $(document).height() }, 1000);
-  		}
+  		//const gridTable2 = document.getElementById("snpEffGrid");
+  		//new agGrid.Grid(gridTable2, gridOptions2);
   	});
   	
   	$(window).on("resize", function() {
