@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
-<%@ page import="ipet_digitalbreed.*"%>    
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -73,14 +72,6 @@ body {
 
 
 </style>
-<%
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	String permissionUid = session.getAttribute("permissionUid")+"";
-	String cropvari_sql = "select a.cropname, a.cropid, b.varietyid, b.varietyname from crop_t a, variety_t b, permissionvariety_t c where c.uid='"+permissionUid+"' and c.varietyid=b.varietyid and a.cropid=b.cropid order by b.varietyid;";
-
-	String linkedJobid = request.getParameter("linkedJobid");
-	
-%>
 <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
 	<jsp:include page="../../css/topmenu.jsp" flush="true"/>

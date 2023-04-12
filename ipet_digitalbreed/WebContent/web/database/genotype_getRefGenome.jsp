@@ -11,8 +11,6 @@
 
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 
-	ipetdigitalconndb = new IPETDigitalConnDB();	
-	//JSONArray jsonArray = new JSONArray();
 	JsonArray jsonArray = new JsonArray();
 
 	try{

@@ -53,9 +53,9 @@ private JsonArray csvStream(String rootFolder, String jobid, String resultpath) 
         	JsonObject jsonObject = new JsonObject();
         	jsonObject.addProperty("chr", lineArr[0]);
         	jsonObject.addProperty("pos_start", lineArr[1]);
-        	jsonObject.addProperty("pos_end", lineArr[1]);
-        	jsonObject.addProperty("count", lineArr[1]);
-        	jsonObject.addProperty("key", lineArr[1]);
+        	jsonObject.addProperty("pos_end", lineArr[2]);
+        	jsonObject.addProperty("count", lineArr[3]);
+        	jsonObject.addProperty("key", lineArr[4]);
         	jsonArray.add(jsonObject);
         	
         	//System.out.println(line);

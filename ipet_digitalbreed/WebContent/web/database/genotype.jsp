@@ -407,7 +407,6 @@ body {
 	        		objOption.text = "" + data[i]['refgenome'] + " (" + data[i]['gff'] + ")";
 	        		selectEl.options.add(objOption);
         		}
-        		
         	})
         }
             

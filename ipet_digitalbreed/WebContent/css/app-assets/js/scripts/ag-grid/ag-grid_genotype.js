@@ -584,32 +584,33 @@
 		
 		/*** GET TABLE DATA FROM URL ***/
 		fetch("../../web/database/genotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val() )
-			.then((response) => {
-				response.json().then(data => {
-					console.log(data);
-					gridOptions.api.setRowData(data);
-					gridOptions.api.sizeColumnsToFit();
-					
-					//console.log(linkedJobid);
-					
-					if(linkedJobid !== "null") {
-						gridOptions.api.forEachNode((rowNode, index) => {
-							if(linkedJobid == rowNode.data.jobid) {
-								//console.log(rowNode.rowIndex);
-								
-								gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
-								
-								gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
-								rowNode.setSelected(true);
-								
-								gridOptions.api.setFocusedCell(Number(rowNode.rowIndex), 'displayno');
-								//console.log($("[row-id='0'] [col-id='displayno']"));
-								$(`[row-index=${rowNode.rowIndex}] [col-id='displayno']`).trigger("click");
-							}
-						});	
-					} 
-				});
+		.then((response) => {
+			response.json().then(data => {
+				console.log(data);
+				gridOptions.api.setRowData(data);
+				gridOptions.api.sizeColumnsToFit();
+				
+				//console.log(linkedJobid);
+				
+				if(linkedJobid !== "null") {
+					gridOptions.api.forEachNode((rowNode, index) => {
+						if(linkedJobid == rowNode.data.jobid) {
+							//console.log(rowNode.rowIndex);
+							
+							gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
+							
+							gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
+							rowNode.setSelected(true);
+							
+							gridOptions.api.setFocusedCell(Number(rowNode.rowIndex), 'displayno');
+							//console.log($("[row-id='0'] [col-id='displayno']"));
+							$(`[row-index=${rowNode.rowIndex}] [col-id='displayno']`).trigger("click");
+						}
+					});	
+				} 
 			});
+		});
+		
 	});
   
   	document.addEventListener('click', function(event) {
