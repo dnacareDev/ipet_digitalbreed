@@ -53,6 +53,10 @@
 
 <!-- BEGIN: Body-->
 <style>
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: 'SDSamliphopangche_Outline';
 }
@@ -98,7 +102,7 @@ body {
                     <section id="profile-info">
                         <div class="row">
                             <div class="col-lg-6 col-12">
-                                <div class="card" style="height:675px;">
+                                <div class="card">
 									<div class="card-content">				
 			                            <div class="card-body">		
 			                                <div class="row">
@@ -139,28 +143,42 @@ body {
 		                                            </div>
 		                                        </div>
 		                                    </div>
-		                                </div>	
-			                              	<div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 98%;height:450px;" ></div><br>
+		                                    <div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 100%;height:520px;" ></div><br>
+			                                <div class="row" style="display:flex; justify-content:space-between">
+		                                		<div class="col-12 col-xl-6">
+				                                	<button class="btn btn-warning mr-1" style="float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
+													<button class="btn btn-danger" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
+		                                		</div>
+												<div class="col-12 col-xl-6 d-flex justify-content-start justify-content-xl-end">
+													<button class="btn btn-success mr-1"  style="display:flex; column-gap: 5px;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
+													<button class="btn btn-info dropdown-toggle" type="button" style="height:40px;" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
+				                                       	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+				                                           	<a class="dropdown-item" href="javascript:ajaxFileDownload();">Template Download</a>
+				                                            <a class="dropdown-item" href="javascript:ajaxFileUpload();">Template Upload</a>
+				                                        </div>
+												</div>
+			                                </div>
+			                                
+											<!--  
 			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
 											<button class="btn btn-danger mr-1 mb-1" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
 											<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
-											<!--  
 											<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="saveData()"><i class="feather icon-save"></i> Save</button>
-											-->
-											<!-- <button class="btn btn-info mr-1 mb-1"  style="float: right;" onclick="ajaxFileUpload()"><i class="feather icon-upload"></i> Upload</button> -->
 											<button class="btn btn-info dropdown-toggle mr-1" type="button" style="float: right;" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-                                                    <a class="dropdown-item" href="javascript:ajaxFileDownload();">Template Download</a>
-                                                    <a class="dropdown-item" href="javascript:ajaxFileUpload();">Template Upload</a>
-                                                </div>
-											<input type="file" id="ajaxFile" name="ajaxFile" onChange="ajaxFileTransmit();" style="display:none;"/> 
-			                            </div>
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+		                                           	<a class="dropdown-item" href="javascript:ajaxFileDownload();">Template Download</a>
+		                                            <a class="dropdown-item" href="javascript:ajaxFileUpload();">Template Upload</a>
+		                                        </div>
+											-->
+		                                </div>	
+										<input type="file" id="ajaxFile" name="ajaxFile" onChange="ajaxFileTransmit();" style="display:none;"/>
+		                            </div>
                                 </div>
                             </div>
 
 							<div class="col-lg-6 col-12">
 								<div class="row">									
-									<div class="col-lg-6 col-12">                                    
+									<div class="col-6">                                    
 						                <!-- navigations swiper start -->
 					                <section id="component-swiper-progress_one">
 					                    <div class="card ">
@@ -181,7 +199,7 @@ body {
 						                <!-- navigations swiper ends -->						                
 								    </div>           
 									
-									<div class="col-lg-6 col-12">                                    
+									<div class="col-6">                                    
 						                <!-- navigations swiper start -->
 					                <section id="component-swiper-progress_two">
 					                    <div class="card ">

@@ -495,7 +495,13 @@
 				
 				changed_values_arr.push(changed_values_map);
 			}
-		}  
+		},
+		onRowDragEnter: (params) => {
+			if(window.innerWidth <= 990) {
+				window.scrollTo(0, document.getElementById('component-swiper-progress_one').getBoundingClientRect().y+window.pageYOffset -80);
+			}
+			
+		}
 	  };
 	  
 	  var changed_values_arr = [];
@@ -558,6 +564,7 @@
 
   /*** GET TABLE DATA FROM URL ***/
 
+  
   agGrid
     .simpleHttpRequest({ url: "../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
