@@ -24,7 +24,7 @@
 	      headerName: "실제순번",
 	      field: "selectfiles",
 	      hide: true,	
-	      },		
+	    },		
 	    {
 	      headerName: "순번",
 	      field: "displayno",
@@ -496,7 +496,7 @@
 				changed_values_arr.push(changed_values_map);
 			}
 		},
-		onRowDragEnter: (params) => {
+		onRowDragLeave: (params) => {
 			if(window.innerWidth <= 990) {
 				window.scrollTo(0, document.getElementById('component-swiper-progress_one').getBoundingClientRect().y+window.pageYOffset -80);
 			}

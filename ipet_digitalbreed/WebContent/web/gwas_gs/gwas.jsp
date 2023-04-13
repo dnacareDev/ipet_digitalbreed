@@ -55,6 +55,10 @@
 
 <!-- BEGIN: Body-->
 <style>
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: 'SDSamliphopangche_Outline';
 }
@@ -175,28 +179,6 @@ body {
 									<div class='col-12'>
 										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
 										</ul>
-										<!--  
-										<div class='row'>
-											<div class='col-12'>
-												<div style="width:15%; padding:0px;"> 
-													<select id='param_phenotype' class='select2 form-select float-left'>
-													</select>
-												</div>
-												<div style="display:none; width:15%; margin-top:1px; padding:0px;"> 
-													<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
-														<option value='-1' hidden disabled selected>Select plot type</option>
-														<option value='QQ'>QQ plot</option>
-														<option value='noQQ'>Manhattan plot</option>
-													</select>
-												</div>
-												<div style="display:none; width:15%; margin-top:1px; padding:0px;"> 
-													<select id='QQ_model' class='select2 form-select ml-1 mb-1 float-left' style="display:none">
-														<option value='-1' hidden disabled selected>Select Model</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										-->
 										<div id='content-list' class='tab-content'>
 										</div>
 									</div>
@@ -523,7 +505,6 @@ body {
     	   	    	    	
    	    				}
    	 	    		});	
-   	    			
 	    		}
 	    	});
    	    	
@@ -532,6 +513,84 @@ body {
 	    //console.log("box? : ", box);
     };
 	
+	async function showPlotAndGrid(phenotype) {
+
+		document.getElementById('cutOffDiv').style.display = 'flex';
+		
+		const model = document.querySelector(`.nav-link.active`).textContent;
+		const jobid_param = $('#jobid_param').val();
+		//showPlot(phenotype);
+		
+		const params = new URLSearchParams({
+			"phenotype": phenotype,
+			"model": model,
+			"jobid": jobid_param,
+		});
+		
+		showPlot(phenotype);
+		
+		let cutOffValue = await fetch('./gwas_getCutOffValue.jsp', {
+								method: "POST",
+								headers: {
+					   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+					   			},
+					   			body: params,
+							})
+							.then((response) => response.text())
+		
+		
+		cutOffValue = parseInt(cutOffValue) == Number(cutOffValue) ? parseInt(cutOffValue) : Number(cutOffValue);  
+		
+		//console.log(cutOffValue);
+		
+		
+		if(cutOffValue == -1) {
+			showGrid(phenotype, cutOffValue, phenotype);
+		} else {
+			document.getElementById(`cutOffValue_\${model}`).value = cutOffValue;
+			gapitCutOff(model, cutOffValue, phenotype);
+		}
+	}
+	
+	function validCheckCutOff(model, cutOff, phenotype) {
+		if(Number(phenotype) == -1) {
+    		return false;
+    	}
+    	
+    	if(cutOff == 0 && !confirm("cut off값에 0 또는 아무것도 입력하지 않았습니다.\n이 경우 모든 데이터가 출력됩니다.\n계속 하시겠습니까?") ) {
+    		return false;
+    	}
+    	
+    	return true;
+	}
+	
+	function updateCutOff(model, cutOffValue, phenotype) {
+		//const selectEl = document.getElementById(`\${model}_phenotype`);
+    	//const phenotype = selectEl.options[selectEl.selectedIndex].value;
+    	
+    	const params = new URLSearchParams({
+			"phenotype": phenotype,
+			"model": model,
+			"jobid": $('#jobid_param').val(),
+			"cutOffValue": cutOffValue,
+		});
+    	
+    	fetch('./gwas_updateCutOffValue.jsp', {
+			method: "POST",
+			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+   			},
+   			body: params,
+		})
+	}
+    
+    function gapitCutOff(model, cutOff, phenotype) {
+    	console.log(model, cutOff, phenotype);
+    	//const selectEl = document.getElementById(`\${model}_phenotype`);
+    	//const phenotype = selectEl.options[selectEl.selectedIndex].value;
+    	//console.log(phenotype);
+    	showGrid(phenotype, cutOff);
+    }
 	
    	function vcfFileList() {
    		

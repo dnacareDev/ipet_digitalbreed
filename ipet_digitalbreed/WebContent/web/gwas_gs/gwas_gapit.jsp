@@ -9,17 +9,31 @@
 	String model_name = request.getParameter("model_name");
 	String phenotype = request.getParameter("phenotype");
 	String jobid_param = request.getParameter("jobid_param");
+	String cutOff = request.getParameter("cutOff");
 	
 	/*
 	System.out.println(model_name);
 	System.out.println(phenotype);
 	System.out.println(jobid_param);
 	*/
+	System.out.println(cutOff);
+	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	
-	String cutOffValue = cutOff(rootFolder, model_name, phenotype, jobid_param);
 	//System.out.println("cutOff : " + cutOffValue);
-	JsonArray jsonArray = csvStream(rootFolder, model_name, phenotype, jobid_param, cutOffValue);
+	
+	JsonArray jsonArray = new JsonArray();
+	if(cutOff.equals("-1")) {
+		String cutOffValue = cutOff(rootFolder, model_name, phenotype, jobid_param);
+		//System.out.println("default");
+		jsonArray = csvStream(rootFolder, model_name, phenotype, jobid_param, cutOffValue);
+	} else {
+		//System.out.println("cutOff");
+		//System.out.println(Math.pow(10, -Double.parseDouble(cutOff)) + "");
+		String cutOffValue = Math.pow(10, -Double.parseDouble(cutOff)) + "";
+		//jsonArray = csvStream(rootFolder, model_name, phenotype, jobid_param, cutOff);
+		jsonArray = csvStream(rootFolder, model_name, phenotype, jobid_param, cutOffValue);
+	}
 	
 	out.clear();
 	out.print(jsonArray);

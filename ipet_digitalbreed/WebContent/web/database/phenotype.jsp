@@ -101,7 +101,7 @@ body {
                 <div id="user-profile">
                     <section id="profile-info">
                         <div class="row">
-                            <div class="col-lg-6 col-12">
+                            <div class="col-xl-6 col-12">
                                 <div class="card">
 									<div class="card-content">				
 			                            <div class="card-body">		
@@ -143,13 +143,13 @@ body {
 		                                            </div>
 		                                        </div>
 		                                    </div>
-		                                    <div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 100%;height:520px;" ></div><br>
+		                                    <div id="myGrid" class="ag-theme-alpine" style="margin: 0 auto;width: 100%;height:526px;" ></div>
 			                                <div class="row" style="display:flex; justify-content:space-between">
-		                                		<div class="col-12 col-xl-6">
+		                                		<div class="col-12 col-md-6 mt-1">
 				                                	<button class="btn btn-warning mr-1" style="float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
 													<button class="btn btn-danger" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
 		                                		</div>
-												<div class="col-12 col-xl-6 d-flex justify-content-start justify-content-xl-end">
+												<div class="col-12 col-md-6 mt-1 d-flex justify-content-start justify-content-md-end">
 													<button class="btn btn-success mr-1"  style="display:flex; column-gap: 5px;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
 													<button class="btn btn-info dropdown-toggle" type="button" style="height:40px;" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
 				                                       	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
@@ -176,7 +176,7 @@ body {
                                 </div>
                             </div>
 
-							<div class="col-lg-6 col-12">
+							<div class="col-xl-6 col-12">
 								<div class="row">									
 									<div class="col-6">                                    
 						                <!-- navigations swiper start -->
@@ -222,7 +222,7 @@ body {
 								    
 								</div>
 								<div class="row">
-									<div class="col-lg-12 col-12">                                    
+									<div class="col-xl-12 col-12">                                    
 						                <!-- navigations swiper start -->
 						                <section id="component-swiper-navigations">
 						                    <div class="card ">

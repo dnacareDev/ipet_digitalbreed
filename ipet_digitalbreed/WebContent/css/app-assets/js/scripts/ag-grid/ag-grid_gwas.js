@@ -224,9 +224,26 @@
 							$('#button_list').append(`<li class='nav-item'><a class='nav-link' id='gwas_${model_arr[i]}' data-toggle='pill' href='#panel_${model_arr[i]}' aria-expanded='true'>${model_arr[i]}</a></li>`);
 							$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_${model_arr[i]}' aria-expanded='true'>
 															<div class="row">
-																<div class="col-2" style="max-width:12%;">
-																	<select id='${model_arr[i]}_phenotype' class='select2 form-select float-left' onchange="showPlot(this.options[this.selectedIndex].value); showGrid(this.options[this.selectedIndex].value);">
+																<div class="col-12 col-xl-8 mb-1">
+																	<!--
+																	<select id='${model_arr[i]}_phenotype' class='select2 form-select float-left' data-width="200px" onchange="showPlot(this.options[this.selectedIndex].value); showGrid(this.options[this.selectedIndex].value); ">
+																	-->
+																	<select id='${model_arr[i]}_phenotype' class='select2 form-select float-left' data-width="200px" onchange="showPlotAndGrid(this.options[this.selectedIndex].value);  ">
 																	</select>
+																</div>
+																<div id="cutOffDiv" class="col-12 col-xl-4 pl-0 mb-1 justify-content-start" style="display:none;">
+																	<div class="col-3 col-xl-10" style="max-width:24%; min-width:228px;">
+																		<input type="text" id='cutOffValue_${model_arr[i]}' class='form-control' placeholder='cut off value (-log10(P))' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1'); if(this.value<0)this.value=0;" >
+																	</div>
+																	<div class="col-2">
+																		<button class="btn btn-primary" data-model="${model_arr[i]}" onclick="const selectEl = document.getElementById('${model_arr[i]}_phenotype'); 
+																																				const phenotype = selectEl.options[selectEl.selectedIndex].value; 
+																																				const cutOffValue = Number(document.getElementById('cutOffValue_${model_arr[i]}').value); 
+																																				if(validCheckCutOff(this.dataset.model, cutOffValue, phenotype)) {
+																																					updateCutOff(this.dataset.model, cutOffValue, phenotype);
+																																					showGrid(phenotype, cutOffValue);
+																																				} ">cutoff</button>
+																	</div>
 																</div>
 															</div>
 															<div class="row">
@@ -317,7 +334,7 @@
 						
 						gridOptions.api.sizeColumnsToFit();
 						
-					  	$("html").animate({ scrollTop: $(document).height() }, 1000);
+						window.scrollTo(0, document.body.scrollHeight);
 						
 						break;
 					case 2:
@@ -329,150 +346,6 @@
 		}
 	};
 
-	/*
-	document.addEventListener('click', function(event) {
-		if(event.target.id.includes('gwas_')) {
-//			$("#param_phenotype").val('-1').trigger('change');
-			document.getElementById('param_phenotype').value = '-1';
-			document.getElementById('param_phenotype').dispatchEvent(new Event('change'));
-			
-			document.getElementById('isQQ').value = '-1';
-			document.getElementById('isQQ').dispatchEvent(new Event('change'));
-			
-			document.getElementById('QQ_model').value = '-1';
-			document.getElementById('QQ_model').dispatchEvent(new Event('change'));
-			
-			$('#model_name').val(event.target.id.replaceAll("gwas_",""));
-			
-			const model_name = $('#model_name').val();
-			
-			$('iframe').each(function(index, item) {
-				item.src = "";
-			});
-			
-			//console.log(document.getElementById('grid_'+model_name));
-			if(document.getElementById('grid_'+model_name)) {
-				document.getElementById('grid_'+model_name).innerHTML = "";
-			}
-			
-			if( $("#status404") ) {
-				$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-			}
-			
-			if (event.target.id == "gwas_Multi") {
-				$("#isQQ").parent().css('display','');
-				$("#QQ_model").parent().css('display','none');
-			} else if (event.target.id == "gwas_QQ") {
-				$("#isQQ").parent().css('display','none');
-				$("#QQ_model").parent().css('display','');
-			} else {
-				$("#isQQ").parent().css('display','none');
-				$("#QQ_model").parent().css('display','none');
-			}
-		} 
-	})
-	
-	
-	// form-select2_gwas의 'select2:select' 
-	// => document.getElementById('isQQ').dispatchEvent(new Event('change'));를 거쳐서 온다. 
-	document.querySelector('#isQQ').addEventListener('change', function(event) {
-		
-		const model_name = $('#model_name').val();
-		const value = event.target.value.trim();
-		const isQQ = document.getElementById('isQQ').value;
-		const param_phenotype = document.getElementById('param_phenotype').value.trim();
-		
-		if(isQQ == '-1' || param_phenotype == '-1') {
-			return;
-		}
-		
-		const resultpath = document.getElementById('resultpath').value;
-		const jobid = document.getElementById('jobid_param').value;
-		
-		//console.log("isQQ : ", isQQ);
-		
-		
-		if( $("#status404") ) {
-			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-		}
-		
-		$(`iframe#${model_name}`).attr('src', '');		// empty plot
-		
-		
-		let url;
-		if(isQQ == "QQ") {
-			url = `${resultpath}${jobid}/multi_QQ_${param_phenotype}.html`
-		} else {
-			url = `${resultpath}${jobid}/multi_${param_phenotype}.html`
-		}
-		
-		fetch(url, {method: "HEAD"})
-		.then((response) => response.ok)
-		.then((ok) => {
-			if(!ok) {
-				HTMLNotExist(model_name);
-				$("#Multi").height(0);
-				return;
-			} else {
-				$("#Multi").height("500px");					// iframe 높이 정상
-				$("#iframeLoading").modal('show');
-				$('iframe#Multi').attr('src', url);
-			}
-		});
-		
-		
-		if(param_phenotype == "-1") {
-			alert("특성을 선택해주세요");
-			$("#isQQ").val("-1").trigger('change');
-		}
-		
-	});
-	
-	
-	document.querySelector('#QQ_model').addEventListener('change', function(event) {
-		
-		const value = event.target.value;
-		const param_phenotype = document.getElementById('param_phenotype').value.trim();
-		const model_name = $('#model_name').val();
-		const QQ_model_name = document.getElementById('QQ_model').value;
-
-		if(model_name == '-1' || param_phenotype == '-1') {
-			return;
-		}
-		
-		const resultpath = document.getElementById('resultpath').value;
-		const jobid = document.getElementById('jobid_param').value;
-		
-		
-		if( $("#status404") ) {
-			$("#status404").remove();						// '표현형과의 유사성을 찾을 수 없습니다' 안내문 제거
-		}
-		
-		
-		const url = `${resultpath}${jobid}/QQ_${QQ_model_name}_${param_phenotype}.html`;
-		
-		fetch(url, {method: "HEAD"})
-		.then((response) => response.ok)
-		.then((ok) => {
-			if(!ok) {
-				HTMLNotExist(model_name);
-				$("#QQ").height(0);
-				return;
-			} else {
-				$("#QQ").height("500px");					// iframe 높이 정상
-				$("#iframeLoading").modal('show');
-				$('iframe#QQ').attr('src', url);
-			}
-		});
-		
-		if(param_phenotype == "-1") {
-			alert("특성을 선택해주세요");
-			$("#QQ_model").val("-1").trigger('change');
-		}
-	})
-	
-	
-	*/
 	function HTMLNotExist(model_name) {
 		$(`iframe#${model_name}`).attr('src', '');		// empty plot
 		
@@ -496,61 +369,16 @@
 							`;
 		
 		if( (model_name == 'Multi' || model_name == 'QQ') ) {
-			/*
-			const htmlElement = `
-								<div id="status404">
-									<div class="row mt-5">
-										<div class="col-12 d-flex justify-content-center">
-											<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-												<line x1="12" y1="9" x2="12" y2="13"></line>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
-											</svg>
-										</div>
-									</div>
-									<div class="row mt-1 mb-5">
-										<div class="col-12 d-flex justify-content-center" style="font-size:20px; color:black;">
-											표현형과의 유사성을 찾을 수 없습니다.
-										</div>
-									</div>
-								</div>
-								`;
-			*/
 			//$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
 			$(`#panel_${model_name}`).children().append(htmlElement);
 			
 		} else {
 			// Multiple Model, QQ Plot이 아닐 경우
-			/*
-			const htmlElement = `
-								<div id="status404">
-									<div class="row mt-5">
-										<div class="col-xl-6"></div>
-										<div class="col-12 col-xl-6 d-flex justify-content-center">
-											<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-												<line x1="12" y1="9" x2="12" y2="13"></line>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
-											</svg>
-										</div>
-									</div>
-									<div class="row mt-1 mb-5">
-										<div class="col-xl-6"></div>
-										<div class="col-12 col-xl-6 d-flex justify-content-center" style="font-size:20px; color:black;">
-											표현형과의 유사성을 찾을 수 없습니다.
-										</div>
-									</div>
-								</div>
-								`;
-			*/
 			$(`#panel_${model_name}`).children().children().first().prepend(htmlElement);
 		}
 	}
 
 	
-	
-	
-
 	function showPlot(value) {
 		
 		//const model_name = $('#model_name').val();
@@ -702,6 +530,7 @@
 			width: 120, 
 		},
 		{
+			headerName: "-log10(P)",
 			field: "P-value", 
 			//valueFormatter: (params) => Number(params.value).toFixed(5),
 			valueFormatter: (params) => -Math.log10(Number(params.value)).toFixed(5),
@@ -773,7 +602,8 @@
 	}
 	
 	//var modelGrid = [];
-	function showGrid(value) {
+	//function showGrid(value) {
+	function showGrid(value, cutOff = -1) {
 		
 		//const model_name = $('#model_name').val();
 		const model_name = document.querySelector(`.nav-link.active`).textContent;
@@ -792,36 +622,13 @@
 			console.error(error);
 		}
 		
-		
-		
-		//console.log(`#grid_${model_name}`);
-		//console.log("path : ", resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv");
-		
-		/*
-		fetch(resultpath+jobid_param+"/GAPIT.Association.GWAS_Results." +model_name+ "." +value+ ".csv")
-		.then((response) => response.blob())
-		.then((file) => {
-			var reader = new FileReader();
-		    reader.onload = function(){
-		    	
-		    	var fileData = reader.result;
-		        var wb = XLSX.read(fileData, {type : 'binary'});
-		        var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-		        //console.log("rowObj : ", rowObj);
-		        const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
-		        gridOptions2.api.setRowData(rowObj);
-		        gridOptions2.columnApi.autoSizeAllColumns();
-		        
-		    };
-		    reader.readAsBinaryString(file);
-		});
-		*/
-		
 		const params = new URLSearchParams({
 			"model_name" : model_name,
 			"phenotype": value,
 			"jobid_param" : jobid_param,
+			"cutOff": cutOff,
 		});
+		
 		
 		fetch(`./gwas_gapit.jsp`, {
 			method: "POST",
@@ -840,6 +647,9 @@
 		})
 		.then((data) => {
 			console.log(data);
+			
+			//cut off Div display
+			document.getElementById('cutOffDiv').style.display = "flex";
 			
 			const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
 	        gridOptions2.api.setRowData(data);
@@ -939,23 +749,9 @@
   		})
   	});
 
-	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
-	
-  	document.addEventListener('click', function(event) {
-  		if(event.composedPath()[0].classList.contains("nav-link")) {
-  			$("html").animate({ scrollTop: $(document).height() }, 1000);
-  		}
-  	});
-	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
 		gridOptionsTraitName.api.sizeColumnsToFit();
-		
-	    if ($(window).width() < 768) {
-	      //gridOptions.columnApi.setColumnPinned("email", null);
-	    } else {
-	     // gridOptions.columnApi.setColumnPinned("email", "left");
-	    }
 	});
   
 	//console.log(gridOptions);

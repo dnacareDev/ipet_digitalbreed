@@ -123,32 +123,8 @@
 		int exitValue = executor.execute(cmdLine);
 		if(exitValue == 0) {
 			System.out.println("Success");
-			/*
-			String updateSql = "update vcf_file_merge_t set status=1 where jobid='" +jobid_vfm+ "';";
-			System.out.println(updateSql);
-			try{
-				ipetdigitalconndb.stmt.executeUpdate(updateSql);
-			} catch(Exception e) {
-				System.out.println(e);
-			} finally { 
-				ipetdigitalconndb.stmt.close();
-				ipetdigitalconndb.conn.close();
-			} 
-			*/
 		} else {
 			System.out.println("Fail");
-			/*
-			String updateSql = "update vcf_file_merge_t set status=2 where jobid='" +jobid_vfm+ "';";
-			System.out.println(updateSql);
-			try{
-				ipetdigitalconndb.stmt.executeUpdate(updateSql);
-			} catch(Exception e) {
-				System.out.println(e);
-			} finally { 
-				ipetdigitalconndb.stmt.close();
-				ipetdigitalconndb.conn.close();
-			} 
-			*/
 		}
 	} catch(Exception e) {
 		e.printStackTrace();

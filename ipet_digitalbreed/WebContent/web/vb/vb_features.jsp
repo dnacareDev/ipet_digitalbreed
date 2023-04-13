@@ -978,6 +978,7 @@
 		
 		getGwasSelectList();
 		getUpgmaSelectList();
+		//getStructureSelectList();
 		
 		
 	})
@@ -2540,7 +2541,7 @@
 		
    		
 		if(!model || !phenotype || !jobid) {
-			//console.log("gwas 영역 생성안됨");
+			console.log("gwas 영역 생성안됨");
 			return;
 		}
 		
@@ -2553,7 +2554,7 @@
 		
 		const GWAS_gridTable = document.getElementById(`GWAS_Grid_\${model}`);
 		
-		
+		/*
 		fetch(`/ipet_digitalbreed/result/gwas/\${jobid}/GAPIT.Association.GWAS_Results.\${model}.\${phenotype}.csv`, {method: "HEAD"})
 		.then((response) => response.ok)
 		.then((ok) => {
@@ -2589,7 +2590,7 @@
 				})
 			}
 		})
-		
+		*/
 
    	}
    	
@@ -2962,6 +2963,10 @@
    		document.getElementById('reset_UPGMA').dataset = "true";
    	}
    	
+   	function getStructureSelectList() {
+   		console.log("sturcture");
+   		// structure new analysis 시 vcf_data no값이 안 넘어감. select option값에 넣어주는 것부터 시작해야 함.
+   	}
    	
    	async function primerDesign() {
    		
