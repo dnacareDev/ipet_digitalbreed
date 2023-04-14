@@ -497,7 +497,7 @@
 			}
 		},
 		onRowDragLeave: (params) => {
-			if(window.innerWidth <= 990) {
+			if(window.innerWidth < 1200) {
 				window.scrollTo(0, document.getElementById('component-swiper-progress_one').getBoundingClientRect().y+window.pageYOffset -80);
 			}
 			

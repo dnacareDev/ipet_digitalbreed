@@ -51,6 +51,7 @@
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/pages/aggrid.css">
+    <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/bootstrap5_custom.css">
     <!-- END: Page CSS-->
 
 </head>
@@ -89,7 +90,7 @@ body {
     <jsp:include page="../../../../css/topmenu.jsp" flush="true"/>
 
 	<jsp:include page="../../../../css/menu.jsp" flush="true">
-		<jsp:param name="menu_active" value="standard_deviation"/>
+		<jsp:param name="menu_active" value="statistical_summary"/>
 	</jsp:include>
 
     <!-- BEGIN: Content-->
@@ -101,7 +102,7 @@ body {
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">&nbsp;Standard deviation</h2>
+                            <h2 class="content-header-title float-left mb-0">&nbsp;Statistical summary</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="../../mainboard.jsp">Home</a>
@@ -176,43 +177,63 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+        <!--  
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width : 1140px; margin: 0 auto;" role="document">
+        -->
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">PCA New Analysis</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Genomic Selection New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-					<form class="form" id="uploadPcaForm">
+					<form class="form" id="uploadForm">
 					    <div class="form-body">
 					        <div class="row">
-					            <div class="col-md-12 col-12 ml-1">
-					                <br>
-					             	<div class="form-label-group">
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:444px;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
-					             		<label for="first-name-column">Comment</label>
-					                </div>
-					            </div>
-					            <div class="col-md-12 col-12 ml-1">
-					            	<div class="form-label-group" >
-					                    <select class="select2 form-select" id="VcfSelect" style="width: 444px;">
-					                    </select>
+					            <div class="col-md-12 col-12">
+					             	<div class="form-label-group d-flex justify-content-center">
+					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:93%;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 					                </div>
 					            </div>
 					            <div class="col-md-12 col-12">
-									<div class="form-label-group">
-							            <h6 style="margin-left:13px; font-weight:bold;">Population &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" ><a href="/ipet_digitalbreed/uploads/pca_population.xlsx" download="pca_population.xlsx" style="color:white;" ><i class='feather icon-download'></i>예시파일받기</a> </button></h6>
-							            <div class="col-md-12 col-12">
-											<div id="fileControl" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div>
-											<br>
+					            	<div class="form-label-group d-flex justify-content-center" >
+					                    <select class="select2 form-select" id="Training_VCF" data-width="93%" data-placeholder="Select Training VCF File">
+					                    </select>
+					                </div>
+					            </div>
+					            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
+					            	<legend  class="w-auto">Phenotype Selection</legend>
+						            <div class="col-12" style="display:flex;">
+						            	<div class="col-6">
+						            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false)" value="0" checked>
+											<label class="form-check-label" for="RadioPhenotype" style="padding-left: 14px;"> Phenotype Database</label>
+						            	</div>
+						            	<div class="col-6">
+						            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true)" value="1">
+											<label class="form-check-label" for="RadioCsvFile" style="padding-left: 14px;"> New Phenotype</label>
+						            	</div>
+					            	</div>
+						            <div>
+							            <div id="isPhenotype" class="form-label-group mt-1" >
+						                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
+							                <!--
+							                <div id="phenotypeResultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:120px;"></div><br>
+							                -->
+	                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
+	                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
 							            </div>
-						            </div>
-						        </div>
+							        </div>
+							        <div>
+										<div id="isNewFile" class="form-label-group mt-1" style="display:none">
+								            <div id="PhenotypeCsvFile" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div>
+							            </div>
+							        </div>
+						        </fieldset>
 					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="FileUpload();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetPCA();">Reset</button>
+					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
+					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
 					            </div>
 					        </div>
 					    </div>

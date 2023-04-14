@@ -17,25 +17,27 @@
 	try{
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-		String cropvari_sql = "select traitname from sampledata_traitname_t where varietyid='" +varietyid+ "' and creuser='" +permissionUid+ "' order by seq asc;";
-		//System.out.println("cropvari_sql : " + cropvari_sql);
-		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(cropvari_sql);
+		String sql = "select * from sampledata_info_t where varietyid='" +varietyid+ "' and creuser='" +permissionUid+ "' order by no DESC;";
+		//System.out.println("sql : " + sql);
+		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		
-		int i=0;
 		while (ipetdigitalconndb.rs.next()) { 	
 			JsonObject jsonObj = new JsonObject();
-			jsonObj.addProperty("traitname", ipetdigitalconndb.rs.getString("traitname"));
-			jsonObj.addProperty("traitname_key", i++);
+			jsonObj.addProperty("no", ipetdigitalconndb.rs.getString("no"));
+			jsonObj.addProperty("samplename", ipetdigitalconndb.rs.getString("samplename"));
+			jsonObj.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt").split(" ")[0]);
+			jsonObj.addProperty("act_dt", ipetdigitalconndb.rs.getString("act_dt"));
 			jsonArray.add(jsonObj);
 		}
 	}catch(Exception e){
 		System.out.println(e);
-	}finally { 
+	}finally{ 
     	ipetdigitalconndb.stmt.close();
     	ipetdigitalconndb.rs.close();
     	ipetdigitalconndb.conn.close();
     }
 	
+	//System.out.println(jsonArray);
 	out.clear();
 	out.print(jsonArray);
 		
