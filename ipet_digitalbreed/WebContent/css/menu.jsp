@@ -95,7 +95,7 @@
                                     </li>
                                     <li class="<%if(menu_active.equals("t-test")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/t-test/t-test.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>T-test</a>
                                     </li>
-                                    <li class="<%if(menu_active.equals("anova")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/anova/anova.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>One-wayANOVA</a>
+                                    <li class="<%if(menu_active.equals("anova")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/anova/anova.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>One-way ANOVA</a>
                                     </li>
                                     <li class="<%if(menu_active.equals("phenotype_pca")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/phenotype_pca/phenotype_pca.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Phenotype PCA</a>
                                     </li>

@@ -53,6 +53,7 @@
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/pages/aggrid.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/bootstrap5_custom.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css"> 
+    <link rel="stylesheet" type="text/css" href="../../../../css/index_assets/css/icons.min.css">
     <!-- END: Page CSS-->
 
 </head>
@@ -204,21 +205,21 @@ body {
 							        <div class="row mb-1">
 							            <div class="col-12 pl-2" style="display:flex;">
 							            	<div class="col-3">
-							            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false)" value="0" checked>
+							            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false, 'individual')" value="0" checked>
 												<label class="form-check-label" for="RadioPhenotype" style="padding-left: 14px;"> Phenotype Database</label>
 							            	</div>
 							            	<div class="col-3">
-							            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true)" value="1">
+							            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true,  'individual')" value="1">
 												<label class="form-check-label" for="RadioCsvFile" style="padding-left: 14px;"> New Phenotype</label>
 							            	</div>
 						            	</div>
 						            </div>
-					            	<div class="form-label-group d-flex justify-content-start" >
-					                    <select class="select2 form-select" id="Select_Phenotype" data-width="50%" data-placeholder="Select Phenotype">
+					            	<div class="d-flex justify-content-start" >
+					                    <select class="select2 form-select" id="Select_Phenotype_1" data-width="50%" data-placeholder="Select Phenotype">
 					                    </select>
 					                </div>
 						            <div>
-							            <div id="isPhenotype" class="form-label-group mt-1" >
+							            <div id="isPhenotype_individual" class="form-label-group" >
 						                    <div>
 						                    	<div class="col-12 mb-1 p-0" style="font-size:16px;">Group</div>
 							                    <!--  
@@ -232,8 +233,9 @@ body {
 												</div>
 							                    <div id="Grid_Individual_Group" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
 						                    </div>
+						                    <div class="mt-1"></div>
 							            </div>
-					                    <div id="isNewFile" class="form-label-group mt-1 justify-content-center" style="display:none; flex-direction:column;">
+					                    <div id="isNewFile_individual" class="form-label-group justify-content-center" style="display:none; flex-direction:column;">
 											<div class="col-12 d-flex justify-content-space-between">
 												<div class="col-6" style="font-weight:bold;">File Upload</div>
 												<div id="exampleFile" class="col-6" style="display:none;">
@@ -241,19 +243,41 @@ body {
 								            	</div>
 											</div>
 											<div class="col-12 mt-1 d-flex justify-content-center">
-								            	<div id="FileControl_Phenotype" class="col-12"  style="border: 1px solid #48BAE4;"></div>
+								            	<div id="FileControl_individual" class="col-12"  style="border: 1px solid #48BAE4;"></div>
 											</div>
 							            </div>
 							        </div>
 						        </fieldset>
 					        </div>
+					        <div class="mt-1">
+				                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
+				                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
+				            </div>
 						</div>
 						<div class='tab-pane' id='pillModal2' aria-expanded='true' aria-labelledby='base-pill1'>
 							<div class="row">
-					            <fieldset id="Field_Individual" class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
+					            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
 					            	<legend  class="w-auto">Options</legend>
+					            	<div class="row mb-1">
+							            <div class="col-12 pl-2" style="display:flex;">
+							            	<div class="col-3">
+							            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioPhenotype2" onclick="radioSelect(false, 'phenotype')" value="0" checked>
+												<label class="form-check-label" for="RadioPhenotype2" style="padding-left: 14px;"> Phenotype Database</label>
+							            	</div>
+							            	<div class="col-3">
+							            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioCsvFile2" onclick="radioSelect(true, 'phenotype')" value="1">
+												<label class="form-check-label" for="RadioCsvFile2" style="padding-left: 14px;"> New Phenotype</label>
+							            	</div>
+						            	</div>
+						            </div>
+						            <!--  
+						            <div class="form-label-group d-flex justify-content-start" >
+					                    <select class="select2 form-select" id="Select_Phenotype_2" data-width="50%" data-placeholder="Select Phenotype">
+					                    </select>
+					                </div>
+					                -->
 						            <div>
-							            <div id="isPhenotype" class="d-flex mt-1" >
+							            <div id="isPhenotype_phenotype" class="mt-1" style="display:flex;">
 						                    <div class="col-6 p-0">
 							                    <div id="Grid_Phenotype" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;" ></div><br>
 						                    </div>
@@ -261,17 +285,28 @@ body {
 							                    <div id="Grid_Phenotype_Selected" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
 						                    </div>
 							            </div>
-					                    <input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
+							            <div id="isNewFile_phenotype" class="form-label-group mt-1 justify-content-center" style="display:none; flex-direction:column;">
+											<div class="col-12 d-flex justify-content-space-between">
+												<div class="col-6" style="font-weight:bold;">File Upload</div>
+												<div class="col-6">
+								            		<button class="btn btn-sm btn-info float-right">예시파일</button>
+								            	</div>
+											</div>
+											<div class="col-12 mt-1 d-flex justify-content-center">
+								            	<div id="FileControl_phenotype" class="col-12"  style="border: 1px solid #48BAE4;"></div>
+											</div>
+							            </div>
+                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
                                     	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
                                     	<div class="mt-1"></div>
 							        </div>
 						        </fieldset>
 					        </div>
+					        <div class="mt-1">
+				                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
+				                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
+				            </div>
 						</div>
-			            <div class="col-12">
-			                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
-			                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
-			            </div>
 					</div>
                 </div>
             </div>
@@ -379,6 +414,7 @@ body {
     }
    	
     var box = new Object();
+    var box_phenotype = new Object();
     window.onload = function() {
     	
     	//const jobid_pca = $("#jobid_pca").val();
@@ -386,7 +422,7 @@ body {
     	
     	// 파일전송 컨트롤 생성
 	    box = innorix.create({
-	    	el: '#FileControl_Phenotype', // 컨트롤 출력 HTML 객체 ID
+	    	el: '#FileControl_individual', // 컨트롤 출력 HTML 객체 ID
 	        width			: 445,
 	    	height          : 190,
 	        maxFileCount   : 1,  
@@ -397,12 +433,10 @@ body {
 	        uploadUrl: './pca_population.jsp'
 	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
 	    });
-    	
-    	
 
 	    // 업로드 완료 이벤트
 	    box.on('uploadComplete', function (p) {
-			document.getElementById('uploadPcaForm').reset();
+			document.getElementById('uploadForm').reset();
 	    	box.removeAllFiles();
 			//backdrop.style.display = "none";	
 			//refresh();
@@ -415,32 +449,88 @@ body {
 	   			}
 	   		, 1000);
         });
+	    
+	 // 파일전송 컨트롤 생성
+	    box_phenotype = innorix.create({
+	    	el: '#FileControl_phenotype', // 컨트롤 출력 HTML 객체 ID
+	        width			: 445,
+	    	height          : 190,
+	        maxFileCount   : 1,  
+	        //allowType : ["vcf"],
+	        allowType : ["xlsx"],
+			addDuplicateFile : false,
+	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
+	        uploadUrl: './pca_population.jsp'
+	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
+	    });
+
+	    // 업로드 완료 이벤트
+	    box_phenotype.on('uploadComplete', function (p) {
+			document.getElementById('uploadForm').reset();
+	    	box.removeAllFiles();
+			//backdrop.style.display = "none";	
+			//refresh();
+			
+	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
+	   		setTimeout( function () {
+	   			//backdrop.style.display = "none";
+	   			refresh();
+	   			$("#backdrop").modal("hide");
+	   			}
+	   		, 1000);
+        });
+	    
     };
     
 	//radio 선택에 따라 파일창 노출여부 결정  | true: New Phenotype , false: Phenotype Database
-	function radioSelect(flag) {
-		//console.log(flag);
-		if(flag) {
-			document.getElementById('Select_Phenotype').nextSibling.style.display = 'none';
-			document.getElementById('isPhenotype').style.display = 'none';
-			//$("#Field_Phenotype").css('display','none');
-			//$("#Field_Individual").css('display','none');
-			$("#isNewFile").css('display','flex');
-			$("#exampleFile").css('display','block');
-			
-			// New Phenotype 선택시 특성 체크박스 해제
-			//gridOptionsTraitName.api.deselectAll();
-		} else {
-			document.getElementById('Select_Phenotype').parentElement.style.display='';
-			document.getElementById('isPhenotype').style.display = '';
-			//$("#Field_Phenotype").css('display','block');
-			//$("#Field_Individual").css('display','block');
-			$("#isNewFile").css('display','none');
-			$("#exampleFile").css('display','none');
-			
-			// Phenotype Database 선택시 innorix 파일목록 해제
-			box.removeAllFiles();
+	function radioSelect(flag, category) {
+		
+		if(category == "individual") {
+			if(flag) {
+				document.getElementById('Select_Phenotype_1').nextSibling.style.display = 'none';
+				document.getElementById('Select_Phenotype_1').selectedIndex = 0;
+		    	document.getElementById('Select_Phenotype_1').dispatchEvent(new Event("change"));
+				document.getElementById('isPhenotype_individual').style.display = 'none';
+				$("#isNewFile_individual").css('display','flex');
+				$("#exampleFile").css('display','block');
+				
+				// New Phenotype 선택시 특성 체크박스 해제
+				//gridOptionsTraitName.api.deselectAll();
+			} else {
+				document.getElementById('Select_Phenotype_1').nextSibling.style.display='';
+				document.getElementById('isPhenotype_individual').style.display = '';
+				$("#isNewFile_individual").css('display','none');
+				$("#exampleFile").css('display','none');
+				
+				// Phenotype Database 선택시 innorix 파일목록 해제
+				box.removeAllFiles();
+			}
+		} else if(category == "phenotype") {
+			if(flag) {
+				//document.getElementById('Select_Phenotype_2').nextSibling.style.display = 'none';
+				document.getElementById('isPhenotype_phenotype').style.display = 'none';
+				document.getElementById("cre_date").style.display = "none";
+				document.getElementById("inv_date").style.display = "none";
+				resetFlatpickr();
+				$("#isNewFile_phenotype").css('display','flex');
+				$("#exampleFile").css('display','block');
+				
+				// New Phenotype 선택시 특성 체크박스 해제
+				//gridOptionsTraitName.api.deselectAll();
+			} else {
+				//document.getElementById('Select_Phenotype_2').nextSibling.style.display='';
+				document.getElementById('isPhenotype_phenotype').style.display = 'flex';
+				document.getElementById("cre_date").style.display = "inline";
+				document.getElementById("inv_date").style.display = "inline";
+				$("#isNewFile_phenotype").css('display','none');
+				$("#exampleFile").css('display','none');
+				
+				// Phenotype Database 선택시 innorix 파일목록 해제
+				box.removeAllFiles();
+			}
 		}
+		
+		//console.log(flag);
 	}
     
 	function flatpickr() {
@@ -479,23 +569,37 @@ body {
 
    		const comment = $('#comment').val();
     	
+    	if(!comment) {
+    		return alert("comment를 입력해주세요.");
+    	}
     	
     	const category = document.querySelector(".modal-body .nav-link.active").dataset.pill;
     	console.log(category);
+    	
     	if(category == "individual") {
     		//console.log("indi");
     		
-    		const selectEl = document.getElementById("Select_Phenotype");
+    		const selectEl = document.getElementById("Select_Phenotype_1");
     		const traitname = selectEl.options[selectEl.selectedIndex].dataset.traitname;
     		const traitname_key = Number(selectEl.options[selectEl.selectedIndex].dataset.traitname_key);
     		
+    		if(selectEl.selectedIndex == 0) {
+    			return alert("형질을 선택해주세요.");
+    		}
+    		
     		const sampleno = new Array();
     		const samplename = new Array();
+
+    		if(gridOptions_individualGroupName.api.getSelectedRows().length < 10) {
+    			return alert("10개 이상의 개체를 선택해주세요.");
+    		}
+    		
     		const nodes = gridOptions_individualGroupName.api.getModel().rootNode.allLeafChildren;
     		for(let i=0 ; i<nodes.length ; i++) {
     			sampleno.push(nodes[i].data.no);
     			samplename.push(nodes[i].data.samplename);
     		}
+    		
     		
     		const params = new URLSearchParams({
     			"varietyid": varietyid,
@@ -507,6 +611,40 @@ body {
     			"samplename": samplename,
     		})
     		
+    		await fetch('./t-test_analysis_samplename.jsp', {
+	    			method: "POST",
+	    			headers: {
+	    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	    			},
+	    			body: params
+	    		})
+    		
+    		
+    	} else if(category == "phenotype") {
+    		console.log("pheno");
+    		
+    		
+    		const traitname = new Array();
+    		const traitname_key = new Array();
+    		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+    		for(let i=0 ; i<nodes.length ; i++) {
+    			traitname.push(nodes[i].data.traitname);
+    			traitname_key.push(Number(nodes[i].data.traitname_key) + 1);
+    		}
+    		
+    		const cre_date = document.getElementById('cre_date').value;
+    		const inv_date = document.getElementById('inv_date').value;
+    		
+    		const params = new URLSearchParams({
+    			"varietyid": varietyid,
+    			"jobid_t_test": jobid_t_test,
+    			"comment": comment,
+    			"traitname": traitname,
+    			"seq": traitname_key,
+    			"cre_date": cre_date,
+    			"inv_date": inv_date,
+    		})
+    		
     		fetch('t-test_analysis_samplename.jsp', {
     			method: "POST",
     			headers: {
@@ -515,8 +653,7 @@ body {
     			body: params
     		})
     		
-    	} else if(category == "phenotype") {
-    		console.log("pheno");
+    		
     	}
     	
     	

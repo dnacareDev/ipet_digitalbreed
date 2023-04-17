@@ -15,15 +15,15 @@
 	String comment = request.getParameter("comment");
 	String[] traitname = request.getParameter("traitname").split(",");
 	String[] seq = request.getParameter("seq").split(",");
-	String[] samplename = request.getParameter("samplename").split(",");
-	String[] sampleno = request.getParameter("sampleno").split(",");
+	String[] cre_date = request.getParameter("cre_date").split(" to ");
+	String[] inv_date = request.getParameter("inv_date").split(" to ");
 	
-	/*
 	System.out.println();
 	System.out.println("varietyid : " + varietyid);
 	System.out.println("jobid_t_test : " + jobid_t_test);
 	System.out.println("comment : " + comment);
 	System.out.println("traitname : " + traitname);
+	/*
 	System.out.println("seq : " + Arrays.toString(seq));
 	System.out.println("samplename : " + Arrays.toString(samplename));
 	System.out.println("sampleno : " + Arrays.toString(sampleno));
@@ -60,15 +60,15 @@
 		}        
 	}
 	
-	Map<String, JsonObject> phenotypeDB = getAllPhenotype(permissionUid);
+	//Map<String, JsonObject> phenotypeDB = getAllPhenotype(permissionUid);
 	
 	//System.out.println(phenotypeDB);
 	//System.out.println(phenotypeDB.get("1209"));
 	
-	writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, sampleno, traitname, seq);
+	//writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, sampleno, traitname, seq);
 	
 	/*
-	String cmd = "Rscript " +script_path+ "breedertoolbox_annotation.R " +savePath+ " GS_trait.csv " +outputPath+ " " +jobid_t_test +" "+ filename +" "+ annotationPath +" "+ annotation_filename;
+	String cmd = "Rscript " +script_path+ "breedertoolbox_annotation.R " +savePath+ " " +outputPath+ " " +jobid_anno +" "+ filename +" "+ annotationPath +" "+ annotation_filename;
 	
 	System.out.println("annotation parameter : " + cmd);
 			
@@ -142,7 +142,7 @@ private Map<String, JsonObject> getAllPhenotype(String permissionUid) throws SQL
 			bw.newLine();
 			
 			for(int i=0 ; i<sampleno.length ; i++) {
-				//System.out.println(phenotypeDB.get(sampleno[i]));
+				System.out.println(phenotypeDB.get(sampleno[i]));
 				//System.out.println(phenotypeDB.get(sampleno[i]).get("samplename"));
 				bw.write(phenotypeDB.get(sampleno[i]).get("samplename").getAsString()+",");
 				for(int j=0 ; j<seq.length ; j++) {
@@ -151,10 +151,7 @@ private Map<String, JsonObject> getAllPhenotype(String permissionUid) throws SQL
 						bw.write(",");
 					}
 				}
-				
-				if( i != sampleno.length -1) {
-					bw.newLine();
-				}
+				bw.newLine();
 			}
 			
 			bw.flush();
