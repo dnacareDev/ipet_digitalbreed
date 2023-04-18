@@ -61,6 +61,10 @@
 
 <!-- BEGIN: Body-->
 <style>
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: 'SDSamliphopangche_Outline';
 }
@@ -164,7 +168,37 @@ body {
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
-                    <div id="vcf_status" class="card"></div>
+                    <div id="Extra_Card" class="card" style="display:none;">
+                    	<div class='card-content'>
+							<div class='card-body'>
+								<div class='row'>
+									<div class='col-12'>
+										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
+											<li class='nav-item'><a class='nav-link active' id='nav1' data-toggle='pill' data-pill='individual' href='#pill1' aria-expanded='true'>Result</a></li>
+										</ul>
+				                    	<div id='content-list' class='tab-content'>
+											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+												<div class="row">
+													<div class="col-12">
+														<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload=' $("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-lg-8 col-12">
+														<iframe src = '' loading="lazy" width='100%' height='480px' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='$("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													</div>
+													<div class="col-lg-4 col-12">
+														<iframe src = '' loading="lazy" width='100%' height='480px' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame' onload='$("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													</div>
+												</div>
+											</div>
+				                    	</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    	
+                    </div>
                 </section>
                 <!-- Basic example section end -->
                 
@@ -587,16 +621,20 @@ body {
     			return alert("형질을 선택해주세요.");
     		}
     		
+    		const row = new Array();
     		const sampleno = new Array();
     		const samplename = new Array();
 
-    		if(gridOptions_individualGroupName.api.getSelectedRows().length < 10) {
+    		
+    		const nodes = gridOptions_individualGroupName.api.getModel().rootNode.allLeafChildren;
+    		
+    		if(nodes.length < 10) {
     			return alert("10개 이상의 개체를 선택해주세요.");
     		}
     		
-    		const nodes = gridOptions_individualGroupName.api.getModel().rootNode.allLeafChildren;
-    		for(let i=0 ; i<nodes.length ; i++) {
-    			sampleno.push(nodes[i].data.no);
+   			for(let i=0 ; i<nodes.length ; i++) {
+   				row.push(nodes[i].data.row);
+   				sampleno.push(nodes[i].data.no);
     			samplename.push(nodes[i].data.samplename);
     		}
     		
@@ -607,22 +645,30 @@ body {
     			"comment": comment,
     			"traitname": traitname,
     			"seq": traitname_key+1,
+    			"row": row,
     			"sampleno": sampleno,
     			"samplename": samplename,
     		})
     		
-    		await fetch('./t-test_analysis_samplename.jsp', {
-	    			method: "POST",
-	    			headers: {
-	    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-	    			},
-	    			body: params
-	    		})
-    		
+    		fetch('./t-test_analysis_samplename.jsp', {
+    			method: "POST",
+    			headers: {
+    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    			},
+    			body: params
+    		})
+    		fetch('./t-test_insertSql.jsp', {
+    			method: "POST",
+    			headers: {
+    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    			},
+    			body: params
+    		})
+    		/*
+    		*/
     		
     	} else if(category == "phenotype") {
     		console.log("pheno");
-    		
     		
     		const traitname = new Array();
     		const traitname_key = new Array();
@@ -645,7 +691,7 @@ body {
     			"inv_date": inv_date,
     		})
     		
-    		fetch('t-test_analysis_samplename.jsp', {
+    		fetch('t-test_analysis_phenotype.jsp', {
     			method: "POST",
     			headers: {
     				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
@@ -653,13 +699,20 @@ body {
     			body: params
     		})
     		
-    		
+    		fetch('./t-test_insertSql.jsp', {
+    			method: "POST",
+    			headers: {
+    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    			},
+    			body: params
+    		})
     	}
-    	
-    	
-    	// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
-    	// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
-    	
+    	setTimeout( function () {
+   			refresh();
+   			$("#backdrop").modal("hide");
+    	}, 1000);
+    	/*
+    	*/
     	
 		    	
     	/*

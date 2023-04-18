@@ -21,8 +21,19 @@
 		//System.out.println("sql : " + sql);
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		
+		/*
 		while (ipetdigitalconndb.rs.next()) { 	
 			JsonObject jsonObj = new JsonObject();
+			jsonObj.addProperty("no", ipetdigitalconndb.rs.getString("no"));
+			jsonObj.addProperty("samplename", ipetdigitalconndb.rs.getString("samplename"));
+			jsonObj.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt").split(" ")[0]);
+			jsonObj.addProperty("act_dt", ipetdigitalconndb.rs.getString("act_dt"));
+			jsonArray.add(jsonObj);
+		}
+		*/
+		for(int i=1 ; ipetdigitalconndb.rs.next() ; i++) { 	
+			JsonObject jsonObj = new JsonObject();
+			jsonObj.addProperty("row", i);
 			jsonObj.addProperty("no", ipetdigitalconndb.rs.getString("no"));
 			jsonObj.addProperty("samplename", ipetdigitalconndb.rs.getString("samplename"));
 			jsonObj.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt").split(" ")[0]);

@@ -13,17 +13,21 @@
 	String varietyid = request.getParameter("varietyid");
 	String jobid_t_test = request.getParameter("jobid_t_test");
 	String comment = request.getParameter("comment");
-	String[] traitname = request.getParameter("traitname").split(",");
-	String[] seq = request.getParameter("seq").split(",");
+	//String[] traitname = request.getParameter("traitname").split(",");
+	//String[] seq = request.getParameter("seq").split(",");
+	String traitname = request.getParameter("traitname");
+	String seq = request.getParameter("seq");
+	String[] traitnameArr = traitname.split(",");
+	String[] seqArr = seq.split(",");
 	String[] cre_date = request.getParameter("cre_date").split(" to ");
 	String[] inv_date = request.getParameter("inv_date").split(" to ");
 	
+	/*
 	System.out.println();
 	System.out.println("varietyid : " + varietyid);
 	System.out.println("jobid_t_test : " + jobid_t_test);
 	System.out.println("comment : " + comment);
 	System.out.println("traitname : " + traitname);
-	/*
 	System.out.println("seq : " + Arrays.toString(seq));
 	System.out.println("samplename : " + Arrays.toString(samplename));
 	System.out.println("sampleno : " + Arrays.toString(sampleno));
@@ -60,17 +64,26 @@
 		}        
 	}
 	
-	//Map<String, JsonObject> phenotypeDB = getAllPhenotype(permissionUid);
+	Map<String, JsonObject> phenotypeDB = getAllPhenotype(permissionUid, cre_date, inv_date);
 	
 	//System.out.println(phenotypeDB);
 	//System.out.println(phenotypeDB.get("1209"));
 	
-	//writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, sampleno, traitname, seq);
+	//writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitname, seq);
+	writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitnameArr, seqArr);
 	
-	/*
-	String cmd = "Rscript " +script_path+ "breedertoolbox_annotation.R " +savePath+ " " +outputPath+ " " +jobid_anno +" "+ filename +" "+ annotationPath +" "+ annotation_filename;
+	String cmd = "Rscript " +script_path+ "Phenotype_t-test.R " +jobid_t_test+ " " +savePath+jobid_t_test+ " GS_traits.csv ";
 	
-	System.out.println("annotation parameter : " + cmd);
+	for(int i=1 ; i<=phenotypeDB.size() ; i++) {
+		cmd += i;
+		if(i == phenotypeDB.size()) {
+			cmd +=" ";
+		} else {
+			cmd +=",";
+		}
+	}
+	
+	System.out.println("cmd : " + cmd);
 			
 	
 	CommandLine cmdLine = CommandLine.parse(cmd);
@@ -82,21 +95,37 @@
 	} else {
 		System.out.println("Fail");
 	}
+	/*
 	*/
 	
 %>
 
 <%!
-private Map<String, JsonObject> getAllPhenotype(String permissionUid) throws SQLException {
+private Map<String, JsonObject> getAllPhenotype(String permissionUid, String[] cre_date, String[] inv_date) throws SQLException {
 	
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	Map<String, JsonObject> phenotypeDB = new HashMap<>();
+	Map<String, JsonObject> phenotypeDB = new LinkedHashMap<>();
 	
 	try {
-		String sql = "select a.no, a.samplename, a.cre_dt, a.act_dt, group_concat( b.value SEPARATOR  ',' ) as val from sampledata_info_t as a inner join sampledata_traitval_t as b on a.no = b.sampleno where a.varietyid='v-00001' and a.creuser='"+ permissionUid +"' group by b.sampleid order by b.sampleid desc;";
-		//System.out.println(sql);
+		String sql = "select a.no, a.samplename, a.cre_dt, a.act_dt, group_concat( b.value SEPARATOR  ',' ) as val from sampledata_info_t as a inner join sampledata_traitval_t as b on a.no = b.sampleno where a.varietyid='v-00001'";
+		
+		if(cre_date.length == 2) {
+			sql += " and a.cre_dt between '"+ cre_date[0] +"' and '"+ cre_date[1] +"'"; 
+		} else if(!cre_date[0].isEmpty()) {
+			sql += " and DATE(a.cre_dt) = '"+ cre_date[0] +"'";
+		}
+		
+		if(inv_date.length == 2) {
+			sql += " and a.act_dt between '"+ inv_date[0] +"' and '"+ inv_date[1] +"'"; 
+		} else if(!inv_date[0].isEmpty()) {
+			sql += " and DATE(a.act_dt) = '"+ inv_date[0] +"'";
+		}
+		
+		sql += " and a.creuser='"+ permissionUid +"' group by b.sampleid order by b.sampleid desc;";
+		
+		System.out.println(sql);
 		
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		
@@ -126,21 +155,22 @@ private Map<String, JsonObject> getAllPhenotype(String permissionUid) throws SQL
 %>
 
 <%!
-	public void writePhenotypeTxt(String jobid_t_test, String savePath, Map<String, JsonObject> phenotypeDB, String[] sampleno, String[] traitname, String[] seq) throws SQLException {
+	public void writePhenotypeTxt(String jobid_t_test, String savePath, Map<String, JsonObject> phenotypeDB, String[] traitnameArr, String[] seqArr) throws SQLException {
 		
 		try {
 			File phenotypeTxt = new File(savePath+jobid_t_test+"/GS_trait.csv");
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "UTF-8"));
 			
 			bw.write("Taxa,");
-			for(int i=0 ; i<traitname.length ; i++) {
-				bw.write(traitname[i]);
-				if(i != traitname.length -1) {
+			for(int i=0 ; i<traitnameArr.length ; i++) {
+				bw.write(traitnameArr[i]);
+				if(i != traitnameArr.length -1) {
 					bw.write(",");
 				}
 			}
 			bw.newLine();
 			
+			/*
 			for(int i=0 ; i<sampleno.length ; i++) {
 				System.out.println(phenotypeDB.get(sampleno[i]));
 				//System.out.println(phenotypeDB.get(sampleno[i]).get("samplename"));
@@ -152,6 +182,24 @@ private Map<String, JsonObject> getAllPhenotype(String permissionUid) throws SQL
 					}
 				}
 				bw.newLine();
+			}
+			*/
+			
+			Iterator<String> iterator = phenotypeDB.keySet().iterator();
+			
+			while(iterator.hasNext()) {
+				String key = iterator.next();
+			    
+		    	bw.write(phenotypeDB.get(key).get("samplename").getAsString()+",");
+				for(int j=0 ; j<seqArr.length ; j++) {
+					bw.write(phenotypeDB.get(key).get("seq_"+seqArr[j]).getAsString());
+					if(j != seqArr.length -1) {
+						bw.write(",");
+					}
+				}
+				if(iterator.hasNext()) {
+					bw.newLine();
+				}
 			}
 			
 			bw.flush();
