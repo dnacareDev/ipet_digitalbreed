@@ -5,7 +5,7 @@
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
 <%@ page import="ipet_digitalbreed.*"%>    
 <%@ page import="org.apache.commons.exec.*" %>
-<%@page import="com.google.gson.JsonObject, com.google.gson.JsonArray"%>
+<%@page import="com.google.gson.*"%>
 
 <%
 	
@@ -18,8 +18,7 @@
 	String seq_independent = request.getParameter("seq_independent");
 	String traitname_dependent = request.getParameter("traitname_dependent");
 	String seq_dependent = request.getParameter("seq_dependent");
-	String[] cre_date = request.getParameter("cre_date").split(" to ");
-	String[] inv_date = request.getParameter("inv_date").split(" to ");
+	JsonArray phenotypeDB = new Gson().fromJson(request.getParameter("phenotypeDB"), JsonArray.class);
 	
 	/*
 	*/
@@ -63,7 +62,6 @@
 		}        
 	}
 	
-	JsonArray phenotypeDB = getAllPhenotype(permissionUid, cre_date, inv_date);
 	//System.out.println(phenotypeDB);
 	
 	List<String> traitNames = getAllTraitNames(permissionUid, varietyid);
@@ -87,61 +85,6 @@
 	/*
 	*/
 	
-%>
-
-<%!
-private JsonArray getAllPhenotype(String permissionUid, String[] cre_date, String[] inv_date) throws SQLException {
-	
-	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
-	
-	JsonArray phenotypeDB = new JsonArray();
-	
-	try {
-		String sql = "select a.no, a.samplename, a.cre_dt, a.act_dt, group_concat( b.value SEPARATOR  ',' ) as val from sampledata_info_t as a inner join sampledata_traitval_t as b on a.no = b.sampleno where a.varietyid='v-00001'";
-		
-		if(cre_date.length == 2) {
-			sql += " and a.cre_dt between '"+ cre_date[0] +"' and '"+ cre_date[1] +"'"; 
-		} else if(!cre_date[0].isEmpty()) {
-			sql += " and DATE(a.cre_dt) = '"+ cre_date[0] +"'";
-		}
-		
-		if(inv_date.length == 2) {
-			sql += " and a.act_dt between '"+ inv_date[0] +"' and '"+ inv_date[1] +"'"; 
-		} else if(!inv_date[0].isEmpty()) {
-			sql += " and DATE(a.act_dt) = '"+ inv_date[0] +"'";
-		}
-		
-		sql += " and a.creuser='"+ permissionUid +"' group by b.sampleid order by b.sampleid desc;";
-		
-		System.out.println(sql);
-		
-		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
-		
-		while(ipetdigitalconndb.rs.next()) {
-			
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("samplename", ipetdigitalconndb.rs.getString("samplename"));
-			jsonObject.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt").split(" ")[0]);
-			jsonObject.addProperty("act_dt", ipetdigitalconndb.rs.getString("act_dt"));
-			String[] valueArr = ipetdigitalconndb.rs.getString("val").split(",", Integer.MAX_VALUE);
-			for(int i=0 ; i<valueArr.length ; i++) {
-				jsonObject.addProperty("seq_"+(i+1), valueArr[i]);
-			}
-			//phenotypeDB.put(ipetdigitalconndb.rs.getString("no"), jsonObject);
-			phenotypeDB.add(jsonObject);
-		}
-		
-	} catch(SQLException e) {
-		e.getStackTrace();
-	} finally {
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.rs.close();
-		ipetdigitalconndb.conn.close();
-	}
-	
-	return phenotypeDB;
-}
 %>
 
 <%!
@@ -174,44 +117,44 @@ private List<String> getAllTraitNames(String permissionUid, String varietyid) th
 %>
 
 <%!
-	public void writePhenotypeTxt(String jobid_t_test, String savePath, JsonArray phenotypeDB, List<String> traitNames) throws SQLException {
-	
-	
-		try {
-			File phenotypeTxt = new File(savePath+jobid_t_test+"/GS_traits.csv");
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "UTF-8"));
-			
-			int traitSize = traitNames.size();
-			
-			bw.write("Taxa,");
-			for(int i=0 ; i<traitSize; i++) {
-				//bw.write(phenotypeDB.get(0).getAsJsonObject().get("seq_"+(i+1)).getAsString());
-				bw.write(traitNames.get(i));
-				if(i != traitSize -1) {
+public void writePhenotypeTxt(String jobid_t_test, String savePath, JsonArray phenotypeDB, List<String> traitNames) throws SQLException {
+
+
+	try {
+		File phenotypeTxt = new File(savePath+jobid_t_test+"/GS_traits.csv");
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "UTF-8"));
+		
+		int traitSize = traitNames.size();
+		
+		bw.write("Taxa,");
+		for(int i=0 ; i<traitSize; i++) {
+			//bw.write(phenotypeDB.get(0).getAsJsonObject().get("seq_"+(i+1)).getAsString());
+			bw.write(traitNames.get(i));
+			if(i != traitSize -1) {
+				bw.write(",");
+			}
+		}
+		bw.newLine();
+		
+		int sampleSize = phenotypeDB.size();
+		
+		for(int i=0 ; i<sampleSize ; i++) {
+			bw.write(phenotypeDB.get(i).getAsJsonObject().get("samplename").getAsString()+",");
+			for(int j=0 ; j<traitSize ; j++) {
+				bw.write(phenotypeDB.get(i).getAsJsonObject().get("seq_"+(j+1)).getAsString());
+				if(j != traitSize -1) {
 					bw.write(",");
 				}
 			}
-			bw.newLine();
-			
-			int sampleSize = phenotypeDB.size();
-			
-			for(int i=0 ; i<sampleSize ; i++) {
-				bw.write(phenotypeDB.get(i).getAsJsonObject().get("samplename").getAsString()+",");
-				for(int j=0 ; j<traitSize ; j++) {
-					bw.write(phenotypeDB.get(i).getAsJsonObject().get("seq_"+(j+1)).getAsString());
-					if(j != traitSize -1) {
-						bw.write(",");
-					}
-				}
-				if(i != sampleSize - 1) {
-					bw.newLine();
-				}
+			if(i != sampleSize - 1) {
+				bw.newLine();
 			}
-			
-			bw.flush();
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+		
+		bw.flush();
+		bw.close();
+	} catch (IOException e) {
+		e.printStackTrace();
 	}
+}
 %>

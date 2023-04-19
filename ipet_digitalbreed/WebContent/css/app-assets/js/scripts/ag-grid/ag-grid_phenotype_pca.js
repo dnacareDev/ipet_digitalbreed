@@ -110,7 +110,8 @@
 					case 2:
 						return "<span title='분석 실패'><i class='feather icon-x-circle'></i></span>";
 		    	}
-		    }
+		    },
+	    	hide: true,
 	    },
 	    {
 	    	headerName: "상세내용",
@@ -209,6 +210,28 @@
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
+				$('#pill1_frame').attr('src', '');
+				$('#pill2_frame').attr('src', '');
+				$('#pill3_frame').attr('src', '');
+				$('#pill4_frame').attr('src', '');
+				$('#pill5_frame').attr('src', '');
+
+				$("#iframeLoading").modal('show');
+				
+				document.getElementById("Extra_Card").style.display = "block";
+				document.getElementById("Extra_Card").dataset.jobid = params.data.jobid;
+				document.getElementById("Extra_Card").dataset.resultpath = params.data.resultpath;
+				
+				document.getElementById('nav1').click();
+		   		
+				$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc1_pc2.html");
+				$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc2_pc3.html");
+				$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pca_pc1_pc3.html");
+				//$('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA3D.html");
+				
+				window.scrollTo(0, document.body.scrollHeight);
+				
+				/*
 				switch (Number(params.data.status)) {
 					case 0:
 						//$("#analysis_process").modal('show');
@@ -242,6 +265,7 @@
 						alert("분석에 실패했습니다.");
 						break;
 				}
+				*/
 			}
 		}
 	};
@@ -255,7 +279,7 @@
 		{
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true,
-			//sheaderCheckboxSelection: true,
+			headerCheckboxSelection: true,
 			width: 40,
 		},
 		{ 	

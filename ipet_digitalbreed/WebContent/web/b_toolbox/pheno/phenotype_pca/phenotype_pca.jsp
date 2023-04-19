@@ -163,7 +163,7 @@ body {
                                 </div>
                                   
                             </div>
-                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:450px;"></div><br>
 							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
@@ -530,7 +530,7 @@ body {
    		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
    		for(let i=0 ; i<nodes.length ; i++) {
    			traitname.push(nodes[i].data.traitname);
-   			traitname_key.push(Number(nodes[i].data.traitname_key) + 1);
+   			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);
    		}
    		
    		const cre_date = document.getElementById('cre_date').value;
@@ -546,6 +546,26 @@ body {
    			"inv_date": inv_date,
    		})
    		
+   		const phenotypeDB = await fetch('../setPhenotypeDB.jsp', {
+							   			method: "POST",
+							   			headers: {
+							   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+							   			},
+							   			body: params
+							   		})
+							   		.then(response => response.json());
+
+		if(phenotypeDB.length <= 0) {
+			return alert(`조건에 맞는 표현형이 \${phenotypeDB.length}개입니다. 분석을 시작할 수 없습니다.`)
+		}
+		
+		//console.log(phenotypeDB);
+		
+		params.set("phenotypeDB", JSON.stringify(phenotypeDB));
+		params.set("analysis_number", phenotypeDB.length);
+   		
+   		$("#iframeLoading").modal('show');
+   		
    		fetch('phenotype_pca_analysis_phenotype.jsp', {
    			method: "POST",
    			headers: {
@@ -553,6 +573,14 @@ body {
    			},
    			body: params
    		})
+   		.then(response => response.ok)
+   		.then(ok => {
+   			$("#iframeLoading").modal('hide');
+   			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
+			node.setSelected(true);
+			//gridOptions.api.setFocusedCell(0, 'comment');
+			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+   		});
    		
    		fetch('./phenotype_pca_insertSql_phenotype.jsp', {
    			method: "POST",

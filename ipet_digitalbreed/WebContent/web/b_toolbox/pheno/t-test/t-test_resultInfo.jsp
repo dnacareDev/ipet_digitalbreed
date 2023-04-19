@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
 <html>
@@ -69,7 +70,7 @@
 		 }
 	}
 
-	System.out.println(str);
+	//System.out.println(str);
 	
 	bufferedReader.close();
 	

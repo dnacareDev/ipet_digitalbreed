@@ -110,7 +110,8 @@
 					case 2:
 						return "<span title='분석 실패'><i class='feather icon-x-circle'></i></span>";
 		    	}
-		    }
+		    },
+		    hide: true,
 	    },
 	    {
 	    	headerName: "상세내용",
@@ -217,6 +218,15 @@
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
+				$("#iframeLoading").modal('show');
+				
+				document.getElementById("Extra_Card").style.display = "block";
+		   		
+				$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/Regression_paired_plot.html");
+				
+				window.scrollTo(0, document.body.scrollHeight);
+				
+				/*
 				switch (Number(params.data.status)) {
 					case 0:
 						//$("#analysis_process").modal('show');
@@ -238,6 +248,7 @@
 						alert("분석에 실패했습니다.");
 						break;
 				}
+				*/
 			}
 		}
 	};
@@ -292,12 +303,14 @@
 			suppressMenu: true,
 			width: 40,
 		},
+		/*
 		{
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true,
-			//headerCheckboxSelection: true,
+			headerCheckboxSelection: true,
 			width: 40,
 		},
+		*/
 		{ 	
 			headerName:'특성', 
 			field: "traitname",
@@ -346,7 +359,7 @@
 			    	    defaultState: { sort: null },
 			    	});
 			        
-			    	gridOptionsTraitName_selected.api.applyTransaction({
+					gridOptionsTraitName_independent.api.applyTransaction({
 			        	remove: [params.node.data]
 			        });
 			        
@@ -417,7 +430,7 @@
 			    	    defaultState: { sort: null },
 			    	});
 			        
-			    	gridOptionsTraitName_selected.api.applyTransaction({
+					gridOptionsTraitName_dependent.api.applyTransaction({
 			        	remove: [params.node.data]
 			        });
 			        

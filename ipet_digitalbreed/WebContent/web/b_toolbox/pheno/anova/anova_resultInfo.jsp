@@ -1,9 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <%@ page import="java.util.*, java.io.*, java.sql.*, java.text.*"%>
 <html>
  <head>
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
- </head>
 
  <style type="text/css">
     td:hover {
@@ -35,6 +35,7 @@
 
 
  </style>
+ </head>
  
  
  <body>
@@ -46,26 +47,36 @@
 	String db_outputPath = rootFolder+"/result/Breeder_toolbox_analyses/pheno/anova/";	
 
 	
-	FileReader fileReader = new FileReader(db_outputPath+jobid+"/ANOVA.result.csv");
-	BufferedReader bufferedReader = new BufferedReader(fileReader);
+	//FileReader fileReader = new FileReader(db_outputPath+jobid+"/ANOVA.result.csv");
+	//BufferedReader bufferedReader = new BufferedReader(fileReader);
 	
-	/*
-	out.clear();
-	out.println("<center><table margin-top: 5px; border='1' style='width:100%;' class='bluetop' id='userListTable' border='' px solid #444444>");
+	FileInputStream fileInputStream = new FileInputStream(db_outputPath+jobid+"/ANOVA.result.csv");
+	InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+	BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+	
+	//out.clear();
+	out.println("<center><table margin-top: 5px; border='1' style='width:100%; border-collapse:collapse;' class='bluetop' id='userListTable' border='' px solid #444444>");
+	int count = 0;
 	String line = "";
 	while( (line = bufferedReader.readLine()) != null ){ 
 
 		 String[] str = line.split(",");
 		 out.print("<tr height='30px'>");
 		 for(int i=0 ; i<str.length ; i++) {
-			 out.print("<td width='20%' bgcolor='f8f8f8'><b>"+str[i]+"</b></td>");
+			 if(count ==0 ) {
+				 out.print("<td bgcolor='f8f8f8'><b>"+str[i].replaceAll("\"","")+"</b></td>");
+			 } else {
+				 out.print("<td>"+str[i].replaceAll("\"","")+"</td>");
+			 }
 		 }
 		 out.println("</tr>");
+		 count++;
 	}
 	out.println("</table></center>");
+	/*
 	*/
 	
-
+	/*
 	StringTokenizer s = null;
 
 	String line = "";
@@ -82,12 +93,13 @@
 		 }
 	}
 
-	System.out.println(str);
+	//System.out.println(str);
 	
-	bufferedReader.close();
 	
 	out.println("<tr height='30px'><td width='20%' bgcolor='f8f8f8'><b>"+str.get(0)+"</b></td><td width='20%' bgcolor='f8f8f8'><b>"+str.get(1)+"</b></td><td width='20%' bgcolor='f8f8f8'><b>"+str.get(2)+"</b></td><td width='20%'  bgcolor='f8f8f8'><b>"+str.get(3)+"</b></td></tr>");
 	out.println("<tr height='30px'><td width='20%' >"+str.get(4)+"</td><td width='20%' >"+str.get(5)+"</td><td width='20%' >"+str.get(6)+"</td><td width='20%' >"+str.get(7)+"</td></tr>");
 	out.println("</table>");
+	*/
+	bufferedReader.close();
 %>
 

@@ -78,7 +78,7 @@
 	//System.out.println(phenotypeDB);
 	
 	List<String> traitNames = getAllTraitNames(permissionUid, varietyid);
-	
+	System.out.println(traitNames);	
 	
 	writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitNames);
 	
