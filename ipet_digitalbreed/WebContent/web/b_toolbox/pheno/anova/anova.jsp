@@ -690,8 +690,10 @@ body {
     		return alert("comment를 입력해주세요.");
     	}
     	
+    	
+    	
     	const category = document.querySelector(".modal-body .nav-link.active").dataset.pill;
-    	console.log(category);
+    	//console.log(category);
     	
     	if(category == "individual") {
     		//console.log("indi");
@@ -723,6 +725,9 @@ body {
 	    		const row = new Array();
 	    		//const sampleno = new Array();
 	    		const nodes = gridOptions_individualGroups[key].api.getModel().rootNode.allLeafChildren;
+	    		if(nodes.length <3) {
+	    			return alert("각 그룹에 최소 3개의 개체를 넣어주세요.")
+	    		}
 	    		for(let i=0 ; i<nodes.length ; i++) {
 	    			//sampleno.push(nodes[i].data.no);
 	    			row.push(nodes[i].data.row);
@@ -755,8 +760,11 @@ body {
     		
     		
     	} else if(category == "phenotype") {
-    		console.log("pheno");
+    		//console.log("pheno");
     		
+    		if(gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length < 2) {
+				return alert("형질은 2~5개만 선택 가능합니다.")
+			}
     		
     		const traitname = new Array();
     		const traitname_key = new Array();
@@ -771,7 +779,7 @@ body {
     		
     		const params = new URLSearchParams({
     			"varietyid": varietyid,
-    			"jobid_t_test": jobid_t_test,
+    			"jobid_anova": jobid_anova,
     			"comment": comment,
     			"traitname": traitname,
     			"seq": traitname_key,
@@ -779,7 +787,15 @@ body {
     			"inv_date": inv_date,
     		})
     		
-    		fetch('t-test_analysis_samplename.jsp', {
+    		fetch('anova_analysis_phenotype.jsp', {
+    			method: "POST",
+    			headers: {
+    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    			},
+    			body: params
+    		})
+    		
+    		fetch('./anova_insertSql_phenotype.jsp', {
     			method: "POST",
     			headers: {
     				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"

@@ -64,7 +64,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../../web/b_toolbox/pheno/t-test/t-test_delete.jsp",
+		    url:"./t-test_delete.jsp",
 		    type:"POST",
 		    //data:{'params':deleteitems},
 		    data:{'params':deleteitems, 'varietyid':varietyid},

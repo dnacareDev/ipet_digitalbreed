@@ -7,11 +7,12 @@
 <%@ page import="org.apache.commons.exec.*" %>
 
 <%
-	
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	
 	String varietyid = request.getParameter("varietyid");
-	String jobid_t_test = request.getParameter("jobid_t_test");
+	String jobid = request.getParameter("jobid");
 	String comment = request.getParameter("comment");
 	String traitname = request.getParameter("traitname");
 	String seq = request.getParameter("seq");
@@ -37,64 +38,38 @@
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	
-	
-	File folder_savePath = new File(savePath+jobid_t_test);
-	
-	if (!folder_savePath.exists()) {
-		try{
-			folder_savePath.mkdirs(); 
-	        } 
-	        catch(Exception e){
-		    e.getStackTrace();
-		}        
-	}
-
-	File folder_outputPath = new File(outputPath+jobid_t_test);
-	
-	if (!folder_outputPath.exists()) {
-		try{
-			folder_outputPath.mkdirs(); 
-	        } 
-	        catch(Exception e){
-		    e.getStackTrace();
-		}        
-	}
-	
 	Map<String, JsonObject> phenotypeDB = getAllPhenotype(permissionUid, cre_date, inv_date);
 	
-	//System.out.println(phenotypeDB);
-	//System.out.println(phenotypeDB.get("1209"));
+	int analysis_number = phenotypeDB.size();
 	
-	//writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitname, seq);
-	writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitnameArr, seqArr);
+	String db_savePath = "/ipet_digitalbreed/uploads/database/phenotype_data/";
+	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/pheno/correlation/";
 	
-	String cmd = "Rscript " +script_path+ "Phenotype_t-test.R " +jobid_t_test+ " " +savePath+jobid_t_test+ " GS_traits.csv null ";
-	
-	for(int i=0 ; i<seqArr.length ; i++) {
-		cmd += Integer.parseInt(seqArr[i])+1;
-		if(i != seqArr.length -1) {
-			cmd += ",";
-		} else {
-			cmd += " ";
-		}
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Correlation Analysis', 'New analysis', now());";
+	//System.out.println(log_sql);
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(log_sql);
+	}catch(Exception e){
+		System.out.println(e);
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
 	}
 	
-	cmd += outputPath;
 	
-	System.out.println("cmd : " + cmd);
-			
+	String sql = "insert into correlation_t (cropid, varietyid, status, comment, analysis_number, phenotype, uploadpath, resultpath, jobid, creuser, cre_dt) ";
+	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+comment+"', '" +analysis_number+ "', '" +traitname+ "', '" +db_savePath+"','"+db_outputPath+"', '"+jobid+"','" +permissionUid+ "',now());";
 	
-	CommandLine cmdLine = CommandLine.parse(cmd);
-	DefaultExecutor executor = new DefaultExecutor();
-	executor.setExitValue(0);
-	int exitValue = executor.execute(cmdLine);
-	if(exitValue == 0) {
-		System.out.println("Success");
-	} else {
-		System.out.println("Fail");
+	System.out.println("sql : " + sql);
+	
+	try{
+		ipetdigitalconndb.stmt.executeUpdate(sql);
+	} catch(Exception e) {
+		System.out.println(e);
+	} finally { 
+		ipetdigitalconndb.stmt.close();
+		ipetdigitalconndb.conn.close();
 	}
-	/*
-	*/
+	
 	
 %>
 
@@ -152,43 +127,3 @@ private Map<String, JsonObject> getAllPhenotype(String permissionUid, String[] c
 }
 %>
 
-<%!
-	public void writePhenotypeTxt(String jobid_t_test, String savePath, Map<String, JsonObject> phenotypeDB, String[] traitnameArr, String[] seqArr) throws SQLException {
-		
-		try {
-			File phenotypeTxt = new File(savePath+jobid_t_test+"/GS_traits.csv");
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "UTF-8"));
-			
-			bw.write("Taxa,");
-			for(int i=0 ; i<traitnameArr.length ; i++) {
-				bw.write(traitnameArr[i]);
-				if(i != traitnameArr.length -1) {
-					bw.write(",");
-				}
-			}
-			bw.newLine();
-			
-			Iterator<String> iterator = phenotypeDB.keySet().iterator();
-			
-			while(iterator.hasNext()) {
-				String key = iterator.next();
-			    
-		    	bw.write(phenotypeDB.get(key).get("samplename").getAsString()+",");
-				for(int j=0 ; j<seqArr.length ; j++) {
-					bw.write(phenotypeDB.get(key).get("seq_"+seqArr[j]).getAsString());
-					if(j != seqArr.length -1) {
-						bw.write(",");
-					}
-				}
-				if(iterator.hasNext()) {
-					bw.newLine();
-				}
-			}
-			
-			bw.flush();
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-%>

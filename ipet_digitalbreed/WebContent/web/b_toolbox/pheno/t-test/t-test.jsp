@@ -608,7 +608,7 @@ body {
     	}
     	
     	const category = document.querySelector(".modal-body .nav-link.active").dataset.pill;
-    	console.log(category);
+    	//console.log(category);
     	
     	if(category == "individual") {
     		//console.log("indi");
@@ -699,13 +699,15 @@ body {
     			body: params
     		})
     		
-    		fetch('./t-test_insertSql.jsp', {
+    		fetch('./t-test_insertSql_phenotype.jsp', {
     			method: "POST",
     			headers: {
     				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
     			},
     			body: params
     		})
+    		/*
+    		*/
     	}
     	setTimeout( function () {
    			refresh();

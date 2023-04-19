@@ -32,7 +32,7 @@
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
-			.simpleHttpRequest({ url: "./t-test_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+			.simpleHttpRequest({ url: "./phenotype_pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
@@ -64,7 +64,7 @@
 		
 		$.ajax(
 		{
-		    url:"../../../../web/b_toolbox/pheno/t-test/t-test_delete.jsp",
+		    url:"./phenotype_pca_delete.jsp",
 		    type:"POST",
 		    //data:{'params':deleteitems},
 		    data:{'params':deleteitems, 'varietyid':varietyid},
@@ -215,13 +215,24 @@
 						alert("분석 중입니다.");
 						break;
 					case 1:
+						$('#pill1_frame').attr('src', '');
+						$('#pill2_frame').attr('src', '');
+						$('#pill3_frame').attr('src', '');
+						$('#pill4_frame').attr('src', '');
+						$('#pill5_frame').attr('src', '');
+
 						$("#iframeLoading").modal('show');
 						
 						document.getElementById("Extra_Card").style.display = "block";
+						document.getElementById("Extra_Card").dataset.jobid = params.data.jobid;
+						document.getElementById("Extra_Card").dataset.resultpath = params.data.resultpath;
+						
+						document.getElementById('nav1').click();
 				   		
-						$('#pill1_frame').attr('src', "./t-test_resultInfo.jsp?jobid="+params.data.jobid);
-						$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_hist.html");
-						$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_box.html");
+						$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc1_pc2.html");
+						$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc2_pc3.html");
+						$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pca_pc1_pc3.html");
+						//$('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA3D.html");
 						
 						window.scrollTo(0, document.body.scrollHeight);
 						
@@ -277,18 +288,14 @@
 			onGridReady: (params) => {
 			    addGridDropZone3(params);
 			},
+			/*
 			onRowClicked: (params) => {
 				if(gridOptionsTraitName.api.getSelectedRows().length + gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length > 2) {
 					params.node.setSelected(false);
 					return alert("형질은 2개까지만 선택 가능합니다.")
 				}
 			},
-			onRowClicked: (params) => {
-				if(gridOptionsTraitName.api.getSelectedRows().length + gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length > 2) {
-					params.node.setSelected(false);
-					return alert("형질은 2개까지만 선택 가능합니다.")
-				}
-			}
+			*/
 	}
 	
 	var columnDefsTraitName_selected = [
@@ -565,10 +572,8 @@
   		const myGrid = new agGrid.Grid(gridTable, gridOptions);
   		new agGrid.Grid(document.getElementById('Grid_Phenotype'), gridOptionsTraitName);
   		new agGrid.Grid(document.getElementById('Grid_Phenotype_Selected'), gridOptionsTraitName_selected);
-  		new agGrid.Grid(document.getElementById('Grid_Individual'), gridOptions_individualName);
-  		new agGrid.Grid(document.getElementById('Grid_Individual_Group'), gridOptions_individualGroupName);
   		
-  		fetch("./t-test_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
+  		fetch("./phenotype_pca_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
   		.then((response) => response.json())
   		.then((data) => {
   			console.log(data);
@@ -584,35 +589,10 @@
   		.then((response) => response.json())
   		.then((data) => {
   			console.log("traitname : ", data);
-  			const selectEl_traitName = document.getElementById('Select_Phenotype_1');
-  			selectEl_traitName.insertAdjacentHTML('beforeend', `<option></option>`);
-  			for(let i=0 ; i<data.length ; i++) {
-  				selectEl_traitName.insertAdjacentHTML('beforeend', `<option data-traitname="${data[i].traitname}" data-traitname_key="${data[i].traitname_key}" >${data[i].traitname}</option>`);
-  			}
   			
   			gridOptionsTraitName.api.setRowData(data);
   			gridOptionsTraitName_selected.api.setRowData();
   		})	
-  		
-  		
-  		fetch('../individualName.jsp',{
-  			method: "POST",
-  			headers: {
-   				"Content-Type": "application/x-www-form-urlencoded",
-   			},
-  			body: new URLSearchParams({
-  				"varietyid": varietyid,
-  			})
-  		})
-  		.then((response) => response.json())
-  		.then((data) => {
-  			console.log("samplename : ", data);
-  			gridOptions_individualName.api.setRowData(data);
-  		})
-  		
-  		gridOptions_individualGroupName.api.setRowData();
-  		
-  		
 	})	
   
 	

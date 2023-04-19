@@ -32,7 +32,7 @@
 	function refresh() {
 		gridOptions.api.refreshCells(); 
 		agGrid
-			.simpleHttpRequest({ url: "./anova_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+			.simpleHttpRequest({ url: "./regression_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
 		    .then(function(data) {
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
@@ -64,7 +64,7 @@
 		
 		$.ajax(
 		{
-		    url:"./anova_delete.jsp",
+		    url:"./regression_delete.jsp",
 		    type:"POST",
 		    //data:{'params':deleteitems},
 		    data:{'params':deleteitems, 'varietyid':varietyid},
@@ -123,16 +123,24 @@
 	    	headerName: "분석개체 수",
 	    	field: "analysis_number",
 	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
+	    	cellClass: "grid-cell-centered",
 	    	width: 200,
 	    	minWidth: 150,
 	    },
 	    {
-	    	headerName: "분석 형질",
-	    	field: "phenotype",
+	    	headerName: "분석 형질(독립 변수)",
+	    	field: "phenotype_independent",
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
-	    	width: 300,
+	    	width: 100,
+	    	minWidth: 150,
+	    },
+	    {
+	    	headerName: "분석 형질(종속 변수)",
+	    	field: "phenotype_dependent",
+	    	filter: true,
+	    	cellClass: "grid-cell-centered",      
+	    	width: 200,
 	    	minWidth: 150,
 	    },
 	    {
@@ -202,6 +210,7 @@
 		colResizeDefault: "shift",
 		suppressDragLeaveHidesColumns: true,
 		animateRows: true,
+		serverSideInfiniteScroll: true,
 		onCellClicked: params => {
 		
 			//console.log("params : ", params);
@@ -218,9 +227,8 @@
 						
 						document.getElementById("Extra_Card").style.display = "block";
 				   		
-						$('#pill1_frame').attr( 'src', "./anova_resultInfo.jsp?jobid="+params.data.jobid);
-						$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/ANOVA_hist.html");
-						$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/ANOVA_box.html");
+						//$('#pill1_frame').attr('src', "./t-test_resultInfo.jsp?jobid="+params.data.jobid);
+						$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/Regression_paired_plot.html");
 						
 						window.scrollTo(0, document.body.scrollHeight);
 						
@@ -242,8 +250,8 @@
 		},
 		{
 			checkboxSelection: true, 
+			headerCheckboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
-			//sheaderCheckboxSelection: true,
 			width: 40,
 		},
 		{ 	
@@ -276,34 +284,25 @@
 			onGridReady: (params) => {
 			    addGridDropZone3(params);
 			},
-			onRowClicked: (params) => {
-				if(gridOptionsTraitName.api.getSelectedRows().length + gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length > 5) {
-					params.node.setSelected(false);
-					return alert("형질은 2~5개만 선택 가능합니다.")
-				}
-			}
 	}
 	
-	var columnDefsTraitName_selected = [
+	var columnDefsTraitName_independent = [
 		{
 			rowDrag: true,
 			suppressMenu: true,
 			width: 40,
 		},
-		/*
 		{
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true,
 			//headerCheckboxSelection: true,
 			width: 40,
 		},
-		*/
 		{ 	
 			headerName:'특성', 
 			field: "traitname",
 			filter: true,
 			menuTabs: ["filterMenuTab"], 
-			cellClass: "grid-cell-centered", 
 		},
 		{
 			headerName: "삭제",
@@ -318,13 +317,14 @@
 			hide:true
 		}
 	];
-	var gridOptionsTraitName_selected = {
+	var gridOptionsTraitName_independent = {
 			defaultColDef: {
 				editable: false, 
 			    sortable: true,
 			    filter: false,
+			    cellClass: "grid-cell-centered", 
 			},
-			columnDefs: columnDefsTraitName_selected,
+			columnDefs: columnDefsTraitName_independent,
 			rowDragManaged: true,
 			rowDragMultiRow: true,
 			rowHeight: 35,
@@ -355,98 +355,25 @@
 			
 	}
 	
-	const columnDefs_individualName = [
-		{
-			//dndSource: true,
-			rowDrag: true,
-			suppressMenu: true,
-			width: 40,
-		},
-		{ 	
-			checkboxSelection: true, 
-			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true,
-			width: 40,
-		},
-		{ 	
-			headerName:'개체명', 
-			field: "samplename",
-			menuTabs: ["filterMenuTab"], 
-		},
-		{
-			headerName: "등록일자",
-			field: "cre_dt",
-			filter: 'agDateColumnFilter',
-		    filterParams: filterParams,
-		    menuTabs: ["filterMenuTab"], 
-		},
-		{
-			headerName: "조사일자",
-			field: "act_dt",
-			filter: 'agDateColumnFilter',
-		    filterParams: filterParams,
-		    menuTabs: ["filterMenuTab"], 
-		},
-		{
-			field: 'no',
-			hide: true,
-		}
-	];
-	
-	const gridOptions_individualName = {
-			defaultColDef: {
-				editable: false, 
-			    sortable: true,
-			    movable: false,
-			    filter: true,
-			    cellClass: "grid-cell-centered",
-			},
-			columnDefs: columnDefs_individualName,
-			rowDragManaged: true,
-			rowDragMultiRow: true,
-			rowHeight: 35,
-			rowSelection: "multiple",
-			rowMultiSelectWithClick: true,
-			suppressMultiRangeSelection: true,
-			animateRows: true,
-			//suppressHorizontalScroll: true,
-			getRowId: (params) => {
-			    return params.data.no;
-			},
-	}
-	
-	const columnDefs_individualGroupName = [
+	var columnDefsTraitName_dependent = [
 		{
 			rowDrag: true,
 			suppressMenu: true,
 			width: 40,
 		},
 		/*
-		{ 	
+		{
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true,
-			headerCheckboxSelection: true,
+			//headerCheckboxSelection: true,
 			width: 40,
 		},
 		*/
 		{ 	
-			headerName:'개체명', 
-			field: "samplename",
+			headerName:'특성', 
+			field: "traitname",
+			filter: true,
 			menuTabs: ["filterMenuTab"], 
-		},
-		{
-			headerName: "등록일자",
-			field: "cre_dt",
-			filter: 'agDateColumnFilter',
-		    filterParams: filterParams,
-		    menuTabs: ["filterMenuTab"], 
-		},
-		{
-			headerName: "조사일자",
-			field: "act_dt",
-			filter: 'agDateColumnFilter',
-		    filterParams: filterParams,
-		    menuTabs: ["filterMenuTab"], 
 		},
 		{
 			headerName: "삭제",
@@ -457,17 +384,51 @@
 			}
 		},
 		{
-			field: 'no',
-			hide: true,
+			field: "traitname_key",
+			hide:true
 		}
-		
 	];
+	var gridOptionsTraitName_dependent = {
+			defaultColDef: {
+				editable: false, 
+			    sortable: true,
+			    filter: false,
+			    cellClass: "grid-cell-centered", 
+			},
+			columnDefs: columnDefsTraitName_dependent,
+			rowDragManaged: true,
+			rowDragMultiRow: true,
+			rowHeight: 35,
+			rowSelection: "multiple",
+			rowMultiSelectWithClick: true,
+			suppressMultiRangeSelection: true,
+			animateRows: true,
+			suppressHorizontalScroll: true,
+			getRowId: (params) => params.data.traitname_key,
+			onCellClicked: (params) => {
+				if(params.column.colId == "delete") {
+					
+					gridOptionsTraitName.api.applyTransaction({
+			    		add: [params.node.data]
+			    	}),
+			    	
+			    	gridOptionsTraitName.columnApi.applyColumnState({
+			    	    state: [{ colId: 'traitname_key', sort: 'asc' }],
+			    	    defaultState: { sort: null },
+			    	});
+			        
+			    	gridOptionsTraitName_selected.api.applyTransaction({
+			        	remove: [params.node.data]
+			        });
+			        
+				}
+			},
+			
+	}
 	
-	let gridOptions_individualGroups = {};
 	
 	function addGridDropZone(params) {
-		
-		const dropZoneParams = gridOptions_individualGroups[`gridOptions_individualGroupName_1`].api.getRowDropZoneParams({
+		const dropZoneParams = gridOptions_individualGroupName.api.getRowDropZoneParams({
 		    onDragStop: (params) => {
 		    	const nodes = params.nodes;
 
@@ -478,31 +439,46 @@
 		        })
 		    },
 		});
-		/*
-		*/
-		params.api.addRowDropZone(dropZoneParams);
-		
+		  params.api.addRowDropZone(dropZoneParams);
 	}
 	
 	function addGridDropZone3(params) {
-		const dropZoneParams = gridOptionsTraitName_selected.api.getRowDropZoneParams({
+		const dropZoneParams = gridOptionsTraitName_independent.api.getRowDropZoneParams({
 		    onDragStop: (params) => {
 		    	const nodes = params.nodes;
+		    	
+		    	if(nodes.length > 1) {
+		    		alert("독립변수에는 1개의 형질만 넣을 수 있습니다.");
+		    		
+		    		gridOptionsTraitName_independent.api.applyTransaction({
+			    		remove: nodes.map(node => node.data)
+			        })
+			        
+		    		return;
+		    	}
 
 		    	gridOptionsTraitName.api.applyTransaction({
 		    		remove: nodes.map(function (node) {
 		    			return node.data;
 		    		}),
 		        })
-		        /*
-		        gridOptionsTraitName_selected.columnApi.applyColumnState({
-		    	    state: [{ colId: 'traitname_key', sort: 'asc' }],
-		    	    defaultState: { sort: null },
-		    	});
-		    	*/
 		    },
 		});
-		  params.api.addRowDropZone(dropZoneParams);
+		
+		const dropZoneParams2 = gridOptionsTraitName_dependent.api.getRowDropZoneParams({
+		    onDragStop: (params) => {
+		    	const nodes = params.nodes;
+		    	
+		    	gridOptionsTraitName.api.applyTransaction({
+		    		remove: nodes.map(function (node) {
+		    			return node.data;
+		    		}),
+		        })
+		    },
+		});
+		
+		params.api.addRowDropZone(dropZoneParams);
+		params.api.addRowDropZone(dropZoneParams2);
 	}
 	
 	
@@ -520,11 +496,10 @@
 		const gridTable = document.getElementById("myGrid");
   		const myGrid = new agGrid.Grid(gridTable, gridOptions);
   		new agGrid.Grid(document.getElementById('Grid_Phenotype'), gridOptionsTraitName);
-  		new agGrid.Grid(document.getElementById('Grid_Phenotype_Selected'), gridOptionsTraitName_selected);
-  		new agGrid.Grid(document.getElementById('Grid_Individual'), gridOptions_individualName);
-  		//new agGrid.Grid(document.getElementById('Grid_Individual_Group'), gridOptions_individualGroupName);
+  		new agGrid.Grid(document.getElementById('Grid_Phenotype_Independent'), gridOptionsTraitName_independent);
+  		new agGrid.Grid(document.getElementById('Grid_Phenotype_Dependent'), gridOptionsTraitName_dependent);
   		
-  		fetch("./anova_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
+  		fetch("./regression_json.jsp?varietyid=" + $("#variety-select option:selected").val() )
   		.then((response) => response.json())
   		.then((data) => {
   			console.log(data);
@@ -533,42 +508,18 @@
 			
   		})
   		
+  		//const gridTraitNameTable = document.getElementById("phenotypeSelectGrid");
+  		//const TraitNameGrid = new agGrid.Grid(gridTraitNameTable, gridOptionsTraitName);
+  		
   		fetch(`../traitname.jsp?varietyid=${varietyid}`)
   		.then((response) => response.json())
   		.then((data) => {
   			console.log("traitname : ", data);
-  			const selectEl_traitName = document.getElementById('Select_Phenotype_1');
-  			selectEl_traitName.insertAdjacentHTML('beforeend', `<option></option>`);
-  			for(let i=0 ; i<data.length ; i++) {
-  				selectEl_traitName.insertAdjacentHTML('beforeend', `<option data-traitname="${data[i].traitname}" data-traitname_key="${data[i].traitname_key}" >${data[i].traitname}</option>`);
-  			}
   			
   			gridOptionsTraitName.api.setRowData(data);
-  			gridOptionsTraitName_selected.api.setRowData();
+  			gridOptionsTraitName_independent.api.setRowData();
+  			gridOptionsTraitName_dependent.api.setRowData();
   		})	
-  		
-  		
-  		fetch('../individualName.jsp',{
-  			method: "POST",
-  			headers: {
-   				"Content-Type": "application/x-www-form-urlencoded",
-   			},
-  			body: new URLSearchParams({
-  				"varietyid": varietyid,
-  			})
-  		})
-  		.then((response) => response.json())
-  		.then((data) => {
-  			console.log("samplename : ", data);
-  			gridOptions_individualName.api.setRowData(data);
-  		})
-  		
-  		//gridOptions_individualGroupName.api.setRowData();
-  		
-  		//그룹추가 버튼 2번 클릭 => 기본적으로 2개 세팅
-  		document.getElementById('Button_Group_Add').click();
-  		document.getElementById('Button_Group_Add').click();
-  		
 	})	
   
 	

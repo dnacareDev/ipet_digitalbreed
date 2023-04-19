@@ -46,9 +46,12 @@
 	String db_outputPath = rootFolder+"/result/Breeder_toolbox_analyses/pheno/t-test/";	
 
 
-	FileReader fileReader = new FileReader(db_outputPath+jobid+"/T-test.result.csv");
-
-	BufferedReader bufferedReader = new BufferedReader(fileReader);
+	//FileReader fileReader = new FileReader(db_outputPath+jobid+"/T-test.result.csv");
+	//BufferedReader bufferedReader = new BufferedReader(fileReader);
+	
+	FileInputStream fileInputStream = new FileInputStream(db_outputPath+jobid+"/T-test.result.csv");
+	InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+	BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
 	StringTokenizer s = null;
 
@@ -62,7 +65,7 @@
 		 s = new StringTokenizer(line, ",", false);
 
 		 while (s.hasMoreElements()){
-			str.add(s.nextElement()+"");
+			str.add((s.nextElement()+"").replaceAll("\"", ""));
 		 }
 	}
 

@@ -11,7 +11,7 @@
 	
 	
 	String varietyid = request.getParameter("varietyid");
-	String jobid_t_test = request.getParameter("jobid_t_test");
+	String jobid_anova = request.getParameter("jobid_anova");
 	String comment = request.getParameter("comment");
 	String traitname = request.getParameter("traitname");
 	String seq = request.getParameter("seq");
@@ -38,7 +38,7 @@
 	
 	
 	
-	File folder_savePath = new File(savePath+jobid_t_test);
+	File folder_savePath = new File(savePath+jobid_anova);
 	
 	if (!folder_savePath.exists()) {
 		try{
@@ -49,7 +49,7 @@
 		}        
 	}
 
-	File folder_outputPath = new File(outputPath+jobid_t_test);
+	File folder_outputPath = new File(outputPath+jobid_anova);
 	
 	if (!folder_outputPath.exists()) {
 		try{
@@ -66,9 +66,9 @@
 	//System.out.println(phenotypeDB.get("1209"));
 	
 	//writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitname, seq);
-	writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitnameArr, seqArr);
+	writePhenotypeTxt(jobid_anova, savePath, phenotypeDB, traitnameArr, seqArr);
 	
-	String cmd = "Rscript " +script_path+ "Phenotype_t-test.R " +jobid_t_test+ " " +savePath+jobid_t_test+ " GS_traits.csv null ";
+	String cmd = "Rscript " +script_path+ "Phenotype_ANOVA.R " +jobid_anova+ " " +savePath+jobid_anova+ " GS_traits.csv null null null null null null ";
 	
 	for(int i=0 ; i<seqArr.length ; i++) {
 		cmd += Integer.parseInt(seqArr[i])+1;

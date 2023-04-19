@@ -52,6 +52,8 @@
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/pages/aggrid.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/bootstrap5_custom.css">
+    <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css"> 
+    <link rel="stylesheet" type="text/css" href="../../../../css/index_assets/css/icons.min.css">
     <!-- END: Page CSS-->
 
 </head>
@@ -59,6 +61,10 @@
 
 <!-- BEGIN: Body-->
 <style>
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: 'SDSamliphopangche_Outline';
 }
@@ -102,7 +108,7 @@ body {
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">&nbsp;Statistical summary</h2>
+                            <h2 class="content-header-title float-left mb-0">&nbsp;Statistical Summary</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="../../mainboard.jsp">Home</a>
@@ -158,11 +164,41 @@ body {
                                   
                             </div>
                             <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
-							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i> New Analysis</button>
+							<button class="btn btn-success mr-1 mb-1"  style="float: right;" data-toggle="modal" data-target="#backdrop" data-backdrop="false"><i class="feather icon-upload"></i>New Analysis</button>
                             <button class="btn btn-danger mr-1 mb-1" style="float: right;" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
                         </div>
                     </div>
-                    <div id="vcf_status" class="card"></div>
+                    <div id="Extra_Card" class="card" style="display:none;">
+                    	<div class='card-content'>
+							<div class='card-body'>
+								<div class='row'>
+									<div class='col-12'>
+										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
+											<li class='nav-item'><a class='nav-link active' id='nav1' data-toggle='pill' data-pill='individual' href='#pill1' aria-expanded='true'>Result</a></li>
+										</ul>
+				                    	<div id='content-list' class='tab-content'>
+											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+												<div class="row">
+													<div class="col-12">
+														<select id="Select_Phenotype_Statistical_Summary" class="select2 form-select" data-placeholder="Select Phenotype" data-width="200px" onchange="selectPhenotype(this.options[this.selectedIndex].dataset.phenotype);">
+														</select>
+													</div>
+												</div>
+												<div class="row mt-1">
+													<div class="col-lg-4 col-12">
+														<iframe src = '' loading="lazy" width='100%' height='480px' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload=' $("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													</div>
+													<div class="col-lg-8 col-12">
+														<iframe src = '' loading="lazy" width='100%' height='480px' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload=' $("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													</div>
+												</div>
+											</div>
+				                    	</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
                 </section>
                 <!-- Basic example section end -->
                 
@@ -177,68 +213,72 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-        <!--  
-        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width : 1140px; margin: 0 auto;" role="document">
-        -->
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
-                    <h4 class="modal-title" id="myModalLabel5">Genomic Selection New Analysis</h4>
+                    <h4 class="modal-title" id="myModalLabel5">Statistical Summary New Analysis</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-					<form class="form" id="uploadForm">
-					    <div class="form-body">
-					        <div class="row">
-					            <div class="col-md-12 col-12">
-					             	<div class="form-label-group d-flex justify-content-center">
-					                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:93%;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
-					                </div>
-					            </div>
-					            <div class="col-md-12 col-12">
-					            	<div class="form-label-group d-flex justify-content-center" >
-					                    <select class="select2 form-select" id="Training_VCF" data-width="93%" data-placeholder="Select Training VCF File">
-					                    </select>
-					                </div>
-					            </div>
-					            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
-					            	<legend  class="w-auto">Phenotype Selection</legend>
-						            <div class="col-12" style="display:flex;">
-						            	<div class="col-6">
-						            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false)" value="0" checked>
-											<label class="form-check-label" for="RadioPhenotype" style="padding-left: 14px;"> Phenotype Database</label>
-						            	</div>
-						            	<div class="col-6">
-						            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true)" value="1">
-											<label class="form-check-label" for="RadioCsvFile" style="padding-left: 14px;"> New Phenotype</label>
-						            	</div>
+		            <div class="col-12">
+		             	<div class="d-flex justify-content-start">
+		                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:100%;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
+		                </div>
+		            </div>
+					<div class="row">
+			            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
+			            	<legend  class="w-auto">Options</legend>
+			            	<div class="row mb-1">
+					            <div class="col-12 pl-2" style="display:flex;">
+					            	<div class="col-3">
+					            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioPhenotype2" onclick="radioSelect(false, 'phenotype')" value="0" checked>
+										<label class="form-check-label" for="RadioPhenotype2" style="padding-left: 14px;"> Phenotype Database</label>
 					            	</div>
-						            <div>
-							            <div id="isPhenotype" class="form-label-group mt-1" >
-						                    <div id="phenotypeSelectGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
-							                <!--
-							                <div id="phenotypeResultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:120px;"></div><br>
-							                -->
-	                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
-	                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
-							            </div>
-							        </div>
-							        <div>
-										<div id="isNewFile" class="form-label-group mt-1" style="display:none">
-								            <div id="PhenotypeCsvFile" class="col-md-12 col-12"  style="padding: 0; border: 1px solid #48BAE4;"></div>
-							            </div>
-							        </div>
-						        </fieldset>
-					            <div class="col-12">
-					                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
-					                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
+					            	<div class="col-3">
+					            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioCsvFile2" onclick="radioSelect(true, 'phenotype')" value="1">
+										<label class="form-check-label" for="RadioCsvFile2" style="padding-left: 14px;"> New Phenotype</label>
+					            	</div>
+				            	</div>
+				            </div>
+				            <!--  
+				            <div class="form-label-group d-flex justify-content-start" >
+			                    <select class="select2 form-select" id="Select_Phenotype_2" data-width="50%" data-placeholder="Select Phenotype">
+			                    </select>
+			                </div>
+			                -->
+				            <div>
+					            <div id="isPhenotype_phenotype" class="mt-1" style="display:flex;">
+				                    <div class="col-6 p-0">
+					                    <div id="Grid_Phenotype" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;" ></div><br>
+				                    </div>
+				                    <div class="col-6 p-0">
+					                    <div id="Grid_Phenotype_Selected" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
+				                    </div>
 					            </div>
+					            <div id="isNewFile_phenotype" class="form-label-group mt-1 justify-content-center" style="display:none; flex-direction:column;">
+									<div class="col-12 d-flex justify-content-space-between">
+										<div class="col-6" style="font-weight:bold;">File Upload</div>
+										<div class="col-6">
+						            		<button class="btn btn-sm btn-info float-right">예시파일</button>
+						            	</div>
+									</div>
+									<div class="col-12 mt-1 d-flex justify-content-center">
+						            	<div id="FileControl_phenotype" class="col-12"  style="border: 1px solid #48BAE4;"></div>
+									</div>
+					            </div>
+                                  	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
+                                  	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
+                                  	<div class="mt-1"></div>
 					        </div>
-					    </div>
-					</form>
-                </div>
+				        </fieldset>
+			        </div>
+			        <div class="mt-1">
+		                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
+		                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
+		            </div>
+				</div>
             </div>
         </div>
     </div>
@@ -269,7 +309,7 @@ body {
     <script src="../../../../css/app-assets/vendors/js/vendors.min.js"></script>
     <script src="../../../../css/app-assets/vendors/js/innorix/innorix.js"></script>
     <script src="../../../../css/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../../../css/app-assets/js/scripts/forms/select/form-select2_B_toolbox.js"></script>
+    <script src="../../../../css/app-assets/js/scripts/forms/select/form-select2.js"></script>
     <!--  
     <script src="../../../css/app-assets/vendors/js/jquery-ui/jquery-ui.min.js"></script>
     -->
@@ -279,6 +319,7 @@ body {
     <!-- BEGIN: Page Vendor JS-->
     <script src="../../../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
 	<script src="../../../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
+    <script src="../../../../css/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -288,7 +329,7 @@ body {
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../../../css/app-assets/js/scripts/ag-grid/ag-grid_anova.js"></script>
+    <script src="../../../../css/app-assets/js/scripts/ag-grid/ag-grid_statistical_summary.js"></script>
     <script src="../../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
 	<script src="../../../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
@@ -300,57 +341,28 @@ body {
 	var linkedJobid = "<%=linkedJobid%>";
 
    	$(document).ready(function(){ 
-   		vcfFileList();
-   		$(".select2.select2-container.select2-container--default").eq(1).width("444px");
+   		//vcfFileList();
+   		flatpickr();
    	});
-   	 
-
-   	function vcfFileList() {
-   		
-   		$.ajax(
-   			{
- 	   			//url: "./pca_non_population.jsp",
- 	   			url: "../../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
- 	   			method: 'POST',
- 	   			success: function(data) {
- 		  			console.log("vcf file list : ", data);
- 		  			
- 		  			makeOptions(data);
- 	   			}
-   	  	});
-   	}
-   	
-    function makeOptions(data) {
-    	$("#VcfSelect").empty();
-    	
-    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
-    	for(let i=0 ; i<data.length ; i++) {
-			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
-		}
-    }
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
-   		resetPCA();
+   		resetForm();
     });    
    	
-    function resetPCA() {
-    	document.getElementById('uploadPcaForm').reset();
-    	vcfFileList();
+    function resetForm() {
+    	document.getElementById('uploadForm').reset();
+    	//vcfFileList();
     	box.removeAllFiles();
+    	//resetFlatpickr()
     }
    	
-    var box = new Object();
+    var box_phenotype = new Object();
     window.onload = function() {
-    	
-    	//const jobid_pca = $("#jobid_pca").val();
-    	//console.log("innorix jobid_pca : ", jobid_pca);
-    	
-    	// 파일전송 컨트롤 생성
-	    box = innorix.create({
-	    	el: '#fileControl', // 컨트롤 출력 HTML 객체 ID
+	 // 파일전송 컨트롤 생성
+	    box_phenotype = innorix.create({
+	    	el: '#FileControl_phenotype', // 컨트롤 출력 HTML 객체 ID
 	        width			: 445,
-	    	height          : 130,
+	    	height          : 190,
 	        maxFileCount   : 1,  
 	        //allowType : ["vcf"],
 	        allowType : ["xlsx"],
@@ -359,12 +371,10 @@ body {
 	        uploadUrl: './pca_population.jsp'
 	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
 	    });
-    	
-    	
 
 	    // 업로드 완료 이벤트
-	    box.on('uploadComplete', function (p) {
-			document.getElementById('uploadPcaForm').reset();
+	    box_phenotype.on('uploadComplete', function (p) {
+			document.getElementById('uploadForm').reset();
 	    	box.removeAllFiles();
 			//backdrop.style.display = "none";	
 			//refresh();
@@ -377,88 +387,166 @@ body {
 	   			}
 	   		, 1000);
         });
+	    
     };
     
-    async function FileUpload() {
-    	
-    	const comment = $('#comment').val();
-    	const varietyid = $( "#variety-select option:selected" ).val();
-    	const jobid_vcf = $('#VcfSelect').find(':selected').data('jobid');
-    	const jobid_pca = await fetch("../../getJobid.jsp")
-   						.then((response) => response.text())
+	//radio 선택에 따라 파일창 노출여부 결정  | true: New Phenotype , false: Phenotype Database
+	function radioSelect(flag, category) {
+		
+		if(category == "individual") {
+			if(flag) {
+				document.getElementById('Select_Phenotype_1').nextSibling.style.display = 'none';
+				document.getElementById('Select_Phenotype_1').selectedIndex = 0;
+		    	document.getElementById('Select_Phenotype_1').dispatchEvent(new Event("change"));
+				document.getElementById('isPhenotype_individual').style.display = 'none';
+				$("#isNewFile_individual").css('display','flex');
+				$("#exampleFile").css('display','block');
+				
+				// New Phenotype 선택시 특성 체크박스 해제
+				//gridOptionsTraitName.api.deselectAll();
+			} else {
+				document.getElementById('Select_Phenotype_1').nextSibling.style.display='';
+				document.getElementById('isPhenotype_individual').style.display = '';
+				$("#isNewFile_individual").css('display','none');
+				$("#exampleFile").css('display','none');
+				
+				// Phenotype Database 선택시 innorix 파일목록 해제
+				box.removeAllFiles();
+			}
+		} else if(category == "phenotype") {
+			if(flag) {
+				//document.getElementById('Select_Phenotype_2').nextSibling.style.display = 'none';
+				document.getElementById('isPhenotype_phenotype').style.display = 'none';
+				document.getElementById("cre_date").style.display = "none";
+				document.getElementById("inv_date").style.display = "none";
+				resetFlatpickr();
+				$("#isNewFile_phenotype").css('display','flex');
+				$("#exampleFile").css('display','block');
+				
+				// New Phenotype 선택시 특성 체크박스 해제
+				//gridOptionsTraitName.api.deselectAll();
+			} else {
+				//document.getElementById('Select_Phenotype_2').nextSibling.style.display='';
+				document.getElementById('isPhenotype_phenotype').style.display = 'flex';
+				document.getElementById("cre_date").style.display = "inline";
+				document.getElementById("inv_date").style.display = "inline";
+				$("#isNewFile_phenotype").css('display','none');
+				$("#exampleFile").css('display','none');
+				
+				// Phenotype Database 선택시 innorix 파일목록 해제
+				box.removeAllFiles();
+			}
+		}
+		
+		//console.log(flag);
+	}
+    
+	function flatpickr() {
+   		const dateSelector = document.querySelectorAll(".flatpickr-range");
+   		
+   		dateSelector.flatpickr({
+   			mode: "range",
+   			dateFormat: "Y-m-d",
+   			conjunction: " ~ "
+   		});
+   	}
    	
-   		console.log("jobid_pca : ", jobid_pca);
-    	//$("#jobid_pca").val(jobid_pca);
-    	const filename = $('#VcfSelect').find(':selected').data('filename');
-    	// jobid_vcf: 선택한 vcf파일(=select VCF Files 목록)의 고유한 id 
-    	// jobid_pca: pca신규분석으로 생성된 데이터(=grid 각각의 row)가 가진 고유한 id (pca_fileuploader.jsp의 get parameter로 직접 붙어있음)
+   	function resetFlatpickr() {
+   		
+   		const cre_date = document.getElementById('cre_date');
+   		cre_date.flatpickr({
+   			mode: "range",
+   			dateFormat: "Y-m-d",
+   			conjunction: " ~ "
+   		}).clear();
+   		
+   		const inv_date = document.getElementById('inv_date');
+   		inv_date.flatpickr({
+   			mode: "range",
+   			dateFormat: "Y-m-d",
+   			conjunction: " ~ "
+   		}).clear();
+   	}
+   	
+   	function selectPhenotype(phenotype) {
+   		
+   		$("#iframeLoading").modal('show');
+   		
+   		const jobid = document.getElementById("Extra_Card").dataset.jobid;
+   		const resultpath = document.getElementById("Extra_Card").dataset.resultpath;
+   		
+   		$('#pill1_frame').attr('src', `./statistical_summary_resultInfo.jsp?jobid=\${jobid}&phenotype=\${phenotype}`);
+		$('#pill2_frame').attr('src', `\${resultpath+jobid+"/Phenotype_histogram."+phenotype+".html"}`);
+   	}
+    
+    async function execute() {
     	
+    	//const varietyid = $( "#variety-select option:selected" ).val();
+    	const varietyid = document.querySelector("#variety-select option:checked").value
+    	const jobid = await fetch("../../../getJobid.jsp").then((response) => response.text())
+
+   		const comment = $('#comment').val();
     	
-    	if(Number(jobid_vcf) == -1) {
-    		alert("VCF 파일을 선택하세요");
-    		return;
+    	if(!comment) {
+    		return alert("comment를 입력해주세요.");
     	}
     	
+    		
+   		const traitname = new Array();
+   		const traitname_key = new Array();
+   		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+   		/*
+   		for(let i=0 ; i<nodes.length ; i++) {
+   			traitname.push(nodes[i].data.traitname);
+   			traitname_key.push(Number(nodes[i].data.traitname_key) + 1);
+   		}
+   		*/
+   		for(let i=0 ; i<nodes.length ; i++) {
+   			traitname.push(nodes[i].data.traitname);
+   			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);
+   		}
+   		
+   		const cre_date = document.getElementById('cre_date').value;
+   		const inv_date = document.getElementById('inv_date').value;
+   		
+   		const params = new URLSearchParams({
+   			"varietyid": varietyid,
+   			"jobid": jobid,
+   			"comment": comment,
+   			"traitname": traitname,
+   			"seq": traitname_key,
+   			"cre_date": cre_date,
+   			"inv_date": inv_date,
+   		})
+   		
+   		fetch('statistical_summary_analysis_phenotype.jsp', {
+   			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+   			},
+   			body: params
+   		})
+   		
+   		fetch('./statistical_summary_insertSql_phenotype.jsp', {
+   			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+   			},
+   			body: params
+   		})
+    	setTimeout( function () {
+   			refresh();
+   			$("#backdrop").modal("hide");
+    	}, 1000);
+    	/*
+    	*/
     	
-    	if(box.fileList.files.length) {
-			console.log("file exists -> with_population");
-			console.log(box.fileList.files[0].file.name);
-			
-			const population_name = box.fileList.files[0].file.name;
-			
-			
-    		// 파일 업로드 영역
-	    	var postObj = new Object();
-	    	postObj.comment = comment;	       
-	        postObj.varietyid = varietyid;
-	        postObj.jobid_vcf = jobid_vcf;
-	        postObj.jobid_pca = jobid_pca;
-	        postObj.filename = filename;
-	        box.setPostData(postObj);
-	        box.option.uploadUrl = './pca_fileuploader.jsp?jobid_pca='+jobid_pca;
-	        box.upload();
-	        
-	        
-			// with_population 영역
-	    	fetch('./pca_population.jsp?jobid_vcf=' +jobid_vcf+ '&jobid_pca=' +jobid_pca+ '&population_name=' +population_name+ '&filename=' +filename+ '&varietyid=' +varietyid); 
-	    	
-	        
-	    	
-	    	setTimeout( function () {
-		   		refresh();
-		   		$("#backdrop").modal("hide");
-		   	}, 1000);
-	        
-    	} else {
-    		
-    		// without_population 영역
-    		$.ajax(
-				{
-					url: "./pca_non_population.jsp",
-					method: 'POST',
-					data: {
- 						"comment" : comment, 
- 						"varietyid" : varietyid, 
- 						"jobid_vcf" : jobid_vcf, 
- 						"jobid_pca" : jobid_pca,
- 						"filename" : filename },
- 					success: function(result) {
-						console.log("pca_non_population.jsp");
- 					}
-	  		});
-    		
-    		//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {
-	   			//backdrop.style.display = "none";
-	   			refresh();
-	   			$("#backdrop").modal("hide");
-	   			}
-	   		, 1000);
-    		
-    	}
     }
     
-
+	$("#backdrop").on("shown.bs.modal", function(e) {
+		gridOptionsTraitName.api.sizeColumnsToFit();
+		gridOptionsTraitName_selected.api.sizeColumnsToFit();
+	});
 
        
 </script>

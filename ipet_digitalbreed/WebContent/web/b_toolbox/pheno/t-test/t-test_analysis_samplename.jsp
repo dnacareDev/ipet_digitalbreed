@@ -83,9 +83,7 @@
 	writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitNames);
 	
 	String cmd = "Rscript " +script_path+ "Phenotype_t-test.R " +jobid_t_test+ " " +savePath+jobid_t_test+ " GS_traits.csv ";
-	cmd += row + " ";
-
-	cmd += +(Integer.parseInt(seq)+1);
+	cmd += row + " " +(Integer.parseInt(seq)+1) + " " + outputPath;
 	
 	System.out.println("cmd : " + cmd);
 			
@@ -105,7 +103,6 @@
 %>
 
 <%!
-//private Map<String, JsonObject> getAllPhenotype(String permissionUid) throws SQLException {
 private JsonArray getAllPhenotype(String permissionUid, String varietyid) throws SQLException {
 	
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -177,7 +174,6 @@ private List<String> getAllTraitNames(String permissionUid, String varietyid) th
 %>
 
 <%!
-	//public void writePhenotypeTxt(String jobid_t_test, String savePath, Map<String, JsonObject> phenotypeDB, String[] sampleno, String[] traitname, String[] seq) throws SQLException {
 	public void writePhenotypeTxt(String jobid_t_test, String savePath, JsonArray phenotypeDB, List<String> traitNames) throws SQLException {
 	
 	
@@ -185,13 +181,13 @@ private List<String> getAllTraitNames(String permissionUid, String varietyid) th
 			File phenotypeTxt = new File(savePath+jobid_t_test+"/GS_traits.csv");
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(phenotypeTxt), "UTF-8"));
 			
-			int traitSize = phenotypeDB.get(0).getAsJsonObject().size()-4;
+			//int traitSize = phenotypeDB.get(0).getAsJsonObject().size()-4;
 			
 			bw.write("Taxa,");
 			for(int i=0 ; i<traitNames.size() ; i++) {
 				//bw.write(phenotypeDB.get(0).getAsJsonObject().get("seq_"+(i+1)).getAsString());
 				bw.write(traitNames.get(i));
-				if(i != traitSize -1) {
+				if(i != traitNames.size() -1) {
 					bw.write(",");
 				}
 			}
@@ -201,9 +197,9 @@ private List<String> getAllTraitNames(String permissionUid, String varietyid) th
 			
 			for(int i=0 ; i<sampleSize ; i++) {
 				bw.write(phenotypeDB.get(i).getAsJsonObject().get("samplename").getAsString()+",");
-				for(int j=0 ; j<traitSize ; j++) {
+				for(int j=0 ; j<traitNames.size() ; j++) {
 					bw.write(phenotypeDB.get(i).getAsJsonObject().get("seq_"+(j+1)).getAsString());
-					if(j != traitSize -1) {
+					if(j != traitNames.size() -1) {
 						bw.write(",");
 					}
 				}

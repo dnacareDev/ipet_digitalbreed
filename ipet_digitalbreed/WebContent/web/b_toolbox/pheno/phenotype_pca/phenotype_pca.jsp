@@ -174,21 +174,30 @@ body {
 								<div class='row'>
 									<div class='col-12'>
 										<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
-											<li class='nav-item'><a class='nav-link active' id='nav1' data-toggle='pill' data-pill='individual' href='#pill1' aria-expanded='true'>Result</a></li>
+											<li class='nav-item'><a class='nav-link active' id='nav1' data-toggle='pill' data-pill='individual' href='#pill1' aria-expanded='true'>PCA 2D</a></li>
+											<li class='nav-item'><a class='nav-link' id='nav2' data-toggle='pill' data-pill='individual' href='#pill2' aria-expanded='true'>PCA 3D</a></li>
 										</ul>
 				                    	<div id='content-list' class='tab-content'>
 											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
 												<div class="row">
-													<div class="col-12">
-														<iframe src = '' loading="lazy" width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload=' $("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													<div class="col-lg-4 col-12">
+														<iframe src = '' loading="lazy" width='100%' height='480px' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill1_frame' onload=' $("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
 													</div>
-												</div>
-												<div class="row">
-													<div class="col-lg-7 col-12">
+													<div class="col-lg-4 col-12">
 														<iframe src = '' loading="lazy" width='100%' height='480px' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill2_frame' onload='$("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
 													</div>
-													<div class="col-lg-5 col-12">
+													<div class="col-lg-4 col-12">
 														<iframe src = '' loading="lazy" width='100%' height='480px' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill3_frame' onload='$("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													</div>
+												</div>
+											</div>
+											<div class='tab-pane' id='pill2' aria-expanded='true' aria-labelledby='base-pill2'>
+												<div class="row">
+													<div class="col-lg-6 col-12">
+														<iframe src = '' loading="lazy" width='100%' height='480px'  frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill4_frame' onload=' $("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
+													</div>
+													<div class="col-lg-6 col-12">
+														<iframe src = '' loading="lazy" width='100%' height='480px'  frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='pill5_frame' onload=' $("#iframeLoading").modal("hide"); gridOptions.api.sizeColumnsToFit();'></iframe>
 													</div>
 												</div>
 											</div>
@@ -201,6 +210,12 @@ body {
                     </div>
                 </section>
                 <!-- Basic example section end -->
+                
+                <!-- Hidden Parameters -->
+                <input type="hidden" id="jobid_pca">
+                <input type='hidden' id='jobid'>
+				<input type='hidden' id='resultpath'>
+				<!-- Hidden Parameters -->
             </div>
         </div>
     </div>
@@ -216,127 +231,63 @@ body {
                     </button>
                 </div>
                 <div class="modal-body">
-                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill'>
-						<li class='nav-item'><a class='nav-link active' id='navModal1' data-toggle='pill' data-pill='individual' href='#pillModal1' aria-expanded='true'>개체비교</a></li>
-						<li class='nav-item'><a class='nav-link' id='navModal2' data-toggle='pill' data-pill='phenotype' href='#pillModal2' aria-expanded='true' onclick='gridOptionsTraitName.api.sizeColumnsToFit();gridOptionsTraitName_selected.api.sizeColumnsToFit();'>형질비교</a></li>
-					</ul>
 		            <div class="col-12">
 		             	<div class="d-flex justify-content-start">
 		                	<input type="text" id="comment" class="form-control" placeholder="Comment" name="comment" style="width:100%;" autocomplete="off" required data-validation-required-message="This name field is required">						                     
 		                </div>
 		            </div>
-                	<div id='content-list' class='tab-content'>
-						<div role='tabpanel' class='tab-pane active' id='pillModal1' aria-expanded='true' aria-labelledby='base-pill1'>
-					        <div class="row">
-					            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
-					            	<legend  class="w-auto">Options</legend>
-							        <div class="row mb-1">
-							            <div class="col-12 pl-2" style="display:flex;">
-							            	<div class="col-3">
-							            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioPhenotype" onclick="radioSelect(false, 'individual')" value="0" checked>
-												<label class="form-check-label" for="RadioPhenotype" style="padding-left: 14px;"> Phenotype Database</label>
-							            	</div>
-							            	<div class="col-3">
-							            		<input class="form-check-input" type="radio" name="radio_phenotype" id="RadioCsvFile" onclick="radioSelect(true,  'individual')" value="1">
-												<label class="form-check-label" for="RadioCsvFile" style="padding-left: 14px;"> New Phenotype</label>
-							            	</div>
-						            	</div>
-						            </div>
-					            	<div class="d-flex justify-content-start" >
-					                    <select class="select2 form-select" id="Select_Phenotype_1" data-width="50%" data-placeholder="Select Phenotype">
-					                    </select>
-					                </div>
-						            <div>
-							            <div id="isPhenotype_individual" class="form-label-group" >
-						                    <div>
-						                    	<div class="col-12 mb-1 p-0" style="font-size:16px;">Group</div>
-							                    <!--  
-							                    <div id="Grid_Individual" class="ag-theme-alpine" style="margin: 0px auto; height:190px;" ondragover="gridDragOver(event)"  ondrop="gridDrop(event, 'left')"></div><br>
-							                    -->
-							                    <div id="Grid_Individual" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
-						                    </div>
-						                    <div>
-						                    	<div class="col-12 mt-1 mb-1 p-0 d-flex justify-content-center">
-													<i class="feather icon-arrow-down" style="font-size:26px;"></i>
-												</div>
-							                    <div id="Grid_Individual_Group" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
-						                    </div>
-						                    <div class="mt-1"></div>
-							            </div>
-					                    <div id="isNewFile_individual" class="form-label-group justify-content-center" style="display:none; flex-direction:column;">
-											<div class="col-12 d-flex justify-content-space-between">
-												<div class="col-6" style="font-weight:bold;">File Upload</div>
-												<div id="exampleFile" class="col-6" style="display:none;">
-								            		<button class="btn btn-sm btn-info float-right">예시파일</button>
-								            	</div>
-											</div>
-											<div class="col-12 mt-1 d-flex justify-content-center">
-								            	<div id="FileControl_individual" class="col-12"  style="border: 1px solid #48BAE4;"></div>
-											</div>
-							            </div>
-							        </div>
-						        </fieldset>
-					        </div>
-					        <div class="mt-1">
-				                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
-				                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
+					<div class="row">
+			            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
+			            	<legend  class="w-auto">Options</legend>
+			            	<div class="row mb-1">
+					            <div class="col-12 pl-2" style="display:flex;">
+					            	<div class="col-3">
+					            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioPhenotype2" onclick="radioSelect(false, 'phenotype')" value="0" checked>
+										<label class="form-check-label" for="RadioPhenotype2" style="padding-left: 14px;"> Phenotype Database</label>
+					            	</div>
+					            	<div class="col-3">
+					            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioCsvFile2" onclick="radioSelect(true, 'phenotype')" value="1">
+										<label class="form-check-label" for="RadioCsvFile2" style="padding-left: 14px;"> New Phenotype</label>
+					            	</div>
+				            	</div>
 				            </div>
-						</div>
-						<div class='tab-pane' id='pillModal2' aria-expanded='true' aria-labelledby='base-pill1'>
-							<div class="row">
-					            <fieldset class="border w-100 mt-1 ml-1 mr-1 pt-1 pl-1 pr-1">
-					            	<legend  class="w-auto">Options</legend>
-					            	<div class="row mb-1">
-							            <div class="col-12 pl-2" style="display:flex;">
-							            	<div class="col-3">
-							            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioPhenotype2" onclick="radioSelect(false, 'phenotype')" value="0" checked>
-												<label class="form-check-label" for="RadioPhenotype2" style="padding-left: 14px;"> Phenotype Database</label>
-							            	</div>
-							            	<div class="col-3">
-							            		<input class="form-check-input" type="radio" name="radio_phenotype2" id="RadioCsvFile2" onclick="radioSelect(true, 'phenotype')" value="1">
-												<label class="form-check-label" for="RadioCsvFile2" style="padding-left: 14px;"> New Phenotype</label>
-							            	</div>
+				            <!--  
+				            <div class="form-label-group d-flex justify-content-start" >
+			                    <select class="select2 form-select" id="Select_Phenotype_2" data-width="50%" data-placeholder="Select Phenotype">
+			                    </select>
+			                </div>
+			                -->
+				            <div>
+					            <div id="isPhenotype_phenotype" class="mt-1" style="display:flex;">
+				                    <div class="col-6 p-0">
+					                    <div id="Grid_Phenotype" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;" ></div><br>
+				                    </div>
+				                    <div class="col-6 p-0">
+					                    <div id="Grid_Phenotype_Selected" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
+				                    </div>
+					            </div>
+					            <div id="isNewFile_phenotype" class="form-label-group mt-1 justify-content-center" style="display:none; flex-direction:column;">
+									<div class="col-12 d-flex justify-content-space-between">
+										<div class="col-6" style="font-weight:bold;">File Upload</div>
+										<div class="col-6">
+						            		<button class="btn btn-sm btn-info float-right">예시파일</button>
 						            	</div>
-						            </div>
-						            <!--  
-						            <div class="form-label-group d-flex justify-content-start" >
-					                    <select class="select2 form-select" id="Select_Phenotype_2" data-width="50%" data-placeholder="Select Phenotype">
-					                    </select>
-					                </div>
-					                -->
-						            <div>
-							            <div id="isPhenotype_phenotype" class="mt-1" style="display:flex;">
-						                    <div class="col-6 p-0">
-							                    <div id="Grid_Phenotype" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;" ></div><br>
-						                    </div>
-						                    <div class="col-6 p-0">
-							                    <div id="Grid_Phenotype_Selected" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div><br>
-						                    </div>
-							            </div>
-							            <div id="isNewFile_phenotype" class="form-label-group mt-1 justify-content-center" style="display:none; flex-direction:column;">
-											<div class="col-12 d-flex justify-content-space-between">
-												<div class="col-6" style="font-weight:bold;">File Upload</div>
-												<div class="col-6">
-								            		<button class="btn btn-sm btn-info float-right">예시파일</button>
-								            	</div>
-											</div>
-											<div class="col-12 mt-1 d-flex justify-content-center">
-								            	<div id="FileControl_phenotype" class="col-12"  style="border: 1px solid #48BAE4;"></div>
-											</div>
-							            </div>
-                                    	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
-                                    	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
-                                    	<div class="mt-1"></div>
-							        </div>
-						        </fieldset>
+									</div>
+									<div class="col-12 mt-1 d-flex justify-content-center">
+						            	<div id="FileControl_phenotype" class="col-12"  style="border: 1px solid #48BAE4;"></div>
+									</div>
+					            </div>
+                                  	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
+                                  	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
+                                  	<div class="mt-1"></div>
 					        </div>
-					        <div class="mt-1">
-				                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
-				                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
-				            </div>
-						</div>
-					</div>
-                </div>
+				        </fieldset>
+			        </div>
+			        <div class="mt-1">
+		                <button type="button" class="btn btn-success mr-1 mb-1" style="float: right;" onclick="execute();">Run</button>
+		                <button type="reset" class="btn btn-outline-warning mr-1 mb-1" style="float: right;" onclick="resetForm();">Reset</button>
+		            </div>
+				</div>
             </div>
         </div>
     </div>
@@ -441,42 +392,12 @@ body {
     	//resetFlatpickr()
     }
    	
-    var box = new Object();
     var box_phenotype = new Object();
     window.onload = function() {
     	
     	//const jobid_pca = $("#jobid_pca").val();
     	//console.log("innorix jobid_pca : ", jobid_pca);
     	
-    	// 파일전송 컨트롤 생성
-	    box = innorix.create({
-	    	el: '#FileControl_individual', // 컨트롤 출력 HTML 객체 ID
-	        width			: 445,
-	    	height          : 190,
-	        maxFileCount   : 1,  
-	        //allowType : ["vcf"],
-	        allowType : ["xlsx"],
-			addDuplicateFile : false,
-	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: './pca_population.jsp'
-	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
-	    });
-
-	    // 업로드 완료 이벤트
-	    box.on('uploadComplete', function (p) {
-			document.getElementById('uploadForm').reset();
-	    	box.removeAllFiles();
-			//backdrop.style.display = "none";	
-			//refresh();
-			
-	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {
-	   			//backdrop.style.display = "none";
-	   			refresh();
-	   			$("#backdrop").modal("hide");
-	   			}
-	   		, 1000);
-        });
 	    
 	 // 파일전송 컨트롤 생성
 	    box_phenotype = innorix.create({
@@ -592,8 +513,7 @@ body {
     	
     	//const varietyid = $( "#variety-select option:selected" ).val();
     	const varietyid = document.querySelector("#variety-select option:checked").value
-    	const jobid_t_test = await fetch("../../../getJobid.jsp")
-   									.then((response) => response.text())
+    	const jobid = await fetch("../../../getJobid.jsp").then((response) => response.text())
 
    		const comment = $('#comment').val();
     	
@@ -601,45 +521,32 @@ body {
     		return alert("comment를 입력해주세요.");
     	}
     	
-    	const category = document.querySelector(".modal-body .nav-link.active").dataset.pill;
-    	console.log(category);
-    	
+    	if(gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length < 3) {
+			return alert("형질을 3개 이상 선택해주세요.")
+		}
     		
-   		const selectEl = document.getElementById("Select_Phenotype_1");
-   		const traitname = selectEl.options[selectEl.selectedIndex].dataset.traitname;
-   		const traitname_key = Number(selectEl.options[selectEl.selectedIndex].dataset.traitname_key);
-   		
-   		if(selectEl.selectedIndex == 0) {
-   			return alert("형질을 선택해주세요.");
+   		const traitname = new Array();
+   		const traitname_key = new Array();
+   		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+   		for(let i=0 ; i<nodes.length ; i++) {
+   			traitname.push(nodes[i].data.traitname);
+   			traitname_key.push(Number(nodes[i].data.traitname_key) + 1);
    		}
    		
-   		const sampleno = new Array();
-   		const samplename = new Array();
-
-   		
-   		const nodes = gridOptions_individualGroupName.api.getModel().rootNode.allLeafChildren;
-   		
-   		if(nodes.length < 10) {
-   			return alert("10개 이상의 개체를 선택해주세요.");
-   		}
-   		
-  			for(let i=0 ; i<nodes.length ; i++) {
-   			sampleno.push(nodes[i].data.no);
-   			samplename.push(nodes[i].data.samplename);
-   		}
-   		
+   		const cre_date = document.getElementById('cre_date').value;
+   		const inv_date = document.getElementById('inv_date').value;
    		
    		const params = new URLSearchParams({
    			"varietyid": varietyid,
-   			"jobid_t_test": jobid_t_test,
+   			"jobid": jobid,
    			"comment": comment,
    			"traitname": traitname,
-   			"seq": traitname_key+1,
-   			"sampleno": sampleno,
-   			"samplename": samplename,
+   			"seq": traitname_key,
+   			"cre_date": cre_date,
+   			"inv_date": inv_date,
    		})
    		
-   		fetch('./t-test_analysis_samplename.jsp', {
+   		fetch('phenotype_pca_analysis_phenotype.jsp', {
    			method: "POST",
    			headers: {
    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
@@ -647,27 +554,62 @@ body {
    			body: params
    		})
    		
-   		fetch('./t-test_insertSql.jsp', {
+   		fetch('./phenotype_pca_insertSql_phenotype.jsp', {
    			method: "POST",
    			headers: {
    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
    			},
    			body: params
    		})
-    		
-    	
     	setTimeout( function () {
    			refresh();
    			$("#backdrop").modal("hide");
     	}, 1000);
+    	/*
+    	*/
     	
     }
     
+ // 클릭이벤트 : iframe 로딩 중 로드스피너 출력
+	document.addEventListener('click', function(event) {
+		//console.log(event.target.id);
+		
+		switch(event.target.id) {
+			case 'nav1':
+				break;
+			case 'nav2':
+				if(!$('#pill4_frame').attr('src')){
+					$("#iframeLoading").modal('show');
+					
+					const jobid = document.getElementById('Extra_Card').dataset.jobid;
+					const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+					
+					$('#pill4_frame').attr('src', resultpath+jobid+"/Eigenvalue.html");
+					$('#pill5_frame').attr('src', resultpath+jobid+"/PCA_3D.html");
+				}
+				break;
+		}
+	});
+    /*
+    document.getElementById("nav2").addEventListener('click', function(event) {
+		
+    	console.log("aaa");
+    	
+    	if(!$('#pill4_frame').attr('src')){
+			$("#iframeLoading").modal('show');
+			
+			const jobid = document.getElementById('Extra_Card').dataset.jobid;
+			const resultpath = document.getElementById('Extra_Card').dataset.resultpath;
+			
+			$('#pill4_frame').attr('src', resultpath+jobid+"/PCA3D.html");
+		}
+		break;
+    })
+    */
+    
 	$("#backdrop").on("shown.bs.modal", function(e) {
-		gridOptions_individualName.api.sizeColumnsToFit();
-		gridOptions_individualGroupName.api.sizeColumnsToFit();
-		//gridOptions_individualName.columnApi.autoSizeAllColumns();
-		//gridOptions_individualGroupName.columnApi.autoSizeAllColumns();
+		gridOptionsTraitName.api.sizeColumnsToFit();
+		gridOptionsTraitName_selected.api.sizeColumnsToFit();
 	});
 
        

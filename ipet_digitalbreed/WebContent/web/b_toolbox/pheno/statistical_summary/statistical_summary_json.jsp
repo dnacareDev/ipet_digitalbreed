@@ -4,7 +4,7 @@
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="com.google.gson.*"%>
 <%
-/*
+
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String varietyid = request.getParameter("varietyid");
 	
@@ -15,7 +15,7 @@
 
 	try{
 
-		String sql="select *, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from anova_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ORDER BY no DESC;";
+		String sql="select *, DATE_FORMAT(cre_dt, '%Y-%m-%d') AS cre_dt from statistical_summary_t where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' ORDER BY no DESC;";
 		System.out.println(sql);
 		
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
@@ -23,9 +23,9 @@
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("no",ipetdigitalconndb.rs.getInt("no"));
 			jsonObject.addProperty("status",ipetdigitalconndb.rs.getString("status"));
-			jsonObject.addProperty("filename",ipetdigitalconndb.rs.getString("filename"));
 			jsonObject.addProperty("comment",ipetdigitalconndb.rs.getString("comment"));
-			jsonObject.addProperty("marker_category",ipetdigitalconndb.rs.getString("marker_category"));
+			jsonObject.addProperty("analysis_number",ipetdigitalconndb.rs.getString("analysis_number"));
+			jsonObject.addProperty("phenotype",ipetdigitalconndb.rs.getString("phenotype"));
 			jsonObject.addProperty("uploadpath",ipetdigitalconndb.rs.getString("uploadpath"));
 			jsonObject.addProperty("resultpath",ipetdigitalconndb.rs.getString("resultpath"));
 			jsonObject.addProperty("jobid",ipetdigitalconndb.rs.getString("jobid"));
@@ -40,7 +40,7 @@
 		ipetdigitalconndb.conn.close();
 	}
 	out.print(jsonArray);
-	*/
+	
 %>
 
 

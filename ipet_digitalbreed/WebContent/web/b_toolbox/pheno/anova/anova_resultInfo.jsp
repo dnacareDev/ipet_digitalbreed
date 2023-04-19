@@ -78,7 +78,7 @@
 		 s = new StringTokenizer(line, ",", false);
 
 		 while (s.hasMoreElements()){
-			str.add(s.nextElement()+"");
+			str.add((s.nextElement()+"").replaceAll("\"", ""));
 		 }
 	}
 

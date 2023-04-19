@@ -99,7 +99,7 @@
                                     </li>
                                     <li class="<%if(menu_active.equals("phenotype_pca")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/phenotype_pca/phenotype_pca.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Phenotype PCA</a>
                                     </li>
-                                    <li class="<%if(menu_active.equals("correlation_analysis")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/correlation_analysis/correlation_analysis.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Correlation analysis</a>
+                                    <li class="<%if(menu_active.equals("correlation")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/correlation/correlation.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Correlation analysis</a>
                                     </li>
                                     <li class="<%if(menu_active.equals("regression")){out.println("active");}%>" data-menu=""><a class="dropdown-item" href="/ipet_digitalbreed/web/b_toolbox/pheno/regression/regression.jsp" data-toggle="dropdown" data-i18n="Radio"><i class="feather icon-circle"></i>Regression analysis</a>
                                     </li>
