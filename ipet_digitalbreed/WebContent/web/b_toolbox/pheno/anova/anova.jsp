@@ -252,7 +252,7 @@ body {
 						            <div>
 							            <div id="isPhenotype_individual" class="form-label-group" >
 						                    <div>
-						                    	<div class="col-12 mb-1 p-0" style="font-size:16px;">Group</div>
+						                    	<div class="col-12 p-0" style="font-size:16px; margin:5px 0;">Group</div>
 							                    <div id="Grid_Individual" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
 						                    </div>
 						                    <div class="row">
@@ -260,21 +260,18 @@ body {
 													<i class="feather icon-arrow-down" style="font-size:26px;"></i>
 												</div>
 											</div>
-											<div class="row mb-1">
-												<div class="col-12 d-flex justify-content-between">
-													<div>그룹은 최대 5개까지 가능합니다.</div>
-													<button id="Button_Group_Add" class="btn btn-sm btn-dark" data-group_count="0" onclick="addIndividualGroup(this, this.dataset.group_count)">그룹 추가</button>
+											<div class="row">
+												<div class="col-12 d-flex justify-content-between" style="margin-bottom:5px;">
+													<div>You can create up to 5 groups</div>
+													<div class="d-flex justify-content-end" style="column-gap:5px;">
+														<button id="Button_Group_Delete" class="btn btn-sm btn-danger" data-group_count="0" onclick="deleteIndividualGroup(document.getElementById('Button_Group_Add'), this, this.dataset.group_count)">Delete group</button>
+														<button id="Button_Group_Add" class="btn btn-sm btn-success" data-group_count="0" onclick="addIndividualGroup(this, document.getElementById('Button_Group_Delete'), this.dataset.group_count)">Add group</button>
+													</div>
 												</div>
 											</div>
 											<div class="row">
-												<div id="Grid_Groups" class="col-12 mb-1" style="height: 420px; overflow-y:scroll;" >
-													
-												</div>
-												<!--  
-							                    <div id="Grid_Individual_Group" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
-							                    -->
+												<div id="Grid_Groups" class="col-12" style="height: 445px; overflow-y:scroll;" ></div>
 						                    </div>
-						                    <div class="mt-1"></div>
 							            </div>
 					                    <div id="isNewFile_individual" class="form-label-group justify-content-center" style="display:none; flex-direction:column;">
 											<div class="col-12 d-flex justify-content-space-between">
@@ -416,42 +413,86 @@ body {
    		flatpickr();
    	});
    	 
-
-   	function vcfFileList() {
-   		
-   		$.ajax(
-   			{
- 	   			//url: "./pca_non_population.jsp",
- 	   			url: "../../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
- 	   			method: 'POST',
- 	   			success: function(data) {
- 		  			console.log("vcf file list : ", data);
- 		  			
- 		  			makeOptions(data);
- 	   			}
-   	  	});
-   	}
-   	
-    function makeOptions(data) {
-    	$("#VcfSelect").empty();
-    	
-    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
-    	for(let i=0 ; i<data.length ; i++) {
-			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
-		}
-    }
-    
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
    		resetForm();
+   		document.getElementById('navModal1').click();
+    	document.getElementById('RadioPhenotype').click();
+    	document.getElementById('RadioPhenotype2').click();
     });    
    	
     function resetForm() {
-    	document.getElementById('uploadForm').reset();
-    	//vcfFileList();
+    	document.getElementById('comment').value = "";
+    	resetFlatpickr();
+    	resetPhenotype();
+    	deselectIndividualGrid();
+    	deselectTraitNameGrid();
     	box.removeAllFiles();
-    	//resetFlatpickr()
+    	box_phenotype.removeAllFiles();
+    }
+    
+    function resetPhenotype() {
+    	selectEl = document.getElementById('Select_Phenotype_1');
+    	selectEl.selectedIndex = 0;
+    	selectEl.dispatchEvent(new Event("change"));
+    } 
+    
+    function deselectIndividualGrid() {
+    	
+    	
+		for(const key in gridOptions_individualGroups) {
+    		const nodes = gridOptions_individualGroups[key].api.getModel().rootNode.allLeafChildren;
+    		
+    		const rowData = new Array();
+        	for(let i=0 ; i<nodes.length ; i++) {
+        		rowData.push(nodes[i].data);
+        	}
+        	
+        	gridOptions_individualName.api.applyTransaction({
+        		add: rowData
+        	}),
+        	
+            
+        	gridOptions_individualGroups[key].api.applyTransaction({
+            	remove: rowData
+            });
+		}
+		
+		gridOptions_individualName.columnApi.applyColumnState({
+    	    state: [
+    	    	{ colId: 'cre_dt', sort: 'desc', sortIndex:0 },
+    	    	{ colId: 'no', sort: 'desc', sortIndex:1 }
+    	    ],
+    	    defaultState: { sort: null },
+    	});
+		
+		gridOptions_individualName.api.deselectAll();
+    }
+    
+	function deselectTraitNameGrid() {
+    	
+    	const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+    	
+    	const rowData = new Array();
+    	for(let i=0 ; i<nodes.length ; i++) {
+    		rowData.push(nodes[i].data);
+    	}
+    	
+    	gridOptionsTraitName.api.applyTransaction({
+    		add: rowData
+    	}),
+		
+		gridOptionsTraitName_selected.api.applyTransaction({
+        	remove: rowData
+        });
+    	
+    	
+    	gridOptionsTraitName.columnApi.applyColumnState({
+    	    state: [{ colId: 'traitname_key', sort: 'asc' }],
+    	    defaultState: { sort: null },
+    	});
+        
+    	gridOptionsTraitName.api.deselectAll();
     }
    	
     var box = new Object();
@@ -574,17 +615,26 @@ body {
 		//console.log(flag);
 	}
     
-    function addIndividualGroup(button, group_count) {
+    function addIndividualGroup(add_button, delete_button, group_count) {
     	if(group_count == 5) {
     		return alert("그룹은 최대 5개까지 만들 수 있습니다.");
     	}
     	
     	const new_count = Number(group_count) + 1;
     	
-    	button.dataset.group_count = new_count
+    	add_button.dataset.group_count = new_count;
+    	delete_button.dataset.group_count = new_count;
     	
     	const groups = document.getElementById("Grid_Groups");
-    	groups.insertAdjacentHTML('beforeend',`<div id="Grid_Individual_Group_\${new_count}" class="ag-theme-alpine mt-1" style="margin: 0px auto; height:190px;"></div>`);
+    	groups.insertAdjacentHTML('beforeend',`
+    			<div id="Div_Group_\${new_count}">
+	    			<div class="row font-weight-bold" style="margin: 5px 0;">
+	    				Group \${new_count}
+	    			</div>
+	   				<div id="Grid_Individual_Group_\${new_count}" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
+   				</div>
+    			`
+    	);
     	
     	//gridOptions_individualGroups[`gridOptions_individualGroupName_\${new_count}`] = {};
     	
@@ -650,6 +700,51 @@ body {
     	
     	gridOptions_group_count.api.setRowData();
     }
+    
+    function deleteIndividualGroup(add_button, delete_button, group_count) {
+    	if(group_count == 2) {
+    		return alert("분석을 위해서는 최소 2개의 그룹이 있어야 합니다.");
+    	}
+    	
+    	let gridOptions_group_count = gridOptions_individualGroups[`gridOptions_individualGroupName_\${group_count}`];
+    	
+    	// 그룹 삭제시 sample list grid에 데이터 복구
+    	const nodes = gridOptions_group_count.api.getModel().rootNode.allLeafChildren;
+		
+		const rowData = new Array();
+    	for(let i=0 ; i<nodes.length ; i++) {
+    		rowData.push(nodes[i].data);
+    	}
+    	
+    	gridOptions_individualName.api.applyTransaction({
+    		add: rowData
+    	}),
+        
+    	gridOptions_group_count.api.applyTransaction({
+        	remove: rowData
+        });
+    	
+    	// 정렬
+    	gridOptions_individualName.columnApi.applyColumnState({
+    	    state: [
+    	    	{ colId: 'cre_dt', sort: 'desc', sortIndex:0 },
+    	    	{ colId: 'no', sort: 'desc', sortIndex:1 }
+    	    ],
+    	    defaultState: { sort: null },
+    	});
+    	
+    	gridOptions_group_count.api.destroy();
+    	document.getElementById(`Div_Group_\${group_count}`).remove();
+    	
+		const new_count = Number(group_count) - 1;
+    	
+    	add_button.dataset.group_count = new_count;
+    	delete_button.dataset.group_count = new_count;
+    	
+    	
+    	
+    }
+    
     
 	function flatpickr() {
    		const dateSelector = document.querySelectorAll(".flatpickr-range");

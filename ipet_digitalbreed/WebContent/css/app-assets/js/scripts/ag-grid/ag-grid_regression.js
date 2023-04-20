@@ -37,7 +37,6 @@
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
 		    });
-		vcfFileList();
 	}
 
 	function getSelectedRowData() {
@@ -218,13 +217,27 @@
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
-				$("#iframeLoading").modal('show');
+				fetch(`${params.data.resultpath+params.data.jobid}/error.txt`)
+				.then((response) => {
+					if(response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error, status - ", response.status);
+					}
+				})
+				.then((error_message) => {
+					return alert(error_message);
+				})
+				.catch((not_exist) => {
+					$("#iframeLoading").modal('show');
+					
+					document.getElementById("Extra_Card").style.display = "block";
+					
+					$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/Regression_paired_plot.html");
+					
+					window.scrollTo(0, document.body.scrollHeight);
+				})
 				
-				document.getElementById("Extra_Card").style.display = "block";
-		   		
-				$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/Regression_paired_plot.html");
-				
-				window.scrollTo(0, document.body.scrollHeight);
 				
 				/*
 				switch (Number(params.data.status)) {
@@ -460,7 +473,8 @@
 		    onDragStop: (params) => {
 		    	const nodes = params.nodes;
 		    	
-		    	if(nodes.length > 1) {
+		    	//if(nodes.length > 1) {
+		    	if(nodes.length > 1 || gridOptionsTraitName_independent.api.getModel().rootNode.allLeafChildren.length > 1) {
 		    		alert("독립변수에는 1개의 형질만 넣을 수 있습니다.");
 		    		
 		    		gridOptionsTraitName_independent.api.applyTransaction({
@@ -469,7 +483,7 @@
 			        
 		    		return;
 		    	}
-
+		    	
 		    	gridOptionsTraitName.api.applyTransaction({
 		    		remove: nodes.map(function (node) {
 		    			return node.data;

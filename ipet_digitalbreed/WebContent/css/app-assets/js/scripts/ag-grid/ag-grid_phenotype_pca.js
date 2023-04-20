@@ -37,7 +37,6 @@
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
 		    });
-		vcfFileList();
 	}
 
 	function getSelectedRowData() {
@@ -210,26 +209,41 @@
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
-				$('#pill1_frame').attr('src', '');
-				$('#pill2_frame').attr('src', '');
-				$('#pill3_frame').attr('src', '');
-				$('#pill4_frame').attr('src', '');
-				$('#pill5_frame').attr('src', '');
-
-				$("#iframeLoading").modal('show');
+				fetch(`${params.data.resultpath+params.data.jobid}/error.txt`)
+				.then((response) => {
+					if(response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error, status - ", response.status);
+					}
+				})
+				.then((error_message) => {
+					return alert(error_message);
+				})
+				.catch((not_exist) => {
+					
+					//$('#pill1_frame').attr('src', '');
+					//$('#pill2_frame').attr('src', '');
+					//$('#pill3_frame').attr('src', '');
+					//$('#pill4_frame').attr('src', '');
+					//$('#pill5_frame').attr('src', '');
+					
+					$("#iframeLoading").modal('show');
+					
+					document.getElementById("Extra_Card").style.display = "block";
+					document.getElementById("Extra_Card").dataset.jobid = params.data.jobid;
+					document.getElementById("Extra_Card").dataset.resultpath = params.data.resultpath;
+					
+					document.getElementById('nav1').click();
+					
+					$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc1_pc2.html");
+					$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc2_pc3.html");
+					$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pca_pc1_pc3.html");
+					//$('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA3D.html");
+					
+					window.scrollTo(0, document.body.scrollHeight);
+				})
 				
-				document.getElementById("Extra_Card").style.display = "block";
-				document.getElementById("Extra_Card").dataset.jobid = params.data.jobid;
-				document.getElementById("Extra_Card").dataset.resultpath = params.data.resultpath;
-				
-				document.getElementById('nav1').click();
-		   		
-				$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc1_pc2.html");
-				$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc2_pc3.html");
-				$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pca_pc1_pc3.html");
-				//$('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA3D.html");
-				
-				window.scrollTo(0, document.body.scrollHeight);
 				
 				/*
 				switch (Number(params.data.status)) {

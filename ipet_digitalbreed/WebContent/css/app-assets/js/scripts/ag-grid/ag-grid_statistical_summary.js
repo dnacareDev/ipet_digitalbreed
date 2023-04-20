@@ -203,32 +203,57 @@
 		suppressDragLeaveHidesColumns: true,
 		animateRows: true,
 		serverSideInfiniteScroll: true,
-		onCellClicked: params => {
+		onCellClicked: (params) => {
 		
-			//console.log("params : ", params);
+			console.log("params : ", params);
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
-				const Extra_Card = document.getElementById("Extra_Card"); 
-				Extra_Card.style.display = "block";
-				Extra_Card.dataset.jobid = params.data.jobid;
-				Extra_Card.dataset.resultpath = params.data.resultpath;
+				/*
+				const errorTxtCheck = await fetch(`${params.data.resultpath+params.data.jobid}/error.txt`)
+											.then((response) => {
+												if(response.ok) {
+													return response.text();
+												} else {
+													return null;
+												}
+											})
+											
+				console.log(errorTxtCheck);
+				*/
 				
-				const selectEl = document.getElementById("Select_Phenotype_Statistical_Summary");
-				const phenotype_arr = params.data.phenotype.split(",");
-				selectEl.innerHTML = ``;
-				//selectEl.innerHTML = `<option></option>`;
-				for(let i=0 ; i<phenotype_arr.length ; i++) {
-					selectEl.insertAdjacentHTML('beforeend', `<option data-phenotype=${phenotype_arr[i]} >${phenotype_arr[i]}</option>`);
-				}
-		   		
-				$('#pill1_frame').attr('src', "");
-				$('#pill2_frame').attr('src', "");
+				fetch(`${params.data.resultpath+params.data.jobid}/error.txt`)
+				.then((response) => {
+					if(response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error, status - ", response.status);
+					}
+				})
+				.then((error_message) => {
+					return alert(error_message);
+				})
+				.catch((not_exist) => {
+					const Extra_Card = document.getElementById("Extra_Card"); 
+					Extra_Card.style.display = "block";
+					Extra_Card.dataset.jobid = params.data.jobid;
+					Extra_Card.dataset.resultpath = params.data.resultpath;
+					
+					const selectEl = document.getElementById("Select_Phenotype_Statistical_Summary");
+					const phenotype_arr = params.data.phenotype.split(",");
+					selectEl.innerHTML = ``;
+					//selectEl.innerHTML = `<option></option>`;
+					for(let i=0 ; i<phenotype_arr.length ; i++) {
+						selectEl.insertAdjacentHTML('beforeend', `<option data-phenotype=${phenotype_arr[i]} >${phenotype_arr[i]}</option>`);
+					}
+					
+					
+					selectEl.dispatchEvent(new Event("change"));
+					window.scrollTo(0, document.body.scrollHeight);
+				})
 				
-				//selectEl.selectedOption = 1;
-				selectEl.dispatchEvent(new Event("change"));
 				
-				window.scrollTo(0, document.body.scrollHeight);
+				
 				
 				/*
 				switch (Number(params.data.status)) {

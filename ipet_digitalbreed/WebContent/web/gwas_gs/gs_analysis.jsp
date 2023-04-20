@@ -54,7 +54,7 @@
 	String VcfPath = rootFolder + "uploads/database/db_input/";
 	//String phenotypePath = rootFolder + "/uploads/GS/"+jobid_gs+"/train_pheno_1-9.txt";
 	String phenotypePath = rootFolder + "/uploads/GS/Pheno/"+jobid_gs+"/";
-	String outputPath = rootFolder + "result/GS/"+jobid_gs+"/";
+	String outputPath = rootFolder + "result/GS/";
 	
 	
 	File folder_phenotypePath = new File(phenotypePath);
@@ -69,8 +69,8 @@
 	}
 	System.out.println("phenotypePath : " + phenotypePath);
 	
-	File folder_outputPath = new File(outputPath);
-	System.out.println("outputPath : " + outputPath);
+	File folder_outputPath = new File(outputPath+jobid_gs+"/");
+	System.out.println("outputPath : " + outputPath+jobid_gs+"/");
 	if (!folder_outputPath.exists()) {
 		try {
 			folder_outputPath.mkdirs(); 
@@ -117,8 +117,9 @@
 	
 	cmd += ANO_checked ? ANO+" " : "NULL ";
 	cmd += LD_checked ? LD+" " : "NULL ";
-	cmd += model_keys +" "+ nFolds +" "+ nTimes;
+	cmd += model_keys +" "+ nFolds +" "+ nTimes +" ";
 	
+	cmd += outputPath;
 	
 	System.out.println("cmd : " + cmd);
 	//runanalysistools.execute(cmd, "cmd");

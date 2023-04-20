@@ -37,7 +37,6 @@
 		    	console.log("data : ", data);
 		    	gridOptions.api.setRowData(data);
 		    });
-		vcfFileList();
 	}
 
 	function getSelectedRowData() {
@@ -210,6 +209,30 @@
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
+				fetch(`${params.data.resultpath+params.data.jobid}/error.txt`)
+				.then((response) => {
+					if(response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error, status - ", response.status);
+					}
+				})
+				.then((error_message) => {
+					return alert(error_message);
+				})
+				.catch((not_exist) => {
+					$("#iframeLoading").modal('show');
+					
+					document.getElementById("Extra_Card").style.display = "block";
+			   		
+					$('#pill1_frame').attr('src', "./t-test_resultInfo.jsp?jobid="+params.data.jobid);
+					$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_hist.html");
+					$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_box.html");
+					
+					window.scrollTo(0, document.body.scrollHeight);
+				})
+				
+				/*
 				$("#iframeLoading").modal('show');
 				
 				document.getElementById("Extra_Card").style.display = "block";
@@ -219,6 +242,7 @@
 				$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_box.html");
 				
 				window.scrollTo(0, document.body.scrollHeight);
+				*/
 				
 				/*
 				switch (Number(params.data.status)) {
@@ -290,13 +314,7 @@
 			onGridReady: (params) => {
 			    addGridDropZone3(params);
 			},
-			onRowClicked: (params) => {
-				if(gridOptionsTraitName.api.getSelectedRows().length + gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length > 2) {
-					params.node.setSelected(false);
-					return alert("형질은 2개까지만 선택 가능합니다.")
-				}
-			},
-			onRowClicked: (params) => {
+			onRowSelected: (params) => {
 				if(gridOptionsTraitName.api.getSelectedRows().length + gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length > 2) {
 					params.node.setSelected(false);
 					return alert("형질은 2개까지만 선택 가능합니다.")
@@ -646,6 +664,3 @@
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
 	});
-  
-	//console.log(gridOptions);
-  

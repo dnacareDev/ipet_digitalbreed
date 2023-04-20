@@ -19,14 +19,18 @@
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/vendors.min.css">
  	<link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/innorix/innorix.css">    
+ 	<!--  
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/extensions/tether-theme-arrows.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/extensions/tether.min.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/extensions/shepherd-theme-default.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/vendors.min.css">
+    -->
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/tables/ag-grid/ag-grid.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/tables/ag-grid/ag-theme-alpine.css"> 
+    <!--  
 	<link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/plugins/forms/validation/form-validation.css">
+	-->
 	<link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/forms/select/select2.min.css">
 	
 	<!--  
@@ -46,10 +50,12 @@
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/core/menu/menu-types/horizontal-menu.css">
+    <!--  
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/core/colors/palette-gradient.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/pages/dashboard-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/plugins/tour/tour.css">
+    -->
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/pages/aggrid.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/css/bootstrap5_custom.css">
     <link rel="stylesheet" type="text/css" href="../../../../css/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css"> 
@@ -318,7 +324,9 @@ body {
 
     <!-- BEGIN: Page Vendor JS-->
     <script src="../../../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
+	<!--  
 	<script src="../../../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
+	-->
     <script src="../../../../css/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
     <!-- END: Page Vendor JS-->
 
@@ -330,9 +338,11 @@ body {
 
     <!-- BEGIN: Page JS-->
     <script src="../../../../css/app-assets/js/scripts/ag-grid/ag-grid_statistical_summary.js"></script>
+    <!--  
     <script src="../../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
 	<script src="../../../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
+    -->
     <!-- END: Page JS-->
 
 <script type="text/javascript">
@@ -347,13 +357,40 @@ body {
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
    		resetForm();
+   		document.getElementById('RadioPhenotype2').click();
     });    
    	
     function resetForm() {
-    	document.getElementById('uploadForm').reset();
-    	//vcfFileList();
-    	box.removeAllFiles();
-    	//resetFlatpickr()
+    	document.getElementById('comment').value = "";
+    	resetFlatpickr();
+    	deselectTraitNameGrid();
+    	box_phenotype.removeAllFiles();
+    }
+    
+    function deselectTraitNameGrid() {
+    	
+		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+    	
+    	const rowData = new Array();
+    	for(let i=0 ; i<nodes.length ; i++) {
+    		rowData.push(nodes[i].data);
+    	}
+    	
+    	gridOptionsTraitName.api.applyTransaction({
+    		add: rowData
+    	}),
+		
+		gridOptionsTraitName_selected.api.applyTransaction({
+        	remove: rowData
+        });
+    	
+    	
+    	gridOptionsTraitName.columnApi.applyColumnState({
+    	    state: [{ colId: 'traitname_key', sort: 'asc' }],
+    	    defaultState: { sort: null },
+    	});
+    	
+    	gridOptionsTraitName.api.deselectAll();
     }
    	
     var box_phenotype = new Object();
@@ -495,12 +532,11 @@ body {
    		const traitname = new Array();
    		const traitname_key = new Array();
    		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
-   		/*
-   		for(let i=0 ; i<nodes.length ; i++) {
-   			traitname.push(nodes[i].data.traitname);
-   			traitname_key.push(Number(nodes[i].data.traitname_key) + 1);
+
+   		if(nodes.length == 0) {
+   			return alert("형질을 선택해주세요.");
    		}
-   		*/
+
    		for(let i=0 ; i<nodes.length ; i++) {
    			traitname.push(nodes[i].data.traitname);
    			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);
@@ -549,13 +585,15 @@ body {
    		})
    		.then(response => response.ok)
    		.then(ok => {
-   			$("#iframeLoading").modal('hide');
+   			//$("#iframeLoading").modal('hide');
    			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
 			node.setSelected(true);
 			//gridOptions.api.setFocusedCell(0, 'comment');
-			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+			
    			/*
+			$(`#myGrid [row-index="0"] [col-id="comment"]`).trigger("click");
 			*/
+			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
    		});
    		
    		fetch('./statistical_summary_insertSql_phenotype.jsp', {

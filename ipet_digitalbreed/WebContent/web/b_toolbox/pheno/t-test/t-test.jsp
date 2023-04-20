@@ -213,6 +213,7 @@ body {
     
 	<!-- Modal start-->
     <div class="modal fade text-left" id="backdrop" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+    	<!--__module-start__-->
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
@@ -254,19 +255,18 @@ body {
 					                </div>
 						            <div>
 							            <div id="isPhenotype_individual" class="form-label-group" >
-						                    <div>
-						                    	<div class="col-12 mb-1 p-0" style="font-size:16px;">Group</div>
-							                    <!--  
-							                    <div id="Grid_Individual" class="ag-theme-alpine" style="margin: 0px auto; height:190px;" ondragover="gridDragOver(event)"  ondrop="gridDrop(event, 'left')"></div><br>
-							                    -->
-							                    <div id="Grid_Individual" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
+						                    <div class="row font-weight-bold" style="margin:5px 0 7px 0;">
+						                    	<div class="col-12 p-0">Group B</div>
 						                    </div>
-						                    <div>
-						                    	<div class="col-12 mt-1 mb-1 p-0 d-flex justify-content-center">
+							                <div id="Grid_Individual" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
+						                    <div class="row font-weight-bold" style="margin:5px 0 1px 0;">
+						                    	<div class="col-4 p-0">Group A</div>
+						                    	<div class="col-4 p-0 d-flex justify-content-center">
 													<i class="feather icon-arrow-down" style="font-size:26px;"></i>
 												</div>
-							                    <div id="Grid_Individual_Group" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
+												<div class="col-4"></div>
 						                    </div>
+						                    <div id="Grid_Individual_Group" class="ag-theme-alpine" style="margin: 0px auto; height:190px;"></div>
 						                    <div class="mt-1"></div>
 							            </div>
 					                    <div id="isNewFile_individual" class="form-label-group justify-content-center" style="display:none; flex-direction:column;">
@@ -345,6 +345,7 @@ body {
                 </div>
             </div>
         </div>
+        <!--__module-end__-->
     </div>
     
    	<div class="modal" id="iframeLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
@@ -409,42 +410,82 @@ body {
    		flatpickr();
    	});
    	 
-
-   	function vcfFileList() {
-   		
-   		$.ajax(
-   			{
- 	   			//url: "./pca_non_population.jsp",
- 	   			url: "../../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
- 	   			method: 'POST',
- 	   			success: function(data) {
- 		  			console.log("vcf file list : ", data);
- 		  			
- 		  			makeOptions(data);
- 	   			}
-   	  	});
-   	}
-   	
-    function makeOptions(data) {
-    	$("#VcfSelect").empty();
-    	
-    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
-    	for(let i=0 ; i<data.length ; i++) {
-			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
-		}
-    }
-    
-   	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
    		resetForm();
+   		document.getElementById('navModal1').click();
+    	document.getElementById('RadioPhenotype').click();
+    	document.getElementById('RadioPhenotype2').click();
     });    
    	
     function resetForm() {
-    	document.getElementById('uploadForm').reset();
-    	//vcfFileList();
-    	box.removeAllFiles();
-    	//resetFlatpickr()
+    	document.getElementById('comment').value = "";
+    	resetFlatpickr();
+    	resetPhenotype();
+    	deselectIndividualGrid();
+    	deselectTraitNameGrid();
+    	box_phenotype.removeAllFiles();
+    }
+    
+    function resetPhenotype() {
+    	selectEl = document.getElementById('Select_Phenotype_1');
+    	selectEl.selectedIndex = 0;
+    	selectEl.dispatchEvent(new Event("change"));
+    } 
+    
+    function deselectIndividualGrid() {
+    	const nodes = gridOptions_individualGroupName.api.getModel().rootNode.allLeafChildren;
+    	
+    	const rowData = new Array();
+    	for(let i=0 ; i<nodes.length ; i++) {
+    		rowData.push(nodes[i].data);
+    	}
+    	
+    	gridOptions_individualName.api.applyTransaction({
+    		add: rowData
+    	}),
+    	
+        
+    	gridOptions_individualGroupName.api.applyTransaction({
+        	remove: rowData
+        });
+    	
+    	
+    	gridOptions_individualName.columnApi.applyColumnState({
+    	    state: [
+    	    	{ colId: 'cre_dt', sort: 'desc', sortIndex:0 },
+    	    	{ colId: 'no', sort: 'desc', sortIndex:1 }
+    	    ],
+    	    defaultState: { sort: null },
+    	});
+    	
+    	gridOptions_individualName.api.deselectAll();
+    	
+    }
+    
+	function deselectTraitNameGrid() {
+    	
+    	const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+    	
+    	const rowData = new Array();
+    	for(let i=0 ; i<nodes.length ; i++) {
+    		rowData.push(nodes[i].data);
+    	}
+    	
+    	gridOptionsTraitName.api.applyTransaction({
+    		add: rowData
+    	}),
+		
+		gridOptionsTraitName_selected.api.applyTransaction({
+        	remove: rowData
+        });
+    	
+    	
+    	gridOptionsTraitName.columnApi.applyColumnState({
+    	    state: [{ colId: 'traitname_key', sort: 'asc' }],
+    	    defaultState: { sort: null },
+    	});
+        
+    	gridOptionsTraitName.api.deselectAll();
     }
    	
     var box = new Object();
@@ -625,11 +666,10 @@ body {
     		const sampleno = new Array();
     		const samplename = new Array();
 
-    		
     		const nodes = gridOptions_individualGroupName.api.getModel().rootNode.allLeafChildren;
     		
-    		if(nodes.length < 10) {
-    			return alert("10개 이상의 개체를 선택해주세요.");
+    		if(nodes.length < 3) {
+    			return alert("3개 이상의 개체를 선택해주세요.");
     		}
     		
    			for(let i=0 ; i<nodes.length ; i++) {
@@ -684,6 +724,9 @@ body {
     		const traitname = new Array();
     		const traitname_key = new Array();
     		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+    		if(nodes.length != 2) {
+    			return alert("형질을 2개 선택해주세요.");
+    		}
     		for(let i=0 ; i<nodes.length ; i++) {
     			traitname.push(nodes[i].data.traitname);
     			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);

@@ -7,6 +7,7 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+
 	function refresh() {	
 		var columnDefs = [	
 		  {
@@ -439,15 +440,13 @@
 	
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
-	    flex: 1,
 	    //rowDragManaged: true,
 	    columnDefs: columnDefs,
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
   	    rowHeight: 35,
-	  	rowSelection: 'multiple',	  	
-	    floatingFilter: true,
-	    filter: 'agMultiColumnFilter',
+	  	rowSelection: 'multiple',	 
+	  	//rowMultiSelectWithClick: true,
 	    //pagination: true,
 	    //paginationPageSize: 20,
 	    allowContextMenuWithControlKey: true,
@@ -455,7 +454,6 @@
 	    pivotPanelShow: "always",
 	    colResizeDefault: "shift",
 	    animateRows: true,
-	    resizable: true,
 	    serverSideInfiniteScroll: true,	    
 	    onGridReady: (params) => {
 	      addDropZonesone(params);
@@ -712,3 +710,4 @@
      // gridOptions.columnApi.setColumnPinned("email", "left");
     }
   });
+  

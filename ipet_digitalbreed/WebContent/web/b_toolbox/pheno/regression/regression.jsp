@@ -234,20 +234,25 @@ body {
 					            	</div>
 				            	</div>
 				            </div>
-				            <!--  
-				            <div class="form-label-group d-flex justify-content-start" >
-			                    <select class="select2 form-select" id="Select_Phenotype_2" data-width="50%" data-placeholder="Select Phenotype">
-			                    </select>
-			                </div>
-			                -->
+				            <div class="row" style="margin-bottom:5px;">
+				            	<div class="col-6 font-weight-bold" style="padding-left: 23px;">
+				            		Sample List
+				            	</div>
+				            	<div id="Row_Div_Independent" class="col-6 font-weight-bold" style="padding-left: 8px;">
+					            	Dependent Variable (only one)
+				            	</div>
+				            </div>
 				            <div>
-					            <div id="isPhenotype_phenotype" class="mt-1" style="display:flex;">
+					            <div id="isPhenotype_phenotype" class="" style="display:flex;">
 				                    <div class="col-6 p-0">
-					                    <div id="Grid_Phenotype" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:460px;" ></div><br>
+					                    <div id="Grid_Phenotype" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:390px;" ></div><br>
 				                    </div>
 				                    <div class="col-6 p-0">
-					                    <div id="Grid_Phenotype_Independent" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:190px;"></div>
-					                    <div id="Grid_Phenotype_Dependent" class="ag-theme-alpine mt-1" style="margin: 0px auto; width: 98%; height:256px;"></div>
+					                    <div id="Grid_Phenotype_Independent" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:155px;"></div>
+					                    <div class="col-12 font-weight-bold" style="margin: 5px 0; padding-left: 8px;">
+							            	Independent Variables
+						            	</div>
+					                    <div id="Grid_Phenotype_Dependent" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:205px;"></div>
 				                    </div>
 					            </div>
 					            <div id="isNewFile_phenotype" class="form-label-group mt-1 justify-content-center" style="display:none; flex-direction:column;">
@@ -337,43 +342,61 @@ body {
    		//vcfFileList();
    		flatpickr();
    	});
-   	 
-
-   	function vcfFileList() {
-   		
-   		$.ajax(
-   			{
- 	   			//url: "./pca_non_population.jsp",
- 	   			url: "../../../../web/database/genotype_json.jsp?varietyid=" + $( "#variety-select option:selected" ).val(),
- 	   			method: 'POST',
- 	   			success: function(data) {
- 		  			console.log("vcf file list : ", data);
- 		  			
- 		  			makeOptions(data);
- 	   			}
-   	  	});
-   	}
+ 
    	
-    function makeOptions(data) {
-    	$("#VcfSelect").empty();
-    	
-    	$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected>Select VCF File</option>`);
-    	for(let i=0 ; i<data.length ; i++) {
-			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-uploadpath=\${data[i].uploadpath} > \${data[i].filename} (\${data[i].comment}) </option>`);
-		}
-    }
-    
    	
    	$('#backdrop').on('hidden.bs.modal', function (e) {
    		resetForm();
+   		document.getElementById('RadioPhenotype2').click();
     });    
    	
     function resetForm() {
-    	document.getElementById('uploadForm').reset();
-    	//vcfFileList();
-    	box.removeAllFiles();
-    	//resetFlatpickr()
+    	document.getElementById('comment').value = "";
+    	resetFlatpickr();
+    	deselectTraitNameGrid();
+    	box_phenotype.removeAllFiles();
+    }
+    
+    function deselectTraitNameGrid() {
+    	
+		const nodes_independent = gridOptionsTraitName_independent.api.getModel().rootNode.allLeafChildren;
+    	
+    	const rowData_independent = new Array();
+    	for(let i=0 ; i<nodes_independent.length ; i++) {
+    		rowData_independent.push(nodes_independent[i].data);
+    	}
+    	
+    	gridOptionsTraitName.api.applyTransaction({
+    		add: rowData_independent
+    	}),
+		
+    	gridOptionsTraitName_independent.api.applyTransaction({
+        	remove: rowData_independent
+        });
+    	
+    	
+		const nodes_dependent = gridOptionsTraitName_dependent.api.getModel().rootNode.allLeafChildren;
+    	
+    	const rowData_dependent = new Array();
+    	for(let i=0 ; i<nodes_dependent.length ; i++) {
+    		rowData_dependent.push(nodes_dependent[i].data);
+    	}
+    	
+    	gridOptionsTraitName.api.applyTransaction({
+    		add: rowData_dependent
+    	}),
+		
+    	gridOptionsTraitName_dependent.api.applyTransaction({
+        	remove: rowData_dependent
+        });
+    	
+    	
+    	gridOptionsTraitName.columnApi.applyColumnState({
+    	    state: [{ colId: 'traitname_key', sort: 'asc' }],
+    	    defaultState: { sort: null },
+    	});
+    	
+    	gridOptionsTraitName.api.deselectAll();
     }
    	
     var box_phenotype = new Object();
@@ -414,6 +437,59 @@ body {
         });
 	    
     };
+    
+  //radio 선택에 따라 파일창 노출여부 결정  | true: New Phenotype , false: Phenotype Database
+	function radioSelect(flag, category) {
+		
+		if(category == "individual") {
+			if(flag) {
+				document.getElementById('Select_Phenotype_1').nextSibling.style.display = 'none';
+				document.getElementById('Select_Phenotype_1').selectedIndex = 0;
+		    	document.getElementById('Select_Phenotype_1').dispatchEvent(new Event("change"));
+				document.getElementById('isPhenotype_individual').style.display = 'none';
+				$("#isNewFile_individual").css('display','flex');
+				$("#exampleFile").css('display','block');
+				
+				// New Phenotype 선택시 특성 체크박스 해제
+				//gridOptionsTraitName.api.deselectAll();
+			} else {
+				document.getElementById('Select_Phenotype_1').nextSibling.style.display='';
+				document.getElementById('isPhenotype_individual').style.display = '';
+				$("#isNewFile_individual").css('display','none');
+				$("#exampleFile").css('display','none');
+				
+				// Phenotype Database 선택시 innorix 파일목록 해제
+				box.removeAllFiles();
+			}
+		} else if(category == "phenotype") {
+			if(flag) {
+				//document.getElementById('Select_Phenotype_2').nextSibling.style.display = 'none';
+				document.getElementById('Row_Div_Independent').style.display = 'none';
+				document.getElementById('isPhenotype_phenotype').style.display = 'none';
+				document.getElementById("cre_date").style.display = "none";
+				document.getElementById("inv_date").style.display = "none";
+				resetFlatpickr();
+				$("#isNewFile_phenotype").css('display','flex');
+				$("#exampleFile").css('display','block');
+				
+				// New Phenotype 선택시 특성 체크박스 해제
+				//gridOptionsTraitName.api.deselectAll();
+			} else {
+				//document.getElementById('Select_Phenotype_2').nextSibling.style.display='';
+				document.getElementById('Row_Div_Independent').style.display = '';
+				document.getElementById('isPhenotype_phenotype').style.display = 'flex';
+				document.getElementById("cre_date").style.display = "inline";
+				document.getElementById("inv_date").style.display = "inline";
+				$("#isNewFile_phenotype").css('display','none');
+				$("#exampleFile").css('display','none');
+				
+				// Phenotype Database 선택시 innorix 파일목록 해제
+				box_phenotype.removeAllFiles();
+			}
+		}
+		
+		//console.log(flag);
+	}
     
     
 	function flatpickr() {
@@ -459,6 +535,9 @@ body {
    		const traitname_independent = new Array();
    		const traitname_key_independent = new Array();
    		const nodes_independent = gridOptionsTraitName_independent.api.getModel().rootNode.allLeafChildren;
+   		if(nodes_independent.length == 0) {
+   			return alert("종속변수 형질을 넣어주세요");
+   		}
    		for(let i=0 ; i<nodes_independent.length ; i++) {
    			traitname_independent.push(nodes_independent[i].data.traitname);
    			traitname_key_independent.push(Number(nodes_independent[i].data.traitname_key) + 2);
@@ -467,6 +546,9 @@ body {
    		const traitname_dependent = new Array();
    		const traitname_key_dependent = new Array();
    		const nodes_dependent = gridOptionsTraitName_dependent.api.getModel().rootNode.allLeafChildren;
+   		if(nodes_dependent.length == 0) {
+   			return alert("독립변수 형질을 넣어주세요");
+   		}
    		for(let i=0 ; i<nodes_dependent.length ; i++) {
    			traitname_dependent.push(nodes_dependent[i].data.traitname);
    			traitname_key_dependent.push(Number(nodes_dependent[i].data.traitname_key) + 2);

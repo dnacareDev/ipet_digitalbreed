@@ -46,6 +46,9 @@
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/card-analytics.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/plugins/tour/tour.css">
     <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/pages/aggrid.css">
+    <link rel="stylesheet" type="text/css" href="../../css/app-assets/css/bootstrap5_custom.css">
+    <link rel="stylesheet" type="text/css" href="../../css/index_assets/css/icons.min.css">
+    <link rel="stylesheet" href="../../css/app-assets/vendors/css/jquery-ui/jquery-ui.css">
     <!-- END: Page CSS-->
 
 </head>
@@ -149,13 +152,28 @@ body {
 				                                	<button class="btn btn-warning mr-1" style="float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
 													<button class="btn btn-danger" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
 		                                		</div>
-												<div class="col-12 col-md-6 mt-1 d-flex justify-content-start justify-content-md-end">
-													<button class="btn btn-success mr-1"  style="display:flex; column-gap: 5px;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
-													<button class="btn btn-info dropdown-toggle" type="button" style="height:40px;" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
+												<div class="col-12 col-md-6 mt-1 d-flex justify-content-start justify-content-md-end" style="column-gap:10px;">
+													<div class="dropup">
+														<button id="dropdownMenuButton_analysis" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Analysis</button>
+														<div class="dropdown-menu" aria-labelledby="dropdownMenuButton_analysis" style="z-index:9999">
+				                                           	<a class="dropdown-item" href="javascript:openAnalysisModal('statistical_summary');">Statistical summary</a>
+				                                            <a class="dropdown-item" href="javascript:openAnalysisModal('t-test');">T-test</a>
+				                                            <a class="dropdown-item" href="javascript:openAnalysisModal('anova');">One-way ANOVA</a>
+				                                            <a class="dropdown-item" href="javascript:openAnalysisModal('phenotype_pca');">Phenotype PCA</a>
+				                                            <a class="dropdown-item" href="javascript:openAnalysisModal('correlation');">Correlation analysis</a>
+				                                            <a class="dropdown-item" href="javascript:openAnalysisModal('regression');">Regression analysis</a>
+				                                        </div>
+													</div>
+													<div>
+														<button class="btn btn-success" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
+													</div>
+													<div class="dropup">
+														<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
 				                                       	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
 				                                           	<a class="dropdown-item" href="javascript:ajaxFileDownload();">Template Download</a>
 				                                            <a class="dropdown-item" href="javascript:ajaxFileUpload();">Template Upload</a>
 				                                        </div>
+			                                        </div>
 												</div>
 			                                </div>
 			                                
@@ -270,12 +288,14 @@ body {
 
     <!-- BEGIN: Page Vendor JS-->
     <script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
+    <!--  
   	<script src="../../css/app-assets/vendors/js/tables/ag-grid/ag-grid-enterprise.min.js">
+  	-->
     
 	<script src="../../css/app-assets/vendors/js/ui/jquery.sticky.js"></script>
 	<script src="../../css/app-assets/vendors/js/extensions/swiper.min.js"></script>
 	
-    <link rel="stylesheet" href="../../css/app-assets/vendors/css/jquery-ui/jquery-ui.css">
+    
 
     <script src="../../css/app-assets/vendors/js/innorix/innorix.js"></script>	
 
@@ -304,6 +324,7 @@ body {
         
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_phenotype.js"></script>
+    <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_phenotype_modules.js"></script>
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
 	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
@@ -382,9 +403,71 @@ body {
 						</form>
 	                </div>
 	            </div>
+	    	</div>
 	    </div>                          
+	    
+	    
+	    
+	    <div class="modal fade text-left" id="Modal_Analysis" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true">
+	    </div>
+	    
 		<!-- Modal end-->
      
+<script>
+
+	function openAnalysisModal(id) {
+		//console.log("ID : ", id);
+		
+		
+		fetch(`../b_toolbox/pheno/\${id}/\${id}.jsp`)
+		.then((response) => response.text())
+		.then((html) => {
+			const regex = /<!--__module-start__-->([\s\S]*?)<!--__module-end__-->/;
+			const matches = html.match(regex);
+			const content = matches[1];
+			//console.log(content);
+			document.getElementById('Modal_Analysis').insertAdjacentHTML('beforeend', content);
+			document.getElementById('Modal_Analysis').dataset.analysis_category = id;
+			
+			const traitName_arr = new Array();
+			const traitName_key_arr = new Array();
+			
+			const colDef = gridOptions.columnDefs;
+			for(let i=0 ; i<colDef.length ; i++) {
+				if(colDef[i]?.field?.includes('_key')) {
+					traitName_arr.push(colDef[i].headerName);
+					traitName_key_arr.push(colDef[i].field.replaceAll("_key",""));
+				}
+			}
+			
+			$("#Select_Phenotype_1").append(`<option></option>`);
+			for(let i=0 ; i<traitName_arr.length ; i++) {
+				$("#Select_Phenotype_1").append(`<option data-traitname=\${traitName_arr[i]} data-traitname_key=\${traitName_key_arr[i]}> \${traitName_key_arr[i]} </option>`);
+			}
+			
+			new agGrid.Grid(document.getElementById('Grid_Individual'), gridOptions_individualName);
+			new agGrid.Grid(document.getElementById('Grid_Individual_Group'), gridOptions_individualGroupName);
+			
+			const data_selected = gridOptions.api.getSelectedRows();
+			gridOptions_individualName.api.setRowData(data_selected);
+	
+			$("#Select_Phenotype_1").select2();
+			
+			
+			$("#Modal_Analysis").modal("show");
+		})
+	}
+	
+	$("#Modal_Analysis").on("shown.bs.modal", function(e) {
+		gridOptions_individualName.api.sizeColumnsToFit();
+		gridOptions_individualGroupName.api.sizeColumnsToFit();
+	})
+	
+	$("#Modal_Analysis").on("hidden.bs.modal", function(e) {
+		document.getElementById('Modal_Analysis').innerHTML = "";
+	});
+
+</script>
 </body>
 <!-- END: Body-->
 
