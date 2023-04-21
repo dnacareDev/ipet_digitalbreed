@@ -127,8 +127,11 @@
 	    	width: 200,
 	    	minWidth: 150,
 	    },
+	    // 독립과 종속이 뒤바뀌어서 전달됨. 관련변수&컬럼명도 dependent, independent가 바뀌어있는 상태. 
+	    // 이미 만들어진걸 뒤집으면 복잡해지니 우선 headerName만 변경
 	    {
-	    	headerName: "분석 형질(독립 변수)",
+	    	//headerName: "분석 형질(독립 변수)",
+	    	headerName: "분석 형질(종속 변수)",
 	    	field: "phenotype_independent",
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
@@ -136,7 +139,8 @@
 	    	minWidth: 150,
 	    },
 	    {
-	    	headerName: "분석 형질(종속 변수)",
+	    	//headerName: "분석 형질(종속 변수)",
+	    	headerName: "분석 형질(독립 변수)",
 	    	field: "phenotype_dependent",
 	    	filter: true,
 	    	cellClass: "grid-cell-centered",      
@@ -217,7 +221,7 @@
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
-				fetch(`${params.data.resultpath+params.data.jobid}/error.txt`)
+				fetch(`${params.data.resultpath+params.data.jobid}/Error.txt`)
 				.then((response) => {
 					if(response.ok) {
 						return response.text();

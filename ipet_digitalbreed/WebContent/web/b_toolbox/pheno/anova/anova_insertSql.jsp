@@ -70,7 +70,7 @@
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String savePath = rootFolder + "uploads/database/phenotype_data/";
-	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/pheno/t-test/";
+	String outputPath = rootFolder + "result/Breeder_toolbox_analyses/pheno/anova/";
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	String db_savePath = "/ipet_digitalbreed/uploads/database/phenotype_data/";

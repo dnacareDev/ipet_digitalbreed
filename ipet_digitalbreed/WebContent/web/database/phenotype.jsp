@@ -153,6 +153,7 @@ body {
 													<button class="btn btn-danger" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
 		                                		</div>
 												<div class="col-12 col-md-6 mt-1 d-flex justify-content-start justify-content-md-end" style="column-gap:10px;">
+													<!--  
 													<div class="dropup">
 														<button id="dropdownMenuButton_analysis" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Analysis</button>
 														<div class="dropdown-menu" aria-labelledby="dropdownMenuButton_analysis" style="z-index:9999">
@@ -164,6 +165,7 @@ body {
 				                                            <a class="dropdown-item" href="javascript:openAnalysisModal('regression');">Regression analysis</a>
 				                                        </div>
 													</div>
+													-->
 													<div>
 														<button class="btn btn-success" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
 													</div>
@@ -415,31 +417,48 @@ body {
      
 <script>
 
-	function openAnalysisModal(id) {
+	/*
+	async function openAnalysisModal(id) {
 		//console.log("ID : ", id);
 		
 		
-		fetch(`../b_toolbox/pheno/\${id}/\${id}.jsp`)
-		.then((response) => response.text())
-		.then((html) => {
-			const regex = /<!--__module-start__-->([\s\S]*?)<!--__module-end__-->/;
-			const matches = html.match(regex);
-			const content = matches[1];
-			//console.log(content);
-			document.getElementById('Modal_Analysis').insertAdjacentHTML('beforeend', content);
-			document.getElementById('Modal_Analysis').dataset.analysis_category = id;
-			
-			const traitName_arr = new Array();
-			const traitName_key_arr = new Array();
-			
-			const colDef = gridOptions.columnDefs;
-			for(let i=0 ; i<colDef.length ; i++) {
-				if(colDef[i]?.field?.includes('_key')) {
-					traitName_arr.push(colDef[i].headerName);
-					traitName_key_arr.push(colDef[i].field.replaceAll("_key",""));
-				}
+		await fetch(`../b_toolbox/pheno/\${id}/\${id}.jsp`)
+				.then((response) => response.text())
+				.then((html) => {
+					const regex = /<!--__module-start__-->([\s\S]*?)<!--__module-end__-->/;
+					const matches = html.match(regex);
+					const content = matches[1];
+					
+					//console.log(content);
+					document.getElementById('Modal_Analysis').insertAdjacentHTML('beforeend', content);
+					document.getElementById('Modal_Analysis').dataset.analysis_category = id;
+					
+					//const analysis_arr = ['statistical_summary','t-test','anova','phenotype_pca','correlation','regression'];
+				})
+		
+		
+		const traitName_arr = new Array();
+		const traitName_key_arr = new Array();
+		
+		const colDef = gridOptions.columnDefs;
+		for(let i=0 ; i<colDef.length ; i++) {
+			if(colDef[i]?.field?.includes('_key')) {
+				traitName_arr.push(colDef[i].headerName);
+				traitName_key_arr.push(colDef[i].field.replaceAll("_key",""));
 			}
-			
+		}
+		
+		new agGrid.Grid(document.getElementById('Grid_Phenotype'), gridOptionsTraitName);
+		//gridOptionsTraitName.api.setRowData(data);
+		if(id == 'regression') {
+			new agGrid.Grid(document.getElementById('Grid_Phenotype_dependent'), gridOptionsTraitName_dependent);
+			new agGrid.Grid(document.getElementById('Grid_Phenotype_Independent'), gridOptionsTraitName_independent);
+		} else {
+	  		new agGrid.Grid(document.getElementById('Grid_Phenotype_Selected'), gridOptionsTraitName_selected);
+  			gridOptionsTraitName_selected.api.setRowData();
+		}
+		
+		if(id == 't-test') {
 			$("#Select_Phenotype_1").append(`<option></option>`);
 			for(let i=0 ; i<traitName_arr.length ; i++) {
 				$("#Select_Phenotype_1").append(`<option data-traitname=\${traitName_arr[i]} data-traitname_key=\${traitName_key_arr[i]}> \${traitName_key_arr[i]} </option>`);
@@ -452,10 +471,9 @@ body {
 			gridOptions_individualName.api.setRowData(data_selected);
 	
 			$("#Select_Phenotype_1").select2();
-			
-			
-			$("#Modal_Analysis").modal("show");
-		})
+		}
+		
+		$("#Modal_Analysis").modal("show");
 	}
 	
 	$("#Modal_Analysis").on("shown.bs.modal", function(e) {
@@ -466,7 +484,7 @@ body {
 	$("#Modal_Analysis").on("hidden.bs.modal", function(e) {
 		document.getElementById('Modal_Analysis').innerHTML = "";
 	});
-
+	*/ 
 </script>
 </body>
 <!-- END: Body-->

@@ -209,7 +209,7 @@
 			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
-				fetch(`${params.data.resultpath+params.data.jobid}/error.txt`)
+				fetch(`${params.data.resultpath+params.data.jobid}/Error.txt`)
 				.then((response) => {
 					if(response.ok) {
 						return response.text();

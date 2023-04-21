@@ -270,16 +270,16 @@ body {
 									<div class="col-12 d-flex justify-content-space-between">
 										<div class="col-6" style="font-weight:bold;">File Upload</div>
 										<div class="col-6">
-						            		<button class="btn btn-sm btn-info float-right">예시파일</button>
+						            		<a href="/ipet_digitalbreed/uploads/phenotype_pca.csv" download style="color:white;" ><button class="btn btn-sm btn-info float-right"><i class='feather icon-download'></i> 예시파일</button></a>
 						            	</div>
 									</div>
 									<div class="col-12 mt-1 d-flex justify-content-center">
 						            	<div id="FileControl_phenotype" class="col-12"  style="border: 1px solid #48BAE4;"></div>
 									</div>
 					            </div>
-                                  	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
-                                  	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
-                                  	<div class="mt-1"></div>
+                               	<input type="text" id="cre_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="cre_date" placeholder=" (Optional) 등록일자" />
+                               	<input type="text" id="inv_date" class="form-control flatpickr-range" style="display:inline; background-color:white; width:49%;" name="inv_date" placeholder=" (Optional) 조사일자" />
+                               	<div class="mt-1"></div>
 					        </div>
 				        </fieldset>
 			        </div>
@@ -410,24 +410,75 @@ body {
 	        allowType : ["xlsx"],
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: './pca_population.jsp'
+	        uploadUrl: './phenotype_pca_fileuploader.jsp'
 	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
 	    });
 
 	    // 업로드 완료 이벤트
 	    box_phenotype.on('uploadComplete', function (p) {
-			document.getElementById('uploadForm').reset();
-	    	box.removeAllFiles();
-			//backdrop.style.display = "none";	
-			//refresh();
 			
-	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {
-	   			//backdrop.style.display = "none";
-	   			refresh();
-	   			$("#backdrop").modal("hide");
+	    	$("#iframeLoading").modal('show');
+	   		
+   			const params = new URLSearchParams({
+   				"varietyid": p.postData.varietyid,
+	   			"jobid": p.postData.jobid,
+	   			"comment": p.postData.comment,
+	   			//"traitname": data.traitname,
+	   			//"seq": data.seq,
+	   			//"analysis_number": data.analysis_number,
+   			})
+   			
+	   		// read file & return parameters
+	    	fetch('../readPhenotypeCSV_noGroup.jsp',{
+	    		method: "POST",
+	   			headers: {
+	   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	   			},
+	   			body: params
+	    	})
+	   		.then(response => response.json())
+	   		.then(data => {
+	   			console.log(data);
+	   			
+	   			if(data.seq.split(",").length < 3) {
+	   				$("#iframeLoading").modal('hide');
+	   				return alert("분석을 진행할 수 없습니다.\n분석을 진행하기 위해서는 형질이 3개 이상 있어야 합니다.")
 	   			}
-	   		, 1000);
+	   			
+	   			params.set("traitname", data.traitname);
+	   			params.set("seq", data.seq);
+	   			params.set("analysis_number", data.analysis_number);
+	   			
+		    	// insertSql
+		    	fetch('./phenotype_pca_insertSql_phenotype.jsp', {
+		   			method: "POST",
+		   			headers: {
+		   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+		   			},
+		   			body: params
+		   		})
+		   		.then(response => response.ok)
+		    	.then(ok => {
+		    		refresh();
+		    	})
+		    	
+		    	// analysis
+		    	fetch('./phenotype_pca_analysis_fileupload.jsp',{
+		    		method: "POST",
+		   			headers: {
+		   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+		   			},
+		   			body: params
+		    	})
+		    	.then(response => response.ok)
+		    	.then(ok => {
+		   			$("#backdrop").modal("hide");
+		   			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
+					node.setSelected(true);
+					
+					document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+		    	})
+	   		})
         });
 	    
     };
@@ -476,7 +527,7 @@ body {
 				$("#exampleFile").css('display','none');
 				
 				// Phenotype Database 선택시 innorix 파일목록 해제
-				box.removeAllFiles();
+				box_phenotype.removeAllFiles();
 			}
 		}
 		
@@ -522,74 +573,86 @@ body {
     		return alert("comment를 입력해주세요.");
     	}
     	
-    	if(gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length < 3) {
-			return alert("형질을 3개 이상 선택해주세요.")
-		}
-    		
-   		const traitname = new Array();
-   		const traitname_key = new Array();
-   		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
-   		for(let i=0 ; i<nodes.length ; i++) {
-   			traitname.push(nodes[i].data.traitname);
-   			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);
-   		}
-   		
-   		const cre_date = document.getElementById('cre_date').value;
-   		const inv_date = document.getElementById('inv_date').value;
-   		
-   		const params = new URLSearchParams({
-   			"varietyid": varietyid,
-   			"jobid": jobid,
-   			"comment": comment,
-   			"traitname": traitname,
-   			"seq": traitname_key,
-   			"cre_date": cre_date,
-   			"inv_date": inv_date,
-   		})
-   		
-   		const phenotypeDB = await fetch('../setPhenotypeDB.jsp', {
-							   			method: "POST",
-							   			headers: {
-							   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-							   			},
-							   			body: params
-							   		})
-							   		.then(response => response.json());
-
-		if(phenotypeDB.length <= 0) {
-			return alert(`조건에 맞는 표현형이 \${phenotypeDB.length}개입니다. 분석을 시작할 수 없습니다.`)
-		}
-		
-		//console.log(phenotypeDB);
-		
-		params.set("phenotypeDB", JSON.stringify(phenotypeDB));
-		params.set("analysis_number", phenotypeDB.length);
-   		
-   		$("#iframeLoading").modal('show');
-   		
-   		fetch('phenotype_pca_analysis_phenotype.jsp', {
-   			method: "POST",
-   			headers: {
-   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-   			},
-   			body: params
-   		})
-   		.then(response => response.ok)
-   		.then(ok => {
-   			$("#iframeLoading").modal('hide');
-   			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
-			node.setSelected(true);
-			//gridOptions.api.setFocusedCell(0, 'comment');
-			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
-   		});
-   		
-   		fetch('./phenotype_pca_insertSql_phenotype.jsp', {
-   			method: "POST",
-   			headers: {
-   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-   			},
-   			body: params
-   		})
+    	if(document.querySelector('input[name="radio_phenotype2"]:checked').value == '0') {
+    	
+	    	if(gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren.length < 3) {
+				return alert("형질을 3개 이상 선택해주세요.")
+			}
+	    		
+	   		const traitname = new Array();
+	   		const traitname_key = new Array();
+	   		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+	   		for(let i=0 ; i<nodes.length ; i++) {
+	   			traitname.push(nodes[i].data.traitname);
+	   			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);
+	   		}
+	   		
+	   		const cre_date = document.getElementById('cre_date').value;
+	   		const inv_date = document.getElementById('inv_date').value;
+	   		
+	   		const params = new URLSearchParams({
+	   			"varietyid": varietyid,
+	   			"jobid": jobid,
+	   			"comment": comment,
+	   			"traitname": traitname,
+	   			"seq": traitname_key,
+	   			"cre_date": cre_date,
+	   			"inv_date": inv_date,
+	   		})
+	   		
+	   		const phenotypeDB = await fetch('../setPhenotypeDB.jsp', {
+								   			method: "POST",
+								   			headers: {
+								   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+								   			},
+								   			body: params
+								   		})
+								   		.then(response => response.json());
+	
+			if(phenotypeDB.length <= 0) {
+				return alert(`조건에 맞는 표현형이 \${phenotypeDB.length}개입니다. 분석을 시작할 수 없습니다.`)
+			}
+			
+			//console.log(phenotypeDB);
+			
+			params.set("phenotypeDB", JSON.stringify(phenotypeDB));
+			params.set("analysis_number", phenotypeDB.length);
+	   		
+	   		$("#iframeLoading").modal('show');
+	   		
+	   		fetch('phenotype_pca_analysis_phenotype.jsp', {
+	   			method: "POST",
+	   			headers: {
+	   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	   			},
+	   			body: params
+	   		})
+	   		.then(response => response.ok)
+	   		.then(ok => {
+	   			$("#iframeLoading").modal('hide');
+	   			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
+				node.setSelected(true);
+				//gridOptions.api.setFocusedCell(0, 'comment');
+				document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+	   		});
+	   		
+	   		fetch('./phenotype_pca_insertSql_phenotype.jsp', {
+	   			method: "POST",
+	   			headers: {
+	   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	   			},
+	   			body: params
+	   		})
+    	} else {
+    		var postObj = new Object();
+	    	postObj.comment = comment;	       
+	        postObj.varietyid = varietyid;
+	        postObj.jobid = jobid;
+	        postObj.filename = box_phenotype.fileList.files[0].file.name;
+	        box_phenotype.setPostData(postObj);
+	        //box_phenotype.option.uploadUrl = './statistical_summary_fileuploader.jsp;
+	        box_phenotype.upload();
+    	}
     	setTimeout( function () {
    			refresh();
    			$("#backdrop").modal("hide");

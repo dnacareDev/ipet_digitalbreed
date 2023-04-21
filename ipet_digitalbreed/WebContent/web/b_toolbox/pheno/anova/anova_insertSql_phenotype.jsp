@@ -41,7 +41,7 @@
 	String db_savePath = "/ipet_digitalbreed/uploads/database/phenotype_data/";
 	String db_outputPath = "/ipet_digitalbreed/result/Breeder_toolbox_analyses/pheno/anova/";
 	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','ANOVA', 'New analysis', now());";
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','One-way ANOVA', 'New analysis', now());";
 	//System.out.println(log_sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(log_sql);

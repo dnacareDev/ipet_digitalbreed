@@ -60,7 +60,7 @@
 	List<String> traitNames = getAllTraitNames(permissionUid, varietyid);
 	writePhenotypeTxt(jobid_anova, savePath, phenotypeDB, traitNames);
 	
-	String cmd = "Rscript " +script_path+ "Phenotype_ANOVA.R " +jobid_anova+ " " +savePath+jobid_anova+ " GS_traits.csv null null null null null null " +seq+ " " +outputPath;
+	String cmd = "Rscript " +script_path+ "Phenotype_ANOVA.R " +jobid_anova+ " " +savePath+jobid_anova+ " GS_traits.csv null null null null null null " +seq+ " " +outputPath+ " TRUE";
 	
 	System.out.println("cmd : " + cmd);
 			

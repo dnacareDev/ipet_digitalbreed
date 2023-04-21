@@ -68,7 +68,6 @@
 	
 	List<String> traitNames = getAllTraitNames(permissionUid, varietyid);
 	//System.out.println(traitNames);
-	
 	writePhenotypeTxt(jobid, savePath, phenotypeDB, traitNames);
 	
 	String cmd = "Rscript " +script_path+ "Phenotype_Statistical_summary.R " +jobid+ " " +savePath+jobid+ " GS_traits.csv " +seq+ " " +outputPath;

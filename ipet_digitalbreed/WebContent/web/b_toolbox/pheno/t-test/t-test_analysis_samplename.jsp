@@ -83,7 +83,7 @@
 	writePhenotypeTxt(jobid_t_test, savePath, phenotypeDB, traitNames);
 	
 	String cmd = "Rscript " +script_path+ "Phenotype_t-test.R " +jobid_t_test+ " " +savePath+jobid_t_test+ " GS_traits.csv ";
-	cmd += row + " " +(Integer.parseInt(seq)+1) + " " + outputPath;
+	cmd += row + " " +(Integer.parseInt(seq)+1) + " " + outputPath +" TRUE";
 	
 	System.out.println("cmd : " + cmd);
 			

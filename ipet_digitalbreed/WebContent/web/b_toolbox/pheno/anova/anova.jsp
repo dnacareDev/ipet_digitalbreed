@@ -512,24 +512,80 @@ body {
 	        allowType : ["xlsx"],
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: './pca_population.jsp'
+	        uploadUrl: './anova_fileuploader.jsp'
 	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
 	    });
 
 	    // 업로드 완료 이벤트
 	    box.on('uploadComplete', function (p) {
-			document.getElementById('uploadForm').reset();
-	    	box.removeAllFiles();
-			//backdrop.style.display = "none";	
-			//refresh();
-			
-	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {
-	   			//backdrop.style.display = "none";
-	   			refresh();
-	   			$("#backdrop").modal("hide");
+			$("#iframeLoading").modal('show'); 
+	   		
+   			const params = new URLSearchParams({
+   				"varietyid": p.postData.varietyid,
+   				"jobid": p.postData.jobid,
+   				"jobid_anova": p.postData.jobid_anova,
+	   			"comment": p.postData.comment,
+	   			//"traitname": data.traitname,
+	   			//"seq": data.seq,
+	   			//"analysis_number": data.analysis_number,
+   			})
+   			
+	   		// read file & return parameters
+	    	fetch('../readPhenotypeCSV_group.jsp',{
+	    		method: "POST",
+	   			headers: {
+	   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	   			},
+	   			body: params
+	    	})
+	   		.then(response => response.json())
+	   		.then(data => {
+	   			console.log(data);
+	   			
+	   			let row = "";
+	   			for(let i=1 ; i<=Number(data.analysis_number) ; i++) {
+	   				row += i;
+	   				if(i != Number(data.analysis_number)) {
+	   					row += ",";
+	   				}
 	   			}
-	   		, 1000);
+	   			
+	   			params.set("traitname", data.traitname);
+	   			params.set("seq", data.seq);
+	   			params.set("analysis_number", data.analysis_number);
+	   			params.set("row", row);
+	   			
+		    	// insertSql
+		    	fetch('./anova_insertSql_phenotype.jsp', {
+		   			method: "POST",
+		   			headers: {
+		   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+		   			},
+		   			body: params
+		   		})
+		   		.then(response => response.ok)
+		    	.then(ok => {
+		    		refresh();
+		    	})
+		    	
+		    	
+		    	// analysis
+		    	fetch('./anova_analysis_fileupload_samplename.jsp',{
+		    		method: "POST",
+		   			headers: {
+		   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+		   			},
+		   			body: params
+		    	})
+		    	.then(response => response.ok)
+		    	.then(ok => {
+		   			$("#backdrop").modal("hide");
+		   			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
+					node.setSelected(true);
+					
+					document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+		    	})
+	   		})
         });
 	    
 	 // 파일전송 컨트롤 생성
@@ -542,24 +598,72 @@ body {
 	        allowType : ["xlsx"],
 			addDuplicateFile : false,
 	        agent: false, // true = Agent 설치, false = html5 모드 사용                    
-	        uploadUrl: './pca_population.jsp'
+	        uploadUrl: './anova_fileuploader.jsp'
 	        //uploadUrl: './pca_fileuploader.jsp?jobid_pca='+jobid_pca,
 	    });
 
 	    // 업로드 완료 이벤트
 	    box_phenotype.on('uploadComplete', function (p) {
-			document.getElementById('uploadForm').reset();
-	    	box.removeAllFiles();
-			//backdrop.style.display = "none";	
-			//refresh();
 			
-	    	//시간이 조금 지나면 Rscript 작동 여부에 관계없이 새로고침
-	   		setTimeout( function () {
-	   			//backdrop.style.display = "none";
-	   			refresh();
-	   			$("#backdrop").modal("hide");
-	   			}
-	   		, 1000);
+	    	$("#iframeLoading").modal('show'); 
+	   		
+   			const params = new URLSearchParams({
+   				"varietyid": p.postData.varietyid,
+   				"jobid": p.postData.jobid,
+   				"jobid_anova": p.postData.jobid_anova,
+	   			"comment": p.postData.comment,
+	   			//"traitname": data.traitname,
+	   			//"seq": data.seq,
+	   			//"analysis_number": data.analysis_number,
+   			})
+   			
+	   		// read file & return parameters
+	    	fetch('../readPhenotypeCSV_noGroup.jsp',{
+	    		method: "POST",
+	   			headers: {
+	   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	   			},
+	   			body: params
+	    	})
+	   		.then(response => response.json())
+	   		.then(data => {
+	   			console.log(data);
+	   			
+	   			params.set("traitname", data.traitname);
+	   			params.set("seq", data.seq);
+	   			params.set("analysis_number", data.analysis_number);
+	   			
+		    	// insertSql
+		    	fetch('./anova_insertSql_phenotype.jsp', {
+		   			method: "POST",
+		   			headers: {
+		   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+		   			},
+		   			body: params
+		   		})
+		   		.then(response => response.ok)
+		    	.then(ok => {
+		    		refresh();
+		    	})
+		    	
+		    	
+		    	// analysis
+		    	fetch('./anova_analysis_fileupload_phenotype.jsp',{
+		    		method: "POST",
+		   			headers: {
+		   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+		   			},
+		   			body: params
+		    	})
+		    	.then(response => response.ok)
+		    	.then(ok => {
+		   			$("#backdrop").modal("hide");
+		   			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
+					node.setSelected(true);
+					
+					document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+		    	})
+	   		})
         });
 	    
     };
@@ -794,148 +898,192 @@ body {
     	if(category == "individual") {
     		//console.log("indi");
     		
-    		const selectEl = document.getElementById("Select_Phenotype_1");
-    		const traitname = selectEl.options[selectEl.selectedIndex].dataset.traitname;
-    		const traitname_key = Number(selectEl.options[selectEl.selectedIndex].dataset.traitname_key);
-    		
-    		if(selectEl.selectedIndex == 0) {
-    			return alert("형질을 선택해주세요.");
-    		}
-    		
-    		const params = new URLSearchParams({
-    			"varietyid": varietyid,
-    			"jobid_anova": jobid_anova,
-    			"comment": comment,
-    			"traitname": traitname,
-    			"seq": traitname_key+1,
-    		});
-    		
-    		//const sampleno = new Array();
-    		//const samplename = new Array();
-
-    		
-    		const grid_group_count = Object.keys(gridOptions_individualGroups).length;
-    		
-    		let count = 1;
-    		for(const key in gridOptions_individualGroups) {
-	    		const row = new Array();
-	    		//const sampleno = new Array();
-	    		const nodes = gridOptions_individualGroups[key].api.getModel().rootNode.allLeafChildren;
-	    		if(nodes.length <3) {
-	    			return alert("각 그룹에 최소 3개의 개체를 넣어주세요.")
-	    		}
-	    		for(let i=0 ; i<nodes.length ; i++) {
-	    			//sampleno.push(nodes[i].data.no);
-	    			row.push(nodes[i].data.row);
+    		if(document.querySelector('input[name="radio_phenotype"]:checked').value == '0') {
+	    		const selectEl = document.getElementById("Select_Phenotype_1");
+	    		const traitname = selectEl.options[selectEl.selectedIndex].dataset.traitname;
+	    		const traitname_key = Number(selectEl.options[selectEl.selectedIndex].dataset.traitname_key);
+	    		
+	    		if(selectEl.selectedIndex == 0) {
+	    			return alert("형질을 선택해주세요.");
 	    		}
 	    		
-	    		//params.append(`group_\${count}`, sampleno);
-	    		params.append(`group_\${count}`, row);
-	    		count++;
+	    		const params = new URLSearchParams({
+	    			"varietyid": varietyid,
+	    			"jobid_anova": jobid_anova,
+	    			"comment": comment,
+	    			"traitname": traitname,
+	    			"seq": traitname_key+1,
+	    		});
+	    		
+	    		//const sampleno = new Array();
+	    		//const samplename = new Array();
+	
+	    		
+	    		const grid_group_count = Object.keys(gridOptions_individualGroups).length;
+	    		
+	    		let count = 1;
+	    		for(const key in gridOptions_individualGroups) {
+		    		const row = new Array();
+		    		//const sampleno = new Array();
+		    		const nodes = gridOptions_individualGroups[key].api.getModel().rootNode.allLeafChildren;
+		    		if(nodes.length <3) {
+		    			return alert("각 그룹에 최소 3개의 개체를 넣어주세요.")
+		    		}
+		    		for(let i=0 ; i<nodes.length ; i++) {
+		    			//sampleno.push(nodes[i].data.no);
+		    			row.push(nodes[i].data.row);
+		    		}
+		    		
+		    		//params.append(`group_\${count}`, sampleno);
+		    		params.append(`group_\${count}`, row);
+		    		count++;
+	    		}
+	    		
+	    		$("#iframeLoading").modal('show');
+	    		
+	    		fetch('./anova_analysis_samplename.jsp', {
+	    			method: "POST",
+	    			headers: {
+	    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	    			},
+	    			body: params
+	    		})
+	    		.then(response => response.ok)
+	    		.then(ok => {
+	    			$("#iframeLoading").modal('hide');
+	    			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
+	    			node.setSelected(true);
+	    			//gridOptions.api.setFocusedCell(0, 'comment');
+	    			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+	    		});
+	    		
+	    		fetch('./anova_insertSql.jsp', {
+	    			method: "POST",
+	    			headers: {
+	    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	    			},
+	    			body: params
+	    		})
+	    		.then(response => response.ok)
+	    		.then(ok => {
+	    			refresh();
+	    		})
+	    		/*
+	    		*/
+    		} else {
+    			
+    			if(box.fileList.files.length == 0) {
+    				return alert("분석할 파일을 DRAG & DROP 영역에 넣어주세요.");
+    			}
+    			
+    			const postObj = new Object();
+    	    	postObj.comment = comment;	       
+    	        postObj.varietyid = varietyid;
+    	        postObj.jobid = jobid_anova;
+    	        postObj.jobid_anova = jobid_anova;
+    	        postObj.filename = box.fileList.files[0].file.name;
+    	        box.setPostData(postObj);
+    	        //box_phenotype.option.uploadUrl = './statistical_summary_fileuploader.jsp;
+    	        box.upload();
     		}
-    		
-    		$("#iframeLoading").modal('show');
-    		
-    		fetch('./anova_analysis_samplename.jsp', {
-    			method: "POST",
-    			headers: {
-    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-    			},
-    			body: params
-    		})
-    		.then(response => response.ok)
-    		.then(ok => {
-    			$("#iframeLoading").modal('hide');
-    			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
-    			node.setSelected(true);
-    			//gridOptions.api.setFocusedCell(0, 'comment');
-    			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
-    		});
-    		
-    		fetch('./anova_insertSql.jsp', {
-    			method: "POST",
-    			headers: {
-    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-    			},
-    			body: params
-    		})
-    		/*
-    		*/
     		
     		
     	} else if(category == "phenotype") {
     		//console.log("pheno");
     		
-    		
-    		const traitname = new Array();
-    		const traitname_key = new Array();
-    		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
-    		if(nodes.length < 2) {
-				return alert("형질은 2~5개만 선택 가능합니다.")
-			}
-    		for(let i=0 ; i<nodes.length ; i++) {
-    			traitname.push(nodes[i].data.traitname);
-    			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);
+    		if(document.querySelector('input[name="radio_phenotype2"]:checked').value == '0') {
+    			const traitname = new Array();
+        		const traitname_key = new Array();
+        		const nodes = gridOptionsTraitName_selected.api.getModel().rootNode.allLeafChildren;
+        		if(nodes.length < 2) {
+    				return alert("형질은 2~5개만 선택 가능합니다.")
+    			}
+        		for(let i=0 ; i<nodes.length ; i++) {
+        			traitname.push(nodes[i].data.traitname);
+        			traitname_key.push(Number(nodes[i].data.traitname_key) + 2);
+        		}
+        		
+        		const cre_date = document.getElementById('cre_date').value;
+        		const inv_date = document.getElementById('inv_date').value;
+        		
+        		const params = new URLSearchParams({
+        			"varietyid": varietyid,
+        			"jobid_anova": jobid_anova,
+        			"comment": comment,
+        			"traitname": traitname,
+        			"seq": traitname_key,
+        			"cre_date": cre_date,
+        			"inv_date": inv_date,
+        		})
+        		
+        		const phenotypeDB = await fetch('../setPhenotypeDB.jsp', {
+    								   			method: "POST",
+    								   			headers: {
+    								   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    								   			},
+    								   			body: params
+    								   		})
+    								   		.then(response => response.json());
+
+    			if(phenotypeDB.length <= 0) {
+    				return alert(`조건에 맞는 표현형이 \${phenotypeDB.length}개입니다. 분석을 시작할 수 없습니다.`)
+    			}
+    			
+    			//console.log(phenotypeDB);
+    			
+    			params.set("phenotypeDB", JSON.stringify(phenotypeDB));
+    			params.set("analysis_number", phenotypeDB.length);
+        		
+        		
+        		$("#iframeLoading").modal('show');
+        		
+        		fetch('anova_analysis_phenotype.jsp', {
+        			method: "POST",
+        			headers: {
+        				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+        			},
+        			body: params
+        		})
+        		.then(response => response.ok)
+        		.then(ok => {
+        			$("#iframeLoading").modal('hide');
+        			
+        			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
+        			node.setSelected(true);
+        			//gridOptions.api.setFocusedCell(0, 'comment');
+        			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
+        		});
+        		
+        		fetch('./anova_insertSql_phenotype.jsp', {
+        			method: "POST",
+        			headers: {
+        				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+        			},
+        			body: params
+        		})
+        		.then(response => response.ok)
+	    		.then(ok => {
+	    			refresh();
+	    		})
+	    		
+    		} else {
+    			
+    			if(box_phenotype.fileList.files.length == 0) {
+    				return alert("분석할 파일을 DRAG & DROP 영역에 넣어주세요.");
+    			}
+    			
+    			const postObj = new Object();
+    	    	postObj.comment = comment;	       
+    	        postObj.varietyid = varietyid;
+    	        postObj.jobid = jobid_anova;
+    	        postObj.jobid_anova = jobid_anova;
+    	        postObj.filename = box_phenotype.fileList.files[0].file.name;
+    	        box_phenotype.setPostData(postObj);
+    	        //box_phenotype.option.uploadUrl = './statistical_summary_fileuploader.jsp;
+    	        box_phenotype.upload();
     		}
     		
-    		const cre_date = document.getElementById('cre_date').value;
-    		const inv_date = document.getElementById('inv_date').value;
     		
-    		const params = new URLSearchParams({
-    			"varietyid": varietyid,
-    			"jobid_anova": jobid_anova,
-    			"comment": comment,
-    			"traitname": traitname,
-    			"seq": traitname_key,
-    			"cre_date": cre_date,
-    			"inv_date": inv_date,
-    		})
-    		
-    		const phenotypeDB = await fetch('../setPhenotypeDB.jsp', {
-								   			method: "POST",
-								   			headers: {
-								   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-								   			},
-								   			body: params
-								   		})
-								   		.then(response => response.json());
-
-			if(phenotypeDB.length <= 0) {
-				return alert(`조건에 맞는 표현형이 \${phenotypeDB.length}개입니다. 분석을 시작할 수 없습니다.`)
-			}
-			
-			//console.log(phenotypeDB);
-			
-			params.set("phenotypeDB", JSON.stringify(phenotypeDB));
-			params.set("analysis_number", phenotypeDB.length);
-    		
-    		
-    		$("#iframeLoading").modal('show');
-    		
-    		fetch('anova_analysis_phenotype.jsp', {
-    			method: "POST",
-    			headers: {
-    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-    			},
-    			body: params
-    		})
-    		.then(response => response.ok)
-    		.then(ok => {
-    			$("#iframeLoading").modal('hide');
-    			
-    			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
-    			node.setSelected(true);
-    			//gridOptions.api.setFocusedCell(0, 'comment');
-    			document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
-    		});
-    		
-    		fetch('./anova_insertSql_phenotype.jsp', {
-    			method: "POST",
-    			headers: {
-    				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-    			},
-    			body: params
-    		})
     	}
     	setTimeout( function () {
    			refresh();

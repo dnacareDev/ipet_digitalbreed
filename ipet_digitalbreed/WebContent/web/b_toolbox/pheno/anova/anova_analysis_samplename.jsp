@@ -134,7 +134,7 @@
 		cmd +="null ";
 	}
 	
-	cmd += count+" "+(Integer.parseInt(seq)+1)+" "+outputPath;
+	cmd += count+" "+(Integer.parseInt(seq)+1)+" "+outputPath+" TRUE";
 	
 	System.out.println("cmd : " + cmd);
 			
