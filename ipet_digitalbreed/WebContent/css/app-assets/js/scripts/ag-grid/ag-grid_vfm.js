@@ -226,7 +226,6 @@
 						$("#iframeLoading").modal('show');
 						
 						document.getElementById('vcf_status').style.display = "block";
-						window.scrollTo(0, document.body.scrollHeight);
 						document.getElementById('qf_1').click();
 						
 						$('#pill1_frame').attr('height',"130px");
@@ -382,7 +381,8 @@
 			    sortable: true,
 				resizable: true,
 				cellClass: "grid-cell-centered",
-				suppressMenu: true,
+				//suppressMenu: true,
+				menuTabs: ["filterMenuTab"], 
 				suppressMovable: true,
 			},
 			columnDefs: vcf_columnDefs,
@@ -432,29 +432,36 @@
 		//console.log(jobid);
 		
 		switch(event.target.id) {
+			case 'qf_1':
+				window.scrollTo(0, document.body.scrollHeight);
+				break;
 			case 'qf_2':
 				if(!$('#pill2_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill2_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_variant.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_3':
 				if(!$('#pill3_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_depth.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_4':
 				if(!$('#pill4_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_miss.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_5':
 				if(!$('#pill5_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill5_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_density.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 		}
 	});
@@ -543,12 +550,6 @@
 	$(".ag-grid-export-btn").on("click", function(params) {
 	    gridOptions.api.exportDataAsCsv();
 	});
-	
-	document.addEventListener('click', function(event) {
-  		if(event.composedPath()[0].classList.contains("nav-link")) {
-  			$("html").animate({ scrollTop: $(document).height() }, 1000);
-  		}
-  	});
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();

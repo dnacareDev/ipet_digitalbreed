@@ -92,7 +92,7 @@
 	    {
 	      headerName: "VCF 파일명",
 	      field: "file_name",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      width: 700,
 	      minWidth: 150,
@@ -100,7 +100,7 @@
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      width: 350,
 	      minWidth: 90,
 	      minWidth: 110,

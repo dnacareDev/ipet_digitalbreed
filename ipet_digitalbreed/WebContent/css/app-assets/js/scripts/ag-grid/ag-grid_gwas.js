@@ -225,13 +225,10 @@
 							$('#content-list').append(`	<div role='tabpanel' class='tab-pane' id='panel_${model_arr[i]}' aria-expanded='true'>
 															<div class="row">
 																<div class="col-12 col-xl-8 mb-1">
-																	<!--
-																	<select id='${model_arr[i]}_phenotype' class='select2 form-select float-left' data-width="200px" onchange="showPlot(this.options[this.selectedIndex].value); showGrid(this.options[this.selectedIndex].value); ">
-																	-->
 																	<select id='${model_arr[i]}_phenotype' class='select2 form-select float-left' data-width="200px" onchange="showPlotAndGrid(this.options[this.selectedIndex].value);  ">
 																	</select>
 																</div>
-																<div id="cutOffDiv" class="col-12 col-xl-4 pl-0 mb-1 justify-content-start" style="display:none;">
+																<div id="cutOffDiv_${model_arr[i]}" class="col-12 col-xl-4 pl-0 mb-1 justify-content-start" style="display:none;">
 																	<div class="col-3 col-xl-10" style="max-width:24%; min-width:228px;">
 																		<input type="text" id='cutOffValue_${model_arr[i]}' class='form-control' placeholder='cut off value (-log10(P))' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1'); if(this.value<0)this.value=0;" >
 																	</div>
@@ -649,7 +646,8 @@
 			console.log(data);
 			
 			//cut off Div display
-			document.getElementById('cutOffDiv').style.display = "flex";
+			//document.getElementById('cutOffDiv').style.display = "flex";
+			document.getElementById(`cutOffDiv_${model_name}`).style.display = 'flex';
 			
 			const myGrid = new agGrid.Grid(csv_to_grid, gridOptions2);
 	        gridOptions2.api.setRowData(data);

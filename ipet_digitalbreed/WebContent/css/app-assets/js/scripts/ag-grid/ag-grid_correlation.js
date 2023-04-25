@@ -115,14 +115,14 @@
 	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
-	    	filter: 'agNumberColumnFilter',
+	    	filter: 'agTextColumnFilter',
 	    	width: 350,
 	    	minWidth: 110,
 	    },
 	    {
 	    	headerName: "분석개체 수",
 	    	field: "analysis_number",
-	    	filter: true,
+	    	filter: 'agNumberColumnFilter',
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
 	    	minWidth: 150,
@@ -130,7 +130,7 @@
 	    {
 	    	headerName: "분석 형질",
 	    	field: "phenotype",
-	    	filter: true,
+	    	filter: 'agTextColumnFilter',
 	    	cellClass: "grid-cell-centered",      
 	    	width: 300,
 	    	minWidth: 150,

@@ -198,7 +198,7 @@
 						
 						document.getElementById('Marker_Info').dataset.marker_category = params.data.marker_category;
 						document.getElementById('vcf_status').style.display = "block";
-						$("html").animate({ scrollTop: $(document).height() }, 1000);
+						window.scrollTo(0, document.body.scrollHeight);
 						
 						gridOptions2.api.setFilterModel(null);
 						
@@ -272,10 +272,6 @@
 						        }
 						        
 						        gridOptions.api.sizeColumnsToFit();
-						        
-						        
-						        
-								
 						        
 						        //$("#Loading").modal('hide');
 						    };
@@ -592,13 +588,6 @@
   		new agGrid.Grid(document.getElementById('Enzyme_Grid'), enzyme_gridOptions);
   	});
 
-	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
-	
-  	document.addEventListener('click', function(event) {
-  		if(event.composedPath()[0].classList.contains("nav-link")) {
-  			$("html").animate({ scrollTop: $(document).height() }, 1000);
-  		}
-  	});
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();

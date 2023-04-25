@@ -229,8 +229,8 @@
 						$("#iframeLoading").modal('show');
 						
 						document.getElementById('vcf_status').style.display = "block";
-						window.scrollTo(0, document.body.scrollHeight);
 						document.getElementById('qf_1').click();
+						//document.getElementById('qf_1').dispatchEvent(new Event('click'));
 						
 						$('#pill1_frame').attr('height',"130px");
 						$('#pill1_frame').attr( 'src', "/ipet_digitalbreed/web/b_toolbox/sf/sf_vcfinfo.jsp?jobid="+params.data.jobid);
@@ -265,12 +265,13 @@
 			checkboxSelection: true,
 			headerCheckboxSelectionFilteredOnly: true,
 			headerCheckboxSelection: true,
+			suppressMenu: true,
 			minWidth: 50,
 			maxWidth: 50,
 		},
 		{
 			field: "chromosome",
-			suppressMenu: true,
+			filter: true,
 			cellClass: "grid-cell-centered",      
 			width: 350,
 	    },
@@ -286,7 +287,8 @@
 			    sortable: true,
 				resizable: true,
 				cellClass: "grid-cell-centered",
-				suppressMenu: true,
+				//suppressMenu: true,
+				menuTabs: ["filterMenuTab"], 
 				suppressMovable: true,
 			},
 			columnDefs: selectChromosome_ColumnDefs,
@@ -430,8 +432,9 @@
 		{
 			headerName: "Sample Name",
 			field: "sample",
-			suppressMenu: true,
+			//suppressMenu: true,
 			cellClass: "grid-cell-centered",      
+			filter: 'agTextColumnFilter',
 			width: 650,
 	    },
 	];
@@ -442,7 +445,7 @@
 			    sortable: true,
 				resizable: true,
 				cellClass: "grid-cell-centered",
-				suppressMenu: true,
+				menuTabs: ["filterMenuTab"], 
 				suppressMovable: true,
 			},
 			columnDefs: sampleNameGrid_columnDefs,
@@ -473,28 +476,35 @@
 		//console.log(jobid);
 		
 		switch(event.target.id) {
+			case 'qf_1':
+				window.scrollTo(0, document.body.scrollHeight);
+				break;
 			case 'qf_2':
 				if(!$('#pill2_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill2_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_variant.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_3':
 				if(!$('#pill3_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_depth.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_4':
 				if(!$('#pill4_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_miss.html");
+					window.scrollTo(0, document.body.scrollHeight);
 				}
 				break;
 			case 'qf_5':
 				if(!$('#pill5_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill5_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_density.html");
+					window.scrollTo(0, document.body.scrollHeight);
 				}
 				break;
 		}
@@ -590,11 +600,13 @@
 	    gridOptions.api.exportDataAsCsv();
 	});
 	
+	/*
 	document.querySelectorAll(`.nav-link`).forEach((node) => {
 		node.addEventListener('click', function(event) {
 			$("html").animate({ scrollTop: $(document).height() }, 1000);
 		})
 	})
+	*/
 	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();

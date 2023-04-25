@@ -35,8 +35,75 @@
 	
 		//String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+45)+" and vcf_id>="+(vcf_id)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
 		String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+28)+" and vcf_id>"+(vcf_id-18)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
-		//System.out.println(sql);
+		//String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+45)+" and vcf_id>"+(vcf_id-18)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "' limit 45;";
+		//String sql = "select * from vcfviewer_t where vcf_id<"+(vcf_id+45)+" and vcf_id>"+(vcf_id-45)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
+		System.out.println(sql);
 		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+		
+		
+		int vcf_id_row = 0;
+		int totalCount = 0;
+		while(ipetdigitalconndb.rs.next()) {
+			if(Integer.parseInt(ipetdigitalconndb.rs.getString("vcf_id")) == vcf_id) {
+				//System.out.println("base : " + ipetdigitalconndb.rs.getRow());
+				vcf_id_row = ipetdigitalconndb.rs.getRow();
+				ipetdigitalconndb.rs.last();
+				//System.out.println("last : " + ipetdigitalconndb.rs.getRow());
+				totalCount = ipetdigitalconndb.rs.getRow();
+				
+				break;
+			}
+		}
+		int beforeCount = vcf_id_row - 1;
+		int afterCount = totalCount - vcf_id_row;
+		
+		/*
+		System.out.println("vcf_id_row : "+ vcf_id_row);
+		System.out.println("totalCount : "+ totalCount);
+		System.out.println("beforeCount : "+ beforeCount);
+		System.out.println("afterCount : "+ afterCount);
+		*/
+		
+		ipetdigitalconndb.rs.beforeFirst();
+		
+		/*
+		while(ipetdigitalconndb.rs.next()) {
+			
+			if((totalCount > 45)) {
+				
+				if(beforeCount > 17 && ipetdigitalconndb.rs.getRow() <= vcf_id_row - 17 ) {
+				//if(beforeCount > 17 && ipetdigitalconndb.rs.getRow() <= vcf_id_row - 45 + afterCount ) {
+					
+					System.out.println("before : " + ipetdigitalconndb.rs.getRow());
+					continue;
+					
+				} else {
+					
+					if(afterCount > 29 && vcf_id_row + 29 <= ipetdigitalconndb.rs.getRow() && 46 <= ipetdigitalconndb.rs.getRow()) {
+						//System.out.println("after : " + ipetdigitalconndb.rs.getRow());
+						continue;
+					} 
+				}
+				
+			}
+			
+			//System.out.println(totalCount - (beforeCount + 1 + afterCount));
+			//System.out.println("rows : " + ipetdigitalconndb.rs.getRow());
+			
+			JsonObject jsonObject = JsonParser.parseString(ipetdigitalconndb.rs.getString("contents")).getAsJsonObject();
+			
+			if(ipetdigitalconndb.rs.getRow() == vcf_id_row) {
+				keyList.addAll(jsonObject.keySet());
+			}
+			
+			//System.out.println(ipetdigitalconndb.rs.getRow());
+			//System.out.println(columnList);
+			//columnList.add((ipetdigitalconndb.rs.getRow()-1), ipetdigitalconndb.rs.getString("position"));
+			columnList.add(ipetdigitalconndb.rs.getString("position"));
+			
+			jsonArray.add(jsonObject);
+		}
+		*/
 		
 		for(int i=0 ; ipetdigitalconndb.rs.next() ; i++) {
 			JsonObject jsonObject = JsonParser.parseString(ipetdigitalconndb.rs.getString("contents")).getAsJsonObject();
@@ -49,6 +116,8 @@
 			
 			jsonArray.add(jsonObject);
 		}
+		/*
+		*/
 		
 	
 	} catch (Exception e) {
@@ -59,62 +128,12 @@
 		ipetdigitalconndb.rs.close();
 		ipetdigitalconndb.conn.close();
 	}
-	/*
-	int row_index = 1;
-	try {
-		String sql = "select abs(position-"+position+") as gap, row_index from vcfviewer_t where position>=" + (position-100000) + " and position<=" +(position+100000)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "' order by gap limit 1;";
-		System.out.println(sql);
-		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
-		ipetdigitalconndb.rs.next();
-		row_index = ipetdigitalconndb.rs.getInt("row_index");
-		//System.out.println(row_index);
-	} catch (SQLException e) {
-		System.out.println("error - vb_features_getBrowserData - " + e);
-		e.printStackTrace();
-	} 
 	
-	
-	try {
-		
-		String sql = "select * from vcfviewer_t where row_index<="+(row_index+43)+" and row_index>="+(row_index-43)+ " and chr='" +chr+ "' and jobid ='" +jobid+ "';";
-		//System.out.println(sql);
-		ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
-		
-		for(int i=0 ; ipetdigitalconndb.rs.next() ; i++) {
-			JsonObject jsonObject = JsonParser.parseString(ipetdigitalconndb.rs.getString("contents")).getAsJsonObject();
-			//jsonObject.addProperty("chr", ipetdigitalconndb.rs.getInt("chr"));
-			//jsonObject.addProperty("position", ipetdigitalconndb.rs.getInt("position"));
-			//System.out.println(jsonObject);
-			
-			if(i == 0) {
-				//keyList = new ArrayList<>(jsonObject.keySet());
-				keyList.addAll(jsonObject.keySet());
-			}
-			
-			columnList.add(i, ipetdigitalconndb.rs.getString("position"));
-			
-			jsonArray.add(jsonObject);
-		}
-		
-		//out.clear();
-		//out.print(jsonArray);
-		
-	} catch (SQLException e) {
-		System.out.println("error - vb_features_getBrowserData - " + e);
-		e.printStackTrace();
-	} finally {
-		ipetdigitalconndb.stmt.close();
-		ipetdigitalconndb.rs.close();
-		ipetdigitalconndb.conn.close();
-	}
-	*/
 	//System.out.println(jsonArray);
 	//long afterTime = System.currentTimeMillis();
-	
 	//System.out.println("sqlTimeGap : " + (afterTime - beforeTime));
 	
 	JsonArray varintBrowserArray = inversion(keyList, columnList, jsonArray);
-	
 	//System.out.println("varintBrowserArray : " + varintBrowserArray);
 	
 	out.clear();

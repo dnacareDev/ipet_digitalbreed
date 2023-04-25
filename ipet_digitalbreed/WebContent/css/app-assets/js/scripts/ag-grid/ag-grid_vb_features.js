@@ -257,6 +257,9 @@
 	    { 
 			headerName: "Pos",
 			field: "pos",
+			comparator: function(valueA, valueB, nodeA, nodeB, isDescending) {
+	            return (Number(valueA) == Number(valueB)) ? 0 : (Number(valueA) > Number(valueB)) ? 1 : -1;
+	        },
 			filter: 'agNumberColumnFilter', 
 			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 			//width: 70, 
@@ -430,6 +433,9 @@
 	    { 
 			headerName: "Pos",
 			field: "pos",
+			comparator: function(valueA, valueB, nodeA, nodeB, isDescending) {
+	            return (Number(valueA) == Number(valueB)) ? 0 : (Number(valueA) > Number(valueB)) ? 1 : -1;
+	        },
 			filter: 'agNumberColumnFilter', 
 			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 			cellClass: "",
@@ -438,10 +444,13 @@
 			cellStyle: { color: 'blue' }
 		},
 	    { 
+			headerName: "-log10(P)",
 			field: "P-value", 
-			filter: "agTextColumnFilter",
-			valueFormatter: (params) => Number(params.value).toFixed(5),
 			cellClass: "",
+			comparator: (valueA, valueB, nodeA, nodeB, isDescending) => (-Math.log10(Number(valueA)) == -Math.log10(Number(valueB))) ? 0 : (-Math.log10(Number(valueA)) > -Math.log10(Number(valueB))) ? 1 : -1,
+			filter: "agTextColumnFilter",
+			//valueFormatter: (params) => Number(params.value).toFixed(5),
+			valueFormatter: (params) => -Math.log10(Number(params.value)).toFixed(5),
 			width: 360, 
 			//minWidth: 180, 
 		},
@@ -553,12 +562,45 @@
 	}
 	
 	var Marker_columnDefs = [
-		{ checkboxSelection: true, headerCheckboxSelectionFilteredOnly: true, headerCheckboxSelection: true, width: 50, },
-		{ field: "selection", maxWidth: 100, minWidth: 100, suppressMenu: true, },
-	    { field: "Chr", filter: true, width: 60, minWidth: 60, },
-	    { field: "Pos", filter: 'agNumberColumnFilter', width: 70, minWidth: 70, },
-	    { field: "Type", filter: "agTextColumnFilter",width: 80, minWidth: 80, },
-	    { field: "Indel Length", filter: 'agNumberColumnFilter', width: 120, minWidth: 120, },
+		{ 
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true, 
+			headerCheckboxSelection: true, 
+			width: 50, 
+		},
+		{ 
+			field: "selection", 
+			maxWidth: 100, 
+			minWidth: 100, 
+			suppressMenu: true, 
+		},
+	    { 
+			field: "Chr", 
+			filter: true, 
+			width: 60, 
+			minWidth: 60, 
+		},
+	    { 
+			field: "Pos", 
+			comparator: function(valueA, valueB, nodeA, nodeB, isDescending) {
+	            return (Number(valueA) == Number(valueB)) ? 0 : (Number(valueA) > Number(valueB)) ? 1 : -1;
+	        },
+			filter: 'agNumberColumnFilter', 
+			width: 70, 
+			minWidth: 70, 
+		},
+	    { 
+			field: "Type", 
+			filter: "agTextColumnFilter",
+			width: 80, 
+			minWidth: 80, 
+		},
+	    { 
+			field: "Indel Length", 
+			filter: 'agNumberColumnFilter', 
+			width: 120, 
+			minWidth: 120, 
+		},
 	];
 	var Marker_gridOptions = {
 			defaultColDef: { 
@@ -594,7 +636,7 @@
 			field: "chr", 
 			filter: true, 
 			width: 110, 
-			maxWidth: 110, 
+			//maxWidth: 110, 
 			checkboxSelection: true, 
 			headerCheckboxSelectionFilteredOnly: true, 
 			headerCheckboxSelection: true, 
@@ -602,10 +644,13 @@
 	    { 
 			headerName: "Pos", 
 			field: "pos", 
+			comparator: function(valueA, valueB, nodeA, nodeB, isDescending) {
+	            return (Number(valueA) == Number(valueB)) ? 0 : (Number(valueA) > Number(valueB)) ? 1 : -1;
+	        },
 			filter: 'agNumberColumnFilter', 
 			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 			width: 70, 
-			minWidth: 70, 
+			//minWidth: 70, 
 			cellStyle: { color: 'blue', cursor: 'pointer' },
 		},
 	    { 
@@ -613,7 +658,7 @@
 			field: "snpeff", 
 			filter: "agTextColumnFilter",
 			width: 80, 
-			minWidth: 80, 
+			//minWidth: 80, 
 			cellRenderer: param => flag_SVG(param.value),
 		},
 	    { 
@@ -621,7 +666,7 @@
 			field: "gwas", 
 			filter: 'agNumberColumnFilter', 
 			width: 120, 
-			minWidth: 120, 
+			//minWidth: 120, 
 			cellRenderer: param => flag_SVG(param.value),
 		},
 	    { 
@@ -629,7 +674,7 @@
 			field: "marker_candidate", 
 			filter: 'agNumberColumnFilter', 
 			width: 120, 
-			minWidth: 100, 
+			//minWidth: 100, 
 			cellRenderer: param => flag_SVG(param.value),
 		},
 	];
@@ -1026,7 +1071,8 @@
 			["A", "A"], ["C", "C"], ["G", "G"],["T", "T"], ["I", "I"], 
 			["R", "A or G"], ["Y", "C or T"], ["M", "A or C"], ["K", "G or T"],
 			["S", "C or G"], ["W", "A or T"], ["H", "A or C or T"], ["B", "C or G or T"], 
-			["V", "A or C or G"], ["V", "A or C or G"], ["D", "A or G or T"], ["N", "A or C or G or T"]
+			//["V", "A or C or G"], ["V", "A or C or G"], ["D", "A or G or T"], ["N", "A or C or G or T"]
+			["V", "A or C or G"], ["V", "A or C or G"], ["D", "A or G or T"], ["N", "Missing"]
 		]);
 		
 		if(map.has(params.value)) {

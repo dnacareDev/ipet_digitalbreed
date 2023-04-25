@@ -91,7 +91,7 @@
 	    {
 	      headerName: "VCF 파일명",
 	      field: "file_name",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      width: 700,
 	      minWidth: 150,
@@ -99,7 +99,7 @@
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      width: 350,
 	      minWidth: 90,
 	      minWidth: 110,
@@ -343,9 +343,9 @@
 	});
 	
 	const columnDefs_totalCount = [
-  		{ field: "chr", width: 212, filter: 'agNumberColumnFilter', },
-  		{ field: "pos_start", width: 215, filter: 'agTextColumnFilter', },
-  		{ field: "pos_end", width: 220, filter: true, },
+  		{ field: "chr", width: 212, filter: true, },
+  		{ field: "pos_start", width: 215, filter: 'agNumberColumnFilter', },
+  		{ field: "pos_end", width: 220, filter: 'agNumberColumnFilter', },
   		{ field: "count", width: 220, filter: 'agNumberColumnFilter', },
   		{ field: "key", width: 220, filter: 'agNumberColumnFilter', hide: true, },
   	];
@@ -367,7 +367,7 @@
   	}
   	
   	const columnDefs_binSize = [
-  		{ field: "Chr", width: 212, filter: 'agNumberColumnFilter', },
+  		{ field: "Chr", width: 212, filter: true, },
   		{ field: "variant_count", width: 215, filter: 'agTextColumnFilter', },
   	];
   	

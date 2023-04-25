@@ -236,7 +236,7 @@ body {
 							            	<div class="form-check col-6 pl-2">
 							            		<input type="radio" class="form-check-input" id="analysisModalRadio2" name="analysisModalRadioType1" value="merge" onclick="document.getElementById('concatenateOptionDiv').style.display='none'; document.getElementById('mergeOptionDiv').style.display='flex'; deselectAllCheckbox" />
 		                                        <label class="form-check-label" for="analysisModalRadio2" style="margin-left:4px;" >Merge</label>
-		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="동일한 변이 site에 대해 서로 다른 샘플에 대한 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.<br><br>입력 파일 간에는 반드시 동일한 형태의 VCF header와 변이 sites 정보를 공유해야 합니다."></i>
+		                                        <i class="ri-question-line" data-toggle="popover" data-trigger="hover" data-container="#backdrop" data-content="동일한 변이 site에 대해 서로 다른 샘플에 대한 여러 개의 vcf 파일을 하나의 vcf 파일로 병합하는 기능입니다.<br><br>입력 파일 간에는 반드시 동일한 형태의 VCF header와 변이 sites 정보를 공유해야 합니다." data-html="true"></i>
 							            	</div>
 					            		</div>
 					            		<div id="concatenateOptionDiv" class="row mt-1">
@@ -262,12 +262,7 @@ body {
 						            </div>
 						        </fieldset>
 						        <fieldset class="border w-100 m-1">
-						        <legend class="w-auto ml-1 mr-1">Select a subset of sample</legend>
-						            <div class="col-md-12 col-12">
-					            		<div class="row pl-2 pr-2" style="display:flex; column-gap:10px;">
-							            	Move to the right
-					            		</div>
-						            </div>
+						        <legend class="w-auto ml-1 mr-1">Select VCF File</legend>
 						            <div class="col-md-12 col-12 mt-1 mb-1">
 						            	<div class="row">
 					            			<div class="col-12">
@@ -336,9 +331,9 @@ body {
     <script src="../../../css/app-assets/js/scripts/ag-grid/ag-grid_vfm.js"></script>
     <!--  
     <script src="../../../css/app-assets/js/scripts/plotly-latest.min.js"></script>
-    -->   
 	<script src="../../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>
+    -->   
     <!-- END: Page JS-->
 
 <script type="text/javascript">

@@ -162,7 +162,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:435px;"></div><br>
+                            <div id="myGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:490px;"></div><br>
                         </div>
                     </div>
                 </section>

@@ -62,6 +62,7 @@
 	  
 		if(result){
 	  
+			
 			$.ajax({
 				url:"../../web/database/genotype_delete.jsp",
 				type:"POST",
@@ -69,12 +70,35 @@
 			    success: function(result) {
 			        if (result) {
 						alert("정상적으로 삭제되었습니다.");
+						
 						refresh();
 			        } else {
 			            alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
 			        }
 			    }
 			});
+			
+			
+			const jobid_items = new Array();
+			
+			for (var i = 0; i < selectedData.length; i++) {
+				jobid_items.push(selectedData[i].jobid);
+			}
+			
+			const params = new URLSearchParams({
+				//"jobid_items": JSON.stringify(jobid_items),
+				"jobid_items": jobid_items,
+				"varietyid": varietyid,
+			});
+			
+			fetch("./genotype_revert_save_cmd.jsp", {
+				method: "POST",
+				headers: {
+	   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+	   			},
+	   			body: params,
+			})
+			
 		}
 	}
 	

@@ -637,14 +637,11 @@ body {
 	   		})
 	   		.then(response => response.ok)
 	   		.then(ok => {
-	   			//$("#iframeLoading").modal('hide');
+	   			$("#backdrop").modal("hide");
 	   			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
 				node.setSelected(true);
 				//gridOptions.api.setFocusedCell(0, 'comment');
 				
-	   			/*
-				$(`#myGrid [row-index="0"] [col-id="comment"]`).trigger("click");
-				*/
 				document.querySelector(`#myGrid [row-index="0"] [col-id="comment"]`).click();
 	   		});
 	   		
@@ -655,6 +652,11 @@ body {
 	   			},
 	   			body: params
 	   		})
+	   		.then(response => response.ok)
+	   		.then(data => {
+	   			refresh();
+	   		})
+	   		
     	} else {
     		
     		var postObj = new Object();

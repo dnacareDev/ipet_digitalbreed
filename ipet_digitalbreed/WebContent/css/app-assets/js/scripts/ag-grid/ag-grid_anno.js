@@ -91,7 +91,7 @@
 	    {
 	      headerName: "VCF 파일명",
 	      field: "file_name",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      width: 700,
 	      minWidth: 150,
@@ -99,7 +99,7 @@
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      width: 350,
 	      minWidth: 90,
 	      minWidth: 110,
@@ -241,12 +241,12 @@
 	}
 	
 	const columnDefs2 = [
-	  		{ field: "Chr", width: 212, filter: 'agNumberColumnFilter', },
-	  		{ field: "Pos", width: 215, filter: 'agTextColumnFilter', },
+	  		{ field: "Chr", width: 212, filter: true, },
+	  		{ field: "Pos", width: 215, filter: 'agNumberColumnFilter', },
 	  		{ field: "Impact", width: 220, filter: true, },
-	  		{ field: "Effect Classic", width: 220, filter: 'agNumberColumnFilter', },
-	  		{ field: "GeneID", width: 220, filter: 'agNumberColumnFilter', },
-	  		{ field: "Description", width: 220, filter: 'agNumberColumnFilter', },
+	  		{ field: "Effect Classic", width: 220, filter: 'agTextColumnFilter', },
+	  		{ field: "GeneID", width: 220, filter: 'agTextColumnFilter', },
+	  		{ field: "Description", width: 220, filter: 'agTextColumnFilter', },
 	  	];
 
   	const gridOptions2 = {

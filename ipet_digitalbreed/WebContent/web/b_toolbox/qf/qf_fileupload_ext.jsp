@@ -43,7 +43,8 @@
 	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	String SaveSql = "UPDATE subset_filter_t SET save_cmd = '1' where jobid='" +jobid+ "';";
+	String SaveSql = "UPDATE genotype_filter_t SET save_cmd = '1' where jobid='" +jobid+ "';";
+	System.out.println(SaveSql);
 	
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(SaveSql);
@@ -117,7 +118,8 @@
 	String genotype_sequence = script_path+"genotype_sequence_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
 	String genotype_statistics = script_path+"genotype_statistics_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 	String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;
-	String snp_eff = "Rscript "+ script_path+"genotype_snpeff.R "+savePath+jobid+"/ "+outputPath+" "+ jobid +" " + _orig_filename +" "+ refgenomePath +" "+ refgenome +" "+ annotation_filename;
+	//String snp_eff = "Rscript "+ script_path+"genotype_snpeff.R "+savePath+jobid+"/ "+outputPath+" "+ jobid +" " + _orig_filename +" "+ refgenomePath +" "+ refgenome +" "+ annotation_filename;
+	String snp_eff = "perl "+ script_path+"genotype_snpeff.pl "+savePath+jobid+"/ "+outputPath+" "+ jobid +" " + _orig_filename +" "+ refgenomePath +" "+ refgenome +" "+ annotation_filename;
 	
 	System.out.println("genotype_sequence :" + genotype_sequence);
 	System.out.println("genotype_statistics :" + genotype_statistics);
@@ -125,6 +127,7 @@
 	
 	
 	String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,status,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"',0,'-','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','-','-','','','','','"+jobid+"','"+permissionUid+"',now());";
+	//String insertVcfinfo_sql="insert into vcfdata_info_t(cropid,varietyid,status,refgenome,uploadpath,filename,resultpath,comment,samplecnt,variablecnt,maf,mindp,mingq,ms,processed_by,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"',0,'-','"+db_savePath+"','"+_orig_filename+"','"+db_outputPath+"','"+comment+"','-','-','','','','','quality_filter','"+jobid+"','"+permissionUid+"',now());";
 	System.out.println(insertVcfinfo_sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(insertVcfinfo_sql);

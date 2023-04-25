@@ -115,8 +115,7 @@
 	      width: 150,
 	      minWidth: 80,
 	      cellRenderer: function(params) {
-	    	  
-	    	  console.log(params);
+	    	  //console.log(params);
 	    	  
 	    	  switch(params.value) {
 	    	  	case "0":
@@ -232,7 +231,6 @@
 						$("#iframeLoading").modal('show');
 						
 						document.getElementById('vcf_status').style.display = "block";
-						window.scrollTo(0, document.body.scrollHeight);
 						document.getElementById('qf_1').click();
 						
 						$('#pill1_frame').attr('height',"130px");
@@ -274,29 +272,36 @@
 		//console.log(jobid);
 		
 		switch(event.target.id) {
+			case 'qf_1':
+				window.scrollTo(0, document.body.scrollHeight);
+				break;
 			case 'qf_2':
 				if(!$('#pill2_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill2_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_variant.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_3':
 				if(!$('#pill3_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill3_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_depth.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_4':
 				if(!$('#pill4_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill4_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_miss.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 			case 'qf_5':
 				if(!$('#pill5_frame').attr('src')){
 					$("#iframeLoading").modal('show');
 					$('#pill5_frame').attr('src', resultpath+"/"+jobid+"/"+jobid+"_density.html");
 				}
+				window.scrollTo(0, document.body.scrollHeight);
 				break;
 		}
 	});

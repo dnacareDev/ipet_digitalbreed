@@ -229,6 +229,10 @@
 		--ag-widget-vertical-spacing: 0px !important;
 	}
 	
+	input::placeholder {
+		color: #ccc;
+	}
+	
 </style>
 <%
 	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -312,7 +316,7 @@
             <div class="content-body">
                 <!-- Basic example section start -->
                 <section id="basic-examples">
-                    <div class="card">
+                    <div class="card mb-0">
                         <div class="card-content">
                             <div class="card-body pt-0 pb-0">
                                 <div class="row justify-content-between">
@@ -328,7 +332,7 @@
 										-->
 	                                	<div class="row" style="margin-top: 0px; margin-bottom:0px;">
 	                                		<fieldset class="border pt-2 pl-2 pr-2 pb-1 pb-3" style="width:96%; margin-left:23px; margin-right:23px;">
-	                                			<legend  class="w-auto">Reference</legend>
+	                                			<legend  class="w-auto">Reference : <%=refgenome %></legend>
 		                                		<div id="chromosomeDiv"></div>
 		                                		<div id="chromosomeScaleBarDiv">
 		                                		</div>
@@ -346,7 +350,7 @@
 	                                		</div>
 	                                	</div>
 	                                	<div class="row">
-				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:495px;"></div><br>
+				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:415px;"></div><br>
 	                                	</div>
 	                                </div>
 	                                <div id="sideRow" class="expandAndCollapse small" style="border-left: 1px solid #E9E9E9;">
@@ -387,7 +391,10 @@
 											            	</div>
 														</div>
 									            		<div class="row col-12 pl-0" style="margin-left:0px;">
-															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:760px; width:100%;"></div>
+															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:760px; width:100%; display:none;"></div>
+														</div>
+														<div id="SnpEff_Not_Exist" class="row col-12 pl-0" style="height:500px; margin-left:0px; display:none; justify-content:center; align-content:center; font-size: 25px;">
+															연관된 SNP 정보를 찾을 수 없습니다.
 														</div>
 	  												</div>
 	  												<!-- GWAS pill -->
@@ -1402,57 +1409,8 @@
 			return alert("더이상 이동할 수 없습니다.");
 		}
 		
-		getVariantBrowserGrid(vcf_id, position);
 		
 		changeInputValue(position);
-		/*
-		const chr = selectedOption('Chr_select').dataset.chr;
-		const chr_orders_arr = chr_orders_map.get(chr);
-		
-		const beforeId = document.getElementById('beforeId');
-		if(Number(index) == 0) {
-			beforeId.dataset.index = -1;
-			beforeId.dataset.vcf_id = -1;
-			beforeId.dataset.position = -1;
-			beforeId.dataset.order = -1;
-		} else {
-			beforeId.dataset.index = chr_orders_arr[Number(index) - 1].index;
-			beforeId.dataset.vcf_id = chr_orders_arr[Number(index) - 1].vcf_id;
-			beforeId.dataset.position = chr_orders_arr[Number(index) - 1].position;
-			beforeId.dataset.order = chr_orders_arr[Number(index) - 1].order;
-		}
-		
-		const currentId = document.getElementById('currentId');
-		currentId.dataset.index = chr_orders_arr[Number(index)].index;
-		currentId.dataset.vcf_id = chr_orders_arr[Number(index)].vcf_id;
-		currentId.dataset.position = chr_orders_arr[Number(index)].position;
-		currentId.dataset.order = chr_orders_arr[Number(index)].order;
-		
-		const afterId = document.getElementById('afterId');
-		afterId.dataset.index = chr_orders_arr[Number(index) + 1].index;
-		afterId.dataset.vcf_id = chr_orders_arr[Number(index) + 1].vcf_id;
-		afterId.dataset.position = chr_orders_arr[Number(index) + 1].position;
-		afterId.dataset.order = chr_orders_arr[Number(index) + 1].order;
-		
-		
-		const beforeOrder = document.getElementById('beforeOrder');
-		const afterOrder = document.getElementById('afterOrder');
-		
-		if(Number(beforeOrder.dataset.order) == Number(currentId.dataset.order)) {
-			document.querySelector('.chromosomeStackDiv[data-selected="true"]').dataset.selected = "false";
-			document.querySelector(`.chromosomeStackDiv[data-order="\${Number(currentId.dataset.order)}"]`).dataset.selected = "true";
-			
-			const selecting_before_order = chr_orders_arr.findLast((item) => item.order < Number(currentId.dataset.order))?.order;
-			beforeOrder.dataset.order = selecting_before_order===undefined ? -1 : selecting_before_order;
-			
-			
-			const selecting_after_order = chr_orders_arr.find((item) => item.order > Number(currentId.dataset.order)).order;
-			afterOrder.dataset.order = selecting_after_order;
-		}
-		
-		colorGeneModelPosition(chr_orders_arr[Number(index)].position)
-		getGeneModel(chr_orders_arr[Number(index)].position);
-		*/
 	}
 	
 	function nextPosition(index, vcf_id, position, order) {
@@ -1462,57 +1420,6 @@
 		}
 		
 		changeInputValue(position);
-		
-		/*
-		getVariantBrowserGrid(vcf_id, position);
-		
-		
-		const chr = selectedOption('Chr_select').dataset.chr;
-		const chr_orders_arr = chr_orders_map.get(chr);
-		
-		const beforeId = document.getElementById('beforeId');
-		beforeId.dataset.index = chr_orders_arr[Number(index) - 1].index;
-		beforeId.dataset.vcf_id = chr_orders_arr[Number(index) - 1].vcf_id;
-		beforeId.dataset.position = chr_orders_arr[Number(index) - 1].position;
-		beforeId.dataset.order = chr_orders_arr[Number(index) - 1].order;
-		
-		const currentId = document.getElementById('currentId');
-		currentId.dataset.index = chr_orders_arr[Number(index)].index;
-		currentId.dataset.vcf_id = chr_orders_arr[Number(index)].vcf_id;
-		currentId.dataset.position = chr_orders_arr[Number(index)].position;
-		currentId.dataset.order = chr_orders_arr[Number(index)].order;
-		
-		const afterId = document.getElementById('afterId');
-		if(Number(index) == chr_orders_arr.length - 1) {
-			afterId.dataset.index = -1;
-			afterId.dataset.vcf_id = -1;
-			afterId.dataset.position = -1;
-			afterId.dataset.order = -1;
-		} else {
-			afterId.dataset.index = chr_orders_arr[Number(index) + 1].index;
-			afterId.dataset.vcf_id = chr_orders_arr[Number(index) + 1].vcf_id;
-			afterId.dataset.position = chr_orders_arr[Number(index) + 1].position;
-			afterId.dataset.order = chr_orders_arr[Number(index) + 1].order;
-		}
-		
-		const beforeOrder = document.getElementById('beforeOrder');
-		const afterOrder = document.getElementById('afterOrder');
-		
-		if(Number(afterOrder.dataset.order) == Number(currentId.dataset.order)) {
-			document.querySelector('.chromosomeStackDiv[data-selected="true"]').dataset.selected = "false";
-			document.querySelector(`.chromosomeStackDiv[data-order="\${Number(currentId.dataset.order)}"]`).dataset.selected = "true";
-			
-			const selecting_before_order = chr_orders_arr.findLast((item) => item.order < Number(currentId.dataset.order)).order;
-			beforeOrder.dataset.order = selecting_before_order;
-			
-			
-			const selecting_after_order = chr_orders_arr.find((item) => item.order > Number(currentId.dataset.order))?.order;
-			afterOrder.dataset.order = selecting_after_order===undefined ? -1 : selecting_after_order;
-		}
-		
-		colorGeneModelPosition(chr_orders_arr[Number(index)].position)
-		getGeneModel(chr_orders_arr[Number(index)].position);
-		*/
 	}
 	
 	function nextOrder(vcf_id, order) {
@@ -1873,10 +1780,25 @@
 			//fetch(`./vb_features_getSequence.jsp?command=gene&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
 			.then((response) => response.text())
 			.then((data) => {
-				//console.log(data.replaceAll("\r\n",""));
-				
-				
+				/*
+				*/
+				console.log(data.replaceAll("\r\n",""));
 				document.getElementById('gene_sequence').value = data.replaceAll("\r\n","");
+				
+				/*
+				const str = data.replaceAll("\r\n","");
+				const sequence = str.split("\n")[1];
+				
+				let sequence_lines = ""
+				for(let i=0 ; i < sequence.length ; i+=60) {
+					sequence_lines += sequence.slice(i,i+60);
+					if(i != sequence.length/60) {
+						sequence_lines += "\n";
+					}
+				}
+				
+				document.getElementById('gene_sequence').value = str.split("\n")[0] +"\n"+ sequence_lines;
+				*/
 				
 			})
 			
@@ -2135,7 +2057,7 @@
     	.then((response) => response.json())
     	.then((data) => {
     		//console.log("chr=1, position=3374674로 설정")
-    		//console.log(data);
+    		console.log(data);
     		
     		let columnKeys = new Array('id')
     		
@@ -2347,7 +2269,16 @@
 		fetch(`./vb_features_grid_SnpEff.jsp?jobid=\${linkedJobid}&chr=\${chr}`)
 		.then((response) => response.json())
 		.then((data) => {
-			//console.log(data);
+			//console.log("SnpEff data : ", data);
+			
+			if(!data) {
+				document.getElementById('SnpEff_Grid').style.display = 'none';
+				document.getElementById('SnpEff_Not_Exist').style.display = 'flex';
+			} else {
+				
+				document.getElementById('SnpEff_Grid').style.display = 'block';
+				document.getElementById('SnpEff_Not_Exist').style.display = 'none';
+			}
 			
 			SnpEff_gridOptions.api.setRowData(data);
 			SnpEff_gridOptions.columnApi.autoSizeAllColumns();
@@ -2497,7 +2428,8 @@
    		$("#GWAS_content_list").empty();
    		for(let i=0 ; i<model.length ; i++) {
 			$("#GWAS_button_list").append(`<li class="nav-item"><a class="nav-link" id="GWAS_\${model[i]}" data-toggle="pill" href="#GWAS_pill_\${model[i]}" aria-expanded="true" data-phenotype="-1" data-model=\${model[i]} onclick="resizeGrid();" >\${model[i]}</a></li>`);
-			$("#GWAS_content_list").append(`<div role='tabpanel' class='tab-pane' id='GWAS_pill_\${model[i]}' aria-expanded='true' aria-labelledby='base-pill1'>\${model[i]}</div>`)
+			//$("#GWAS_content_list").append(`<div role='tabpanel' class='tab-pane' id='GWAS_pill_\${model[i]}' aria-expanded='true' aria-labelledby='base-pill1'>\${model[i]}</div>`)
+			$("#GWAS_content_list").append(`<div role='tabpanel' class='tab-pane' id='GWAS_pill_\${model[i]}' aria-expanded='true' aria-labelledby='base-pill1'></div>`)
 			
 			
 			if(i==0) {
@@ -2506,7 +2438,30 @@
 			}
 			
 			const element = document.getElementById(`GWAS_pill_\${model[i]}`);
-			element.innerHTML = `<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="show_GWAS_Grid()"></select>`
+			//element.innerHTML = `<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="show_GWAS_Grid()"></select>`
+			element.insertAdjacentHTML('beforeend',`
+					<div class="row">
+						<div class="col-4">
+							<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="show_GWAS_Grid()"></select>
+						</div>
+						<div id="cutOffDiv_\${model[i]}" class="col-8" style="display:none; justify-content:end;">
+							<div class="col-8">
+								<input type="text" id='cutOffValue_${model_arr[i]}' class='form-control' placeholder='cut off value (-log10(P))' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1'); if(this.value<0)this.value=0;" >
+							</div>
+							<div class="col-4">
+								<button class="btn btn-primary" style="width:100%;" data-model="${model[i]}" onclick="const selectEl = document.getElementById('${model_arr[i]}_phenotype'); 
+																									const phenotype = selectEl.options[selectEl.selectedIndex].value; 
+																									const cutOffValue = Number(document.getElementById('cutOffValue_${model_arr[i]}').value); 
+																									if(validCheckCutOff(this.dataset.model, cutOffValue, phenotype)) {
+																										updateCutOff(this.dataset.model, cutOffValue, phenotype);
+																										show_GWAS_Grid(phenotype, cutOffValue);
+																									} ">cutoff</button>
+							</div>
+						</div>
+					</div>
+					`);
+					/*
+					*/
 			
 			
 			const phenotype = HTML_element.dataset.phenotype.split("|");
@@ -2514,7 +2469,8 @@
 			for(let j=0 ; j<phenotype.length ; j++) {
 				$(`#GWAS_select_\${model[i]}`).append(`<option data-phenotype=\${phenotype[j]} > \${phenotype[j]} </option>`);
 			}
-			jQuery(`#GWAS_select_\${model[i]}`).select2({width: '35%'});
+			//jQuery(`#GWAS_select_\${model[i]}`).select2({width: '35%'});
+			jQuery(`#GWAS_select_\${model[i]}`).select2({width: '100%'});
 			
 			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:664px; padding-right:28px;' ></div></div>`); 
 			
@@ -3035,6 +2991,7 @@
    		
    		setTimeout( function () {
    			$("#Primer_Design").modal("hide");
+   			alert("분석이 실행되었습니다. primer design에서 결과를 확인해주세요.");
    		}, 1000);
    		
    	}

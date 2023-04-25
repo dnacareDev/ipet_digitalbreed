@@ -515,11 +515,13 @@ body {
 	
 	async function showPlotAndGrid(phenotype) {
 
-		document.getElementById('cutOffDiv').style.display = 'flex';
+		//document.getElementById('cutOffDiv').style.display = 'flex';
 		
 		const model = document.querySelector(`.nav-link.active`).textContent;
 		const jobid_param = $('#jobid_param').val();
 		//showPlot(phenotype);
+		
+		//document.getElementById(`cutOffDiv_\${model}`).style.display = 'flex';
 		
 		const params = new URLSearchParams({
 			"phenotype": phenotype,
@@ -545,6 +547,7 @@ body {
 		
 		
 		if(cutOffValue == -1) {
+			document.getElementById(`cutOffValue_\${model}`).value = "";
 			showGrid(phenotype, cutOffValue, phenotype);
 		} else {
 			document.getElementById(`cutOffValue_\${model}`).value = cutOffValue;

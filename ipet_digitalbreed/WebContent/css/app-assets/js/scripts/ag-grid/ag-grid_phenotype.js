@@ -59,7 +59,28 @@
             sortable: true,
             resizable: true,
             resizable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
+	    	filterParams: {
+	    		comparator: function(filterLocalDateAtMidnight, cellValue) {
+	    			if (cellValue == null) {
+	    				return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	        },
             cellClass: "grid-cell-centered",      
             width: 150
 		},
@@ -70,8 +91,28 @@
             cellEditor: DatePicker,
             sortable: true,
             resizable: true,
-            resizable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
+	    	filterParams: {
+	    		comparator: function(filterLocalDateAtMidnight, cellValue) {
+	    			if (cellValue == null) {
+	    				return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	        },
             cellEditorPopup: true,
             cellClass: "grid-cell-centered",                  
             width: 150
@@ -264,7 +305,8 @@
 	      checkboxSelection: true,
 	      headerCheckboxSelectionFilteredOnly: true,
 	      headerCheckboxSelection: true,
-	      resizable: true	
+	      resizable: true,
+	      //valueGetter: inverseRowCount,
 	    },
         {
             headerName: "사진",
@@ -283,7 +325,28 @@
             field: "cre_dt",
             editable: false,
             sortable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
+	    	filterParams: {
+	    		comparator: function(filterLocalDateAtMidnight, cellValue) {
+	    			if (cellValue == null) {
+	    				return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	        },
             resizable: true,
             cellClass: "grid-cell-centered",      
             width: 150
@@ -295,7 +358,28 @@
             cellEditor: DatePicker,
             sortable: true,
             resizable: true,
-            filter: true,
+            filter: 'agDateColumnFilter',
+	    	filterParams: {
+	    		comparator: function(filterLocalDateAtMidnight, cellValue) {
+	    			if (cellValue == null) {
+	    				return 0;
+	                }
+	        		
+	                var dateParts = cellValue.split('-');
+	                var year = Number(dateParts[0]);
+	                var month = Number(dateParts[1]) - 1;
+	                var day = Number(dateParts[2]);
+	                var cellDate = new Date(year, month, day);
+	                
+	                if (cellDate < filterLocalDateAtMidnight) {
+	                    return -1;
+	                } else if (cellDate > filterLocalDateAtMidnight) {
+	                    return 1;
+	                } else {
+	                    return 0;
+	                }
+	        	}
+	        },
             cellEditorPopup: true,
             cellClass: "grid-cell-centered",                  
             width: 150
@@ -312,6 +396,9 @@
         }
 	];
     
+	function inverseRowCount(params) {
+		return params.api.getDisplayedRowCount() - params.node.rowIndex;
+	}
     
   	    var old_one_check;
   	    var old_two_check;
@@ -441,6 +528,9 @@
 	  /*** GRID OPTIONS ***/
 	  var gridOptions = {
 	    //rowDragManaged: true,
+		defaultColDefs:{
+			menuTabs: ['filterMenuTab'],
+		},
 	    columnDefs: columnDefs,
 		enableRangeSelection: true,
 		suppressMultiRangeSelection: true,
@@ -566,6 +656,7 @@
   agGrid
     .simpleHttpRequest({ url: "../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
+    	//console.log("data: ", data);
       gridOptions.api.setRowData(data);
     });
 
@@ -577,9 +668,29 @@
 
   function addCol(fieldp, headerNamep) {
 	var columnDefs = gridOptions.columnDefs;
-	columnDefs.push({ field:fieldp, headerName: headerNamep, width: "120",  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+	//columnDefs.push({ field:fieldp, headerName: headerNamep, width: "120",  resizable: true, editable: true,  sortable: true, filter: true, cellClass: "grid-cell-centered"});
+	columnDefs.push({ 
+		field:fieldp, 
+		headerName: headerNamep, 
+		width: "120",  
+		resizable: true, 
+		editable: true,  
+		sortable: true, 
+		filter: 'agNumberColumnFilter',
+		//filterParams: filterParams,
+		cellClass: "grid-cell-centered",
+		valueFormatter: (params) => Number.isInteger(params.value) ? params.value.toFixed(1) : params.value,
+	});
 	gridOptions.api.setColumnDefs(columnDefs);
   }
+  
+  	const filterParams = {
+  		numberParser: (text) => {
+		    return text == null
+			    ? null
+			    : Number(text);
+		},
+  	};
   
   function getFetchData(url_string, map_params) {
 		

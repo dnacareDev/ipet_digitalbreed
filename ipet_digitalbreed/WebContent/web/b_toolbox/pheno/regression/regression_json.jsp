@@ -24,7 +24,7 @@
 			jsonObject.addProperty("no",ipetdigitalconndb.rs.getInt("no"));
 			jsonObject.addProperty("status",ipetdigitalconndb.rs.getString("status"));
 			jsonObject.addProperty("comment",ipetdigitalconndb.rs.getString("comment"));
-			jsonObject.addProperty("analysis_number",ipetdigitalconndb.rs.getString("analysis_number"));
+			jsonObject.addProperty("analysis_number",ipetdigitalconndb.rs.getInt("analysis_number"));
 			jsonObject.addProperty("phenotype_independent",ipetdigitalconndb.rs.getString("phenotype_independent"));
 			jsonObject.addProperty("phenotype_dependent",ipetdigitalconndb.rs.getString("phenotype_dependent"));
 			jsonObject.addProperty("uploadpath",ipetdigitalconndb.rs.getString("uploadpath"));

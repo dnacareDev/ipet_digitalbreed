@@ -273,7 +273,7 @@ body {
 											<div class="col-12 d-flex justify-content-space-between">
 												<div class="col-6" style="font-weight:bold;">File Upload</div>
 												<div id="exampleFile" class="col-6" style="display:none;">
-								            		<a href="/ipet_digitalbreed/uploads/t-test.csv" download style="color:white;" ><button class="btn btn-sm btn-info float-right"><i class='feather icon-download'></i> 예시파일</button></a>
+								            		<a href="/ipet_digitalbreed/uploads/t-test_individual.csv" download style="color:white;" ><button class="btn btn-sm btn-info float-right"><i class='feather icon-download'></i> 예시파일</button></a>
 								            	</div>
 											</div>
 											<div class="col-12 mt-1 d-flex justify-content-center">
@@ -323,7 +323,7 @@ body {
 											<div class="col-12 d-flex justify-content-space-between">
 												<div class="col-6" style="font-weight:bold;">File Upload</div>
 												<div class="col-6">
-								            		<a href="/ipet_digitalbreed/uploads/t-test.csv" download style="color:white;" ><button class="btn btn-sm btn-info float-right"><i class='feather icon-download'></i> 예시파일</button></a>
+								            		<a href="/ipet_digitalbreed/uploads/t-test_phenotype.csv" download style="color:white;" ><button class="btn btn-sm btn-info float-right"><i class='feather icon-download'></i> 예시파일</button></a>
 								            	</div>
 											</div>
 											<div class="col-12 mt-1 d-flex justify-content-center">
@@ -809,6 +809,7 @@ body {
 	    		})
 	    		.then(response => response.ok)
 	    		.then(ok => {
+	    			$("#backdrop").modal("hide");
 	    			$("#iframeLoading").modal('hide');
 	    			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
 	    			node.setSelected(true);
@@ -901,6 +902,7 @@ body {
 	    		})
 	    		.then(response => response.ok)
 	    		.then(ok => {
+	    			$("#backdrop").modal("hide");
 	    			$("#iframeLoading").modal('hide');
 	    			const node = gridOptions.api.getModel().rootNode.allLeafChildren[0];
 	    			node.setSelected(true);
@@ -936,11 +938,11 @@ body {
     		}
     		
     	}
+    	/*
     	setTimeout( function () {
    			refresh();
    			$("#backdrop").modal("hide");
     	}, 1000);
-    	/*
     	*/
 		    	
     }

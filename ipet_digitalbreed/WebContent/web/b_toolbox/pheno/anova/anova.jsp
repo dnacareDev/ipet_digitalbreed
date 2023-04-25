@@ -277,7 +277,7 @@ body {
 											<div class="col-12 d-flex justify-content-space-between">
 												<div class="col-6" style="font-weight:bold;">File Upload</div>
 												<div id="exampleFile" class="col-6" style="display:none;">
-								            		<button class="btn btn-sm btn-info float-right">예시파일</button>
+								            		<a href="/ipet_digitalbreed/uploads/anova_group.csv" download style="color:white;" ><button class="btn btn-sm btn-info float-right"><i class='feather icon-download'></i> 예시파일</button></a>
 								            	</div>
 											</div>
 											<div class="col-12 mt-1 d-flex justify-content-center">
@@ -327,7 +327,7 @@ body {
 											<div class="col-12 d-flex justify-content-space-between">
 												<div class="col-6" style="font-weight:bold;">File Upload</div>
 												<div class="col-6">
-								            		<button class="btn btn-sm btn-info float-right">예시파일</button>
+								            		<a href="/ipet_digitalbreed/uploads/anova_noGroup.csv" download style="color:white;" ><button class="btn btn-sm btn-info float-right"><i class='feather icon-download'></i> 예시파일</button></a>
 								            	</div>
 											</div>
 											<div class="col-12 mt-1 d-flex justify-content-center">

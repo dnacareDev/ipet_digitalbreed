@@ -58,6 +58,11 @@
 
 <!-- BEGIN: Body-->
 <style>
+
+	html {
+		scroll-behavior: smooth;
+	}
+
 	body {
 		font-family: 'SDSamliphopangche_Outline';
 	}
@@ -201,7 +206,7 @@
 														<button type="button" class="btn btn-outline-success mb-1 mr-1 mb-1 float-right" onclick="if(gridOptions2.api.getSelectedRows().length == 0){return alert('primer set를 선택해주세요.');} gridOptions2.api.exportDataAsExcel({onlySelected:true});">Export Excel(selected)</button>
 													</div>
 												</div>
-												<div id="resultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:320px;"></div><br>
+												<div id="resultGrid" class="ag-theme-alpine" style="margin: 0px auto; width: 98%; height:540px;"></div><br>
 											</div>
 										</div>
 									</div>

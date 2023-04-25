@@ -326,7 +326,9 @@ body {
         
     <!-- BEGIN: Page JS-->
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_phenotype.js"></script>
+    <!--  
     <script src="../../css/app-assets/js/scripts/ag-grid/ag-grid_phenotype_modules.js"></script>
+    -->
     <script src="../../css/app-assets/js/scripts/plotly-latest.min.js"></script>   
 	<script src="../../css/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>    
     <script src="../../css/app-assets/js/scripts/forms/validation/form-validation.js"></script>

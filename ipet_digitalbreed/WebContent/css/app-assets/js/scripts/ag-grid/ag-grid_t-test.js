@@ -115,14 +115,14 @@
 	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
-	    	filter: 'agNumberColumnFilter',
+	    	filter: 'agTextColumnFilter',
 	    	width: 350,
 	    	minWidth: 110,
 	    },
 	    {
 	    	headerName: "분석개체 수",
 	    	field: "analysis_number",
-	    	filter: true,
+	    	filter: 'agNumberColumnFilter',
 	    	cellClass: "grid-cell-centered",      
 	    	width: 200,
 	    	minWidth: 150,
@@ -130,7 +130,7 @@
 	    {
 	    	headerName: "분석 형질",
 	    	field: "phenotype",
-	    	filter: true,
+	    	filter: 'agTextColumnFilter',
 	    	cellClass: "grid-cell-centered",      
 	    	width: 300,
 	    	minWidth: 150,
@@ -204,9 +204,6 @@
 		animateRows: true,
 		serverSideInfiniteScroll: true,
 		onCellClicked: params => {
-		
-			//console.log("params : ", params);
-			
 			if(params.column.getId() != "no" && params.column.getId() != "cre_dt" ){
 				
 				fetch(`${params.data.resultpath+params.data.jobid}/Error.txt`)
@@ -231,45 +228,38 @@
 					
 					window.scrollTo(0, document.body.scrollHeight);
 				})
-				
-				/*
-				$("#iframeLoading").modal('show');
-				
-				document.getElementById("Extra_Card").style.display = "block";
-		   		
-				$('#pill1_frame').attr('src', "./t-test_resultInfo.jsp?jobid="+params.data.jobid);
-				$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_hist.html");
-				$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_box.html");
-				
-				window.scrollTo(0, document.body.scrollHeight);
-				*/
-				
-				/*
-				switch (Number(params.data.status)) {
-					case 0:
-						//$("#analysis_process").modal('show');
-						alert("분석 중입니다.");
-						break;
-					case 1:
-						$("#iframeLoading").modal('show');
-						
-						document.getElementById("Extra_Card").style.display = "block";
-				   		
-						$('#pill1_frame').attr('src', "./t-test_resultInfo.jsp?jobid="+params.data.jobid);
-						$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_hist.html");
-						$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_box.html");
-						
-						window.scrollTo(0, document.body.scrollHeight);
-						
-						break;
-					case 2:
-						//$("#analysis_fail").modal('show');
-						alert("분석에 실패했습니다.");
-						break;
-				}
-				*/
 			}
 		}
+		/*
+		*/
+		/*
+		onRowSelected: (params) => {
+			if(gridOptions.api.getSelectedRows().length == 1 && params.node.selected == true && params.column.getId() != "no") {
+				fetch(`${params.data.resultpath+params.data.jobid}/Error.txt`)
+				.then((response) => {
+					if(response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error, status - ", response.status);
+					}
+				})
+				.then((error_message) => {
+					return alert(error_message);
+				})
+				.catch((not_exist) => {
+					$("#iframeLoading").modal('show');
+					
+					document.getElementById("Extra_Card").style.display = "block";
+			   		
+					$('#pill1_frame').attr('src', "./t-test_resultInfo.jsp?jobid="+params.data.jobid);
+					$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_hist.html");
+					$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/T-test_box.html");
+					
+					window.scrollTo(0, document.body.scrollHeight);
+				})
+			}
+		}
+		 */
 	};
 	
 	var columnDefsTraitName = [

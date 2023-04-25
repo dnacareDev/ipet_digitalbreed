@@ -89,7 +89,8 @@
 		
 		JsonArray jsonArr = new JsonArray();
 		
-		String sql = "select upgma.no, upgma.filename, upgma.comment, upgma.jobid, DATE_FORMAT(upgma.cre_dt, '%Y-%m-%d') AS cre_dt from upgma_info_t as upgma inner join vcfdata_info_t as vcf on upgma.vcfdata_no = vcf.no where vcf.jobid ='"+jobid+"';";
+		//String sql = "select upgma.no, upgma.filename, upgma.comment, upgma.jobid, DATE_FORMAT(upgma.cre_dt, '%Y-%m-%d') AS cre_dt from upgma_info_t as upgma inner join vcfdata_info_t as vcf on upgma.vcfdata_no = vcf.no where vcf.jobid ='"+jobid+"';";
+		String sql = "select upgma.no, upgma.filename, upgma.comment, upgma.jobid, DATE_FORMAT(upgma.cre_dt, '%Y-%m-%d') AS cre_dt from upgma_info_t as upgma inner join vcfdata_info_t as vcf on upgma.vcfdata_no = vcf.no where vcf.jobid ='"+jobid+"' and upgma.status=1;";
 		//System.out.println(sql);
 		try{
 			ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);

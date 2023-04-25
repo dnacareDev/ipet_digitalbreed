@@ -184,8 +184,11 @@
    								<div class='row'>
    									<div class='col-12'>
    										<ul class='nav nav-pills nav-active-bordered-pill'>
+   											<li class='nav-item'><a class='nav-link active' id='DeltaK' data-toggle='pill' href='#pill1' aria-expanded='true' onclick="window.scrollTo(0, document.body.scrollHeight);">STURE result</a></li>
+   											<!--  
    											<li class='nav-item'><a class='nav-link active' id='DeltaK' data-toggle='pill' href='#pill1' aria-expanded='true' onclick="window.scrollTo(0, document.body.scrollHeight);">DeltaK</a></li>
    											<li class='nav-item'><a class='nav-link' id='Sturcture_Result' data-toggle='pill' href='#pill2' aria-expanded='true' onclick="window.scrollTo(0, document.body.scrollHeight);">STURCTURE result</a></li>
+   											-->
    										</ul>
    										<div class='tab-content'>
    											<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
@@ -274,7 +277,7 @@
 					            </div>
 					            <div class="col-md-12 col-12 mt-1 mb-1">
 					            	<div class="row">
-										<div class="col-4" style="margin-top:2%">Number of K</div>
+										<div class="col-4" style="margin-top:2%">Number of K<br>(at least 2)</div>
 										<div class="col-8">
 											<input type="number" class="form-control" id="Number_of_K" name="Number_of_K" value="" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
 										</div>
@@ -476,8 +479,8 @@
     		return alert("VCF 파일을 선택하세요.");
     	}
     	
-    	if(!document.getElementById('Number_of_K').value) {
-    		return alert("K값을 입력하세요.");
+    	if(!document.getElementById('Number_of_K').value || Number(document.getElementById('Number_of_K').value)<2 ) {
+    		return alert("2 이상의 K값을 입력하세요.");
     	}
     	
    		

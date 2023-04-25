@@ -91,7 +91,7 @@
 	    {
 	      headerName: "VCF 파일명",
 	      field: "file_name",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      cellClass: "grid-cell-centered",      
 	      width: 700,
 	      minWidth: 150,
@@ -99,7 +99,7 @@
 	    {
 	      headerName: "상세내용",
 	      field: "comment",
-	      filter: true,
+	      filter: 'agTextColumnFilter',
 	      width: 350,
 	      minWidth: 90,
 	      minWidth: 110,
@@ -198,7 +198,7 @@
 	
 						//$("#iframeLoading").modal('show');
 						$('#pill1_frame').attr('src', '');
-						$('#pill2_frame').attr('src', '');
+						//$('#pill2_frame').attr('src', '');
 						
 						document.getElementById('vcf_status').style.display = 'block';
 						window.scrollTo(0, document.body.scrollHeight);
@@ -213,9 +213,13 @@
 						Select_Delta_K.textContent = "";
 						Select_Delta_K.insertAdjacentHTML('beforeend', `<option></option>`);
 						for(let i=1 ; i<=number_of_k ; i++){
+							if(i==1) {
+								continue;
+							}
 							Select_Delta_K.insertAdjacentHTML('beforeend', `<option data-number=${i} > ${i} </option>`);
 						}
 						
+						/*
 						const Select_Structure_result = document.getElementById('Select_Structure_result');
 						Select_Structure_result.textContent = "";
 						
@@ -273,6 +277,7 @@
 								Select_Structure_result.insertAdjacentHTML('beforeend', `<option data-file_name=${data[i].file_name} > ${data[i].file_name} </option>`);
 							}
 						});
+						*/
 					    
 					    break;
 					case 2:

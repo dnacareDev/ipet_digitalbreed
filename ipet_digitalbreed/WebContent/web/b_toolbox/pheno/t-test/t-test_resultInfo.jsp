@@ -76,6 +76,7 @@
 	
 	out.println("<tr height='30px'><td width='20%' bgcolor='f8f8f8'><b>"+str.get(0)+"</b></td><td width='20%' bgcolor='f8f8f8'><b>"+str.get(1)+"</b></td><td width='20%' bgcolor='f8f8f8'><b>"+str.get(2)+"</b></td><td width='20%'  bgcolor='f8f8f8'><b>"+str.get(3)+"</b></td></tr>");
 	out.println("<tr height='30px'><td width='20%' >"+str.get(4)+"</td><td width='20%' >"+str.get(5)+"</td><td width='20%' >"+str.get(6)+"</td><td width='20%' >"+str.get(7)+"</td></tr>");
+	//out.println("<tr height='30px'><td width='20%' >"+String.format("%s",str.get(4))+"</td><td width='20%' >"+String.format("%s",str.get(5))+"</td><td width='20%' >"+String.format("%s",str.get(6))+"</td><td width='20%' >"+String.format("%s",str.get(7))+"</td></tr>");
 	out.println("</table>");
 %>
 
