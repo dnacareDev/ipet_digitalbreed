@@ -25,7 +25,7 @@
 	JsonArray jsonArray = new JsonArray();
 	if(cutOff.equals("-1")) {
 		String cutOffValue = cutOff(rootFolder, model_name, phenotype, jobid_param);
-		//System.out.println("default");
+		System.out.println("default : " + cutOffValue);
 		jsonArray = csvStream(rootFolder, model_name, phenotype, jobid_param, cutOffValue);
 	} else {
 		//System.out.println("cutOff");
@@ -67,7 +67,7 @@ private JsonArray csvStream(String rootFolder, String model_name, String phenoty
 	//String path = rootFolder + "/uploads/reference_database/CsGojo-0_v1_HC/fasta/";
 	String path = rootFolder + "/result/gwas/";
 
-	//System.out.println(cutOffValue);
+	System.out.println(cutOffValue);
 	
 	//System.out.println("==================================");
 	//System.out.println("CSV file (Stream class)");
@@ -91,9 +91,11 @@ private JsonArray csvStream(String rootFolder, String model_name, String phenoty
         	String[] lineArr = line.split(",");
         	
         	JsonObject jsonObject = new JsonObject();
+        	jsonObject.addProperty("row_id", lineArr[1]+ "_" +lineArr[2]);
+        	jsonObject.addProperty("selection", false);
         	jsonObject.addProperty("SNP", lineArr[0]);
-        	jsonObject.addProperty("Chr", lineArr[1]);
-        	jsonObject.addProperty("Pos", lineArr[2]);
+        	jsonObject.addProperty("chr", lineArr[1]);
+        	jsonObject.addProperty("pos", lineArr[2]);
         	jsonObject.addProperty("P-value", lineArr[3]);
         	jsonObject.addProperty("MAF", lineArr[4]);
         	jsonObject.addProperty("nobs", lineArr[5]);
@@ -111,7 +113,7 @@ private JsonArray csvStream(String rootFolder, String model_name, String phenoty
 		
 		//System.out.println("jobid : " +jobid+ ", time : " + (afterTime - beforeTime) + "ms");
 		
-		System.out.println(jsonArray);
+		//System.out.println(jsonArray);
 		
         lines.close();
 	} catch(IOException e) {

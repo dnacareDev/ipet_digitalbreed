@@ -13,6 +13,7 @@
 	String jobid_structure = request.getParameter("jobid_structure");
 	String comment = request.getParameter("comment");
 	String jobid_vcf = request.getParameter("jobid_vcf");
+	String vcfdata_no = request.getParameter("vcfdata_no");
 	String filename = request.getParameter("filename");
 	String refgenome = request.getParameter("refgenome");
 	String annotation_filename = request.getParameter("annotation_filename");
@@ -59,8 +60,8 @@
 		ipetdigitalconndb.conn.close();
 	}
 	
-	String sql = "insert into structure_t (cropid, varietyid, status, filename, comment, number_of_k, uploadpath, resultpath, jobid, creuser, cre_dt) ";
-	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+filename+"', '"+ comment +"', '"+ Number_of_K +"', '"+ db_savePath+"','"+db_outputPath+"', '"+jobid_structure+"','" +permissionUid+ "',now());";
+	String sql = "insert into structure_t (cropid, varietyid, status, vcfdata_no, filename, comment, number_of_k, uploadpath, resultpath, jobid, creuser, cre_dt) ";
+	sql += "values((select cropid from variety_t where varietyid='"+varietyid+"'), '"+varietyid+"', 0, '"+vcfdata_no+"', '" +filename+"', '"+ comment +"', '"+ Number_of_K +"', '"+ db_savePath+"','"+db_outputPath+"', '"+jobid_structure+"','" +permissionUid+ "',now());";
 
 	System.out.println();
 	System.out.println("sql : " + sql);

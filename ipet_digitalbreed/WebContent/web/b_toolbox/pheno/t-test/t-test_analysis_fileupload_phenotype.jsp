@@ -60,7 +60,7 @@
 	//System.out.println(phenotypeDB);
 	
 	
-	String cmd = "Rscript " +script_path+ "Phenotype_t-test.R " +jobid_t_test+ " " +savePath+jobid_t_test+ " GS_traits.csv null " +seq+ " " +outputPath+ " TRUE";
+	String cmd = "Rscript " +script_path+ "Phenotype_t-test.R " +jobid_t_test+ " " +savePath+jobid_t_test+ " GS_traits.csv null " +seq+ " " +outputPath+ " FALSE";
 	
 	System.out.println("cmd : " + cmd);
 			

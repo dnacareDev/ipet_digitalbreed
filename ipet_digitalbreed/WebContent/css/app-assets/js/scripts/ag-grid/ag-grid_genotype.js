@@ -537,7 +537,8 @@
 			["A", "A"], ["C", "C"], ["G", "G"],["T", "T"], ["I", "I"], 
 			["R", "A or G"], ["Y", "C or T"], ["M", "A or C"], ["K", "G or T"],
 			["S", "C or G"], ["W", "A or T"], ["H", "A or C or T"], ["B", "C or G or T"], 
-			["V", "A or C or G"], ["V", "A or C or G"], ["D", "A or G or T"], ["N", "A or C or G or T"]
+			//["V", "A or C or G"], ["V", "A or C or G"], ["D", "A or G or T"], ["N", "A or C or G or T"]
+			["V", "A or C or G"], ["V", "A or C or G"], ["D", "A or G or T"], ["N", "Missing"]
 		]);
 		
 		if(map.has(params.value)) {

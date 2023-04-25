@@ -275,6 +275,7 @@
 																	<option value="-1" hidden disabled selected>Select Phenotype</option>
 																</select>
 															</div>
+															<!--
 															<div class="col-2" style="max-width:12%;">
 																<select id='isQQ' class='select2 form-select ml-1 mb-1 float-left' onchange="showMultiPlot();">
 																	<option value='-1' hidden disabled selected>Select plot type</option>
@@ -282,6 +283,7 @@
 																	<option value='noQQ'>Manhattan plot</option>
 																</select>
 															</div>
+															-->
 														</div>
 														<div class="row">
 															<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
@@ -396,9 +398,14 @@
 	function showMultiPlot() {
 		
 		const multi_phenotype = document.getElementById('Multi_phenotype').value;
+		/*
 		const multi_isQQ = document.getElementById('isQQ').value;
 		
 		if(multi_phenotype == "-1" || multi_isQQ == "-1") {
+			return;
+		}
+		*/
+		if(multi_phenotype == "-1") {
 			return;
 		}
 		
@@ -416,13 +423,15 @@
 		*/
 		$(`iframe#Multi`).attr('src', '');		// empty plot
 		
-		
+		/*
 		let url;
 		if(multi_isQQ == "QQ") {
 			url = `${resultpath}${jobid}/multi_QQ_${multi_phenotype}.html`
 		} else {
 			url = `${resultpath}${jobid}/multi_${multi_phenotype}.html`
 		}
+		*/
+		const url = `${resultpath}${jobid}/multi_${multi_phenotype}.html`
 		
 		/*
 		fetch(url, {method: "HEAD"})

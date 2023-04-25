@@ -399,7 +399,7 @@
    		$("#VcfSelect").append(`<option data-jobid="-1" disabled hidden selected></option>`);
     	for(let i=0 ; i<data.length ; i++) {
 			// ${data}}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
-			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-refgenome_id=\${data[i].refgenome_id} data-refgenome=\${data[i].refgenome} data-annotation_filename=\${data[i].annotation_filename} > \${data[i].filename} (\${data[i].comment}) </option>`);
+			$("#VcfSelect").append(`<option data-jobid=\${data[i].jobid} data-vcfdata_no=\${data[i].selectfiles} data-filename=\${data[i].filename} data-refgenome_id=\${data[i].refgenome_id} data-refgenome=\${data[i].refgenome} data-annotation_filename=\${data[i].annotation_filename} > \${data[i].filename} (\${data[i].comment}) </option>`);
 		}
     }
     
@@ -445,6 +445,7 @@
     	
    		const vcfSelect = document.getElementById('VcfSelect');
    		const jobid_vcf = vcfSelect.options[vcfSelect.selectedIndex].dataset.jobid;
+   		const vcfdata_no = vcfSelect.options[vcfSelect.selectedIndex].dataset.vcfdata_no;
    		const filename = vcfSelect.options[vcfSelect.selectedIndex].dataset.filename;
    		const refgenome_id = vcfSelect.options[vcfSelect.selectedIndex].dataset.refgenome_id;
    		const refgenome = vcfSelect.options[vcfSelect.selectedIndex].dataset.refgenome;
@@ -453,6 +454,7 @@
    		formData.append("varietyid", varietyid);
    		formData.append("jobid_structure", jobid_structure);
    		formData.append("jobid_vcf", jobid_vcf);
+   		formData.append("vcfdata_no", vcfdata_no);
    		formData.append("filename", filename);
     	formData.append("refgenome_id", refgenome_id);
     	formData.append("refgenome", refgenome);
@@ -488,7 +490,7 @@
     	fetch(`./structure_insertSql.jsp`, {
     		method: "POST",
    			headers: {
-   				"Content-Type": "application/x-www-form-urlencoded",
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
    			},
    			body: new URLSearchParams(formData)
     	});
@@ -497,7 +499,7 @@
    		fetch(`./structure_analysis.jsp`, {
    			method: "POST",
    			headers: {
-   				"Content-Type": "application/x-www-form-urlencoded",
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
    			},
    			body: new URLSearchParams(formData)
    		})

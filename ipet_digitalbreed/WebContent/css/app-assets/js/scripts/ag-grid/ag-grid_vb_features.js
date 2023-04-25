@@ -398,7 +398,8 @@
 		{
 			headerName: "row_id(select link)",
 			field: "row_id",
-			//valueGetter: (params) => params.data.chr + "_" + params.data.pos,
+			//field: "SNP",
+			valueGetter: (params) => params.data.Chr + "_" + params.data.Pos,
 			hide: true,
 	    },
 		{ 
@@ -489,6 +490,7 @@
 		colResizeDefault: "shift", 
 		animateRows: true, 
 		getRowId: (params) => params.data.row_id,
+		//getRowId: (params) => params.data.SNP,
 		onCellClicked: (params) => {
 			//console.log(params);
 			
@@ -921,7 +923,7 @@
 			
 	}
 	
-	
+	/*
 	var STRUCTURE_columnDefs = [
 		{ headerName: "순번",valueGetter: inverseRowCount, width: 80, },
 		{ field: "ID", maxWidth: 100, minWidth: 100, suppressMenu: true, },
@@ -929,6 +931,12 @@
 	    { field: "Population", filter: 'agNumberColumnFilter', width: 160, minWidth: 160, },
 	    { field: "K", filter: true, width: 100, minWidth: 100, },
 	];
+	*/
+	const STRUCTURE_columnDefs = [
+		{field: "Sample_Name", filter: true},
+		{field: "Cluster1"},
+		{field: "Cluster2"},
+	]
 	var STRUCTURE_gridOptions = {
 			defaultColDef: { 
 				editable: false, 

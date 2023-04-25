@@ -359,7 +359,9 @@
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' onclick="resizeGrid();" aria-expanded='true'>SnpEff</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' onclick="resizeGrid();" aria-expanded='false'>GWAS</a></li>
+					   								<!--  
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill3' onclick="resizeGrid();" aria-expanded='false'>Marker</a></li>
+					   								-->
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_4' data-toggle='pill' href='#pill4' onclick="resizeGrid();" aria-expanded='false'>Selection</a></li>
 												</ul>
 												<div class='tab-content'>
@@ -494,7 +496,9 @@
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill5' onclick="resizeGrid();" aria-expanded='true'>UPGMA</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill6' onclick="resizeGrid();" aria-expanded='false'>STRUCTURE</a></li>
+					   								<!--  
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill7' onclick="resizeGrid();" aria-expanded='false'>Haplotype</a></li>
+					   								-->
 												</ul>
 												<div class='tab-content'>
 	  												<!-- UPGMA pill -->
@@ -545,21 +549,16 @@
 	  												<div class='tab-pane pl-1' id='pill6' aria-labelledby='base-pill2'>
 	  													<div class="row justify-content-between"> 
 															<div class="col-6">
-																<select id='STRUCTURE_select' class='select2 form-select float-left'>
+																<select id='STRUCTURE_select' class='select2 form-select float-left' onchange='STRUCTURE_gridOptions.api.setColumnDefs(STRUCTURE_columnDefs); STRUCTURE_gridOptions.api.setRowData(); STRUCTURE_gridOptions.api.sizeColumnsToFit(); setNumberOfK(this.options[this.selectedIndex].dataset);'>
 																	<option data-chr="-1" disabled hidden selected>Select result</option>
 																</select>
 															</div>
-															<div class="float-right">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
-											            	</div>
+															<div class="col-6">
+																<select id='STRUCTURE_select_K' class='select2 form-select float-left' onchange='show_STRUCTURE_Grid(this.options[this.selectedIndex].dataset);'>
+																	<option data-chr="-1" disabled hidden selected>Select K</option>
+																</select>
+															</div>
 														</div>
-														<!--  
-														<div class="row mt-1" style="float:right;">
-									            			<div class="col-12">
-											            		<button type="button" class="btn btn-light mb-1" style="margin-right:29px;" onclick="filter_SnpEff();">정렬</button>
-											            	</div>
-									            		</div>
-									            		-->
 									            		<div class="row mt-1">
 	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:642px; width:93%; margin-left: 15px;"></div>
 	  													</div>
@@ -985,7 +984,7 @@
 		
 		getGwasSelectList();
 		getUpgmaSelectList();
-		//getStructureSelectList();
+		getStructureSelectList();
 		
 		
 	})
@@ -2442,20 +2441,23 @@
 			element.insertAdjacentHTML('beforeend',`
 					<div class="row">
 						<div class="col-4">
-							<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="show_GWAS_Grid()"></select>
+							<select id="GWAS_select_\${model[i]}" data-model="\${model[i]}" data-jobid="\${jobid}" onchange="const phenotype=this.options[this.selectedIndex].dataset.phenotype; calculate_GWAS_cutOff(phenotype);"></select>
 						</div>
 						<div id="cutOffDiv_\${model[i]}" class="col-8" style="display:none; justify-content:end;">
 							<div class="col-8">
-								<input type="text" id='cutOffValue_${model_arr[i]}' class='form-control' placeholder='cut off value (-log10(P))' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1'); if(this.value<0)this.value=0;" >
+								<input type="text" id='cutOffValue_\${model[i]}' class='form-control' placeholder='cut off value (-log10(P))' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1'); if(this.value<0)this.value=0;" >
 							</div>
 							<div class="col-4">
-								<button class="btn btn-primary" style="width:100%;" data-model="${model[i]}" onclick="const selectEl = document.getElementById('${model_arr[i]}_phenotype'); 
-																									const phenotype = selectEl.options[selectEl.selectedIndex].value; 
-																									const cutOffValue = Number(document.getElementById('cutOffValue_${model_arr[i]}').value); 
-																									if(validCheckCutOff(this.dataset.model, cutOffValue, phenotype)) {
-																										updateCutOff(this.dataset.model, cutOffValue, phenotype);
+								<button class="btn btn-primary" style="width:100%;" data-model="${model[i]}" onclick="
+																									const selectEl = document.getElementById('GWAS_select_\${model[i]}'); 
+																									const phenotype = selectEl.options[selectEl.selectedIndex].dataset.phenotype; 
+																									const cutOffValue = Number(document.getElementById('cutOffValue_\${model[i]}').value); 
+																									if(validCheckCutOff('\${model[i]}', cutOffValue, phenotype)) {
+																										updateCutOff('\${model[i]}', cutOffValue, phenotype);
 																										show_GWAS_Grid(phenotype, cutOffValue);
-																									} ">cutoff</button>
+																									} else {
+																										show_GWAS_cutOff(phenotype);
+																									}">cutoff</button>
 							</div>
 						</div>
 					</div>
@@ -2478,7 +2480,7 @@
 			GWAS_gridOptions_model[model[i]] = Object.assign({},GWAS_gridOptions);
 			
 			const GWAS_Grid = new agGrid.Grid(GWAS_gridTable, GWAS_gridOptions_model[model[i]]);
-			GWAS_gridOptions_model[model[i]].api.setRowData([]);
+			GWAS_gridOptions_model[model[i]].api.setRowData();
 			GWAS_gridOptions_model[model[i]].columnApi.autoSizeAllColumns();
 			
 			// data가 출력되기 전에는 display='none' & 아이콘 출력
@@ -2487,12 +2489,81 @@
    		
    	}
    	
+   	
+   	function validCheckCutOff(model, cutOff, phenotype) {
+		if(Number(phenotype) == -1) {
+    		return false;
+    	}
+    	
+    	if(cutOff == 0 && !confirm("cut off값에 0 또는 아무것도 입력하지 않았습니다.\n이 경우 모든 데이터가 출력됩니다.\n계속 하시겠습니까?") ) {
+    		return false;
+    	}
+    	
+    	return true;
+	}
+	
+	function updateCutOff(model, cutOffValue, phenotype) {
+		const select_phenotype = document.getElementById(`GWAS_select_\${model}`);
+		const jobid = select_phenotype?.dataset?.jobid;
+    	
+    	const params = new URLSearchParams({
+			"phenotype": phenotype,
+			"model": model,
+			"jobid": jobid,
+			"cutOffValue": cutOffValue,
+		});
+    	
+    	fetch('../gwas_gs/gwas_updateCutOffValue.jsp', {
+			method: "POST",
+			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+   			},
+   			body: params,
+		})
+	}
+	
+	async function calculate_GWAS_cutOff(phenotype) {
+		const model = document.querySelector('#GWAS_button_list .nav-link.active')?.dataset?.model;
+		const select_phenotype = document.getElementById(`GWAS_select_\${model}`);
+		const jobid = select_phenotype?.dataset?.jobid;
+		
+		if(!model || !phenotype || !jobid) {
+			return;
+		}
+		
+		
+		const params = new URLSearchParams({
+			"phenotype": phenotype,
+			"model": model,
+			"jobid": jobid,
+		});
+		
+		let cutOffValue = await fetch('../gwas_gs/gwas_getCutOffValue.jsp', {
+								method: "POST",
+								headers: {
+					   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+					   			},
+					   			body: params,
+							})
+							.then((response) => response.text())
+		
+		
+		cutOffValue = parseInt(cutOffValue) == Number(cutOffValue) ? parseInt(cutOffValue) : Number(cutOffValue);  
+		
+		//console.log(cutOffValue);
+		
+		document.getElementById(`cutOffValue_\${model}`).value = cutOffValue == -1 ? "" : cutOffValue;
+		
+		show_GWAS_Grid(phenotype, cutOffValue);
+	}
+	
+   	
    	//function show_GWAS_Grid (HTML_element) {
-   	function show_GWAS_Grid() {
+   	function show_GWAS_Grid(phenotype, cutOff = -1) {
 		
 		const model = document.querySelector('#GWAS_button_list .nav-link.active')?.dataset?.model;
 		const select_phenotype = document.getElementById(`GWAS_select_\${model}`);
-		const phenotype = select_phenotype?.options[select_phenotype.selectedIndex]?.dataset?.phenotype;
+		//const phenotype = select_phenotype?.options[select_phenotype.selectedIndex]?.dataset?.phenotype;
 		const jobid = select_phenotype?.dataset?.jobid;
 		
    		
@@ -2501,8 +2572,7 @@
 			return;
 		}
 		
-		const chr_select = document.getElementById('Chr_select');
-   		const chr = chr_select.options[chr_select.selectedIndex].dataset.chr;
+		
    		
 		//console.log(model);
 		//console.log(phenotype);
@@ -2510,7 +2580,77 @@
 		
 		const GWAS_gridTable = document.getElementById(`GWAS_Grid_\${model}`);
 		
+		//document.getElementById(`cutOffDiv_\${model}`).style.display = 'flex';
+		
+		
+		const params = new URLSearchParams({
+			"model_name" : model,
+			"phenotype": phenotype,
+			"jobid_param" : jobid,
+			"cutOff": cutOff,
+		});
+		
+		fetch(`./vb_features_grid_GWAS_Gapit.jsp`, {
+			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+   			},
+   			body: params,
+		})
+		.then((response) => {
+			if(response.ok) {
+				//return response.text();
+				GWAS_gridTable.style.display = 'block';
+				document.getElementById(`cutOffDiv_\${model}`).style.display = 'flex';
+				document.getElementById('status404').style.display = 'none';
+				return response.json();
+			} else {
+				GWAS_gridTable.style.display = 'none';
+				document.getElementById(`cutOffDiv_\${model}`).style.display = 'none';
+				document.getElementById('status404').style.display = 'block';
+				throw new Error('error : status ', response.status);
+			}
+		})
+		.then((data) => {
+			//console.log(data);
+			
+			/*
+			if(data.length == 0) {
+				GWAS_gridTable.style.display = 'none';
+				document.getElementById(`cutOffDiv_\${model}`).style.display = 'none';
+				document.getElementById('status404').style.display = 'block';
+				return;
+			} else {
+				GWAS_gridTable.style.display = 'block';
+				document.getElementById(`cutOffDiv_\${model}`).style.display = 'flex';
+				document.getElementById('status404').style.display = 'none';
+			}
+			*/
+			
+			//cut off Div display
+			document.getElementById(`cutOffDiv_\${model}`).style.display = 'flex';
+			
+			//new agGrid.Grid(document.getElementById(`grid_\${model}`), GWAS_gridOptions_model[model]);
+			GWAS_gridOptions_model[model].api.setRowData(data);
+			GWAS_gridOptions_model[model].columnApi.autoSizeAllColumns();
+			
+			SelectionList_gridOptions.api.forEachNode((selection_node) => {
+				const selection_row_id = selection_node.id;
+				const GWAS_node = GWAS_gridOptions_model[model].api.getRowNode(selection_row_id);
+				
+				//console.log("snpEff_node : " , snpEff_node);
+				if(GWAS_node) {
+					const selection_gwas_flag = selection_node.data.gwas
+					GWAS_node.setDataValue('selection', selection_gwas_flag);
+				}
+			})
+		});
+		
+		
 		/*
+		const chr_select = document.getElementById('Chr_select');
+   		const chr = chr_select.options[chr_select.selectedIndex].dataset.chr;
+   		
 		fetch(`/ipet_digitalbreed/result/gwas/\${jobid}/GAPIT.Association.GWAS_Results.\${model}.\${phenotype}.csv`, {method: "HEAD"})
 		.then((response) => response.ok)
 		.then((ok) => {
@@ -2922,6 +3062,74 @@
    	function getStructureSelectList() {
    		console.log("sturcture");
    		// structure new analysis 시 vcf_data no값이 안 넘어감. select option값에 넣어주는 것부터 시작해야 함.
+   		fetch(`./vb_getSelectLists.jsp?command=STRUCTURE&jobid=\${linkedJobid}`)
+   		.then((response) => response.json())
+   		.then((data) => {
+   			console.log(data);
+   			for(let i=0 ; i<data.length ; i++) {
+  				$("#STRUCTURE_select").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-number_of_k=\${data[i].number_of_k} > \${data[i].comment} (\${data[i].cre_dt}) </option>`);
+  			}
+   		});
+   	}
+   	
+   	function setNumberOfK(dataset) {
+   		const number_of_k = dataset.number_of_k;
+   		
+   		const selectEl_k = document.getElementById('STRUCTURE_select_K');
+   		selectEl_k.innerHTML = '<option data-chr="-1" disabled hidden selected>Select K</option>';
+   		for(let i=2 ; i<=number_of_k ; i++) {
+   			selectEl_k.insertAdjacentHTML('beforeend',`<option data-number=\${i} >\${i}</option>`)
+   		}
+   	}
+   	
+   	function show_STRUCTURE_Grid(dataset) {
+   		
+   		const selectEl_structure = document.getElementById('STRUCTURE_select');
+   		const jobid = selectEl_structure.options[selectEl_structure.selectedIndex].dataset.jobid;
+   		
+   		const number_of_k = dataset.number;
+   		
+   		const params = new URLSearchParams({
+   			"jobid": jobid,
+   			"number_of_k": number_of_k,
+   		})
+   		
+   		fetch('./vb_features_grid_STRUCTURE.jsp',{
+   			method: "POST",
+   			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+   			},
+   			body: params
+   		})
+   		.then(response => response.json())
+   		.then(data => {
+   			console.log(data);
+   			
+   			const STRUCTURE_columnDefs = [
+   				{field: "Sample_Name", filter: true},
+   			];
+   			
+   			for(let i=1 ; i<=number_of_k ; i++) {
+   				STRUCTURE_columnDefs.push({field: `Cluster\${i}`})
+   			}
+   			
+   			STRUCTURE_gridOptions.api.setColumnDefs(STRUCTURE_columnDefs);
+   			STRUCTURE_gridOptions.api.setRowData(data);
+   			STRUCTURE_gridOptions.columnApi.autoSizeAllColumns();
+   			
+   			const resultGrid_width = document.getElementById('STRUCTURE_Grid').clientWidth;
+	        const all_columns = STRUCTURE_gridOptions.columnApi.getColumns();
+	        
+	        //STRUCTURE_columnDefs[0]['minWidth'] = all_columns[0]['actualWidth']
+	        
+	        for(let i=0 ; i<=number_of_k ; i++) {
+   				STRUCTURE_columnDefs[i]['minWidth'] = all_columns[0]['actualWidth'];
+   			}
+	        
+        	
+	        STRUCTURE_gridOptions.api.setColumnDefs(STRUCTURE_columnDefs);
+	        STRUCTURE_gridOptions.api.sizeColumnsToFit();
+   		})
    	}
    	
    	async function primerDesign() {

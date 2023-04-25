@@ -42,6 +42,13 @@
 			//System.out.println("standard");
 			out.print(UpgmaStandardListJsonArr);
 			break;	
+			
+		case "STRUCTURE":
+			
+			JsonArray getStructureListJsonArray = getStructureList(rootFolder, jobid);
+			//System.out.println("standard");
+			out.print(getStructureListJsonArray);
+			break;
 	}
 	
 	
@@ -137,6 +144,40 @@
 		
 		
 		//System.out.println(jsonArr);
+		return jsonArr;
+	}
+%>
+
+<%! 
+	public JsonArray getStructureList(String rootFolder, String jobid) throws SQLException {
+		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+		
+		JsonArray jsonArr = new JsonArray();
+		
+		String sql = "select st.no, st.filename, st.comment, st.number_of_k, st.jobid, DATE_FORMAT(st.cre_dt, '%Y-%m-%d') AS cre_dt from structure_t as st inner join vcfdata_info_t as vcf on st.vcfdata_no = vcf.no where vcf.jobid ='"+jobid+"' and st.status=1;";
+		//System.out.println(sql);
+		try{
+			ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+			while (ipetdigitalconndb.rs.next()) { 
+				JsonObject jsonObj = new JsonObject();
+				jsonObj.addProperty("no", ipetdigitalconndb.rs.getString("no"));
+				jsonObj.addProperty("filename", ipetdigitalconndb.rs.getString("filename"));
+				jsonObj.addProperty("comment", ipetdigitalconndb.rs.getString("comment"));
+				jsonObj.addProperty("number_of_k", ipetdigitalconndb.rs.getString("number_of_k"));
+				jsonObj.addProperty("jobid", ipetdigitalconndb.rs.getString("jobid"));
+				jsonObj.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt"));
+				jsonArr.add(jsonObj);
+			}
+		}catch(Exception e){
+			System.out.println(e);
+		} finally {
+			ipetdigitalconndb.rs.close();
+			ipetdigitalconndb.stmt.close();
+			ipetdigitalconndb.conn.close();
+		}
+		
+	
 		return jsonArr;
 	}
 %>

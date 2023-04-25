@@ -23,7 +23,7 @@
 	
 	try{
 		String sql="select cutoff_value from gwas_cutoff_t where jobid='"+ jobid +"' and model='"+ model +"' and phenotype='"+ phenotype +"' and creuser='"+permissionUid+"' ORDER BY gwas_cutoff_id DESC;";
-		System.out.println(sql);
+		//System.out.println(sql);
 		
 		ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);
 		
