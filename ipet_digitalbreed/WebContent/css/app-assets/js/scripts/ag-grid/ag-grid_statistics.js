@@ -43,20 +43,35 @@
 			cellRenderer: function(params) {
 				//const linkedJobid = params.data.jobid;
 
+				return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "${params.data.category}")'>결과보기</span>`
+				/*
 				switch(params.data.category) {
-					case('quality'):
-						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "quality")'>결과보기</span>`;
 					case('GWAS'):
-						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "GWAS")'>결과보기</span>`;
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
+					case('GS'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
 					case('PCA'):
-						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "PCA")'>결과보기</span>`;
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
 					case('UPGMA clustering'):
-						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "UPGMA clustering")'>결과보기</span>`;
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
 					case('Core selection'):
-						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "Core selection")'>결과보기</span>`;
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
+					case('quality'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
+					case('subset'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
+					case('merge'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
 					case('Minimal marker'):
-						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", "Minimal marker")'>결과보기</span>`;
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
+					case('Ideogram'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
+					case('Annotation'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
+					case('STRUCTURE'):
+						return `<span style='color:#777add; cursor:pointer;' onclick='moveTo("${params.data.jobid}", ${params.data.category})'>결과보기</span>`;
 				}
+				*/
 				
 				//console.log(params);
 				//return "<a href='#'>결과보기</a>";
@@ -159,26 +174,52 @@
 	};
 	
 	document.addEventListener('DOMContentLoaded', () => {
-  		/*** DEFINED TABLE VARIABLE ***/
-  		const gridTable = document.getElementById("myGrid");
-
-  	  	/*** FILTER TABLE ***/
-  	  	function updateSearchQuery(val) {
-  	  		gridOptions.api.setQuickFilter(val);
-  	  	}
-
-  	  	$(".ag-grid-filter").on("keyup", function() {
-  	  		updateSearchQuery($(this).val());
-  	  	});
-
-  	  	/*** CHANGE DATA PER PAGE ***/
-  	  	function changePageSize(value) {
-  	  		gridOptions.api.paginationSetPageSize(Number(value));
-  	  	}
   		
-  		const myGrid = new agGrid.Grid(gridTable, gridOptions);
-  		
+  	  	//const gridTable = document.getElementById("myGrid");
+  		const myGrid = new agGrid.Grid(document.getElementById("myGrid"), gridOptions);
   		getAnalysisListGrid();
+  		
+  		
+  		
+  		/*
+  		const params = new URLSearchParams({
+							varietyid: $("#variety-select option:selected").val()
+						})
+  		fetch('./statistics_json_analysis.jsp?'+params)
+  		.then(response => response.json())
+  		.then(data => {
+  			console.log(data);
+  		})
+  		*/
+  		/*
+  		const varietyid = $("#variety-select option:selected").val();
+  		
+  		let urls = [
+  			'../gwas_gs/gs_json.jsp?varietyid='+varietyid,
+  			'../gwas_gs/gwas_json.jsp?varietyid='+varietyid,
+  			'../pd/pd_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/qf/qf_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/sf/sf_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/vfm/vfm_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/pca/pca_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/upgma/upgma_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/genocore/genocore_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/mini/mini_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/anno/anno_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/ideogram/ideogram_json.jsp?varietyid='+varietyid,
+  			'../b_toolbox/structure/structure_json.jsp?varietyid='+varietyid,
+  		];
+  		let requests = urls.map(url => fetch(url));
+  		
+  		Promise.all(requests)
+  		.then(responses => Promise.all(responses.map(r => r.json())))
+  		.then(data => {
+  			console.log(data);
+  		})
+  		 */
+  		
+  		
+  		
 	})	
 	
 	function getAnalysisListGrid() {
@@ -193,7 +234,7 @@
   		fetch(`/ipet_digitalbreed/web/statistics/statistics_json.jsp?varietyid=${varietyid}&year=${year}&month=${month}`)
   		.then((response) => response.json())
   		.then((data) => {
-  			//console.log(data);
+  			//console.log("statistics : ", data);
 			gridOptions.api.setRowData(data);
 			gridOptions.api.sizeColumnsToFit();
   		})

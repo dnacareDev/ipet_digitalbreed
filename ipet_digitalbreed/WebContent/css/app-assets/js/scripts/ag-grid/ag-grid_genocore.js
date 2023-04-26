@@ -520,7 +520,7 @@
 								
 								//gridOptions.api.setFocusedCell(Number(rowNode.rowIndex), 'no');
 								//console.log($("[row-id='0'] [col-id='displayno']"));
-								$(`[row-index=${rowNode.rowIndex}] [col-id='0']`).trigger("click");
+								$(`[row-index=${rowNode.rowIndex}] [col-id='status']`).trigger("click");
 							}
 						});	
 					}

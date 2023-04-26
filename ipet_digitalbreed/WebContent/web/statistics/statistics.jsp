@@ -469,8 +469,25 @@ body {
 		const variety_id = $( "#variety-select option:selected" ).val();
 		//const items = ['genotype_data', 'phenotype_data', 'GWAS', 'GS', 'genotype_analysis', 'phenotype_analysis'];
 		
-		console.log(variety_id);
+		//console.log(variety_id);
 		
+		const params = new URLSearchParams({
+			variety_id : $( "#variety-select option:selected" ).val()
+		});
+		fetch('./statistics_getTablesRowCount.jsp?'+params)
+		.then(response=> response.json()) 
+		.then(data => {
+			//console.log(data);
+			document.getElementById('genotype_data').textContent = data['genotype_data'];
+			document.getElementById('phenotype_data').textContent = data['phenotype_data'];
+			document.getElementById('GWAS').textContent = data['GWAS'];
+			document.getElementById('GS').textContent = data['GS'];
+			document.getElementById('genotype_analysis').textContent = data['genotype_analysis'];
+			document.getElementById('phenotype_analysis').textContent = data['phenotype_analysis'];
+		})
+		
+		
+		/*
 		const genotype_data = document.getElementById('genotype_data');
 		const phenotype_data = document.getElementById('phenotype_data');
 		const GWAS = document.getElementById('GWAS');
@@ -511,6 +528,7 @@ body {
 				}
 			})
 		})
+		*/
 	}
 	
 	
@@ -553,6 +571,7 @@ body {
 		form.appendChild(form_jobid);
 		form.setAttribute('method', 'post'); //get,post 가능
 
+		/*
 		switch(category) {
 			case 'GWAS':
 				form.setAttribute('action', "../gwas_gs/gwas.jsp"); 
@@ -573,6 +592,30 @@ body {
 				form.setAttribute('action', "../b_toolbox/mini/mini.jsp");
 				break;
 		}
+		*/
+		
+		const category_obj = {
+				"GWAS": "../gwas_gs/gwas.jsp",
+				"GS": "../gwas_gs/gs.jsp",
+				"quality": "../b_toolbox/qf/qf.jsp",
+				"subset": "../b_toolbox/sf/sf.jsp",
+				"merge": "../b_toolbox/vfm/vfm.jsp",
+				"PCA": "../b_toolbox/pca/pca.jsp",
+				"UPGMA clustering": "../b_toolbox/upgma/upgma.jsp",
+				"Core selection": "../b_toolbox/genocore/genocore.jsp",
+				"Minimal marker": "../b_toolbox/mini/mini.jsp",
+				"Annotation": "../b_toolbox/anno/anno.jsp",
+				"Ideogram": "../b_toolbox/ideogram/ideogram.jsp",
+				"STRUCTURE": "../b_toolbox/structure/structure.jsp",
+				"Statistical Summary": "../b_toolbox/pheno/statistical_summary/statistical_summary.jsp",
+				"One-way ANOVA": "../b_toolbox/pheno/anova/anova.jsp",
+				"T-test": "../b_toolbox/pheno/t-test/t-test.jsp",
+				"Phenotype PCA": "../b_toolbox/pheno/phenotype_pca/phenotype_pca.jsp",
+				"Correlation": "../b_toolbox/pheno/correlation/correlation.jsp",
+				"Regression": "../b_toolbox/pheno/regression/regression.jsp",
+		}
+		
+		form.setAttribute('action', category_obj[category]); 
 		
 		/*
 		form_category = document.createElement('input');
@@ -584,8 +627,9 @@ body {
 		//form.setAttribute('action', "../b_toolbox/qf/qf.jsp"); //보내는 url
 		form.target = "new";
 		document.body.appendChild(form);
-		console.log(form);
+		//console.log(form);
 		form.submit();
+		form.remove();
 	}
 	
 	</script>

@@ -346,32 +346,33 @@
 	var gridTable = document.getElementById("myGrid");
 
 	/*** GET TABLE DATA FROM URL ***/
-
-  	agGrid
-		.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
-		.then(function(data) {
-		console.log("data : ", data);
-		  
-		gridOptions.api.setRowData(data);
-		gridOptions.api.sizeColumnsToFit();
-		
-		if(linkedJobid !== "null") {
-			gridOptions.api.forEachNode((rowNode, index) => {
-				if(linkedJobid == rowNode.data.jobid) {
-					console.log(rowNode.rowIndex);
-					
-					gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
-					
-					gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
-					rowNode.setSelected(true);
-					
-					//gridOptions.api.setFocusedCell(Number(rowNode.rowIndex), 'no');
-					//console.log($("[row-id='0'] [col-id='displayno']"));
-					$(`[row-index=${rowNode.rowIndex}] [col-id='0']`).trigger("click");
-				}
-			});	
-		}
-	});
+	document.addEventListener('DOMContentLoaded', () => {
+	  	agGrid
+			.simpleHttpRequest({ url: "../../../web/b_toolbox/pca/pca_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
+			.then(function(data) {
+			console.log("data : ", data);
+			  
+			gridOptions.api.setRowData(data);
+			gridOptions.api.sizeColumnsToFit();
+			
+			if(linkedJobid !== "null") {
+				gridOptions.api.forEachNode((rowNode, index) => {
+					if(linkedJobid == rowNode.data.jobid) {
+						console.log(rowNode.rowIndex);
+						
+						gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
+						
+						gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
+						rowNode.setSelected(true);
+						
+						//gridOptions.api.setFocusedCell(Number(rowNode.rowIndex), 'no');
+						//console.log($("[row-id='0'] [col-id='displayno']"));
+						$(`[row-index=${rowNode.rowIndex}] [col-id='status']`).trigger("click");
+					}
+				});	
+			}
+		});
+	}) 
   	
   	function getParams() {
   		return 

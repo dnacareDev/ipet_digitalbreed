@@ -243,45 +243,8 @@
 					
 					window.scrollTo(0, document.body.scrollHeight);
 				})
-				
-				
-				/*
-				switch (Number(params.data.status)) {
-					case 0:
-						//$("#analysis_process").modal('show');
-						alert("분석 중입니다.");
-						break;
-					case 1:
-						$('#pill1_frame').attr('src', '');
-						$('#pill2_frame').attr('src', '');
-						$('#pill3_frame').attr('src', '');
-						$('#pill4_frame').attr('src', '');
-						$('#pill5_frame').attr('src', '');
-
-						$("#iframeLoading").modal('show');
-						
-						document.getElementById("Extra_Card").style.display = "block";
-						document.getElementById("Extra_Card").dataset.jobid = params.data.jobid;
-						document.getElementById("Extra_Card").dataset.resultpath = params.data.resultpath;
-						
-						document.getElementById('nav1').click();
-				   		
-						$('#pill1_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc1_pc2.html");
-						$('#pill2_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pc2_pc3.html");
-						$('#pill3_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA2D_pca_pc1_pc3.html");
-						//$('#pill4_frame').attr('src', params.data.resultpath+params.data.jobid+"/PCA3D.html");
-						
-						window.scrollTo(0, document.body.scrollHeight);
-						
-						break;
-					case 2:
-						//$("#analysis_fail").modal('show');
-						alert("분석에 실패했습니다.");
-						break;
-				}
-				*/
 			}
-		}
+		},
 	};
 	
 	var columnDefsTraitName = [
@@ -617,6 +580,21 @@
   			console.log(data);
 			gridOptions.api.setRowData(data);
 			gridOptions.api.sizeColumnsToFit();
+			
+			if(linkedJobid !== "null") {
+				gridOptions.api.forEachNode((rowNode, index) => {
+					if(linkedJobid == rowNode.data.jobid) {
+						console.log(rowNode.rowIndex);
+						
+						gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
+						
+						gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
+						rowNode.setSelected(true);
+						
+						document.querySelector(`[row-index="${rowNode.rowIndex}"] [col-id='comment']`).click();
+					}
+				});	
+			}
 			
   		})
   		

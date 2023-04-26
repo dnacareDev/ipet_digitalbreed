@@ -556,9 +556,24 @@
 				
 				const position = params.data['pos'];
 				
-				//document.querySelector(`.chromosomeStackDiv[data-order="${parseInt(position * 2000 / length)}"]`).dispatchEvent(new Event('click'));;
-				document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				document.getElementById('positionInput').dispatchEvent(new Event('blur'));
+				if(params.data.chr == chr_select[chr_select.selectedIndex].dataset.chr) {
+					document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					document.getElementById('positionInput').dispatchEvent(new Event('blur'));
+				} else {
+					const options = chr_select.options;
+					for(let i=0 ; i<options.length ; i++) {
+						if(params.data.chr == options[i].dataset.chr) {
+							chr_select.selectedIndex = i;
+							break;
+						}
+					}
+					document.getElementById('Chr_select').dispatchEvent(new Event('change'));
+					setTimeout(function(){
+						document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+						document.getElementById('positionInput').dispatchEvent(new Event('blur'));
+					}, 1000)
+				}
+				
 			}
 		},
 	}
@@ -886,20 +901,20 @@
 		{ 
 			headerName: "ID", 
 			field: "id", 
-			maxWidth: 100, 
-			minWidth: 100, 
+			//maxWidth: 160, 
+			//minWidth: 100, 
 			suppressMenu: true, 
 		},
 	    { field: "population", 
 			filter: true, 
 			width: 160, 
-			minWidth: 160, 
+			//minWidth: 160, 
 		},
 	    { 
 			field: "similarity", 
 			filter: 'agNumberColumnFilter', 
 			width: 160, 
-			minWidth: 160, 
+			//minWidth: 160, 
 			valueFormatter: (params) => Number(params.value).toFixed(2),
 		},
 	];

@@ -133,7 +133,8 @@
 	}
 	.expandSide {
 		width: 100%;
-		height: 880px;
+		/*height: 880px;*/
+		height: 775px;
 		opacity: 1;
 		transition-delay: 20ms;
 	}
@@ -393,7 +394,7 @@
 											            	</div>
 														</div>
 									            		<div class="row col-12 pl-0" style="margin-left:0px;">
-															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:760px; width:100%; display:none;"></div>
+															<div id='SnpEff_Grid' class="ag-theme-alpine" style="height:656px; width:100%; display:none;"></div>
 														</div>
 														<div id="SnpEff_Not_Exist" class="row col-12 pl-0" style="height:500px; margin-left:0px; display:none; justify-content:center; align-content:center; font-size: 25px;">
 															연관된 SNP 정보를 찾을 수 없습니다.
@@ -484,7 +485,7 @@
 											            	</div>
 									            		</div>
 									            		<div class="row col-12 mt-1 pr-0">
-	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:706px; width:100%;'></div>
+	  														<div id='SelectionList_Grid' class="ag-theme-alpine" style='height:642px; width:100%;'></div>
 	  													</div>
 	  													
 	  												</div>
@@ -542,7 +543,7 @@
 											            	</div>
 									            		</div>
 									            		<div class="row mt-1">
-															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:710px; width:93%; margin-left: 15px;"></div>
+															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:607px; width:93%; margin-left: 15px;"></div>
 														</div>
 	  												</div>
 	  												<!-- STRUCTURE pill -->
@@ -560,7 +561,7 @@
 															</div>
 														</div>
 									            		<div class="row mt-1">
-	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:642px; width:93%; margin-left: 15px;"></div>
+	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:658px; width:93%; margin-left: 15px;"></div>
 	  													</div>
 	  												</div>
 	  												<!-- Haplotype pill -->
@@ -2474,7 +2475,7 @@
 			//jQuery(`#GWAS_select_\${model[i]}`).select2({width: '35%'});
 			jQuery(`#GWAS_select_\${model[i]}`).select2({width: '100%'});
 			
-			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:664px; padding-right:28px;' ></div></div>`); 
+			$(`#GWAS_pill_\${model[i]}`).append(`<div class='row mt-1'><div id='GWAS_Grid_\${model[i]}' class='col-12 ag-theme-alpine' style='height:548px; padding-right:28px;' ></div></div>`); 
 			
 			const GWAS_gridTable = document.getElementById(`GWAS_Grid_\${model[i]}`);
 			GWAS_gridOptions_model[model[i]] = Object.assign({},GWAS_gridOptions);
@@ -2495,9 +2496,11 @@
     		return false;
     	}
     	
+		/*
     	if(cutOff == 0 && !confirm("cut off값에 0 또는 아무것도 입력하지 않았습니다.\n이 경우 모든 데이터가 출력됩니다.\n계속 하시겠습니까?") ) {
     		return false;
     	}
+		*/
     	
     	return true;
 	}
@@ -2713,6 +2716,10 @@
 		}
 		
 		for(let i=0 ; i<GWAS_marked_rows.length ; i++) {
+			
+			if(GWAS_marked_rows[i].chr != chr_select[chr_select.selectedIndex].dataset.chr) {
+				continue;
+			}
 			
 			const mark_pos = Number(GWAS_marked_rows[i]['pos']);
 			//console.log(mark_pos);

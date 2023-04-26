@@ -31,6 +31,7 @@
 		}
 	}
 	
+	ipetdigitalconndb.rs.close();
 	ipetdigitalconndb.stmt.close();
 	ipetdigitalconndb.conn.close();
 	

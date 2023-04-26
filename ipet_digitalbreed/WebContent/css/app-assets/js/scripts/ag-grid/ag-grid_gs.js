@@ -234,7 +234,8 @@
 						
 						gridOptions.api.sizeColumnsToFit();
 						
-					  	$("html").animate({ scrollTop: $(document).height() }, 1000);
+					  	//$("html").animate({ scrollTop: $(document).height() }, 1000);
+						window.scrollTo(0, document.body.scrollHeight);
 						
 						break;
 					case 2:
@@ -558,6 +559,21 @@
   			console.log(data);
 			gridOptions.api.setRowData(data);
 			gridOptions.api.sizeColumnsToFit();
+			
+			if(linkedJobid !== "null") {
+				gridOptions.api.forEachNode((rowNode, index) => {
+					if(linkedJobid == rowNode.data.jobid) {
+						console.log(rowNode.rowIndex);
+						
+						gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
+						
+						gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
+						rowNode.setSelected(true);
+						
+						document.querySelector(`[row-index="${rowNode.rowIndex}"] [col-id='status']`).click();
+					}
+				});	
+			}
   		})
   		
   		
@@ -585,22 +601,10 @@
   	});
 
 	/*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
-	
-  	document.addEventListener('click', function(event) {
-  		if(event.composedPath()[0].classList.contains("nav-link")) {
-  			$("html").animate({ scrollTop: $(document).height() }, 1000);
-  		}
-  	});
-	
 	$(window).on("resize", function() {
 		gridOptions.api.sizeColumnsToFit();
 		gridOptionsTraitName.api.sizeColumnsToFit();
 		
-	    if ($(window).width() < 768) {
-	      //gridOptions.columnApi.setColumnPinned("email", null);
-	    } else {
-	     // gridOptions.columnApi.setColumnPinned("email", "left");
-	    }
 	});
   
 	//console.log(gridOptions);

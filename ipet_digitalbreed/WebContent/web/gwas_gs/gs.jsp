@@ -54,6 +54,10 @@
 
 <!-- BEGIN: Body-->
 <style>
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: 'SDSamliphopangche_Outline';
 }

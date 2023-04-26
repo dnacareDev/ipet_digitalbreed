@@ -638,6 +638,21 @@
   			
   			gridOptionsTraitName.api.setRowData(data);
   			gridOptionsTraitName_selected.api.setRowData();
+  			
+  			if(linkedJobid !== "null") {
+				gridOptions.api.forEachNode((rowNode, index) => {
+					if(linkedJobid == rowNode.data.jobid) {
+						console.log(rowNode.rowIndex);
+						
+						gridOptions.api.paginationGoToPage(parseInt( Number(rowNode.rowIndex) / 20 ));
+						
+						gridOptions.api.ensureIndexVisible(Number(rowNode.rowIndex), 'middle');
+						rowNode.setSelected(true);
+						
+						document.querySelector(`[row-index="${rowNode.rowIndex}"] [col-id='comment']`).click();
+					}
+				});	
+			}
   		})	
 	})	
   

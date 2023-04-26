@@ -33,6 +33,7 @@
 	} catch (Exception e) {
 		e.printStackTrace();
 	} finally {
+		ipetdigitalconndb.rs.close();
 		ipetdigitalconndb.stmt.close();
 		ipetdigitalconndb.conn.close();
 	}

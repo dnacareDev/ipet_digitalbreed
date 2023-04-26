@@ -154,6 +154,8 @@
 		
 			const chartData = await getBarChartData();
 			
+			//console.log(chartData);
+			
 			columnChartConfig.series = chartData;
 		
 		    const columnChart = new ApexCharts(columnChartEl, columnChartConfig);
@@ -168,7 +170,7 @@
 	}
 
 	
-	function getBarChartData() {
+	async function getBarChartData() {
 		const variety_id = $( "#variety-select option:selected" ).val();
 		const year = $( "#analysisYear option:selected" ).val();
 		const month = $("#analysisMonth option:selected").val();
@@ -182,8 +184,41 @@
 		//console.log(year);
 		//console.log(month);
 		
-		const chartData = [];
+		const params = new URLSearchParams({
+			'variety_id': variety_id,
+			'year': year,
+			'month': month
+		})
 		
+		let urls = [
+  			'./statistics_getCompleteCount.jsp?'+params,
+  			'./statistics_getOnProgressCount.jsp?'+params,
+  		];
+  		let requests = urls.map(url => fetch(url));
+  		
+  		
+  		const chartData = await Promise.all(requests)
+			  		.then(responses => Promise.all(responses.map(r => r.json())))
+			  		.then(data => {
+			  			//console.log(data);
+			  			const chartData = [
+			  				{
+			  					"name": 'Complete',
+			  					"data": data[0]
+			  				},
+			  				{
+			  					"name": 'On Progress',
+			  					"data": data[1]
+			  				}
+			  			]
+			  			return chartData;
+			  			
+			  		})
+  		/*
+		*/
+		
+		/*
+		const chartData = [];
 		$.ajax({
 			url: 'statistics_getCompleteCount.jsp',
 			method: 'POST',
@@ -212,6 +247,7 @@
 		        });
 			}
 		})
+		*/
 		
 		return chartData;
 	}
@@ -282,7 +318,7 @@
 		const currentYear = now.getFullYear();
 		const variety_id = $( "#variety-select option:selected" ).val();
 		
-		console.log(currentYear);
+		//console.log(currentYear);
 		
 		const inputData = {
 				'variety_id': variety_id,
