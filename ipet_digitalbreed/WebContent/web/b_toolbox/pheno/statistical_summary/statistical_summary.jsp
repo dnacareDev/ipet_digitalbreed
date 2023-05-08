@@ -117,7 +117,7 @@ body {
                             <h2 class="content-header-title float-left mb-0">&nbsp;Statistical Summary</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="../../mainboard.jsp">Home</a>
+                                    <li class="breadcrumb-item"><a href="../../../index.jsp">Home</a>
                                     </li>
                                     <li class="breadcrumb-item active">Breeder's toolbox
                                     </li>

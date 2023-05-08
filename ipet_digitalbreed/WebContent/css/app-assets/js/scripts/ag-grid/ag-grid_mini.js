@@ -233,7 +233,17 @@
 	
   	const gridOptions2 = {
 	  	columnDefs: [],
-	  	animateRows: true
+	  	defaultColDef: {
+			editable: false,
+			//filter: true,
+		    sortable: true,
+			resizable: true,
+			menuTabs: ['filterMenuTab'],
+			//floatingFilter: true,
+		},
+	  	animateRows: true,
+	  	cellClass: "grid-cell-centered",  
+	  	width: 200,
   	}
 	
 	function printExcel(param_data) {
@@ -258,7 +268,15 @@
 		        
 		        const colDefs = [];
 		        const keys = Object.keys(rowObj[0]);
-		        keys.forEach(key => colDefs.push({field: key, sortable: true,resizable: true, cellClass: "grid-cell-centered",  width: 200}))
+		        //keys.forEach(key => colDefs.push({field: key,}))
+		        keys.forEach(key => {
+		        	if(key == "Genotype") {
+		        		//colDefs.push({field: key, filter: 'agTextColumnFilter',})
+		        		colDefs.push({field: key, suppressMenu:true,})
+		        	} else {
+		        		colDefs.push({field: key, filter: true,})
+		        	}
+		        })
 		        
 		        gridOptions2.api.setColumnDefs([]);
 		        gridOptions2.api.setColumnDefs(colDefs);
