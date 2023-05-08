@@ -119,6 +119,7 @@ public class RunPhenotypetraitValue {
 		                                value=cell.getErrorCellValue()+"";
 		                                break;
 	                            }
+	                            //System.out.println(value);
 	                        }
 	                        
 	                		String sampledata_info_sql=null;

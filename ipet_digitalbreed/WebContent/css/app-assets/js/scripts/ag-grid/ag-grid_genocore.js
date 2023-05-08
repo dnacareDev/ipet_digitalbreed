@@ -195,7 +195,8 @@
 					break;
 				case 1:
 					const element = document.getElementById('vcf_status');
-				   	element.innerHTML  = `<div class='card-content'>
+				   	/*
+					element.innerHTML  = `<div class='card-content'>
 				   							<div class='card-body'>
 				   								<div class='row'>
 				   									<div class='col-12'>
@@ -233,6 +234,7 @@
 				   								</div>
 				   							</div>
 				   						</div>`;
+				   	*/
 				   	
 				    //$('#pill1_frame').attr('src', params.data.resultpath + params.data.jobid+"/"+params.data.jobid+"_vcfinfo.txt");
 				    

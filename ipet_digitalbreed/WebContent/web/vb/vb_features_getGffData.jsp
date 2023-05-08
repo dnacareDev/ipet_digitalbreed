@@ -70,7 +70,9 @@
 				//jsonObject.addProperty(header[i], lineArr[i]);
 				if(i==3 || i==4){
 					jsonObject.addProperty(header[i], Integer.parseInt(lineArr[i]));
-				}  else if (i==8) {
+				} else if(i==6) {
+					jsonObject.addProperty(header[i], lineArr[i]);
+				} else if (i==8) {
 					jsonObject.addProperty(header[i], lineArr[i]);
 				} 
 			}

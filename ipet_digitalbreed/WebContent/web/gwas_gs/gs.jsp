@@ -196,7 +196,7 @@ body {
 												</div>
 												<div class="row">
 													<div class="col-12 col-xl-12 style="height:445px; margin-top:25px; float:left;">
-														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Cross_Validation' onload="$('#Loading').modal('hide')"></iframe>
+														<iframe src = '' height='550px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Cross_Validation' onload="$('#Loading').modal('hide')"></iframe>
 													</div>
 												</div>
 											</div>
@@ -211,8 +211,8 @@ body {
 													<div class="col-12 col-xl-4" style="margin-top:25px; float:left;">
 														<div id="Grid-Prediction" class="ag-theme-alpine" style="display:none; margin: 0px auto; width: 98%; height:500px;"></div><br>
 													</div>
-													<div class="col-12 col-xl-8" style="height:445px; margin-top:25px; float:left;">
-														<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Prediction' onload="$('#Loading').modal('hide')"></iframe>
+													<div class="col-12 col-xl-8" style="height:550px; margin-top:25px; float:left;">
+														<iframe src = '' height='550px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='iframe-Prediction' onload="$('#Loading').modal('hide')"></iframe>
 													</div>
 												</div>
 											</div>
@@ -731,12 +731,14 @@ body {
 				headerCheckboxSelection: false,
 				minWidth: 120,
 				maxWidth: 120,
+				suppressMenu: true,
 				valueGetter: inverseRowCount,
 				
 			},
 			{
 				headerName: '개체명',
 				field: 'Taxa',
+				filter: true,
 			},
 		];
 		

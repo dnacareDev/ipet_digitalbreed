@@ -124,6 +124,12 @@
 		case "CAPs":
 			script = "primer_design_CAPS_final.R";
 			break;
+		case "INDEL":
+			script = "primer_design_INDEL_final.R";
+			break;
+		case "HRM":
+			script = "primer_design_HRM_final.R";
+			break;
 		default:
 			script = "--typo--";
 	}

@@ -90,28 +90,28 @@
 	    {
 			headerName: "Genotype",
 			field: "genotype_filename",
-			filter: true,
+			filter: "agTextColumnFilter",
 			width: 600,
 			minWidth: 120,
 	    },
 	    {
 			headerName: "Phenotype",
 			field: "phenotype_name",
-			filter: true,
+			filter: "agTextColumnFilter",
 			width: 350,
 			minWidth: 120,
 	    },
 	    {
 			headerName: "Model",
 			field: "model",
-			filter: true,
+			filter: "agTextColumnFilter",
 			width: 300,
 			minWidth: 100,
 	    },
 	    {
 	    	headerName: "상세내용",
 	    	field: "comment",
-	    	filter: 'agNumberColumnFilter',
+	    	filter: 'agTextColumnFilter',
 	    	cellClass: "",
 	    	width: 300,
 	    	minWidth: 110,
@@ -245,7 +245,7 @@
 															</div>
 															<div class="row">
 																<div class="col-12 col-xl-8 style="height:445px; margin-top:25px; float:left;">
-																	<iframe src = '' height='500px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='${model_arr[i]}' onload="$('#iframeLoading').modal('hide')"></iframe>
+																	<iframe src = '' height='550px' width='100%' frameborder='0' border='0' scrolling='yes' bgcolor=#EEEEEE bordercolor='#FF000000' marginwidth='0' marginheight='0' id='${model_arr[i]}' onload="$('#iframeLoading').modal('hide')"></iframe>
 																</div>
 																<div id='grid_${model_arr[i]}' class="col-12 col-xl-4 ag-theme-alpine">
 																</div>

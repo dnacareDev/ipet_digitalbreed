@@ -234,6 +234,26 @@
 		color: #ccc;
 	}
 	
+	/***Gene Model Table***/
+	.bluetop {
+	  border-collapse: collapse;
+	  line-height:130%;
+	} 
+	
+	.bluetop td:hover {
+		background-color: #aad5f8;
+	  	color: #000000;
+	}
+	
+	.bluetop td {
+		border: 1px solid #ddd;
+	  	text-align:center;
+	}
+	
+	.bluetop a:hover {
+		text-decoration: underline;
+	}
+	/***Gene Model Table***/
 </style>
 <%
 	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
@@ -279,6 +299,11 @@
 							<input type="text" id="positionInput" class="form-control" style="width:180px; display:inline; font-family: 'SDSamliphopangche_Outline';" placeholder="Position" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').replace(/\B(?=(\d{3})+(?!\d))/g, ',');" onkeyup="if(event.keyCode==13){this.blur();}" onblur="changeInputValue(Number(this.value.replaceAll(',','')));">
 							<span style="margin-left:3px;">bp</span>
 						</div>
+						<!--  
+						<div>
+							<button class="btn btn-secondary" data-toggle="modal" data-target="#Modal_Summary">Summary</button>
+						</div>
+						-->
                     </div>
 					<div class="btn-group" role="group" aria-label="Basic example">
 						<button type="button" id="beforeOrder" class="btn btn-sm" style="margin:8px 0; color:white; background-color:#23cac4; font-size:15px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="Display 기준 왼쪽 변이로 이동합니다." onclick="previousOrder(this.dataset.vcf_id, this.dataset.order);">
@@ -301,6 +326,7 @@
             </div>
         </div>
     </nav>
+    <!-- Header -->
 	
     <!-- BEGIN: Content-->
     <div class="app-content content" style="padding-top: 30px;">
@@ -349,6 +375,9 @@
 	                                		<div style="position:absolute; bottom:-14px; margin: 0px 23px; width: 96%;">
 	                                			<svg id="connection" width="100%" height="35" xmlns:svg="http://www.w3.org/2000/svg"></svg>
 	                                		</div>
+	                                	</div>
+	                                	<div style="position:relative; height:0px;">
+	                                		<i class="ri-question-line" style="font-size:18px; position:absolute; bottom:-15px; left:10px;" data-toggle="popover" data-trigger="hover" data-content="header의 각 position을 클릭할때마다<br>A - T - G - C 순으로 정렬합니다.<br>해당되는 염기가 없다면 그 다음 염기를 기준으로 정렬합니다." data-html="true"></i>
 	                                	</div>
 	                                	<div class="row">
 				                            <div id="VariantBrowserGrid" class="ag-theme-alpine" style="margin: 13px 23px; width: 96%; height:415px;"></div><br>
@@ -614,75 +643,53 @@
 	      		<div class="modal-body">
 	        		<div>
 	        			<h4 class="mb-1">Primary data</h4>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">Name</label>
-	        				<p id="pd_name" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">Position</label>
-	        				<p id="pd_position" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">Length</label>
-	        				<p id="pd_length" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">Start</label>
-	        				<p id="pd_start" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">End</label>
-	        				<p id="pd_end" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">Strand</label>
-	        				<p id="pd_strand" style="margin-left:1px;"></p>
-	        			</div>
+		      			<table border='1' style='width:100%;' class='bluetop mb-2' id='Table_Primary_Data'>
+		      				<tr height='30px'>
+		      					<td colspan='5' width='100%' bgcolor='f8f8f8'><b>Name</b></td>
+		      				</tr>
+		      				<tr height='30px'>
+		      					<td colspan='5' width='100%' id="pd_name" ></td>
+		      				</tr>
+		      				<tr height='30px'>
+		      					<td width='20%' bgcolor='f8f8f8'><b>Position</b></td>
+		      					<td width='20%' bgcolor='f8f8f8'><b>Length</b></td>
+		      					<td width='20%' bgcolor='f8f8f8'><b>Start</b></td>
+		      					<td width='20%' bgcolor='f8f8f8'><b>End</b></td>
+		      					<td width='20%' bgcolor='f8f8f8'><b>Strand</b></td>
+		      				</tr>
+		      				<tr height='30px'>
+		      					<td width='20%' id="pd_position" ></td>
+		      					<td width='20%' id="pd_length" >"8,498"</td>
+		      					<td width='20%' id="pd_start" >"29,119"</td>
+		      					<td width='20%' id="pd_end" >"37,617"</td>
+		      					<td width='20%' id="pd_strand" >"-"</td>
+		      				</tr>
+		      			</table>
 	        			<div>
 	        				<label class="h5 pl-0" style="margin-bottom:3px;">CDS</label>
 	        				<p id="pd_cds" style="margin-left:1px;"></p>
 	        			</div>
+	        			<table id='Table_CDS' class='bluetop' border='1' style='width:100%;'>
+	        			</table>
 	        		</div>
-	        		<div>
+	        		<div class="mt-1">
 	        			<h4 class="mb-1">Attributes</h4>
-	        			<div>
+	        			<table id='Table_Attributes' class='bluetop' border='1' style='width:100%;'  >
+	        				<tr height='30px'><td colspan='6' width='100%' bgcolor='f8f8f8'><b>Description</b></td></tr>
+		      				<tr height='30px'><td id="attributes_description" colspan='6' width='100%'></td></tr>
+		      				<tr height='30px'><td width='16.6%' bgcolor='f8f8f8'><b>RefSeq</b></td><td width='16.6%' bgcolor='f8f8f8'><b>UniProt</b></td><td width='16.6%' bgcolor='f8f8f8'><b>Pfam</b></td><td width='16.6%' bgcolor='f8f8f8'><b>TAIR</b></td><td width='16.6%' bgcolor='f8f8f8'><b>GO</b></td><td width='16.6%' bgcolor='f8f8f8'><b>KEGG</b></td></tr>
+		      				<tr height='30px'><td id="attributes_refSeq" width='16.6%' >"1"</td><td id="attributes_uniProt" width='16.6%' >"29,119"<br>"22"</td><td id="attributes_pfam" width='16.6%' >"8,498"</td><td id="attributes_tair" width='16.6%' >"8,498"</td><td id="attributes_go" width='16.6%' >"8,498"</td><td id="attributes_kegg" width='16.6%' >"8,498"</td></tr>
+	        			</table>
+	        			<div style="display:none;">
 	        				<label class="h5 pl-0" style="margin-bottom:3px;">ID</label>
 	        				<p id="attributes_id" style="margin-left:1px;"></p>
 	        			</div>
-	        			<div>
+	        			<div style="display:none;">
 	        				<label class="h5 pl-0" style="margin-bottom:3px;">Parent</label>
 	        				<p id="attributes_parent" style="margin-left:1px;"></p>
 	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">Description</label>
-	        				<p id="attributes_description" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div class="">
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">RefSeq</label>
-	        				<p id="attributes_refSeq" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">UniProt</label>
-	        				<p id="attributes_uniProt" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">Pfam</label>
-	        				<p id="attributes_pfam" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">TAIR</label>
-	        				<p id="attributes_tair" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">GO</label>
-	        				<p id="attributes_go" style="margin-left:1px;"></p>
-	        			</div>
-	        			<div>
-	        				<label class="h5 pl-0" style="margin-bottom:3px;">KEGG</label>
-	        				<p id="attributes_kegg" style="margin-left:1px;"></p>
-	        			</div>
 	        		</div>
-	        		<div class="form-group">
+	        		<div class="form-group mt-2">
 					    <label for="gene_sequence" class="h5 pl-0">Gene sequence</label>
 					    <span style="color:#7367F0; text-decoration:underline; cursor: pointer;" onclick="copyToClipboard('gene_sequence')"> Copy</span>
 					    <textarea class="form-control" id="gene_sequence" rows="3" data-label_text="Gene sequence"></textarea>
@@ -869,6 +876,34 @@
             </div>
         </div>
     </div>
+    
+    <!--  
+    <div class="modal fade" id="Modal_Summary" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-dialog-centered modal-sm">
+    		<div class="modal-content">
+      			<div class="modal-header bg-warning white">
+	    		    <h4 class="modal-title fs-5">SNP Summary</h4>
+   				    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+      			</div>
+	      		<div class="modal-body">
+	        		<div class="row">
+		        		<div class="col-5" style="margin:15px 0 15px auto;">
+						    <input class="form-control" id="flankingSequence" style="font-size:14px;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').replace(/\B(?=(\d{3})+(?!\d))/g, ',');" autocomplete="off" />
+						</div>
+						<div class="col-2 pl-0" style="margin:0 auto 0 0; font-size:14px; display: flex; align-items: center">
+						    bp
+						</div>
+	        		</div>
+	      		</div>
+	      		<div class="modal-footer">
+	      			<button type="button" class="btn btn-success" onclick="flanking_sequence();" >Extraction</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	-->
 	
 	<div class="modal" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
 		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
@@ -1164,23 +1199,25 @@
 		//console.log(vcf_id);
 		//console.log(row_count);
 		//console.log(chr);
+
+		/** 변이정보 초기화 **/
+		document.querySelectorAll(`.chromosomeStackDiv[data-vcf_id]`).forEach((node) => {
+			delete node.dataset.position;
+		});
+		document.querySelectorAll(`.chromosomeDetailedStackDiv[data-position]`).forEach((node) => {
+			delete node.dataset.position;
+			delete node.dataset.vcf_id;
+			node.innerHTML = "";
+		});
+		document.getElementById('connection').innerHTML = "";
+		/** 변이정보 초기화 **/
 		
-		// #chromosomeLastStackDiv에 length값 입력
 		const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		
-		
+		// #chromosomeLastStackDiv에 length값 입력
 		for(let i=1 ; i<=10 ; i++) {
 			const division_length = parseInt(Number(length) * i / 10)
-			//document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = thousands_separator(division_length);
 			document.getElementById(`scaleBarDiv_\${i}`).children[0].textContent = parseInt(division_length / 1000000 ) + 'Mbp'
-			/*
-			for(let j=0, left=0; j<thousands_separator(length).length ; j++) {
-				left = isNaN(thousands_separator(division_length)[j]) ? left-2 : left-4; 
-				if(j==length.toString().length -1) {
-					document.querySelector(`.chromosomeScaleBarStackDiv[data-order="\${(i*400)-1}"]>div`).style.left = left + "px";
-				}
-			}
-			*/
 		}
 		
 		
@@ -1218,9 +1255,12 @@
 			}
 				//console.timeEnd("set_position_memory");
 			
+			
+				
+				
+			
 			if(row_count != 0) {
 				colorPosition(position_ratio, position_at_div, vcf_id_at_div);
-
 				document.querySelector('[data-selected="true"]').dispatchEvent(new Event("click"));
 				
 			} else {
@@ -1600,7 +1640,7 @@
 		//fetch(url);
 		const gene_model = await getFetchData(url_string, map_params);
 		
-		console.log("getGeneModel data : ", gene_model);
+		//console.log("getGeneModel data : ", gene_model);
 		
 		
 		// 이전 표식을 삭제
@@ -1674,12 +1714,11 @@
 			
 			//console.log(row_SVG(i));
 			
-			const svg = createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position);
-			//console.log(svg);
 			
 			const childDiv = document.createElement('div');
+			childDiv.style.display = "flex";
+			childDiv.style.flexDirection = "column";
 			childDiv.dataset.id = mRNA_id;
-			
 			childDiv.dataset.toggle = mRNA_id;
 			childDiv.dataset.html = "true";
 			childDiv.dataset.placement = "right";
@@ -1692,50 +1731,60 @@
 									Strand : \${strand}<br>
 									CDS : <br>
 									`;
+									
+			/*						
 			for(let i=0 ; i<svg_CDS.length ; i++) {
 				popoverContent += `\${i+1} : \${thousands_separator(svg_CDS[i]['start'])} - \${thousands_separator(svg_CDS[i]['end'])}<br>`
+			}
+			*/
+			for(let i=0 ; i<svg_CDS.length ; i++) {
+				popoverContent += `\${i+1} : \${thousands_separator(svg_CDS[i]['start'])} - \${thousands_separator(svg_CDS[i]['end'])}<br>`
+				if(i == 2) {
+					popoverContent += `...`;
+					break;
+				}
 			}
 									
 			childDiv.dataset.content = popoverContent;
 			childDiv.style.position = 'absolute';
-			//childDiv.style.top = '25px';
 			childDiv.style.top = (row_SVG(i)*25+25) + 'px';
-			//childDiv.style.top = `\${row_SVG*10+25}px`;
-			//childDiv.style.right = (-(mRNA_width+4) / 2) + 'px';
+			const svg = createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position, mRNA_id);
 			childDiv.appendChild(svg);
+			
+			const svg_text = createSVG_text(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, mRNA_id);
+			childDiv.appendChild(svg_text);
+			
 			selectedGeneModelDiv.appendChild(childDiv);
+			
 			$(`[data-toggle="\${mRNA_id}"]`).popover();
 		}
 	}
 	
-	function createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position) {
+	function createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position, mRNA_id) {
 		
 		//console.log(mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position);
+		
 		
 		const xmlns = "http://www.w3.org/2000/svg";
 		
 		const svg = document.createElementNS(xmlns, "svg");
 	    svg.setAttribute('width', mRNA_width+9);
-	    svg.setAttribute('height', '20');
+	    //svg.setAttribute('width', 200);
+	    svg.setAttribute('height', '14');
 	    //svg.setAttribute('viewBox', `0 0 \${mRNA_width+8} 16`);
 	    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
 	    svg.setAttribute('onclick', "show_geneInfoModal();");
 	    
 	    
 	    for(const cds of svg_CDS) {
-	    	/*
-	    	const cds_start_relative = (Number(cds.start) - mRNA_start) / 50;
-	    	const cds_width = (Number(cds.end) - Number(cds.start)) / 50;
-	    	const cds_end_relative = cds_start_relative + cds_width;
-	    	*/
-	    	
 	    	const cds_start_relative = getDivPosition(Number(cds.start), selected_position) - getDivPosition(mRNA_start, selected_position);
 	    	const cds_end_relative = getDivPosition(Number(cds.end), selected_position) - getDivPosition(mRNA_start, selected_position);
 	    	const cds_width = cds_end_relative - cds_start_relative;
 	    	
 	    	const polygon_cds = document.createElementNS(xmlns, "polygon");
 	    	polygon_cds.setAttribute('style', 'fill:#e2b095');
-	    	polygon_cds.setAttributeNS(null, 'points', `\${cds_start_relative+4},0 \${cds_end_relative+4},0 \${cds_end_relative+4},18, \${cds_start_relative+4},18`);
+	    	//polygon_cds.setAttributeNS(null, 'points', `\${cds_start_relative+4},0 \${cds_end_relative+4},0 \${cds_end_relative+4},18, \${cds_start_relative+4},18`);
+	    	polygon_cds.setAttributeNS(null, 'points', `\${cds_start_relative+4},0 \${cds_end_relative+4},0 \${cds_end_relative+4},14 \${cds_start_relative+4},14`);
 		    svg.append(polygon_cds);
 	    }
 	    
@@ -1743,9 +1792,11 @@
 	    const line = document.createElementNS(xmlns, "line");
 	    line.setAttribute('style', 'stroke:#000000;')
 	    line.setAttributeNS(null, 'x1', '4');
-	    line.setAttributeNS(null, 'y1', '8');
+	    //line.setAttributeNS(null, 'y1', '8');
+	    line.setAttributeNS(null, 'y1', '6');
 	    line.setAttributeNS(null, 'x2', `\${mRNA_width+4}`);
-	    line.setAttributeNS(null, 'y2', '8');
+	    //line.setAttributeNS(null, 'y2', '8');
+	    line.setAttributeNS(null, 'y2', '6');
 	    
 	    svg.appendChild(line);
 	    
@@ -1753,12 +1804,30 @@
 	    const polygon = document.createElementNS(xmlns, "polygon");
 	    polygon.setAttribute('style', 'fill:#000000');
 	    if(strand == '+') {
-	    	polygon.setAttributeNS(null, 'points', `\${mRNA_width+4},5 \${mRNA_width+4},11 \${mRNA_width+9},8`)
+	    	//polygon.setAttributeNS(null, 'points', `\${mRNA_width+4},5 \${mRNA_width+4},11 \${mRNA_width+9},8`)
+	    	polygon.setAttributeNS(null, 'points', `\${mRNA_width+4},3 \${mRNA_width+4},9 \${mRNA_width+9},6`)
 	    } else if(strand == '-') {
-	    	polygon.setAttributeNS(null, 'points', '0,8 5,5 5,11')
+	    	//polygon.setAttributeNS(null, 'points', '0,8 5,5 5,11')
+	    	polygon.setAttributeNS(null, 'points', '0,6 5,3 5,9')
 	    }
 	    
 	    svg.appendChild(polygon);
+	    
+	    /*
+	    const svg_text = document.createElementNS(xmlns, "text");
+	    svg_text.setAttributeNS(null, 'fill', '#000000');
+	    svg_text.setAttributeNS(null, 'font-size', '0.8rem');
+	    //svg_text.setAttributeNS(null, 'x', '5');
+	    //svg_text.setAttributeNS(null, 'x', '50%');
+	    svg_text.setAttributeNS(null, 'y', '67%');
+	    svg_text.setAttributeNS(null, 'dominant-baseline', 'middle');
+	    //svg_text.setAttributeNS(null, 'text-anchor', 'end');
+
+	    const text_node = document.createTextNode(mRNA_id);
+	    
+	    svg_text.appendChild(text_node);
+	    svg.appendChild(svg_text);
+	    */
 	    
 	    svg.addEventListener('mouseenter', function(event) {
 	    	//console.log(event);
@@ -1767,6 +1836,36 @@
 	    
 	    return svg;
 		
+	}
+	
+	function createSVG_text(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, mRNA_id) {
+		
+		const xmlns = "http://www.w3.org/2000/svg";
+		const svg = document.createElementNS(xmlns, "svg");
+		svg.setAttribute('width', '200');
+	    svg.setAttribute('height', '14');
+	    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg", "http://www.w3.org/2000/svg");
+	    svg.setAttribute('onclick', "show_geneInfoModal();");
+		
+	    const svg_text = document.createElementNS(xmlns, "text");
+	    svg_text.setAttributeNS(null, 'fill', '#000000');
+	    svg_text.setAttributeNS(null, 'font-size', '0.8rem');
+	    //svg_text.setAttributeNS(null, 'x', '50%');
+	    //svg_text.setAttributeNS(null, 'text-anchor', 'middle');
+	    svg_text.setAttributeNS(null, 'y', '50%');
+	    svg_text.setAttributeNS(null, 'dominant-baseline', 'middle');
+
+	    const text_node = document.createTextNode(mRNA_id);
+	    
+	    svg_text.appendChild(text_node);
+	    
+	    svg.appendChild(svg_text);
+	    
+	    svg.addEventListener('mouseenter', function(event) {
+	    	//console.log(event);
+	    	modifyGeneInfoModal(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS)
+	    });
+	    return svg;
 	}
 	
 	function show_geneInfoModal() {
@@ -1780,39 +1879,36 @@
 			//fetch(`./vb_features_getSequence.jsp?command=gene&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
 			.then((response) => response.text())
 			.then((data) => {
-				/*
-				*/
-				console.log(data.replaceAll("\r\n",""));
 				document.getElementById('gene_sequence').value = data.replaceAll("\r\n","");
-				
-				/*
-				const str = data.replaceAll("\r\n","");
-				const sequence = str.split("\n")[1];
-				
-				let sequence_lines = ""
-				for(let i=0 ; i < sequence.length ; i+=60) {
-					sequence_lines += sequence.slice(i,i+60);
-					if(i != sequence.length/60) {
-						sequence_lines += "\n";
-					}
-				}
-				
-				document.getElementById('gene_sequence').value = str.split("\n")[0] +"\n"+ sequence_lines;
-				*/
-				
 			})
 			
 			fetch(`./vb_features_getSequence.jsp?command=cds&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
 			.then((response) => response.text())
 			.then((data) => {
-				document.getElementById('cds_sequence').value = data.replaceAll("\r\n","");
+				const data_arr = data.replaceAll("\r\n").split("\n");
+				let str = data_arr[0]+"\n";
+				for(let i=1 ; i<data_arr.length ; i++) {
+					str += data_arr[i];
+				}
+				
+				document.getElementById('cds_sequence').value = str;
+				//document.getElementById('cds_sequence').value = data.replaceAll("\r\n","");
 			});
 			
 			//fetch(`./vb_features_getSequence.jsp?command=protein&file_name=\${mRNA_parent}&refgenome=\${refgenome}`)
 			fetch(`./vb_features_getSequence.jsp?command=protein&file_name=\${mRNA_id}&refgenome=\${refgenome}`)
 			.then((response) => response.text())
 			.then((data) => {
-				document.getElementById('protein_sequence').value = data.replaceAll("\r\n","");
+				
+				const data_arr = data.replaceAll("\r\n").split("\n");
+				let str = data_arr[0]+"\n";
+				for(let i=1 ; i<data_arr.length ; i++) {
+					str += data_arr[i];
+				}
+				
+				document.getElementById('protein_sequence').value = str;
+				
+				//document.getElementById('protein_sequence').value = data.replaceAll("\r\n","");
 			});
 			
 			
@@ -1845,12 +1941,20 @@
 		document.getElementById('pd_end').innerText = thousands_separator(mRNA_end);
 		document.getElementById('pd_strand').innerText = strand;
 		
+		/*
 		let CDS_contents = ""
 		
 		for(let i=0 ; i<svg_CDS.length ; i++) {
 			CDS_contents += `\${i+1} : \${thousands_separator(svg_CDS[i]['start'])} - \${thousands_separator(svg_CDS[i]['end'])}<br>`
 		}
 		document.getElementById('pd_cds').innerHTML = CDS_contents;
+		*/
+		const Table_CDS = document.getElementById('Table_CDS');
+		Table_CDS.innerHTML = `<tr height='30px'><td width='20%' bgcolor='f8f8f8'><b>CDS</b></td><td width='20%' bgcolor='f8f8f8'><b>Start</b></td><td width='20%' bgcolor='f8f8f8'><b>End</b></td><td width='20%' bgcolor='f8f8f8'><b>Length</b></td><td width='20%' bgcolor='f8f8f8'><b>Strand</b></td></tr>`;
+
+		for(let i=0 ; i<svg_CDS.length ; i++) {
+			Table_CDS.insertAdjacentHTML('beforeend',`<tr height='30px'><td width='20%' >\${i+1}</td><td width='20%' >\${thousands_separator(svg_CDS[i]['start'])}</td><td width='20%' >\${thousands_separator(svg_CDS[i]['end'])}</td><td width='20%' >\${thousands_separator(svg_CDS[i]['end'] - svg_CDS[i]['start'])}</td><td width='20%' >\${svg_CDS[i]['strand']}</td></tr>`);
+		}
 		
 		document.getElementById('attributes_id').innerText = search_attribute('ID');
 		document.getElementById('attributes_parent').innerText = search_attribute('Parent');
@@ -1888,17 +1992,6 @@
 		const GO = search_description('GO').split(",");
 		const KEGG = search_description('KEGG').split(",");
 		
-		/*
-		document.getElementById('attributes_description').innerText = search_attribute('Description');
-		
-		const RefSeq = search_attribute('RefSeq').split(",");
-		const Uniprot = search_attribute('Uniprot').split(",");
-		const Pfam = search_attribute('Pfam').split(",");
-		const TAIR = search_attribute('TAIR').split(",");
-		const GO = search_attribute('GO').split(",");
-		const KEGG = search_attribute('KEGG').split(",");
-		*/
-		
 		const attributes_refSeq = document.getElementById('attributes_refSeq');
 		const attributes_uniProt = document.getElementById('attributes_uniProt');
 		const attributes_pfam = document.getElementById('attributes_pfam');
@@ -1915,34 +2008,58 @@
 		
 		for(let i=0 ; i<RefSeq.length ; i++){
 			attributes_refSeq.innerHTML += `<a href="https://www.ncbi.nlm.nih.gov/gene/?term=\${RefSeq[i]}" target="_blank">\${RefSeq[i]}</a>`;
+			if(i != RefSeq.length -1) {
+				attributes_refSeq.innerHTML += `<br>`;
+			}
 		}
 		
 		for(let i=0 ; i<Uniprot.length ; i++){
 			attributes_uniProt.innerHTML += `<a href="https://www.uniprot.org/uniprotkb/\${Uniprot[i]}/entry" target="_blank">\${Uniprot[i]}</a>`;
+			if(i != Uniprot.length -1) {
+				attributes_uniProt.innerHTML += `<br>`;
+			}
 		}
 		
 		for(let i=0 ; i<Pfam.length ; i++){
 			attributes_pfam.innerHTML += `<a href="https://www.ebi.ac.uk/interpro/entry/pfam/\${Pfam[i]}/" target="_blank">\${Pfam[i]}</a>`;
+			if(i != Pfam.length -1) {
+				attributes_pfam.innerHTML += `<br>`;
+			}
 		}
 		
 		for(let i=0 ; i<TAIR.length ; i++){
 			attributes_tair.innerHTML += `<a href="https://www.arabidopsis.org/servlets/TairObject?type=locus&name=\${TAIR[i].split('.')[0]}" target="_blank">\${TAIR}</a>`
+			if(i != TAIR.length -1) {
+				attributes_tair.innerHTML += `<br>`;
+			}
 		}
 		
 		for(let i=0 ; i<GO.length ; i++){
+			attributes_go.innerHTML += `<a href="http://amigo.geneontology.org/amigo/term/\${GO[i]}" target="_blank">\${GO[i]}</a>`;
+			if(i != GO.length -1) {
+				attributes_go.innerHTML += `<br>`;
+			}
+			/*
 			if(i == GO.length - 1){
 				attributes_go.innerHTML += `<a href="http://amigo.geneontology.org/amigo/term/\${GO[i]}" target="_blank">\${GO[i]}</a>`;
 			} else {
 				attributes_go.innerHTML += `<a href="http://amigo.geneontology.org/amigo/term/\${GO[i]}" target="_blank">\${GO[i]}, </a>`;
 			}
+			*/
 		}
 		
 		for(let i=0 ; i<KEGG.length ; i++){
+			attributes_kegg.innerHTML += `<a href="https://www.genome.jp/dbget-bin/www_bget?pathway+\${KEGG[i]}" target="_blank">\${KEGG[i]}</a>`;
+			if(i != KEGG.length - 1) {
+				attributes_kegg.innerHTML += `<br>`;
+			}
+			/*
 			if(i == KEGG.length - 1){
 				attributes_kegg.innerHTML += `<a href="https://www.genome.jp/dbget-bin/www_bget?pathway+\${KEGG[i]}" target="_blank">\${KEGG[i]}</a>`;
 			} else {
 				attributes_kegg.innerHTML += `<a href="https://www.genome.jp/dbget-bin/www_bget?pathway+\${KEGG[i]}" target="_blank">\${KEGG[i]}, </a>`;
 			}
+			*/
 		}
 		
 	}
@@ -2057,7 +2174,7 @@
     	.then((response) => response.json())
     	.then((data) => {
     		//console.log("chr=1, position=3374674로 설정")
-    		console.log(data);
+    		//console.log(data);
     		
     		let columnKeys = new Array('id')
     		
@@ -2271,7 +2388,8 @@
 		.then((data) => {
 			//console.log("SnpEff data : ", data);
 			
-			if(!data) {
+			//if(!data || data.length == 0) {
+			if(data.length == 0) {
 				document.getElementById('SnpEff_Grid').style.display = 'none';
 				document.getElementById('SnpEff_Not_Exist').style.display = 'flex';
 			} else {
@@ -2374,7 +2492,7 @@
 		}
 		
 		
-		console.log(impact_filter_values);
+		//console.log(impact_filter_values);
 		
 		const impactFilter = {
 				impact: {
@@ -2402,7 +2520,7 @@
    		fetch(`./vb_getSelectLists.jsp?command=GWAS&jobid=\${linkedJobid}`)
    		.then((response) => response.json())
    		.then((data) => {
-   			console.log(data);
+   			//console.log(data);
    			for(let i=0 ; i<data.length ; i++) {
   				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
   				$("#GWAS_select").append(`<option data-jobid=\${data[i].jobid} data-phenotype=\${data[i].phenotype_name} data-model=\${data[i].model} data-filename=\${data[i].filename} > \${data[i].comment} (\${data[i].cre_dt}) </option>`);
@@ -2571,7 +2689,7 @@
 		
    		
 		if(!model || !phenotype || !jobid) {
-			console.log("gwas 영역 생성안됨");
+			//console.log("gwas 영역 생성안됨");
 			return;
 		}
 		
@@ -2839,7 +2957,7 @@
 		
 		const data = await getFetchData(url_string,map_params);
 		
-		console.log("selection : ", data);
+		//console.log("selection : ", data);
 		SelectionList_gridOptions.api.setRowData(data);
    	}
    	
@@ -2922,7 +3040,7 @@
    		fetch(`./vb_getSelectLists.jsp?command=UPGMA&jobid=\${linkedJobid}`)
    		.then((response) => response.json())
    		.then((data) => {
-   			console.log(data);
+   			//console.log(data);
    			for(let i=0 ; i<data.length ; i++) {
   				$("#UPGMA_select").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} > \${data[i].comment} (\${data[i].cre_dt}) </option>`);
   			}
@@ -3014,7 +3132,7 @@
    			return;
    		}
    		
-   		console.log(checked);
+   		//console.log(checked);
    		if(checked) {
    			sort_vb_by_UPGMA();
    		} else {
@@ -3055,7 +3173,7 @@
    			})
    		}
    		
-   		console.log(updatedNodesData);
+   		//console.log(updatedNodesData);
    		
    		VariantBrowser_gridOptions.api.setRowData(updatedNodesData);
    		console.timeEnd("sort_vb_by_UPGMA");
@@ -3067,12 +3185,12 @@
    	}
    	
    	function getStructureSelectList() {
-   		console.log("sturcture");
+   		//console.log("sturcture");
    		// structure new analysis 시 vcf_data no값이 안 넘어감. select option값에 넣어주는 것부터 시작해야 함.
    		fetch(`./vb_getSelectLists.jsp?command=STRUCTURE&jobid=\${linkedJobid}`)
    		.then((response) => response.json())
    		.then((data) => {
-   			console.log(data);
+   			//console.log(data);
    			for(let i=0 ; i<data.length ; i++) {
   				$("#STRUCTURE_select").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} data-number_of_k=\${data[i].number_of_k} > \${data[i].comment} (\${data[i].cre_dt}) </option>`);
   			}
@@ -3110,7 +3228,7 @@
    		})
    		.then(response => response.json())
    		.then(data => {
-   			console.log(data);
+   			//console.log(data);
    			
    			const STRUCTURE_columnDefs = [
    				{field: "Sample_Name", filter: true},

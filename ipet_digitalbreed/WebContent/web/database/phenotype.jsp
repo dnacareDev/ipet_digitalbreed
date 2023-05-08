@@ -168,6 +168,9 @@ body {
 													-->
 													<div>
 														<button class="btn btn-success" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
+														<!--  
+														<button class="btn btn-success" onclick="saveData()"><i class="feather icon-save"></i> Save</button>
+														-->
 													</div>
 													<div class="dropup">
 														<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
@@ -178,18 +181,6 @@ body {
 			                                        </div>
 												</div>
 			                                </div>
-			                                
-											<!--  
-			                                <button class="btn btn-warning mr-1 mb-1" style="margin-left: 20px;float: left;" onclick="addnewrow()"><i class="feather icon-plus-square"></i> Add</button>
-											<button class="btn btn-danger mr-1 mb-1" onclick="getSelectedRowData()"><i class="feather icon-trash-2"></i> Del</button>
-											<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="getAllData()"><i class="feather icon-save"></i> Save</button>
-											<button class="btn btn-success mr-1 mb-1"  style="float: right;" onclick="saveData()"><i class="feather icon-save"></i> Save</button>
-											<button class="btn btn-info dropdown-toggle mr-1" type="button" style="float: right;" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Upload</button>
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-		                                           	<a class="dropdown-item" href="javascript:ajaxFileDownload();">Template Download</a>
-		                                            <a class="dropdown-item" href="javascript:ajaxFileUpload();">Template Upload</a>
-		                                        </div>
-											-->
 		                                </div>	
 										<input type="file" id="ajaxFile" name="ajaxFile" onChange="ajaxFileTransmit();" style="display:none;"/>
 		                            </div>
@@ -268,6 +259,14 @@ body {
             </div>            
         </div>        
     </div>
+    
+    <div class="modal" id="Loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+   			<center><img src='/ipet_digitalbreed/images/loading.gif'/><center>
+			<div><strong>Loading Result...</strong></div>
+	  	</div>
+	</div>
+    
     <!-- END: Content-->
 
     <div class="sidenav-overlay"></div>
@@ -371,7 +370,7 @@ body {
 					success:function(data) {	
 						alert("업데이트가 정상적으로 처리 되었습니다.");  
 						refresh();
-				}       
+					}       
 				});	           
 	        }
 	    }

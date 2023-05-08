@@ -272,7 +272,7 @@
 			field: "impact",
 			//filter: "agTextColumnFilter",
 			filter: 'agSetColumnFilter',
-			suppressMenu: false, 
+			suppressMenu: true, 
 			//width: 80, 
 			minWidth: 120, 
 		},
@@ -280,6 +280,9 @@
 			headerName: "Effect Classic",
 			field: "effect_classic",
 			filter: "agTextColumnFilter",
+			filterParams: {
+				buttons: ['reset'],
+			},
 			suppressMenu: false,
 			//width: 120, 
 			minWidth: 180, 
@@ -308,6 +311,9 @@
 	var SnpEff_gridOptions = {
 		defaultColDef: { 
 			editable: false, 
+			filterParams: {
+				buttons: ['reset'],
+			},
 			sortable: true, 
 			resizable: true, 
 			suppressMenu: true, 
@@ -316,6 +322,14 @@
 			menuTabs: ['filterMenuTab'], 
 		},
 		columnDefs: SnpEff_columnDefs, 
+		defaultCsvExportParams:{
+			columnKeys:["chr","pos","impact","effect_classic","gene_id","description"],
+			onlySelected: true,
+		},
+		defaultExcelExportParams:{
+			columnKeys:["chr","pos","impact","effect_classic","gene_id","description"],
+			onlySelected: true,
+		},
 		rowHeight: 35, 
 		rowSelection: 'multiple',
 		rowMultiSelectWithClick: true,
@@ -475,6 +489,9 @@
 	var GWAS_gridOptions = {
 		defaultColDef: { 
 			editable: false, 
+			filterParams: {
+				buttons: ['reset'],
+			},
 			sortable: true, 
 			resizable: true, 
 			suppressMenu: true,
@@ -483,6 +500,14 @@
 			menuTabs: ['filterMenuTab'], 
 		},
 		columnDefs: GWAS_columnDefs, 
+		defaultCsvExportParams:{
+			columnKeys:["chr","pos","P-value","MAF","Effect"],
+			onlySelected: true,
+		},
+		defaultExcelExportParams:{
+			columnKeys:["chr","pos","P-value","MAF","Effect"],
+			onlySelected: true,
+		},
 		rowHeight: 35, 
 		rowSelection: 'multiple',
 		rowMultiSelectWithClick: true,
@@ -622,6 +647,9 @@
 	var Marker_gridOptions = {
 			defaultColDef: { 
 				editable: false, 
+				filterParams: {
+					buttons: ['reset'],
+				},
 				sortable: true, 
 				resizable: true, 
 				suppressMenu: true, 

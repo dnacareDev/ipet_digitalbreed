@@ -94,16 +94,18 @@
 	    {
 	    	headerName: "VCF 파일명",
 	    	field: "filename",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
+	    	filter: "agTextColumnFilter",
+	    	cellClass: "grid-cell-centered",     
+	    	sortable: true,
+	      	suppressMenu: false,
 	    	width: 700,
 	    	minWidth: 150,
 	    },
 	    {
 	    	headerName: "처리내용",
 	    	field: "manufacture",
-	    	filter: true,
-	    	cellClass: "grid-cell-centered",      
+	    	//filter: true,
+	    	cellClass: "grid-cell-centered",
 	    	width: 300,
 	    	minWidth: 110,
 	    },
@@ -150,6 +152,8 @@
 	                }
 	        	}
 	      	},
+	      	sortable: true,
+	      	suppressMenu: false,
 	      	width: 150,
 	      	minWidth: 110,
 	      	cellClass: "grid-cell-centered", 
@@ -187,10 +191,10 @@
 	var gridOptions = {
 		defaultColDef: {
 			editable: false, 
-		    sortable: true,
-			resizable: true,
 			menuTabs: ['filterMenuTab'],
-			//floatingFilter: true,
+			resizable: true,
+			sortable: false,
+	    	suppressMenu: true,
 		},
 		columnDefs: columnDefs,
 		rowHeight: 35,

@@ -13,7 +13,7 @@
 	//System.out.println(refgenome);
 	//System.out.println(annotation_filename);
 	
-	long beforeTime = System.currentTimeMillis();
+	//long beforeTime = System.currentTimeMillis();
 	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String path = rootFolder + "/uploads/reference_database/" +refgenome+ "/annotation/";
@@ -49,11 +49,11 @@
 	//out.print(description);
 	
 				
-	long afterTime = System.currentTimeMillis();
+	//long afterTime = System.currentTimeMillis();
 	
 	
 	out.clear();
 	out.print(result);
 	//System.out.println(result);
-	System.out.println("read annotation time : " + (afterTime -  beforeTime) + "ms");
+	//System.out.println("read annotation time : " + (afterTime -  beforeTime) + "ms");
 %>

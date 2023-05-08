@@ -245,11 +245,11 @@
                                         <label class="form-check form-check-label" for="CAPs" style="padding-top:1px; padding-left:15px;" >CAPs</label>
 					            	</div>
 					            	<div class="col-2">
-					            		<input type="radio" class="form-check-input" id="INDEL" name='modalCategory1'  onclick="onClickMarkerCategory(this.id);" disabled/>
+					            		<input type="radio" class="form-check-input" id="INDEL" name='modalCategory1'  onclick="onClickMarkerCategory(this.id);" />
                                         <label class="form-check form-check-label" for="INDEL" style="padding-top:1px; padding-left:15px;">INDEL</label>
 					            	</div>
 					            	<div class="col-2">
-					            		<input type="radio" class="form-check-input" id="HRM" name='modalCategory1'  onclick="onClickMarkerCategory(this.id);" disabled/>
+					            		<input type="radio" class="form-check-input" id="HRM" name='modalCategory1'  onclick="onClickMarkerCategory(this.id);" />
                                         <label class="form-check form-check-label" for="HRM" style="padding-top:1px; padding-left:15px;">HRM</label>
 					            	</div>
 				            	</div>
@@ -696,6 +696,7 @@
 			box.setPostData(data);
 			box.upload();
 		} else {
+			
 			
 			fetch(`./pd_insertSql.jsp`, {
 				method: "POST",

@@ -126,7 +126,7 @@
                 <section id="basic-examples">
                     <div class="card">
                         <div class="card-content">
-                            <div class="card-body">
+                            <div class="card-body" style="padding-bottom:10px;">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="ag-grid-btns d-flex justify-content-between flex-wrap mb-1">
@@ -159,6 +159,11 @@
                                                 <input type="text" class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0" id="filter-text-box" placeholder="Search...." />
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                    	Genotype Database의 분석이 완료된 VCF파일 목록 중 참조유전체 정보를 가지고 있는 목록을 출력합니다.  
                                     </div>
                                 </div>
                             </div>

@@ -9,6 +9,7 @@
 
 
 	function refresh() {	
+		
 		var columnDefs = [	
 		  {
 		    rowDrag: true,
@@ -37,7 +38,8 @@
 	      checkboxSelection: true,
 	      headerCheckboxSelectionFilteredOnly: true,
 	      headerCheckboxSelection: true,
-	      resizable: true	
+	      resizable: true,
+	      valueGetter: inverseRowCount,
 	    },
         {
             headerName: "사진",
@@ -148,6 +150,7 @@
 				}		
 			}
 		});  
+		 
 		gridOptions.api.refreshCells(); 		
 		  agGrid
     .simpleHttpRequest({ url: "../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
@@ -183,6 +186,7 @@
 		var result = confirm("삭제 된 데이터는 복구 불가능합니다.\n삭제 하시겠습니까?");
 
 		if(result){
+			$("#Loading").modal('show');
 					$.ajax({
 						url:"../../web/database/phenotype_delete.jsp",
 						type:"POST",
@@ -194,6 +198,7 @@
 							} else {
 								alert("삭제하는 과정에서 에러가 발생 되었습니다. 관리자에게 문의 바랍니다.");
 							}
+							$("#Loading").modal('hide');
 						}
 					});
 		}
@@ -306,7 +311,7 @@
 	      headerCheckboxSelectionFilteredOnly: true,
 	      headerCheckboxSelection: true,
 	      resizable: true,
-	      //valueGetter: inverseRowCount,
+	      valueGetter: inverseRowCount,
 	    },
         {
             headerName: "사진",
@@ -544,7 +549,9 @@
 	    pivotPanelShow: "always",
 	    colResizeDefault: "shift",
 	    animateRows: true,
-	    serverSideInfiniteScroll: true,	    
+	    serverSideInfiniteScroll: true,	  
+	    //undoRedoCellEditing: true,
+	    getRowId: (params) => params.data.selectfiles,
 	    onGridReady: (params) => {
 	      addDropZonesone(params);
 	      addDropZonestwo(params);
@@ -568,31 +575,42 @@
 			//console.log(params);
 			if(params.column.getId().includes('key')){
 				
-				const changed_values_map = new Map();
-				changed_values_map.set('varietyid', params.data.varietyid);
-				changed_values_map.set('sampleno', params.data.selectfiles);
-				changed_values_map.set('seq', Number(params.column.getId().split("_")[0]) + 1);
-				changed_values_map.set('value', params.newValue);
+				if(isNaN(params.newValue)) {
+					params.node.setDataValue(params.colDef.field, params.oldValue);
+					return alert("숫자만 입력 가능합니다.");
+				}
 				
-				for(let i=0 ; i<changed_values_arr.length ; i++) {
-					if(changed_values_arr[i].get('varietyid') == params.data.varietyid && changed_values_arr[i].get('sampleno') == params.data.selectfiles && changed_values_arr[i].get('seq') == Number(params.column.getId().split("_")[0]) + 1) {
-						changed_values_arr[i].set('value', params.newValue);
+				//edited_cells[params.data.selectfiles][params['colDef']['field']] = params.newValue;
+				
+				for(let i=0 ; i<edited_cells.length ; i++) {
+					if(edited_cells[i]["sampleno"] == params.data.selectfiles && edited_cells[i]["seq"] == params.colDef.field.replace("_key", "")) {
+						edited_cells.splice(i, 1, {
+							"sampleno": params.data.selectfiles,
+							"seq": params.colDef.field.replace("_key", ""),
+							"newValue": params.newValue,
+						});
 						return;
 					}
 				}
 				
-				changed_values_arr.push(changed_values_map);
+				edited_cells.push({
+					"sampleno": params.data.selectfiles,
+					"seq": params.colDef.field.replace("_key", ""),
+					"newValue": params.newValue,
+				})
+				
+				
 			}
 		},
 		onRowDragLeave: (params) => {
 			if(window.innerWidth < 1200) {
 				window.scrollTo(0, document.getElementById('component-swiper-progress_one').getBoundingClientRect().y+window.pageYOffset -80);
 			}
-			
 		}
 	  };
 	  
-	  var changed_values_arr = [];
+	const edited_cells = new Array();
+	
 
 	function replaceClass(id, oldClass, newClass) {
 	    var elem = $(`#${id}`);
@@ -725,6 +743,12 @@
 	   		 
   function getAllData() {
 
+	  if(!confirm("변경된 데이터를 저장하시겠습니까?")) {
+		  return;
+	  }
+	  
+	  $("#Loading").modal('show');
+	  
 		let saveList = [];		
 		saveList.push(gridOptions.api.getDataAsCsv(getParams()));
 			$.ajax({
@@ -740,13 +764,14 @@
 			       else{
 			      	 alert(result.trim());
 			       }
+			       $("#Loading").modal('hide');
 			    }
 		});			
   }
   
   	function saveData() {
   		//changed_values_arr
-  		if(changed_values_arr.length == 0) {
+  		if(edited_cells.length == 0) {
   			return alert('변경된 데이터가 적어도 하나 있어야 합니다.');
   		}
   		
@@ -754,16 +779,32 @@
   			return;
   		}
   		
-  		for(let i=0 ; i<changed_values_arr.length ; i++) {
-  			getFetchData('./phenotype_saveData.jsp', changed_values_arr[i]);
-  		}
-  		
-  		changed_values_arr = [];
-  		
+  		/*
   		setTimeout(function() {
   			alert('저장되었습니다.');
   			refresh();
   		},200);
+  		*/
+  		gridOptions.api.stopEditing();
+  		
+  		const params = new URLSearchParams({
+  			"varietyid": $( "#variety-select option:selected" ).val(),
+  			"update_cells": JSON.stringify(edited_cells),
+  		});
+  		
+  		fetch('./phenotype_saveData.jsp',{
+  			method: "POST",
+  			headers: {
+   				"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+   			},
+   			body: params
+  		})
+  		.then(response => response.ok)
+  		.then(ok => {
+  			edited_cells.length = 0;
+  			refresh();
+  			alert('저장되었습니다.');
+  		})
   		
   		/*
   		const promises = [];

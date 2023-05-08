@@ -28,7 +28,7 @@
 	String vcf_statistcs = script_path+"vcf_statistcs_final.sh "+savePath+" "+outputPath+" "+ jobid +" " + _orig_filename;		
 	String snp_eff = "perl "+ script_path+"genotype_snpeff.pl "+savePath+jobid+"/ "+outputPath+" "+ jobid +" " + _orig_filename +" "+ refgenomePath +" "+ refgenome +" "+ annotation_filename;
 	
-	
+	/*
 	System.out.println("========genotype_sequence========");
 	System.out.println(genotype_sequence);
 	runanalysistools.execute(genotype_sequence, "cmd");
@@ -38,6 +38,39 @@
 	System.out.println("========vcf_statistcs========");
 	System.out.println(vcf_statistcs);
 	runanalysistools.execute(vcf_statistcs, "cmd");
+	*/
+	
+	System.out.println("========genotype_sequence========");
+	System.out.println(genotype_sequence);
+	try {
+		CommandLine cmdLine = CommandLine.parse(genotype_sequence);
+		DefaultExecutor executor = new DefaultExecutor();
+		executor.setExitValue(0);
+		int exitValue = executor.execute(cmdLine);
+	} catch(Exception e) {
+		e.printStackTrace();
+	}
+	System.out.println("========genotype_statistics========");
+	System.out.println(genotype_statistics);
+	try {
+		CommandLine cmdLine = CommandLine.parse(genotype_statistics);
+		DefaultExecutor executor = new DefaultExecutor();
+		executor.setExitValue(0);
+		int exitValue = executor.execute(cmdLine);
+	} catch(Exception e) {
+		e.printStackTrace();
+	}
+	System.out.println("========vcf_statistcs========");
+	System.out.println(vcf_statistcs);
+	try {
+		CommandLine cmdLine = CommandLine.parse(vcf_statistcs);
+		DefaultExecutor executor = new DefaultExecutor();
+		executor.setExitValue(0);
+		int exitValue = executor.execute(cmdLine);
+	} catch(Exception e) {
+		e.printStackTrace();
+	}
+	
 	
 	if(!annotation_filename.equals("null")) {
 		System.out.println("========snp_eff========");
@@ -70,7 +103,6 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	//String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refseq+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
 	//String updateVcfinfo_sql="update vcfdata_info_t set status=1, refgenome='" +refgenome+ "', samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
 	String updateVcfinfo_sql="update vcfdata_info_t set status=1, samplecnt='" +samplecnt+ "', variablecnt='" +variablecnt+ "' where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
 	System.out.println(updateVcfinfo_sql);
@@ -85,8 +117,6 @@
 	
 	// CSV => JSON 생성 & DB저장
 	System.out.println("========CSV to Json & excuteUpdate start========");
-	//CsvToJson csvToJson = new CsvToJson();
-	//csvToJson.getJson(outputPath, jobid, permissionUid);
 	makeJsonFromCsv(outputPath, jobid, permissionUid);
 	System.out.println("========CSV to Json & excuteUpdate end========"); 
 	
@@ -97,21 +127,6 @@
 		makeChrDataCsv(rootFolder, jobid, refgenome);
 	}
 	System.out.println("========save reference information end========");
-
-	/*
-	String updateVcfinfo2_sql="update vcfdata_info_t set status=2 where creuser='"+permissionUid+"' and varietyid='"+varietyid+"' and jobid='" +jobid+ "';";
-	System.out.println(updateVcfinfo_sql);
-	
-	try{
-		ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
-	}catch(Exception e){
-   		System.out.println(e);
-   	}finally { 
-   		ipetdigitalconndb.stmt.close();
-   		ipetdigitalconndb.conn.close();
-   	}
-	*/
-	
 	System.out.println("vcf file background process complete");
 	
 	
@@ -139,7 +154,6 @@
 			System.out.println("column size : " + columns.size());
 			
 			
-			//String insertSqlColumnPart = "insert into vcfviewer_t (jobid, row_index, contents, creuser) values ('";
 			String insertSqlColumnPart = "insert into vcfviewer_t (chr, position, jobid, row_index, contents, creuser) values ('";
 			StringBuilder insertSqlValuesPart = new StringBuilder();
 			
@@ -155,11 +169,9 @@
 	            for(int i = 0; i < columns.size(); i++) {
 		        	if(i==0) {
 		        		String chr = chunks.get(0);
-		        		//obj.addProperty("chr", chr);
 		        		insertSqlValuesPart.append(chr + "', ");
 		        	} else if(i==1) {
 		        		String position = chunks.get(1);
-		        		//obj.addProperty("position", position);
 		        		insertSqlValuesPart.append(position + ", '");
 		        	} else {
 		        		obj.addProperty(columns.get(i), chunks.get(i));
@@ -174,16 +186,11 @@
 	            line = br.readLine();
 	            if(line == null || count % 1000 == 0) {
 	            	System.out.println("1000 inserts executed & count passed - " + count);
-	            	//System.out.println("String length - " + (insertSqlColumnPart+insertSqlValuesPart).length() );
 	            	ipetdigitalconndb.stmt.executeUpdate(insertSqlColumnPart+insertSqlValuesPart);
-	            	//insertSqlValuesPart = "";
 	            	insertSqlValuesPart.setLength(0);
 	            } else {
-	            	//insertSqlValuesPart += ",('";
 	            	insertSqlValuesPart.append(",('");
 	            }
-	            
-	            
 			}
 			
 			br.close();
@@ -202,13 +209,11 @@
 	private void makeChrDataCsv(String rootFolder, String jobid, String refgenome) throws IOException, SQLException {
 		String path = rootFolder+"result/database/genotype_statistics/";
 		
-		//File fileRead = new File(path+"/"+jobid+"/"+jobid+"_genotype_matrix_viewer.csv");
 		File fileRead2 = new File(rootFolder+"uploads/reference_database/"+refgenome+"/len/len.csv");
 		File fileWrite = new File(path+"/"+jobid+"/"+jobid+"_chr_row_index_data.csv");
 		
 		System.out.println(rootFolder+"uploads/reference_database/"+refgenome+"/len/len.csv");
 		
-		//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead), "UTF-8"));
 		BufferedReader br2 = new BufferedReader(new InputStreamReader(new FileInputStream(fileRead2), "UTF-8"));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileWrite), "UTF-8"));
 		
