@@ -166,8 +166,8 @@
 		columnDefs: columnDefs,
 		rowHeight: 35,
 		enableRangeSelection: true,
-		suppressMultiRangeSelection: true,
-		//rowSelection: "multiple",
+		//suppressMultiRangeSelection: true,
+		rowSelection: "multiple",
 		//floatingFilter: true,
 		//filter: 'agMultiColumnFilter',
 		pagination: true,
@@ -205,6 +205,13 @@
 				   											</ul>
 				   											<div class='tab-content'>
 				   												<div role='tabpanel' class='tab-pane active' id='pill1' aria-expanded='true' aria-labelledby='base-pill1'>
+				   													<div class="row">
+				   														<div class="col-12 d-flex justify-content-end" style="padding-right:30px;">
+				   															<a href="${params.data.resultpath}/${params.data.jobid}/${params.data.jobid}_marker_final.csv" download
+				   																<button type="button" class="btn btn-success" style="background-color:#259556 !important;">Download Position Info</button>
+				   															</a>
+				   														</div>
+				   													</div>
 				   													<div id='pill2_frame' class="col-12 col-xl-12 ag-theme-alpine" style='height:445px; margin-top:25px; float:left;'></div>
 				   												</div>
 				   											</div>
@@ -234,15 +241,13 @@
   	const gridOptions2 = {
 	  	columnDefs: [],
 	  	defaultColDef: {
+	  		cellClass: "grid-cell-centered", 
 			editable: false,
-			//filter: true,
 		    sortable: true,
 			resizable: true,
 			menuTabs: ['filterMenuTab'],
-			//floatingFilter: true,
 		},
 	  	animateRows: true,
-	  	cellClass: "grid-cell-centered",  
 	  	width: 200,
   	}
 	

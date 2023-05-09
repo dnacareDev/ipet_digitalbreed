@@ -389,9 +389,7 @@
 			                                	<ul id='button_list' class='nav nav-pills nav-active-bordered-pill pl-1 pr-1'>
 		                             				<li class='nav-item col-3' style="padding:0px;"><a class='nav-link active text-center' id='result_1_1' data-toggle='pill' href='#pill1' onclick="resizeGrid();" aria-expanded='true'>SnpEff</a></li>
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_2' data-toggle='pill' href='#pill2' onclick="resizeGrid();" aria-expanded='false'>GWAS</a></li>
-					   								<!--  
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_3' data-toggle='pill' href='#pill3' onclick="resizeGrid();" aria-expanded='false'>Marker</a></li>
-					   								-->
 					   								<li class='nav-item col-3' style="padding:0px;"><a class='nav-link text-center' id='result_1_4' data-toggle='pill' href='#pill4' onclick="resizeGrid();" aria-expanded='false'>Selection</a></li>
 												</ul>
 												<div class='tab-content'>
@@ -449,9 +447,6 @@
 														<div class="row mt-1">
 															<div class="col-12">
 																<ul id='GWAS_button_list' class='nav nav-pills nav-active-bordered-pill'>
-																	<!--  
-																	<li class='nav-item'><a class='nav-link active' id='GWAS_1' data-toggle='pill' href='#GWAS_pill1' aria-expanded='true'>GLM(test)</a></li>
-																	-->
 																</ul>
 																<div class="row mt-1">
 																	<div id="GWAS_content_list" class='tab-content col-12'>
@@ -460,25 +455,12 @@
 															</div>
 														</div>
 														<div id="nonSelectGWAS" class="row mt-1" style="display:block;">
-															<!--  
-															<div class="col-12" style="display: flex; flex-direction: column; align-items: center;">
-																<i class="ri-file-search-line" style=" font-size: 355px;"></i>
-																<p style="margin-top:-25px; font-size: 30px;">Please select a result</p>
-															</div>
-															-->
 															<div class="col-12" style="height:500px; display: flex; align-items: center; justify-content: center;">
 																<p style="margin-top:80px; font-size: 30px;">Please select a result</p>
 															</div>
 														</div>
 														<div id="status404" class="row mt-1" style="display:none;">
 															<div class="col-12" style="margin-top:70px; display: flex; flex-direction: column; align-items: center;">
-																<!--  
-																<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-																	<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-																	<line x1="12" y1="9" x2="12" y2="13"></line>
-																	<line x1="12" y1="17" x2="12.01" y2="17"></line>
-																</svg>
-																-->
 																<p style="margin-top:170px; font-size: 25px;">표현형과의 유사성을 찾을 수 없습니다.</p>
 															</div>
 														</div>
@@ -487,13 +469,14 @@
 	  												<div class='tab-pane pl-1' id='pill3' aria-labelledby='base-pill3'>
 	  													<div class="row mt-1 justify-content-between">
 	  														<div class="col-6"> 
-																<select id='Marker_select' class='select2 form-select float-left'>
+																<select id='Marker_select' class='select2 form-select float-left' onchange='show_Marker_Grid();'>
 																	<option data-chr="-1" disabled hidden selected>Select result</option>
 																</select>
 															</div>
-									            			<div class="float-right">
-											            		<button type="button" class="btn btn-outline-success mb-1" style="margin-right:30px;" onclick="marker_mark();">표지</button>
-											            	</div>
+															<div class="col-6 d-flex justify-content-end">
+											            		<button type="button" class="btn btn-outline-warning mb-1" style="margin-right:7px;" onclick="clear_mark_marker();">Reset</button>
+											            		<button type="button" class="btn btn-outline-success mb-1" style="margin-right:15px;" onclick="marker_mark();">표지</button>
+															</div>
 	  													</div>
 	  													
 									            		<div class="row mt-1">
@@ -564,7 +547,7 @@
 											            	</div>
 											            	-->
 											            	<div class="col-3"></div>
-											            	<div class="col-3 mt-1 mr-1">
+											            	<div class="col-3 mr-1">
 											            		<div class="form-check form-check-secondary form-switch" style="display:inline;">
 					                                                <input type="checkbox" class="form-check-input" id="switch_sort_UPGMA" style="height: 1.5rem; width:3em;" onclick="isSorted_by_UPGMA(this.checked);" > 
 												            	</div>
@@ -572,25 +555,44 @@
 											            	</div>
 									            		</div>
 									            		<div class="row mt-1">
-															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:607px; width:93%; margin-left: 15px;"></div>
+															<div id='UPGMA_Grid' class="ag-theme-alpine" style="height:620px; width:93%; margin-left: 15px;"></div>
 														</div>
 	  												</div>
 	  												<!-- STRUCTURE pill -->
 	  												<div class='tab-pane pl-1' id='pill6' aria-labelledby='base-pill2'>
 	  													<div class="row justify-content-between"> 
 															<div class="col-6">
-																<select id='STRUCTURE_select' class='select2 form-select float-left' onchange='STRUCTURE_gridOptions.api.setColumnDefs(STRUCTURE_columnDefs); STRUCTURE_gridOptions.api.setRowData(); STRUCTURE_gridOptions.api.sizeColumnsToFit(); setNumberOfK(this.options[this.selectedIndex].dataset);'>
+																<select id='STRUCTURE_select' class='select2 form-select float-left' onchange='
+																		STRUCTURE_gridOptions.api.setColumnDefs(STRUCTURE_columnDefs); 
+																		STRUCTURE_gridOptions.api.setRowData(); 
+																		STRUCTURE_gridOptions.api.sizeColumnsToFit(); 
+																		setNumberOfK(this.options[this.selectedIndex].dataset); 
+																		getVariantBrowserGrid();
+																		STRUCTURE_gridOptions.columnApi.applyColumnState({defaultState: { sort: null },});
+																		'>
 																	<option data-chr="-1" disabled hidden selected>Select result</option>
 																</select>
 															</div>
 															<div class="col-6">
-																<select id='STRUCTURE_select_K' class='select2 form-select float-left' onchange='show_STRUCTURE_Grid(this.options[this.selectedIndex].dataset);'>
+																<select id='STRUCTURE_select_K' class='select2 form-select float-left' onchange='
+																		show_STRUCTURE_Grid(this.options[this.selectedIndex].dataset); 
+																		getVariantBrowserGrid();
+																		STRUCTURE_gridOptions.columnApi.applyColumnState({defaultState: { sort: null },});
+																		'>
 																	<option data-chr="-1" disabled hidden selected>Select K</option>
 																</select>
 															</div>
 														</div>
+														<div class="row mt-1">
+															<div class="col-12">
+																<div class="form-check form-check-secondary form-switch" style="display:inline;">
+					                                                <input type="checkbox" class="form-check-input" id="switch_sort_STRUCTURE" style="height: 1.5rem; width:3em;" onclick="isSorted_by_STRUCTURE(this.checked);" > 
+												            	</div>
+											            		<label class="form-check-label " for="switch_sort_STRUCTURE" style="margin-left: 18px; font-size: 16px; display:inline;">Sort</label>
+											            	</div>
+														</div>
 									            		<div class="row mt-1">
-	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:658px; width:93%; margin-left: 15px;"></div>
+	  														<div id='STRUCTURE_Grid' class="ag-theme-alpine" style="height:620px; width:93%; margin-left: 15px;"></div>
 	  													</div>
 	  												</div>
 	  												<!-- Haplotype pill -->
@@ -1019,6 +1021,7 @@
 		document.getElementById("Chr_select").dispatchEvent(new Event("change"));
 		
 		getGwasSelectList();
+		getMarkerSelectList();
 		getUpgmaSelectList();
 		getStructureSelectList();
 		
@@ -1721,7 +1724,7 @@
 			childDiv.dataset.id = mRNA_id;
 			childDiv.dataset.toggle = mRNA_id;
 			childDiv.dataset.html = "true";
-			childDiv.dataset.placement = "right";
+			childDiv.dataset.placement = "left";
 			childDiv.dataset.trigger = "hover";
 			
 			let popoverContent = `
@@ -1758,6 +1761,7 @@
 			
 			$(`[data-toggle="\${mRNA_id}"]`).popover();
 		}
+		document.querySelector(`.popover.fade.bs-popover-left.show`).remove();
 	}
 	
 	function createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position, mRNA_id) {
@@ -2374,6 +2378,7 @@
 	function clear_mark_all() {
    		clear_mark_snpEff();
    		clear_mark_GWAS();
+   		clear_mark_marker();
    	}
 	
 	function show_SnpEff_Grid() {
@@ -2735,19 +2740,6 @@
 		.then((data) => {
 			//console.log(data);
 			
-			/*
-			if(data.length == 0) {
-				GWAS_gridTable.style.display = 'none';
-				document.getElementById(`cutOffDiv_\${model}`).style.display = 'none';
-				document.getElementById('status404').style.display = 'block';
-				return;
-			} else {
-				GWAS_gridTable.style.display = 'block';
-				document.getElementById(`cutOffDiv_\${model}`).style.display = 'flex';
-				document.getElementById('status404').style.display = 'none';
-			}
-			*/
-			
 			//cut off Div display
 			document.getElementById(`cutOffDiv_\${model}`).style.display = 'flex';
 			
@@ -2766,49 +2758,6 @@
 				}
 			})
 		});
-		
-		
-		/*
-		const chr_select = document.getElementById('Chr_select');
-   		const chr = chr_select.options[chr_select.selectedIndex].dataset.chr;
-   		
-		fetch(`/ipet_digitalbreed/result/gwas/\${jobid}/GAPIT.Association.GWAS_Results.\${model}.\${phenotype}.csv`, {method: "HEAD"})
-		.then((response) => response.ok)
-		.then((ok) => {
-			if(!ok) {
-				
-				GWAS_gridTable.style.display = 'none';
-				document.getElementById('status404').style.display = 'block';
-				
-			} else {
-				fetch(`./vb_features_grid_Gwas.jsp?chr=\${chr}&jobid=\${jobid}&model=\${model}&phenotype=\${phenotype}`)
-				.then((response) => response.json())
-				.then((data) => {
-					//console.log(data);
-					GWAS_gridOptions_model[model].api.setRowData(data);
-					
-					GWAS_gridTable.style.display = 'block';
-					document.getElementById('status404').style.display = 'none';
-					
-					GWAS_gridOptions_model[model].columnApi.autoSizeAllColumns();
-					
-					
-					
-					SelectionList_gridOptions.api.forEachNode((selection_node) => {
-						const selection_row_id = selection_node.id;
-						const GWAS_node = GWAS_gridOptions_model[model].api.getRowNode(selection_row_id);
-						
-						//console.log("snpEff_node : " , snpEff_node);
-						if(GWAS_node) {
-							const selection_gwas_flag = selection_node.data.gwas
-							GWAS_node.setDataValue('selection', selection_gwas_flag);
-						}
-					})
-				})
-			}
-		})
-		*/
-
    	}
    	
    	
@@ -2881,7 +2830,102 @@
 		})
    	}
    	
+   	function getMarkerSelectList() {
+   		fetch(`./vb_getSelectLists.jsp?command=Marker&jobid=\${linkedJobid}`)
+   		.then((response) => response.json())
+   		.then((data) => {
+   			//console.log("marker list : ", data);
+   			for(let i=0 ; i<data.length ; i++) {
+  				// ${data}값을 jsp에서는 넘기고 javascript의 백틱에서 받으려면 \${data} 형식으로 써야한다 
+  				$("#Marker_select").append(`<option data-jobid=\${data[i].jobid} data-phenotype=\${data[i].phenotype_name} data-model=\${data[i].model} data-filename=\${data[i].filename} > \${data[i].comment} (\${data[i].cre_dt}) </option>`);
+  			}
+   		});
+   	}
    	
+   	function show_Marker_Grid() {
+   		
+   		const chr_select = document.getElementById('Chr_select');
+   		const chr = chr_select.options[chr_select.selectedIndex].dataset.chr;
+   		
+   		const marker_select = document.getElementById('Marker_select');
+   		const marker_jobid = marker_select[marker_select.selectedIndex].dataset.jobid;
+   		
+   		fetch(`./vb_features_grid_Marker.jsp?chr=\${chr}&jobid=\${marker_jobid}`)
+   		.then((response) => response.json())
+   		.then((data) => {
+   			console.log(data);
+   			
+   			Marker_gridOptions.api.setRowData(data);
+   			Marker_gridOptions.api.sizeColumnsToFit();
+   			
+   			//sort_vb_by_UPGMA();
+   		});
+   	}
+   	
+   	function marker_mark() {
+		console.time("markerMark");
+		
+   		clear_mark_marker();
+		
+		const chr_select = document.getElementById('Chr_select')
+		const length = chr_select[chr_select.selectedIndex].dataset.length;
+		
+		const marker_marked_rows = Marker_gridOptions.api.getSelectedRows();
+		
+		//console.log(GWAS_marked_rows);
+		//console.log(length);
+		
+		if(marker_marked_rows.length == 0) {
+			return;
+		}
+		
+		for(let i=0 ; i<marker_marked_rows.length ; i++) {
+			
+			if(marker_marked_rows[i].chr != chr_select[chr_select.selectedIndex].dataset.chr) {
+				continue;
+			}
+			
+			const mark_pos = Number(marker_marked_rows[i]['pos']);
+			//console.log(mark_pos);
+			//console.log(parseInt(mark_pos * 1000 / length));
+			
+			const mark = document.querySelector(`.chromosomeStackDiv[data-order="\${parseInt(mark_pos * 2000 / length)}"]`);
+			//console.log(mark);
+			
+			const mark_data_order = mark.dataset.order;
+			
+			if(!document.querySelector(`[data-marker_order="\${mark_data_order}"]`)){
+				const childDiv = document.createElement('div');
+				childDiv.dataset.marker_order = mark_data_order;
+				childDiv.dataset.toggle="popover";
+				childDiv.dataset.placement = "top";
+				childDiv.dataset.trigger = "hover";
+				childDiv.dataset.content = thousands_separator(mark_pos);
+				childDiv.style.position = "absolute";
+				childDiv.style.bottom = "25px";
+				childDiv.style.right = "-3px";
+				childDiv.innerHTML = `<svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#f44336;" /></svg>`;
+				childDiv.addEventListener("click", (e) => {
+					changeInputValue(mark_pos);
+				});
+				
+				mark.appendChild(childDiv);
+			}
+			
+			
+			
+			//mark.innerHTML = `<div data-GWAS_order=\${i} style="position: absolute; bottom: 25px; right: -3px;" ><svg height="5" width="6"><polygon points="3,5 6,0 0,0" style="fill:#2cb637;" /></svg></div>`;
+		}
+		$('[data-toggle="popover"]').popover();
+		console.timeEnd("markerMark");
+   	}
+   	
+   	function clear_mark_marker() {
+		//선택되어있는 표지를 모두 지움
+		document.querySelectorAll(`[data-marker_order]`).forEach((El) => {
+			El.remove();
+		})
+   	}
    	
    	async function flanking_sequence() {
    		
@@ -3040,7 +3084,7 @@
    		fetch(`./vb_getSelectLists.jsp?command=UPGMA&jobid=\${linkedJobid}`)
    		.then((response) => response.json())
    		.then((data) => {
-   			//console.log(data);
+   			//console.log("UPGMA list: " , data);
    			for(let i=0 ; i<data.length ; i++) {
   				$("#UPGMA_select").append(`<option data-jobid=\${data[i].jobid} data-filename=\${data[i].filename} > \${data[i].comment} (\${data[i].cre_dt}) </option>`);
   			}
@@ -3228,33 +3272,98 @@
    		})
    		.then(response => response.json())
    		.then(data => {
-   			//console.log(data);
+   			//console.log("STRUCTURE data : ", data);
    			
    			const STRUCTURE_columnDefs = [
    				{field: "Sample_Name", filter: true},
    			];
    			
    			for(let i=1 ; i<=number_of_k ; i++) {
-   				STRUCTURE_columnDefs.push({field: `Cluster\${i}`})
+   				//STRUCTURE_columnDefs.push({field: `Cluster\${i}`, valueFormatter: exponential_to_decimal})
+   				
+   				STRUCTURE_columnDefs.push({
+   					field: `Cluster\${i}`,
+   					valueFormatter: (params) => {
+   						const number = Number(params.value);
+   						const exponent = Math.floor(Math.log10(Math.abs(Number(params.value))));
+   						//console.log(number, -exponent);
+   						return number > 0 ? number.toFixed(-exponent) : number;
+   					}
+   				})
    			}
    			
    			STRUCTURE_gridOptions.api.setColumnDefs(STRUCTURE_columnDefs);
    			STRUCTURE_gridOptions.api.setRowData(data);
    			STRUCTURE_gridOptions.columnApi.autoSizeAllColumns();
-   			
    			const resultGrid_width = document.getElementById('STRUCTURE_Grid').clientWidth;
 	        const all_columns = STRUCTURE_gridOptions.columnApi.getColumns();
 	        
 	        //STRUCTURE_columnDefs[0]['minWidth'] = all_columns[0]['actualWidth']
-	        
+	        let all_columns_width = 0;
 	        for(let i=0 ; i<=number_of_k ; i++) {
-   				STRUCTURE_columnDefs[i]['minWidth'] = all_columns[0]['actualWidth'];
+   				STRUCTURE_columnDefs[i]['minWidth'] = all_columns[i]['actualWidth'];
+   				all_columns_width += all_columns[i]['actualWidth'];
    			}
 	        
         	
 	        STRUCTURE_gridOptions.api.setColumnDefs(STRUCTURE_columnDefs);
-	        STRUCTURE_gridOptions.api.sizeColumnsToFit();
+	        if(all_columns_width < resultGrid_width) {
+		        STRUCTURE_gridOptions.api.sizeColumnsToFit();
+	        }
+   			/*
+	        */
    		})
+   	}
+   	
+   	function isSorted_by_STRUCTURE(checked) {
+   		
+   		const STRUCTURE_select = document.getElementById('STRUCTURE_select');
+   		
+   		if(STRUCTURE_select[STRUCTURE_select.selectedIndex].dataset.jobid == '-1' ) {
+   			return;
+   		}
+   		
+   		//console.log(checked);
+   		if(checked) {
+   			sort_vb_by_STRUCTURE();
+   		} else {
+   			getVariantBrowserGrid();
+   		}
+   	}
+   	
+	function sort_vb_by_STRUCTURE() {
+   		
+   		if(!document.getElementById('switch_sort_STRUCTURE').checked) {
+   			return;
+   		}
+   		
+   		console.time("sort_vb_by_STRUCTURE");
+   		
+   		let id_arr = new Array();
+   		
+   		
+   		const rows = STRUCTURE_gridOptions.api.getModel().rowsToDisplay;
+   		
+   		for(let i=0 ; i<rows.length ; i++) {
+   			id_arr.push(rows[i].id);
+   		}
+   		//console.log(id_arr);
+   		
+   		// 첫 row(=Reference는 무조건 고정)
+   		let updatedNodesData = [VariantBrowser_gridOptions.api.getRowNode(0).data];
+   		
+   		for(let i=0 ; i<id_arr.length ; i++) {
+   			VariantBrowser_gridOptions.api.forEachNode((node) => {
+   				if(node.data.id == id_arr[i]) {
+   					updatedNodesData.push(node.data);
+   				}
+   			})
+   		}
+   		
+   		//console.log(updatedNodesData);
+   		
+   		VariantBrowser_gridOptions.api.setRowData(updatedNodesData);
+   		console.timeEnd("sort_vb_by_STRUCTURE");
    	}
    	
    	async function primerDesign() {
@@ -3402,6 +3511,15 @@
 	}
 	
 	const thousands_separator = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	
+	/*
+	const exponential_to_decimal = (params) => {
+		const number = Number(params.value);
+		const exponent = Math.floor(Math.log10(Math.abs(number)));
+		return number > 0 ? number.toFixed(-exponent) : number;
+	}
+	*/
+	//const exponential_to_decimal = (params) => Number(params.value).toFixed(-Math.floor(Math.log10(Math.abs(Number(params.value)))));
 	
 	window.onresize = resizeGrid;
 		

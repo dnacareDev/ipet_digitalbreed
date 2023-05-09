@@ -20,6 +20,7 @@
 	
 	out.clear();
 	
+	//System.out.println(command);
 	switch(command) {
 		case "GWAS":
 
@@ -35,6 +36,12 @@
 			UpgmaListJsonArr = getUpgmaList(jobid);
 			
 			out.print(UpgmaListJsonArr);
+			break;
+		case "Marker":
+			JsonArray MarkerListJsonArr = new JsonArray();
+			MarkerListJsonArr = getMarkerList(jobid);
+			
+			out.print(MarkerListJsonArr);
 			break;
 		case "UPGMA_standard":
 			
@@ -119,6 +126,37 @@
 		}
 		
 	
+		return jsonArr;
+	}
+%>
+
+<%! 
+	public JsonArray getMarkerList(String jobid) throws SQLException {
+		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+		
+		JsonArray jsonArr = new JsonArray();
+		
+		String sql = "select marker.no as no, marker.filename as filename, marker.comment as comment, marker.jobid as jobid, DATE_FORMAT(marker.cre_dt, '%Y-%m-%d') AS cre_dt from mini_info_t marker inner join vcfdata_info_t vcf on (marker.vcfdata_no = vcf.no and marker.refgenome_id = vcf.refgenome_id) where vcf.jobid='" +jobid+ "'and marker.status=1;";
+		//System.out.println(sql);
+		try{
+			ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
+			while (ipetdigitalconndb.rs.next()) { 
+				JsonObject jsonObj = new JsonObject();
+				jsonObj.addProperty("no", ipetdigitalconndb.rs.getString("no"));
+				jsonObj.addProperty("filename", ipetdigitalconndb.rs.getString("filename"));
+				jsonObj.addProperty("comment", ipetdigitalconndb.rs.getString("comment"));
+				jsonObj.addProperty("jobid", ipetdigitalconndb.rs.getString("jobid"));
+				jsonObj.addProperty("cre_dt", ipetdigitalconndb.rs.getString("cre_dt"));
+				jsonArr.add(jsonObj);
+			}
+		}catch(Exception e){
+			System.out.println(e);
+		} finally {
+			ipetdigitalconndb.rs.close();
+			ipetdigitalconndb.stmt.close();
+			ipetdigitalconndb.conn.close();
+		}
 		return jsonArr;
 	}
 %>

@@ -66,7 +66,8 @@
 
 			 while (ipetdigitalconndb.rs.next()) { 		
 				fw.write(ipetdigitalconndb.rs.getString("traitname")+"\t");		
-				fw_full.write(ipetdigitalconndb.rs.getString("traitname")+"\t");	
+				fw_full.write(ipetdigitalconndb.rs.getString("traitname")+"\t");
+				//System.out.println("dbstjrwo");
 				traitcnt++;
 			 }	  	 
 			fw.write("\n");
@@ -83,8 +84,8 @@
 	    System.out.println(sql);
 	    
 	  	 while (ipetdigitalconndb.rs.next()) { 		
-	  		 System.out.println(ipetdigitalconndb.rs.getString("samplename"));
-	  		fw.write(ipetdigitalconndb.rs.getString("samplename")+"\t");			
+	  		//System.out.println(ipetdigitalconndb.rs.getString("samplename"));
+	  		fw.write(ipetdigitalconndb.rs.getString("samplename")+"\t");
 	  	 }	  		  	
 	}catch(Exception e){
 		System.out.println(e);
@@ -97,7 +98,8 @@
 	    ipetdigitalconndb.rs=ipetdigitalconndb.stmt.executeQuery(sql);	
 	    
 	  	 while (ipetdigitalconndb.rs.next()) { 		
-	  		fw.write(ipetdigitalconndb.rs.getString("value")+"\t");			
+	  		fw.write(ipetdigitalconndb.rs.getString("value")+"\t");		
+	  		//System.out.println("loop");
 	  	 }
 		  fw.write("\n");		
 	}catch(Exception e){
@@ -156,20 +158,23 @@
 		ipetdigitalconndb.conn.close();
 	}
 	//System.out.println(fullsamplename);
-	System.out.println(traitcnt);
+	//System.out.println(traitcnt);
 	
 	int j=0;
 	int traitcnt_loop=traitcnt;
-  	for(int i=0;i<fullsamplename.size();) { 
+	//System.out.println("full samplename size : " + fullsamplename.size());
+	for(int i=0;i<fullsamplename.size();) { 
   		
   		fw_full.write(fullsamplename.get(i)+"\t");			
 
   		for(;j<traitcnt_loop;j++) {   	  		
   			fw_full.write(fulltraitval.get(j)+"\t");
+  			//System.out.println("(i, j) : "+ "("+i+","+j+")");
   			i++;
   		}
 		fw_full.write("\n");
-		traitcnt_loop +=traitcnt;  		
+		traitcnt_loop +=traitcnt;  	
+		//System.out.println("loop trait");
 	}
   	
   	fw_full.flush();  	

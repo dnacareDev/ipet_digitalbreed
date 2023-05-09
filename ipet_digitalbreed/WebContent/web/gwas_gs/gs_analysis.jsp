@@ -53,7 +53,7 @@
 	String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	String VcfPath = rootFolder + "uploads/database/db_input/";
 	//String phenotypePath = rootFolder + "/uploads/GS/"+jobid_gs+"/train_pheno_1-9.txt";
-	String phenotypePath = rootFolder + "/uploads/GS/Pheno/"+jobid_gs+"/";
+	String phenotypePath = rootFolder + "uploads/GS/Pheno/"+jobid_gs+"/";
 	String outputPath = rootFolder + "result/GS/";
 	
 	
@@ -91,17 +91,18 @@
 	}
 	
 	
-	//String cmd = "Rscript "+ script_path +"GS_script.R "+ jobid_gs +" "+ VcfPath+jobid_training_vcf +"/ "+ filename_training_vcf +" ";
-	String cmd = "Rscript "+ script_path +"GS_script.R "+ jobid_gs +" "+ jobid_training_vcf +" "+ filename_training_vcf +" ";
+	String cmd = "Rscript "+ script_path +"GS_script.R "+ jobid_gs +" "+ VcfPath+jobid_training_vcf +"/ "+ filename_training_vcf +" ";
+	//String cmd = "Rscript "+ script_path +"GS_script.R "+ jobid_gs +" "+ jobid_training_vcf +" "+ filename_training_vcf +" ";
 	
 	if(jobid_prediction_vcf.equals("-1")) {
 		cmd += "NULL NULL ";
 	} else {
-		//cmd += VcfPath+jobid_prediction_vcf +"/ "+ filename_prediction_vcf +" ";
-		cmd += jobid_prediction_vcf +" "+ filename_prediction_vcf +" ";
+		cmd += VcfPath+jobid_prediction_vcf +"/ "+ filename_prediction_vcf +" ";
+		//cmd += jobid_prediction_vcf +" "+ filename_prediction_vcf +" ";
 	}
 	
-	cmd += "GS_trait.csv" +" "+ traitname_keys +" "+ MAXNA +" "+ MAF;
+	cmd += phenotypePath+"GS_trait.csv" +" "+ traitname_keys +" "+ MAXNA +" "+ MAF;
+	//cmd += "GS_trait.csv" +" "+ traitname_keys +" "+ MAXNA +" "+ MAF;
 	
 	if(ANO_checked && LD_checked) {
 		cmd += " ANO+LD ";

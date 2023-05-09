@@ -604,44 +604,64 @@
 	}
 	
 	var Marker_columnDefs = [
+		{
+			headerName: "row_id(select link)",
+			field: "row_id",
+			//field: "SNP",
+			//valueGetter: (params) => params.data.Chr + "_" + params.data.Pos,
+			hide: true,
+	    },
 		{ 
-			checkboxSelection: true, 
-			headerCheckboxSelectionFilteredOnly: true, 
-			headerCheckboxSelection: true, 
-			width: 50, 
-		},
-		{ 
+			headerName: "",
 			field: "selection", 
 			maxWidth: 100, 
 			minWidth: 100, 
+			checkboxSelection: true, 
+			headerCheckboxSelectionFilteredOnly: true, 
+			headerCheckboxSelection: true, 
 			suppressMenu: true, 
+			pinned: 'left',
+			cellRenderer: (params) => {
+				if(params.value) {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#b672f5" stroke="#b672f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`
+				} else {
+					return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bcbcbc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+								<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+							</svg>`;
+				}
+			},
 		},
 	    { 
-			field: "Chr", 
+			field: "chr", 
 			filter: true, 
-			width: 60, 
-			minWidth: 60, 
-		},
-	    { 
-			field: "Pos", 
-			comparator: function(valueA, valueB, nodeA, nodeB, isDescending) {
-	            return (Number(valueA) == Number(valueB)) ? 0 : (Number(valueA) > Number(valueB)) ? 1 : -1;
-	        },
-			filter: 'agNumberColumnFilter', 
-			width: 70, 
-			minWidth: 70, 
-		},
-	    { 
-			field: "Type", 
-			filter: "agTextColumnFilter",
 			width: 80, 
 			minWidth: 80, 
 		},
 	    { 
-			field: "Indel Length", 
+			field: "pos", 
+	        cellClass: "", 
+	        cellStyle: { color: 'blue' },
+	        comparator: function(valueA, valueB, nodeA, nodeB, isDescending) {
+	        	return (Number(valueA) == Number(valueB)) ? 0 : (Number(valueA) > Number(valueB)) ? 1 : -1;
+	        },
 			filter: 'agNumberColumnFilter', 
-			width: 120, 
-			minWidth: 120, 
+			valueFormatter: (params) => params.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+			width: 100, 
+			minWidth: 100, 
+		},
+	    { 
+			field: "REF", 
+			filter: true,
+			width: 80, 
+			minWidth: 80, 
+		},
+	    { 
+			field: "ALT", 
+			filter: true, 
+			width: 80, 
+			minWidth: 80, 
 		},
 	];
 	var Marker_gridOptions = {
@@ -651,7 +671,8 @@
 					buttons: ['reset'],
 				},
 				sortable: true, 
-				resizable: true, 
+				resizable: true,
+				suppressDragLeaveHidesColumns: true,
 				suppressMenu: true, 
 				cellClass: "grid-cell-centered", 
 				menuTabs: ['filterMenuTab'], 
@@ -996,6 +1017,14 @@
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift", 
 			animateRows: true, 
+			getRowId: params => params.data.Sample_Name,
+			onSortChanged: params => {
+				
+				if(document.getElementById('switch_sort_STRUCTURE').checked) {
+					sort_vb_by_STRUCTURE();
+				}
+				
+			}
 			//onCellClicked: (params) =>	
 	}
 	
@@ -1028,10 +1057,6 @@
 		return params.api.getDisplayedRowCount() - params.node.rowIndex;
 	}
 	
-	function filter_SnpEff() {
-
-	}
-	
 	function flag_SVG(flag) {
 		if(flag) {
 			return `
@@ -1052,11 +1077,6 @@
 		}
 	}
 	
-	
-	
-	
-	
- 
 	/*** DEFINED TABLE VARIABLE ***/
 	var gridTable = document.getElementById("myGrid");
 

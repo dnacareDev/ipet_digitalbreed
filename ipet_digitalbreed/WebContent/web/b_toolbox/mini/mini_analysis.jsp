@@ -17,6 +17,8 @@
 	String jobid = request.getParameter("jobid");		
 	String jobid2 = runanalysistools.getCurrentDateTime();									// parameter로 받은게 아닌, 새로 생성되는 jobid
 	String filename = request.getParameter("filename");
+	String vcfdata_no = request.getParameter("vcfdata_no");
+	String refgenome_id = request.getParameter("refgenome_id");
 	//String uploadPath = request.getParameter("uploadpath");
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
@@ -80,9 +82,10 @@
 	}
 	
 	
-	String insert_sql="insert into mini_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";	
+	//String insert_sql="insert into mini_info_t(cropid,varietyid,filename,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+filename+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";
+	String insert_sql="insert into mini_info_t(cropid,varietyid,vcfdata_no,filename,refgenome_id,status,uploadpath,resultpath,comment,jobid,creuser,cre_dt) values((select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','"+vcfdata_no+"','"+filename+"','"+refgenome_id+"', 0,'"+db_savePath+"','"+db_outputPath+"','"+comment+"','"+jobid2+"','"+permissionUid+"',now());";
 
-	System.out.println("insert mini_info_t sql : " + insert_sql);
+	System.out.println("mini_info_t sql : " + insert_sql);
 	
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(insert_sql);

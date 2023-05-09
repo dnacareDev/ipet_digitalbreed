@@ -69,7 +69,8 @@
 				JSONArray jsonArray = new JSONArray();
 				ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
-				String sql = "select contents from vcfviewer_t where jobid = '" +jobid+ "' and row_index >= " +startRow+ " and row_index < "+endRow;
+				//String sql = "select contents from vcfviewer_t where jobid = '" +jobid+ "' and row_index >= " +startRow+ " and row_index < "+endRow;
+				String sql = "select contents from vcfviewer_t where jobid = '" +jobid+ "' and row_index > " +startRow+ " and row_index <= "+endRow;
 				System.out.println("sql : " + sql);
 				ipetdigitalconndb.rs = ipetdigitalconndb.stmt.executeQuery(sql);
 				while (ipetdigitalconndb.rs.next()) { 
