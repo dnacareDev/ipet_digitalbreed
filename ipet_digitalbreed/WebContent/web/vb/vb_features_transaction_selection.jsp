@@ -63,6 +63,7 @@
 					sql = "insert into variant_browser_selection (chr, pos, snpeff, gwas, marker_candidate, jobid, creuser, cre_dt) values ('" +chr+ "', " +pos+ ", false, true, false, '" +jobid+ "', '" +permissionUid+ "', now());";
 					break;
 				case "marker_candidate":
+					sql = "insert into variant_browser_selection (chr, pos, snpeff, gwas, marker_candidate, jobid, creuser, cre_dt) values ('" +chr+ "', " +pos+ ", false, false, true, '" +jobid+ "', '" +permissionUid+ "', now());";
 					break;
 			}
 			

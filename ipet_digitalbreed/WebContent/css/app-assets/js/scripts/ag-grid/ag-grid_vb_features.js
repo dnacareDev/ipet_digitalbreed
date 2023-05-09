@@ -584,7 +584,7 @@
 				if(params.data.chr == chr_select[chr_select.selectedIndex].dataset.chr) {
 					document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 					document.getElementById('positionInput').dispatchEvent(new Event('blur'));
-				} else {
+				} /* else {
 					const options = chr_select.options;
 					for(let i=0 ; i<options.length ; i++) {
 						if(params.data.chr == options[i].dataset.chr) {
@@ -597,7 +597,7 @@
 						document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 						document.getElementById('positionInput').dispatchEvent(new Event('blur'));
 					}, 1000)
-				}
+				} */
 				
 			}
 		},
@@ -684,7 +684,88 @@
 			pivotPanelShow: "always", 
 			colResizeDefault: "shift",
 			animateRows: true, 
-			//onCellClicked: (params) =>	
+			getRowId: (params) => params.data.row_id,
+			onCellClicked: (params) => {
+				function nodeSelected(isSelected) {
+					return !isSelected;
+				}
+				
+				if (params.column.colId === 'selection' ) {
+					const flag = nodeSelected(params.node.selected);
+					params.node.setSelected(flag);
+					
+					// 즐겨찾기 on/off | GWAS에서는 모든 모델, phenotype의 selection을 공유함
+					/*
+					const selection_flag = params.data.selection;
+					const rowNode = GWAS_gridOptions.api.getRowNode(params.node.id);
+					rowNode.setDataValue('selection', !selection_flag);
+					*/
+					const selection_flag = params.data.selection;
+					const rowNode = Marker_gridOptions.api.getRowNode(params.node.id);
+					if(rowNode) {
+						rowNode.setDataValue('selection', !selection_flag);
+					}
+					
+					// selection 탭에 추가
+					const selection_row_id = params.node.data.row_id;
+					const selection_node = SelectionList_gridOptions.api.getRowNode(selection_row_id);
+					if(!selection_node) {
+						
+						// db에 추가
+						const url_string = './vb_features_transaction_selection.jsp';
+						
+						const map_params = new Map();
+						map_params.set('command', 'add');
+						map_params.set('jobid', linkedJobid);
+						map_params.set("chr", selectedOption("Chr_select").dataset.chr);
+						map_params.set("pos", params.node.data.pos);
+						//map_params.set('vb_selection_id', params.data.vb_selection_id);
+						map_params.set('column', 'marker_candidate');
+						map_params.set('value', params.value);
+						
+						getFetchData(url_string, map_params);
+						
+						SelectionList_gridOptions.api.applyTransaction({add: [{'row_id':selection_row_id, 'chr':params.node.data.chr, 'pos':params.node.data.pos, 'snpeff':false, 'gwas':false, 'marker_candidate':true}]})
+					} else {
+						selection_node.setDataValue('marker_candidate', !selection_flag);
+						/*
+						if(!selection_node.data.snpeff && !selection_node.data.gwas && !selection_node.data.marker_candidate) {
+							SelectionList_gridOptions.api.applyTransaction({remove: [selection_node.data]});
+							//SelectionList_gridOptions.api.applyTransaction({remove: [{'row_id':selection_row_id}]});
+						}
+						*/
+					}
+		        }
+				
+				if(params.column.colId === 'pos') {
+					const flag = nodeSelected(params.node.selected);
+					params.node.setSelected(flag);
+					
+					const chr_select = document.getElementById('Chr_select')
+					const length = chr_select[chr_select.selectedIndex].dataset.length;
+					
+					const position = params.data['pos'];
+					
+					if(params.data.chr == chr_select[chr_select.selectedIndex].dataset.chr) {
+						document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+						document.getElementById('positionInput').dispatchEvent(new Event('blur'));
+					} /* else {
+						const options = chr_select.options;
+						for(let i=0 ; i<options.length ; i++) {
+							if(params.data.chr == options[i].dataset.chr) {
+								chr_select.selectedIndex = i;
+								break;
+							}
+						}
+						document.getElementById('Chr_select').dispatchEvent(new Event('change'));
+						setTimeout(function(){
+							document.getElementById('positionInput').value = position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+							document.getElementById('positionInput').dispatchEvent(new Event('blur'));
+						}, 1000)
+					} */
+					
+				}
+			}	
 	}
 	
 	var Selection_columnDefs = [
