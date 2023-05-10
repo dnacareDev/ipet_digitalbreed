@@ -1761,7 +1761,10 @@
 			
 			$(`[data-toggle="\${mRNA_id}"]`).popover();
 		}
-		document.querySelector(`.popover.fade.bs-popover-left.show`).remove();
+		
+		if(!document.querySelector(`.popover.fade.bs-popover-left.show`)) {
+			document.querySelector(`.popover.fade.bs-popover-left.show`).remove();
+		}
 	}
 	
 	function createSVG(mRNA_attribute, mRNA_start, mRNA_end, mRNA_width, strand, svg_CDS, getDivPosition, selected_position, mRNA_id) {
