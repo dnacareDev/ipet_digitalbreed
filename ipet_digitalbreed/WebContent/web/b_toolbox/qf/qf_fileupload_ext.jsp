@@ -172,7 +172,7 @@
 	bufferedReader.close();
 	
 	//Statistics - Timeline
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','Genotype', 'New analysis', now());";
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+variety_id+"'),'"+variety_id+"','Genotype DB', 'Save - "+_orig_filename+"', now());";
 	//System.out.println(log_sql);
 	
 	try{
@@ -191,6 +191,7 @@
 			ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
 	}catch(Exception e){
    		System.out.println(e);
+   	}finally { 
    		ipetdigitalconndb.stmt.close();
    		ipetdigitalconndb.conn.close();
    	}
@@ -210,8 +211,9 @@
 	}
 	System.out.println("========save chromosome list end========");
 
+	/*
 	String updateVcfinfo2_sql="update vcfdata_info_t set status=2 where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
-	System.out.println(updateVcfinfo_sql);
+	System.out.println("updateVcfinfo_sql : "+updateVcfinfo_sql);
 	
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
@@ -221,6 +223,7 @@
    		ipetdigitalconndb.stmt.close();
    		ipetdigitalconndb.conn.close();
    	}
+	*/
 
 %>
 

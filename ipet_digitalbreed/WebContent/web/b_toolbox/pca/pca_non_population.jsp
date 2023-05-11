@@ -64,7 +64,8 @@
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','PCA', 'New analysis', now());";
+	//String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','PCA', 'New analysis', now());";
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','PCA', 'New analysis(non-population) - "+filename+"', now());";
 	//System.out.println(log_sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(log_sql);
@@ -87,7 +88,7 @@
 		ipetdigitalconndb.conn.close();
 	}		
 	
-	String PCA = "Rscript " +script_path+ "pca_plot.R " +savePath+ " " +outputPath+ " " +jobid_pca+ " " +filename+ " NA NA";
+	String PCA = "Rscript " +script_path+ "pca_plot.R " +savePath+ " " +outputPath+ " " +jobid_pca+ " " +filename+ " NA NA " +permissionUid+ " " + varietyid;
 	System.out.println("PCA parameter(without population) : " + PCA);
 
 	runanalysistools.execute(PCA, "cmd");

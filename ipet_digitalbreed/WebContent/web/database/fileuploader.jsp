@@ -95,15 +95,14 @@ if (request.getMethod().equals("POST"))
 		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
-		String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Genotype', 'New analysis', now());";
+		//String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Genotype', 'New analysis', now());";
+		String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Genotype DB', 'New Analysis - "+_orig_filename+"', now());";
 		//System.out.println(log_sql);
 		
 		try{
 			ipetdigitalconndb.stmt.executeUpdate(log_sql);
 		}catch(Exception e){
 			System.out.println(e);
-			ipetdigitalconndb.stmt.close();
-			ipetdigitalconndb.conn.close();
 		}
 		
 		

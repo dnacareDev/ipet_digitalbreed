@@ -597,7 +597,7 @@ body {
     		data: {
     			"jobid_vcf": jobid_vcf, "jobid_qf": jobid_qf, "variant_type": variant_type, "file_name":file_name,
     			"allelic_type": allelic_type, "missing": missing, "maf": maf,
-    			"minDP": minDP, "minGQ": minGQ, "thin": thin
+    			"minDP": minDP, "minGQ": minGQ, "thin": thin, "variety_id": variety_id,
     		},
     		success: function(result) {
     			console.log("success");

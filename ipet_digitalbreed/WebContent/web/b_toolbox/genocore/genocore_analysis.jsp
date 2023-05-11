@@ -70,7 +70,8 @@
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Core Selection', 'New analysis', now());";
+	//String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Core Selection', 'New analysis', now());";
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Core Selection', 'New analysis - "+filename+"', now());";
 	System.out.println(log_sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(log_sql);
@@ -94,7 +95,7 @@
 	}	
 	
 	
-	String Genocore = "Rscript " +script_path+ "breedertoolbox_genocore_final.R " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename;
+	String Genocore = "Rscript " +script_path+ "breedertoolbox_genocore_final.R " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename+ " " +permissionUid+ " " +varietyid;
 	
 	System.out.println("Genocore parameter : " + Genocore);
 			

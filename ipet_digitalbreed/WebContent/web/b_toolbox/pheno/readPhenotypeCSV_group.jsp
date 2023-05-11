@@ -8,7 +8,6 @@
 
 
 <%
-
 	String permissionUid = session.getAttribute("permissionUid")+"";	
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
 	String savePath = rootFolder + "uploads/database/phenotype_data/";
@@ -16,24 +15,11 @@
 	//String script_path = "/data/apache-tomcat-9.0.64/webapps/ROOT/digitalbreed_script/";
 	
 	String jobid = request.getParameter("jobid");
-	
     
 	JsonObject jsonObject = readPhenotypeTxt(savePath, jobid);
     
 	System.out.println(jsonObject);
 	
-	/*
-    String[] sqlInfo = readPhenotypeTxt(savePath, jobid);
-    String traitname = sqlInfo[0];
-    String seq = sqlInfo[1];
-    String analysis_number = sqlInfo[2];
-    
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.addProperty("traitname", traitname);
-    jsonObject.addProperty("seq", seq);
-    jsonObject.addProperty("analysis_number", analysis_number);
-    */
-    
     out.clear();
     out.print(jsonObject);
 	
@@ -53,19 +39,6 @@ public JsonObject readPhenotypeTxt(String savePath, String jobid) throws IOExcep
 	
 	String traitname = line.split(",")[1];
 	String traitname_key = 2+"";
-	/*
-	String traitname = "";
-	String traitname_keys = "";
-	for(int i=2 ; i<=column_count-1 ; i++) {
-		//System.out.println(i);
-		traitname += line.split(",")[i-1];
-		traitname_keys += i;
-		if(i != column_count-1) {
-			traitname += ",";
-			traitname_keys += ",";
-		}
-	}
-	*/
 	
 	while((line = br.readLine()) != null) {
 		analysis_number++;
@@ -82,8 +55,6 @@ public JsonObject readPhenotypeTxt(String savePath, String jobid) throws IOExcep
     jsonObject.addProperty("seq", traitname_key);
     jsonObject.addProperty("analysis_number", analysis_number+"");
 	
-	//String[] sqlInfo = {traitname, traitname_key, analysis_number+""};
-	//return sqlInfo;
 	return jsonObject;
 }
 %>

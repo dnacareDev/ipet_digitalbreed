@@ -8,7 +8,7 @@
 <%
 	
 	
-	
+	String varietyid = request.getParameter("varietyid");
 	String jobid_structure = request.getParameter("jobid_structure");
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String filename = request.getParameter("filename");
@@ -74,7 +74,7 @@
 	
 	
 	
-	String cmd = "perl " +script_path+ "breedertoolbox_STRUCTURE_total_running.pl " +savePath+ " "+ filename +" "+ jobid_structure +" "+ outputPath+jobid_structure +" "+ Number_of_K +" "+ Burn_IN +" "+ MCMC +" "+ iteration_number ;
+	String cmd = "perl " +script_path+ "breedertoolbox_STRUCTURE_total_running.pl " +savePath+ " "+ filename +" "+ jobid_structure +" "+ outputPath+jobid_structure +" "+ Number_of_K +" "+ Burn_IN +" "+ MCMC +" "+ iteration_number +" "+ permissionUid +" "+ varietyid;
 	
 	System.out.println();
 	System.out.println("STRUCTURE parameter : " + cmd);

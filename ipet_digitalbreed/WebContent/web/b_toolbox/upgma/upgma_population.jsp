@@ -53,14 +53,14 @@
 	}
 	
 	
-	String UPGMA = "Rscript " +script_path+ "phylogenetic_tree.R " +inputPath+ " " +outputPath+ " " +jobid_upgma+ " " +filename+ " " +populationPath+ " " +population_name;
+	String UPGMA = "Rscript " +script_path+ "phylogenetic_tree.R " +inputPath+ " " +outputPath+ " " +jobid_upgma+ " " +filename+ " " +populationPath+ " " +population_name+ " " +permissionUid+ " " +varietyid;
 	
 	System.out.println("UPGMA parameter(with population) : " + UPGMA);
 	
 	runanalysistools.execute(UPGMA, "cmd");
 	
 	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','UPGMA', 'New analysis', now());";
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','UPGMA', 'New analysis(population) - "+filename+"', now());";
 	//System.out.println(log_sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(log_sql);

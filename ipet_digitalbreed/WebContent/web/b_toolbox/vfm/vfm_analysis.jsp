@@ -12,7 +12,7 @@
 	//ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	//RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
-	
+	String variety_id = request.getParameter("variety_id");
 	String jobid_vfm = request.getParameter("jobid_vfm");
 	
 	String analysisModalRadioType1 = request.getParameter("analysisModalRadioType1");
@@ -108,9 +108,10 @@
 	} else if(analysisModalRadioType1.equals("merge")) {
 		cmd += " 2 "+ merge_count +" ";
 	} else {
-		cmd += " --typo--";
+		cmd += " --typo-- ";
 	}
 	
+	cmd += permissionUid +" "+ variety_id;
 	
 	
 	System.out.println("merge params : " + cmd);

@@ -10,6 +10,7 @@
 	
 	
 	String jobid_anno = request.getParameter("jobid_anno");
+	String varietyid = request.getParameter("varietyid");
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String filename = request.getParameter("filename");
 	String refgenome = request.getParameter("refgenome");
@@ -64,7 +65,7 @@
 	
 	
 	
-	String cmd = "Rscript " +script_path+ "breedertoolbox_annotation.R " +savePath+ " " +outputPath+ " " +jobid_anno +" "+ filename +" "+ annotationPath +" "+ annotation_filename;
+	String cmd = "Rscript " +script_path+ "breedertoolbox_annotation.R " +savePath+ " " +outputPath+ " " +jobid_anno +" "+ filename +" "+ annotationPath +" "+ annotation_filename +" "+ permissionUid +" "+ varietyid;
 	
 	System.out.println("annotation parameter : " + cmd);
 			

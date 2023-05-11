@@ -172,6 +172,9 @@
   
 	function getSelectedRowData() {
 	  let selectedData = gridOptions.api.getSelectedRows();
+	  
+	  const varietyid = $( "#variety-select option:selected" ).val();
+	  
 	  var deleteitems = new Array();
 	  
 	  if(selectedData.length==0){
@@ -190,7 +193,7 @@
 					$.ajax({
 						url:"../../web/database/phenotype_delete.jsp",
 						type:"POST",
-						data:{'params':deleteitems},
+						data:{'params':deleteitems, 'varietyid':varietyid},
 						success: function(result) {
 							if (result) {
 								alert("정상적으로 삭제되었습니다.");

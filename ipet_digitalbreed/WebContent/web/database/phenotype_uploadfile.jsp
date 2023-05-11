@@ -40,13 +40,13 @@
 		//RunPhenotypetraitValue runphenotypetraitvalue = new RunPhenotypetraitValue();
 		//runphenotypetraitvalue.UpdateTraitValue(savePath+originFile, variety, permissionUid);		
 		
-		insertSqlFromExcel(savePath+originFile, variety, permissionUid);
-		
+		int excel_rows = insertSqlFromExcel(savePath+originFile, variety, permissionUid);
 		
 		IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 		ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		
-		String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+variety+"'),'"+variety+"','Phenotype', 'New excel list uploaded', now());";
+		//String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+variety+"'),'"+variety+"','Phenotype', 'New excel list uploaded', now());";
+		String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+variety+"'),'"+variety+"','Phenotype DB', 'New excel list uploaded - "+excel_rows+" rows', now());";
 		//System.out.println(log_sql);
 		
 		try{
@@ -65,10 +65,13 @@
 %>
 
 <%!
-private void insertSqlFromExcel(String filename, String varietyid, String permissionUid) throws SQLException {
+//private void insertSqlFromExcel(String filename, String varietyid, String permissionUid) throws SQLException {
+private int insertSqlFromExcel(String filename, String varietyid, String permissionUid) throws SQLException {
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();	
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 
+	//리턴값 용도
+	int excel_rows = 0;
 	
 	int new_sampleid=1;
 	String conv_newsampleid = null;
@@ -87,7 +90,7 @@ private void insertSqlFromExcel(String filename, String varietyid, String permis
 		ipetdigitalconndb.rs.close();
 		System.out.println(e);
 	}
-	System.out.println("cropid : "+ cropid);
+	//System.out.println("cropid : "+ cropid);
 	
 	try {
 		String newsampleidsql="select SUBSTRING(sampleid,3) as newsampleid from sampledata_info_t order by sampleid desc limit 1;";
@@ -132,6 +135,8 @@ private void insertSqlFromExcel(String filename, String varietyid, String permis
         int rows=sheet.getPhysicalNumberOfRows();
         //System.out.println(rows);
         
+        // header row 하나를 뺀 값을 리턴
+        excel_rows = rows - 1;
         
         for(rowindex=1;rowindex<rows;rowindex++){
         	XSSFRow row=sheet.getRow(rowindex);
@@ -160,14 +165,28 @@ private void insertSqlFromExcel(String filename, String varietyid, String permis
                                 value=cell.getCellFormula();
                                 break;
                             case XSSFCell.CELL_TYPE_NUMERIC:
+                            	if(columnindex==0) {
+                            		//value=cell.getDateCellValue()+"";
+                            		java.util.Date date = cell.getDateCellValue();
+                            		value = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                            	} else if(columnindex==1) {
+                            		//columnindex == 1(개체명)일때 정수를 double로 변환해서 서로 matching이 안되는 문제. -> 강제 int화
+                            		value=(int)cell.getNumericCellValue()+"";
+                            	} else {
+                            		value=cell.getNumericCellValue()+"";
+                            	}
+                            	
+                            	/*
                             	if(columnindex==1) {
                             		//columnindex == 1(개체명)일때 정수를 double로 변환해서 서로 matching이 안되는 문제. -> 강제 int화
                             		value=(int)cell.getNumericCellValue()+"";
                             	} else {
                             		value=cell.getNumericCellValue()+"";
                             	}
+                            	*/
                                 break;
                             case XSSFCell.CELL_TYPE_STRING:
+                            	
                                 value=cell.getStringCellValue()+"";
                                 break;
                             case XSSFCell.CELL_TYPE_BLANK:
@@ -184,7 +203,6 @@ private void insertSqlFromExcel(String filename, String varietyid, String permis
                     
                     if(columnindex == 0) {
                     	
-                    	System.out.println(value);
                     	/*
                     	SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
         				String cellValue = formateador.format(value);
@@ -254,5 +272,9 @@ private void insertSqlFromExcel(String filename, String varietyid, String permis
 		}
 	}
 	
+	ipetdigitalconndb.stmt.close();
+	ipetdigitalconndb.conn.close();
+	
+	return excel_rows;
 }
 %>

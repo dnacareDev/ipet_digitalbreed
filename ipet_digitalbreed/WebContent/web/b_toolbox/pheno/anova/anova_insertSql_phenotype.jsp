@@ -10,7 +10,6 @@
 	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
-	
 	String varietyid = request.getParameter("varietyid");
 	String jobid_anova = request.getParameter("jobid_anova");
 	String comment = request.getParameter("comment");

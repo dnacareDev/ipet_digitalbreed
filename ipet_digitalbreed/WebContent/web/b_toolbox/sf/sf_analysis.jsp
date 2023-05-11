@@ -126,7 +126,7 @@
 	
 	
 	
-	String SF = "Rscript " +script_path+ "breedertoolbox_subset.R " +savePath+ " " +outputPath+ " " +jobid_sf+ " " +file_name+ " " +subsetSavePath+jobid_sf+"/ "+ subset_filename +" "+ sample_filename;
+	String SF = "Rscript " +script_path+ "breedertoolbox_subset.R " +savePath+ " " +outputPath+ " " +jobid_sf+ " " +file_name+ " " +subsetSavePath+jobid_sf+"/ "+ subset_filename +" "+ sample_filename +" "+ permissionUid +" "+ varietyid;
 	System.out.println("Subset Filter parameter : " + SF);
 	//runanalysistools.execute(SF, "cmd");
 	try {
@@ -136,32 +136,8 @@
 		int exitValue = executor.execute(cmdLine);
 		if(exitValue == 0) {
 			System.out.println("Success");
-			/*
-			String updateSql = "update subset_filter_t set status=1 where jobid='" +jobid_sf+ "';";
-			System.out.println(updateSql);
-			try{
-				ipetdigitalconndb.stmt.executeUpdate(updateSql);
-			} catch(Exception e) {
-				System.out.println(e);
-			} finally { 
-				ipetdigitalconndb.stmt.close();
-				ipetdigitalconndb.conn.close();
-			} 
-			*/
 		} else {
 			System.out.println("Fail");
-			/*
-			String updateSql = "update subset_filter_t set status=2 where jobid='" +jobid_sf+ "';";
-			System.out.println(updateSql);
-			try{
-				ipetdigitalconndb.stmt.executeUpdate(updateSql);
-			} catch(Exception e) {
-				System.out.println(e);
-			} finally { 
-				ipetdigitalconndb.stmt.close();
-				ipetdigitalconndb.conn.close();
-			} 
-			*/
 		}
 	} catch(Exception e) {
 		e.printStackTrace();

@@ -191,6 +191,9 @@
    		System.out.println(e);
    		ipetdigitalconndb.stmt.close();
    		ipetdigitalconndb.conn.close();
+   	}finally { 
+   		ipetdigitalconndb.stmt.close();
+   		ipetdigitalconndb.conn.close();
    	}
 	
 	// CSV => JSON 생성 & DB저장
@@ -207,18 +210,6 @@
 		makeChrDataCsv(rootFolder, jobid, refgenome);
 	}
 	System.out.println("========save chromosome list end========");
-
-	String updateVcfinfo2_sql="update vcfdata_info_t set status=2 where creuser='"+permissionUid+"' and varietyid='"+variety_id+"' and jobid='" +jobid+ "';";
-	System.out.println(updateVcfinfo_sql);
-	
-	try{
-		ipetdigitalconndb.stmt.executeUpdate(updateVcfinfo_sql);
-	}catch(Exception e){
-   		System.out.println(e);
-   	}finally { 
-   		ipetdigitalconndb.stmt.close();
-   		ipetdigitalconndb.conn.close();
-   	}
 
 %>
 

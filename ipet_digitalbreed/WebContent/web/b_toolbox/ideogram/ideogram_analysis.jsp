@@ -10,6 +10,7 @@
 	
 	
 	String jobid_ideogram = request.getParameter("jobid_ideogram");
+	String varietyid = request.getParameter("varietyid");
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String filename = request.getParameter("filename");
 	String refgenome = request.getParameter("refgenome");
@@ -63,7 +64,7 @@
 	
 	
 	//String cmd = "Rscript " +script_path+ "breedertoolbox_ideogram_final.R " +savePath+ " " +outputPath+ " " +jobid_ideogram +" "+ filename +" "+ CM_Plot_Bin_Size +" "+ annotationPath +" "+ annotation_filename;
-	String cmd = "Rscript " +script_path+ "breedertoolbox_ideogram_final.R " +savePath+ " " +outputPath+ " " +jobid_ideogram +" "+ filename +" "+ CM_Plot_Bin_Size +" "+ annotationPath;
+	String cmd = "Rscript " +script_path+ "breedertoolbox_ideogram_final.R " +savePath+ " " +outputPath+ " " +jobid_ideogram +" "+ filename +" "+ CM_Plot_Bin_Size +" "+ annotationPath +" "+ permissionUid +" "+ varietyid;
 	
 	System.out.println("ideogram cmd : " + cmd);
 	

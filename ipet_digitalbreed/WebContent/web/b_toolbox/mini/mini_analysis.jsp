@@ -73,7 +73,8 @@
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Minimal Marker', 'New analysis', now());";
+	//String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Minimal Marker', 'New analysis', now());";
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','Minimal Marker', 'New Analysis - "+filename+"', now());";
 	System.out.println(log_sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(log_sql);
@@ -99,7 +100,7 @@
 	
 	
 	
-	String minimalMarker = "perl " +script_path+ "breedertoolbox_minimal_markers_final.pl " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename;
+	String minimalMarker = "perl " +script_path+ "breedertoolbox_minimal_markers_final.pl " +savePath+ " " +outputPath+ " " +jobid2+ " " +filename+ " " +permissionUid+ " " +varietyid;
 	
 	System.out.println("minimalMarker parameter : " + minimalMarker);
 			

@@ -66,7 +66,7 @@
 	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	
 	
-	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','UPGMA', 'New analysis', now());";
+	String log_sql="insert into log_t(logid, cropid, varietyid, menuname, comment, cre_dt) values('" +permissionUid+ "', (select cropid from variety_t where varietyid='"+varietyid+"'),'"+varietyid+"','UPGMA', 'New analysis(non-population) - "+filename+"', now());";
 	System.out.println(log_sql);
 	try{
 		ipetdigitalconndb.stmt.executeUpdate(log_sql);
@@ -88,7 +88,7 @@
 		ipetdigitalconndb.conn.close();
 	}		
 	
-	String UPGMA = "Rscript " +script_path+ "phylogenetic_tree.R " +savePath+ " " +outputPath+ " " +jobid_upgma+ " " +filename+ " NA NA";
+	String UPGMA = "Rscript " +script_path+ "phylogenetic_tree.R " +savePath+ " " +outputPath+ " " +jobid_upgma+ " " +filename+ " NA NA " +permissionUid+ " " +varietyid;
 	System.out.println("UPGMA parameter(without population) : " + UPGMA);
 
 	runanalysistools.execute(UPGMA, "cmd");

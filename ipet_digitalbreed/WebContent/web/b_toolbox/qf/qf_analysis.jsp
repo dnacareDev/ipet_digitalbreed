@@ -6,10 +6,11 @@
 
 <%
 	//IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
-ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
+	IPETDigitalConnDB ipetdigitalconndb = new IPETDigitalConnDB();
+	ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	RunAnalysisTools runanalysistools = new RunAnalysisTools();		
 	
+	String varietyid = request.getParameter("variety_id");
 	String jobid_vcf = request.getParameter("jobid_vcf");
 	String file_name = request.getParameter("file_name");
 	String jobid_qf = request.getParameter("jobid_qf");
@@ -21,6 +22,7 @@ ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	String minGQ = request.getParameter("minGQ");
 	String thin = request.getParameter("thin");
 	
+	/*
 	System.out.println("========================================");
 	System.out.println("jobid_vcf : " + jobid_vcf);
 	System.out.println("file_name : " + file_name);
@@ -33,7 +35,7 @@ ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 	System.out.println("minGQ : " + minGQ);
 	System.out.println("thin : " + thin);
 	System.out.println("========================================");
-	
+	*/
 	
 	String permissionUid = session.getAttribute("permissionUid")+"";
 	String rootFolder = request.getSession().getServletContext().getRealPath("/");
@@ -70,8 +72,9 @@ ipetdigitalconndb.stmt = ipetdigitalconndb.conn.createStatement();
 		}        
 	}
 	
-	String QF = "Rscript " +script_path+ "breedertoolbox_quality.R " +savePath+ " " +outputPath+ " " +jobid_qf+ " " +file_name+ " " +variant_type+ " " +allelic_type+ " " +missing+ " "	+maf+ " " +minDP+ " " +minGQ+ " " +thin;
-	System.out.println("Quality Filter parameter : " + QF);
+	//String QF = "Rscript " +script_path+ "breedertoolbox_quality.R " +savePath+ " " +outputPath+ " " +jobid_qf+ " " +file_name+ " " +variant_type+ " " +allelic_type+ " " +missing+ " "	+maf+ " " +minDP+ " " +minGQ+ " " +thin;
+	String QF = "Rscript " +script_path+ "breedertoolbox_quality.R " +savePath+ " " +outputPath+ " " +jobid_qf+ " " +file_name+ " " +variant_type+ " " +allelic_type+ " " +missing+ " "	+maf+ " " +minDP+ " " +minGQ+ " " +thin+ " "+permissionUid+" "+varietyid;
+	System.out.println("QF cmd : " + QF);
 
 	runanalysistools.execute(QF, "cmd");
 	
