@@ -132,7 +132,12 @@
 		}
 	];
 		
+		
+		const user = document.querySelector(`.user-name`).textContent;
 		var variety_id = $( "#variety-select option:selected" ).val();
+		window.localStorage.setItem(`variety_lastSelected_for_${user}`,variety_id);
+		
+		
 	 	var grid_array;	
 		$.ajax({
 			url : "../../web/database/traitnamertn.jsp",
@@ -560,6 +565,16 @@
 	      addDropZonestwo(params);
 	      //addCheckboxListener(params);
 	    },
+	    onModelUpdated: (params) => {
+	    	const user = document.querySelector(`.user-name`).textContent;
+			var variety_id = $( "#variety-select option:selected" ).val();
+			
+			const savedColumnState_str = window.localStorage.getItem(`columnState_for_${user}_and_${variety_id}`);
+			
+			const savedColumnState = JSON.parse(savedColumnState_str);
+			
+			gridOptions.columnApi.applyColumnState({ state: savedColumnState });
+	    },
 		onCellClicked: params => {
 			if(params.column.getId() == "photo_status"){
 					$.ajax({
@@ -609,8 +624,18 @@
 			if(window.innerWidth < 1200) {
 				window.scrollTo(0, document.getElementById('component-swiper-progress_one').getBoundingClientRect().y+window.pageYOffset -80);
 			}
+		},
+		onColumnVisible: (params) => {
+			//console.log(params);
+			const savedColumnState = gridOptions.columnApi.getColumnState();
+			
+			const savedColumnState_str = JSON.stringify(savedColumnState);
+			
+			const user = document.querySelector(`.user-name`).textContent;
+			var variety_id = $( "#variety-select option:selected" ).val();
+			window.localStorage.setItem(`columnState_for_${user}_and_${variety_id}`,savedColumnState_str);
 		}
-	  };
+	};
 	  
 	const edited_cells = new Array();
 	
@@ -673,14 +698,14 @@
 
   /*** GET TABLE DATA FROM URL ***/
 
-  
+  /*
   agGrid
     .simpleHttpRequest({ url: "../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val()})
     .then(function(data) {
     	//console.log("data: ", data);
       gridOptions.api.setRowData(data);
     });
-
+	*/
 
   /*** FILTER TABLE ***/
   function updateSearchQuery(val) {
@@ -827,6 +852,35 @@
   		
   	}
 
+  	document.addEventListener('DOMContentLoaded', function() {
+  		/*
+  		const user = document.querySelector(`.user-name`).textContent;
+  		// localStorage에 저장한 값 로드
+  		const variety_id = window.localStorage.getItem(`variety_lastSelected_for_${user}`);
+  		
+  		const selectEl = document.getElementById('variety-select');
+  		
+  		if(variety_id != null) {
+  			for(let i=0 ; i<selectEl.length ; i++) {
+  				if(selectEl[i].value == variety_id) {
+  					selectEl.selectedIndex = i;
+  					selectEl.dispatchEvent(new Event("change"));
+  					return;
+  				}
+  			}
+  		}
+  		*/
+  		
+  		refresh();
+  		/*
+  		fetch("../../web/database/phenotype_json.jsp?varietyid="+$( "#variety-select option:selected" ).val())
+  		.then(response => response.json())
+  		.then(data => {
+  			gridOptions.api.setRowData(data);
+  		});
+  		*/
+  		
+  	});
    		 
   $(".ag-grid-filter").on("keyup", function() {
     updateSearchQuery($(this).val());

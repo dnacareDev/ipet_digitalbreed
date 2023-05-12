@@ -51,6 +51,7 @@ if (request.getMethod().equals("POST"))
 	//System.out.println(jobid);
 	
 	
+	uploader.setOverwrite(true);
 	
 	String _run_retval = uploader.run();
 	

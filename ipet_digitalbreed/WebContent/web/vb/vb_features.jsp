@@ -1719,6 +1719,7 @@
 			
 			
 			const childDiv = document.createElement('div');
+			childDiv.style.zIndex = "10";
 			childDiv.style.display = "flex";
 			childDiv.style.flexDirection = "column";
 			childDiv.dataset.id = mRNA_id;
@@ -1761,6 +1762,7 @@
 			
 			$(`[data-toggle="\${mRNA_id}"]`).popover();
 		}
+		
 		
 		if(!document.querySelector(`.popover.fade.bs-popover-left.show`)) {
 			document.querySelector(`.popover.fade.bs-popover-left.show`).remove();
